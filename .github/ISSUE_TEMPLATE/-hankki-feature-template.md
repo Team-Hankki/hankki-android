@@ -1,8 +1,8 @@
 ---
-name: Hankki Issue Template
-about: Create Issue
-title: "[Type] what"
-labels: ''
+name: "\bHankki Feature Template"
+about: Feature Issue
+title: "[Feature] what"
+labels: FEATURE ✨
 assignees: ''
 
 ---
