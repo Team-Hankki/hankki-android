@@ -1,7 +1,7 @@
 ---
 name: Hankki Issue Template
-about: "[Type] what"
-title: ''
+about: Create issue
+title: "[Type] what"
 labels: ''
 assignees: ''
 
