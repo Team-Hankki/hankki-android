@@ -1,4 +1,4 @@
-package com.hankki.hankkijogbo.ui.theme
+package com.hankki.feature.main.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
