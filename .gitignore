@@ -46,6 +46,9 @@ gen-external-apklibs
 # Compiled class file
 *.class
 
+# kotlin 2.0
+.kotlin/
+
 # Log file
 
 # BlueJ files
