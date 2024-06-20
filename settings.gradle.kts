@@ -18,3 +18,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "hankkijogbo"
 include(":app")
+include(":feature:main")
