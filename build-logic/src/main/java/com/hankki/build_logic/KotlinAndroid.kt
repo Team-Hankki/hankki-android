@@ -12,9 +12,6 @@ import java.util.Properties
 
 internal fun Project.configureKotlinAndroid() {
     val libs = extensions.libs
-    val properties = Properties().apply {
-        load(rootProject.file("local.properties").inputStream())
-    }
 
     // Plugins
     pluginManager.apply("org.jetbrains.kotlin.android")
@@ -34,25 +31,13 @@ internal fun Project.configureKotlinAndroid() {
         }
 
         buildTypes {
-            getByName("debug") {
-                val devUrl = properties["hankkiDevUrl"] as? String ?: ""
-                buildConfigField("String", "BASE_URL", devUrl)
-            }
-
             getByName("release") {
-                val prodUrl = properties["hankkiProdUrl"] as? String ?: ""
-                buildConfigField("String", "BASE_URL", prodUrl)
-
                 isMinifyEnabled = false
                 proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
                 )
             }
-        }
-
-        buildFeatures{
-            buildConfig = true
         }
     }
 
