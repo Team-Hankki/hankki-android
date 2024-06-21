@@ -1,5 +1,6 @@
 package com.hankki.build_logic
 
+import com.android.build.gradle.BaseExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
@@ -8,6 +9,12 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginE
 internal fun Project.configureComposeAndroid() {
     with(plugins) {
         apply("org.jetbrains.kotlin.plugin.compose")
+    }
+
+    extensions.getByType<BaseExtension>().apply {
+        buildFeatures.apply {
+            compose = true
+        }
     }
 
     val libs = extensions.libs
