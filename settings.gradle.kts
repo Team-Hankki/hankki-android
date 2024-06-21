@@ -19,3 +19,5 @@ dependencyResolutionManagement {
 rootProject.name = "hankkijogbo"
 include(":app")
 include(":feature:main")
+include(":core")
+include(":core:designsystem")
