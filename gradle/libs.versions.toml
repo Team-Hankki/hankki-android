@@ -42,6 +42,9 @@ kotlinxImmutable = "0.3.7"
 ## Coroutine
 coroutine = "1.8.1"
 
+## Timber
+timber = "5.0.1"
+
 ## Test
 # https://github.com/junit-team/junit4
 junit = "4.13.2"
@@ -97,6 +100,9 @@ kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collectio
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutine" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutine" }
+
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
 kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 junit = { group = "junit", name = "junit", version.ref = "junitJunit" }

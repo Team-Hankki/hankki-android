@@ -24,3 +24,4 @@ include(
     ":core:designsystem",
     ":core:network"
 )
+include(":core:common")
