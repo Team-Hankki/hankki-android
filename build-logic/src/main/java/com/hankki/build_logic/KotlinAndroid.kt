@@ -3,16 +3,18 @@ package com.hankki.build_logic
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
 
-/**
- * https://github.com/android/nowinandroid/blob/main/build-logic/convention/src/main/kotlin/com/google/samples/apps/nowinandroid/KotlinAndroid.kt
- */
 internal fun Project.configureKotlinAndroid() {
     val libs = extensions.libs
+    val properties = Properties().apply {
+        load(rootProject.file("local.properties").inputStream())
+    }
 
     // Plugins
     pluginManager.apply("org.jetbrains.kotlin.android")
@@ -32,13 +34,25 @@ internal fun Project.configureKotlinAndroid() {
         }
 
         buildTypes {
+            getByName("debug") {
+                val devUrl = properties["hankkiDevUrl"] as? String ?: ""
+                buildConfigField("String", "BASE_URL", devUrl)
+            }
+
             getByName("release") {
+                val prodUrl = properties["hankkiProdUrl"] as? String ?: ""
+                buildConfigField("String", "BASE_URL", prodUrl)
+
                 isMinifyEnabled = false
                 proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
                 )
             }
+        }
+
+        buildFeatures{
+            buildConfig = true
         }
     }
 
