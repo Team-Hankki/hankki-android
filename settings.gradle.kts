@@ -39,3 +39,4 @@ include(
     ":feature:main"
 )
 include(":data:dummy")
+include(":domain:dummy")
