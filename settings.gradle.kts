@@ -21,10 +21,8 @@ include(":app")
 include(":feature:main")
 
 include(
+    ":core:common",
+    ":core:datastore",
     ":core:designsystem",
     ":core:network"
 )
-include(":core:common")
-include(":core:data")
-include(":core:domain")
-include(":core:datastore")
