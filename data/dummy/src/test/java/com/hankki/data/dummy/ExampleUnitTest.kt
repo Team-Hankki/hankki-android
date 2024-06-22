@@ -1,4 +1,4 @@
-package com.hankki.core.data
+package com.hankki.data.dummy
 
 import org.junit.Test
 

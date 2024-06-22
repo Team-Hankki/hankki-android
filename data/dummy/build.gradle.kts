@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hankki.core.data"
+    namespace = "com.hankki.data.dummy"
     compileSdk = 34
 
     defaultConfig {

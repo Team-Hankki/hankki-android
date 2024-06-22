@@ -38,3 +38,4 @@ include(
     ":feature:dummy",
     ":feature:main"
 )
+include(":data:dummy")
