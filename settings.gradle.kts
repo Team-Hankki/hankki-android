@@ -18,13 +18,23 @@ dependencyResolutionManagement {
 
 rootProject.name = "hankkijogbo"
 include(":app")
-include(":feature:main")
 
+// core
 include(
     ":core:common",
     ":core:datastore",
     ":core:designsystem",
     ":core:network"
 )
-include(":domain")
+
+// data
 include(":data")
+
+// domain
+include(":domain")
+
+// feature
+include(
+    ":feature:dummy",
+    ":feature:main"
+)
