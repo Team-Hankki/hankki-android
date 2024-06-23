@@ -20,8 +20,8 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import timber.log.Timber
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val APPLICATION_JSON = "application/json"
     private const val OKHTTP = "okhttp"
@@ -54,23 +54,21 @@ object NetworkModule {
             }
         }
     }.apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
     }
 
     @Provides
     @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: Interceptor,
-        authInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .addInterceptor(authInterceptor)
         .build()
 
 
     @Provides
     @Singleton
-    fun provideJWTRetrofit(
+    fun provideRetrofit(
         client: OkHttpClient,
         factory: Converter.Factory,
     ): Retrofit = Retrofit.Builder()
