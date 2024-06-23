@@ -8,4 +8,6 @@ android {
     setNamespace("feature.dummy")
 }
 
-dependencies {}
+dependencies {
+    implementation(projects.domain.dummy)
+}

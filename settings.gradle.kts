@@ -28,15 +28,17 @@ include(
 )
 
 // data
-include(":data")
+include(
+    ":data:dummy"
+)
 
 // domain
-include(":domain")
+include(
+    ":domain:dummy"
+)
 
 // feature
 include(
     ":feature:dummy",
     ":feature:main"
 )
-include(":data:dummy")
-include(":domain:dummy")
