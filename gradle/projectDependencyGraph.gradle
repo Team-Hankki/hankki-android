@@ -22,6 +22,7 @@ task projectDependencyGraph {
         def multiplatformProjects = []
         def jsProjects = []
         def androidProjects = []
+        def androidDynamicFeatureProjects = []
         def javaProjects = []
 
         queue = [rootProject]
@@ -38,11 +39,15 @@ task projectDependencyGraph {
             if (project.plugins.hasPlugin('com.android.library') || project.plugins.hasPlugin('com.android.application')) {
                 androidProjects.add(project)
             }
+            if (project.plugins.hasPlugin('com.android.dynamic-feature')) {
+                androidDynamicFeatureProjects.add(project)
+            }
             if (project.plugins.hasPlugin('java-library') || project.plugins.hasPlugin('java')) {
                 javaProjects.add(project)
             }
 
             project.configurations.all { config ->
+                if (config.name.toLowerCase().contains("test")) return
                 config.dependencies
                         .withType(ProjectDependency)
                         .collect { it.dependencyProject }
@@ -77,6 +82,8 @@ task projectDependencyGraph {
                 traits.add('fillcolor="#ffffba"')
             } else if (androidProjects.contains(project)) {
                 traits.add('fillcolor="#baffc9"')
+            } else if (androidDynamicFeatureProjects.contains(project)) {
+                traits.add('fillcolor="#c9baff"')
             } else if (javaProjects.contains(project)) {
                 traits.add('fillcolor="#ffb3ba"')
             } else {
@@ -110,6 +117,7 @@ task projectDependencyGraph {
         if (p.exitValue() != 0) {
             throw new RuntimeException(p.errorStream.text)
         }
+        dot.delete()
 
         println("Project module dependency graph created at ${dot.absolutePath}.png")
     }
