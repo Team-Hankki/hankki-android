@@ -18,3 +18,7 @@ plugins {
     alias(libs.plugins.android.test) apply false
     alias(libs.plugins.android.library) apply false
 }
+
+apply {
+    from("gradle/projectDependencyGraph.gradle")
+}
