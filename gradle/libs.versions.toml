@@ -125,5 +125,6 @@ android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 hankki-application = { id = "hankki.android.application", version = "unspecified" }
 hankki-compose = { id = "hankki.android.compose", version = "unspecified" }
 hankki-feature = { id = "hankki.android.feature", version = "unspecified" }
+hankki-data = { id = "hankki.android.data", version = "unspecified" }
 hankki-library = { id = "hankki.android.library", version = "unspecified" }
 hankki-kotlin = { id = "hankki.kotlin.library", version = "unspecified" }
