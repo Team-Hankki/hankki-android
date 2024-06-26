@@ -24,7 +24,8 @@ include(
     ":core:common",
     ":core:datastore",
     ":core:designsystem",
-    ":core:network"
+    ":core:network",
+    ":core:navigation"
 )
 
 // data
