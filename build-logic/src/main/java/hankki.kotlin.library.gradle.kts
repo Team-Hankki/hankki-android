@@ -1,4 +1,3 @@
-import com.hankki.build_logic.configureKotest
 import com.hankki.build_logic.configureKotlin
 
 plugins {
@@ -6,4 +5,3 @@ plugins {
 }
 
 configureKotlin()
-configureKotest()
