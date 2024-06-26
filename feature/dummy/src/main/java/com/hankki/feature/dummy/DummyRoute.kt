@@ -5,10 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun DummyRoute(
-    onSignInClick: () -> Unit,
-    onShowErrorSnackBar: (Int) -> Unit,
-) {
+fun DummyRoute() {
     DummyScreen()
 }
 

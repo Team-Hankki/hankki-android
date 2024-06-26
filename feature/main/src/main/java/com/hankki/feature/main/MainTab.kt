@@ -1,7 +1,7 @@
 package com.hankki.feature.main
 
 import androidx.compose.runtime.Composable
-import com.eoyeongbooyeong.core.navigation.Route
+import com.hankki.core.navigation.Route
 import kotlinx.serialization.Serializable
 
 internal enum class MainTab(

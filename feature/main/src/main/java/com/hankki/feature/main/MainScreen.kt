@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.feature.dummy.navigation.dummyNavGraph
+import com.hankki.feature.home.navigation.homeNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -55,10 +56,8 @@ internal fun MainScreen(
                     startDestination = navigator.startDestination,
                 ) {
                     // navgraph 추가하기
-                    dummyNavGraph(
-                        onSignInClick = {},
-                        onShowErrorSnackBar = {  }
-                    )
+                    dummyNavGraph()
+                    homeNavGraph()
                 }
 
             }

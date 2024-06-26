@@ -9,5 +9,7 @@ android {
 }
 
 dependencies {
+    // feature
     implementation(projects.feature.dummy)
+    implementation(projects.feature.home)
 }

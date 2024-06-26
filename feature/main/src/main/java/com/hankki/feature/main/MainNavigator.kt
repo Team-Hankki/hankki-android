@@ -9,8 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.eoyeongbooyeong.core.navigation.Route
+import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.navigation.Dummy
+import com.hankki.feature.home.navigation.navigateHome
 
 internal class MainNavigator(
     val navController: NavHostController,
@@ -36,7 +37,7 @@ internal class MainNavigator(
         }
 
         when (tab) {
-            MainTab.HOME -> {} // navController.navigateHome(navOptions)
+            MainTab.HOME -> navController.navigateHome(navOptions)
             MainTab.REPORT -> {} // navController.navigateHome(navOptions)
             MainTab.MY -> {} // navController.navigateHome(navOptions)
         }
