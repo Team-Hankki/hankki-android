@@ -1,8 +1,10 @@
 package com.hankki.feature.main
 
 import androidx.compose.runtime.Composable
+import com.hankki.core.navigation.MainTabRoute
 import com.hankki.core.navigation.Route
-import kotlinx.serialization.Serializable
+import com.hankki.feature.home.navigation.Home
+import com.hankki.feature.report.navigation.Report
 
 internal enum class MainTab(
     val iconResId: Int,
@@ -12,17 +14,17 @@ internal enum class MainTab(
     HOME(
         iconResId = R.drawable.ic_launcher_background,
         contentDescription = "홈",
-        MainTabRoute.Home
+        Home
     ),
     REPORT(
         iconResId = R.drawable.ic_launcher_background,
         contentDescription = "제보하기",
-        MainTabRoute.Report,
+        Report,
     ),
     MY(
         iconResId = R.drawable.ic_launcher_background,
         contentDescription = "마이페이지",
-        MainTabRoute.My,
+        Home,
     );
 
     companion object {
@@ -36,15 +38,4 @@ internal enum class MainTab(
             return entries.map { it.route }.any { predicate(it) }
         }
     }
-}
-
-sealed interface MainTabRoute : Route {
-    @Serializable
-    data object Home : MainTabRoute
-
-    @Serializable
-    data object Report : MainTabRoute
-
-    @Serializable
-    data object My : MainTabRoute
 }

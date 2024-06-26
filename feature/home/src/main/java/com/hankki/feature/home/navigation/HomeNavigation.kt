@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.hankki.core.navigation.Route
+import com.hankki.core.navigation.MainTabRoute
 import com.hankki.feature.home.HomeRoute
 import kotlinx.serialization.Serializable
 
@@ -19,4 +19,4 @@ fun NavGraphBuilder.homeNavGraph() {
 }
 
 @Serializable
-data object Home : Route
+data object Home : MainTabRoute
