@@ -45,3 +45,4 @@ include(
 )
 include(":feature:home")
 include(":feature:report")
+include(":feature:my")

@@ -12,6 +12,7 @@ import androidx.navigation.navOptions
 import com.hankki.core.navigation.Route
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
+import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.report.navigation.navigateReport
 
 internal class MainNavigator(
@@ -40,7 +41,7 @@ internal class MainNavigator(
         when (tab) {
             MainTab.HOME -> navController.navigateHome(navOptions)
             MainTab.REPORT -> navController.navigateReport(navOptions)
-            MainTab.MY -> {} // navController.navigateHome(navOptions)
+            MainTab.MY -> navController.navigateMy(navOptions)
         }
     }
 

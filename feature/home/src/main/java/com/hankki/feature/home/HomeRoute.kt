@@ -14,6 +14,6 @@ fun HomeRoute() {
 @Composable
 fun HomeScreen() {
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Report")
+        Text(text = "Home")
     }
 }

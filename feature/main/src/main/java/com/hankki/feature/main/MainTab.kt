@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.hankki.core.navigation.MainTabRoute
 import com.hankki.core.navigation.Route
 import com.hankki.feature.home.navigation.Home
+import com.hankki.feature.my.navigation.My
 import com.hankki.feature.report.navigation.Report
 
 internal enum class MainTab(
@@ -24,7 +25,7 @@ internal enum class MainTab(
     MY(
         iconResId = R.drawable.ic_launcher_background,
         contentDescription = "마이페이지",
-        Home,
+        My,
     );
 
     companion object {
