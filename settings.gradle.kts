@@ -43,3 +43,4 @@ include(
     ":feature:dummy",
     ":feature:main"
 )
+include(":feature:home")
