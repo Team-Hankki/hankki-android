@@ -12,4 +12,5 @@ dependencies {
     // feature
     implementation(projects.feature.dummy)
     implementation(projects.feature.home)
+    implementation(projects.feature.report)
 }

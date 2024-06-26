@@ -44,3 +44,4 @@ include(
     ":feature:main"
 )
 include(":feature:home")
+include(":feature:report")
