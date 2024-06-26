@@ -8,8 +8,8 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.DummyRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateDummy(navOptions: NavOptions) {
-    navigate(Dummy, navOptions)
+fun NavController.navigateDummy() {
+    navigate(Dummy)
 }
 
 fun NavGraphBuilder.dummyNavGraph() {

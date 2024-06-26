@@ -12,9 +12,9 @@ fun NavController.navigateMy(navOptions: NavOptions) {
     navigate(My, navOptions)
 }
 
-fun NavGraphBuilder.myNavGraph() {
+fun NavGraphBuilder.myNavGraph(navigateToDummy: () -> Unit) {
     composable<My> {
-        MyRoute()
+        MyRoute(navigateToDummy)
     }
 }
 

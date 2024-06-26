@@ -10,6 +10,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.hankki.core.navigation.Route
+import com.hankki.feature.dummy.navigation.navigateDummy
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.my.navigation.navigateMy
@@ -43,6 +44,10 @@ internal class MainNavigator(
             MainTab.REPORT -> navController.navigateReport(navOptions)
             MainTab.MY -> navController.navigateMy(navOptions)
         }
+    }
+
+    fun navigateToDummy() {
+        navController.navigateDummy()
     }
 
     private fun navigateUp() {

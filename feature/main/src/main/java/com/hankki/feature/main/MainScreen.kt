@@ -61,7 +61,9 @@ internal fun MainScreen(
                     dummyNavGraph()
                     homeNavGraph()
                     reportNavGraph()
-                    myNavGraph()
+                    myNavGraph(
+                        navigateToDummy = { navigator.navigateToDummy() }
+                    )
                 }
 
             }
