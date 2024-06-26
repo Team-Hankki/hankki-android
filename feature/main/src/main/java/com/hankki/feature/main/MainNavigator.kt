@@ -42,13 +42,13 @@ internal class MainNavigator(
         }
     }
 
-    private fun popBackStack() {
-        navController.popBackStack()
+    private fun navigateUp() {
+        navController.navigateUp()
     }
 
-    fun popBackStackIfNotHome() {
+    fun navigateUpIfNotHome() {
         if (!isSameCurrentDestination<MainTabRoute.Home>()) {
-            popBackStack()
+            navigateUp()
         }
     }
 
