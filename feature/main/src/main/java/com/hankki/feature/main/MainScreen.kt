@@ -57,7 +57,6 @@ internal fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
                 ) {
-                    // navgraph 추가하기
                     dummyNavGraph()
                     homeNavGraph()
                     reportNavGraph()
