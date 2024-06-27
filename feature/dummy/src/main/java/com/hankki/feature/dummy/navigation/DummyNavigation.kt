@@ -2,7 +2,6 @@ package com.hankki.feature.dummy.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.DummyRoute
@@ -12,11 +11,13 @@ fun NavController.navigateDummy() {
     navigate(Dummy)
 }
 
-fun NavGraphBuilder.dummyNavGraph() {
+fun NavGraphBuilder.dummyNavGraph(onShowErrorSnackBar: (String) -> Unit) {
     composable<Dummy> {
-        DummyRoute()
+        DummyRoute(
+            onShowErrorSnackBar = onShowErrorSnackBar
+        )
     }
 }
 
 @Serializable
-data object Dummy: Route
+data object Dummy : Route

@@ -25,6 +25,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -39,12 +40,20 @@ import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.navigation.reportNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
+    val onShowErrorSnackBar: (String) -> Unit = { errorMessage ->
+        coroutineScope.launch {
+            snackBarHostState.currentSnackbarData?.dismiss()
+            snackBarHostState.showSnackbar(errorMessage)
+        }
+    }
 
     Scaffold(
         content = { innerPadding ->
@@ -57,7 +66,9 @@ internal fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
                 ) {
-                    dummyNavGraph()
+                    dummyNavGraph(
+                        onShowErrorSnackBar = onShowErrorSnackBar
+                    )
                     homeNavGraph()
                     reportNavGraph()
                     myNavGraph(
