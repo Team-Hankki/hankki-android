@@ -24,8 +24,6 @@ dependencies {
     val libs = project.extensions.libs
 
     // modules
-    implementation(project(":core:common"))
-    implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
 
     // timber
