@@ -31,4 +31,8 @@ android {
 
 dependencies {
     implementation(projects.feature.main)
+    implementation(projects.data.dummy)
+    implementation(projects.core.network)
+
+    implementation(libs.timber)
 }

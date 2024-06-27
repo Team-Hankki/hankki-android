@@ -9,6 +9,8 @@ import javax.inject.Inject
 class ReqresRepositoryImpl @Inject constructor(
     private val reqresDataSource: ReqresDataSource,
 ) : ReqresRepository {
-    override suspend fun getUserList(page: Int): List<ReqresUserModel> =
-        reqresDataSource.getUserList(page).toResponseUserList()
+    override suspend fun getUserList(page: Int): Result<List<ReqresUserModel>> =
+        runCatching {
+            reqresDataSource.getUserList(page).toResponseUserList()
+        }
 }
