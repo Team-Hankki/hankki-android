@@ -1,6 +1,5 @@
 package com.hankki.feature.dummy
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.UiState

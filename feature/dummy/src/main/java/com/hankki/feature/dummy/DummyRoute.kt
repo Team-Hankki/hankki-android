@@ -37,7 +37,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun DummyRoute(
     viewModel: DummyViewModel = hiltViewModel(),
-    onShowErrorSnackBar: (String) -> Unit
+    onShowErrorSnackBar: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
