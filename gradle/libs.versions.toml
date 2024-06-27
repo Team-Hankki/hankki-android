@@ -20,7 +20,7 @@ androidxDatastore = "1.1.1"
 ## Compose
 androidxComposeBom = "2024.05.00"
 androidxComposeCompiler = "1.5.14"
-androidxComposeNavigation = "2.8.0-beta02"
+androidxComposeNavigation = "2.8.0-beta04"
 androidxComposeMaterial3 = "1.2.1"
 
 ## Kotlin Symbol Processing
@@ -36,7 +36,7 @@ retrofit = "2.11.0"
 
 ## Kotlin
 kotlin = "2.0.0"
-kotlinxSerializationJson = "1.7.0-RC"
+kotlinxSerializationJson = "1.7.0"
 kotlinxImmutable = "0.3.7"
 
 ## Coroutine
