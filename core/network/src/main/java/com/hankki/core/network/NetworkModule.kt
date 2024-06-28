@@ -22,7 +22,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+internal object NetworkModule {
     private const val APPLICATION_JSON = "application/json"
     private const val OKHTTP = "okhttp"
     private const val UNIT_TAB = 4

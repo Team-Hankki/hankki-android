@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ServiceModule {
+internal object ServiceModule {
     @Provides
     @Singleton
     fun providePokeService(retrofit: Retrofit): ReqresService = retrofit.create(ReqresService::class.java)
