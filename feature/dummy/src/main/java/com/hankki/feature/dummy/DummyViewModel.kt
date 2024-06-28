@@ -6,6 +6,7 @@ import com.hankki.core.common.utill.UiState
 import com.hankki.domain.dummy.repository.ReqresRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,7 +32,7 @@ class DummyViewModel @Inject constructor(
         viewModelScope.launch {
             requresRepository.getUserList(1)
                 .onSuccess {
-                    _state.value = _state.value.copy(users = UiState.Success(it.toImmutableList()))
+                    _state.value = _state.value.copy(users = UiState.Success(it.toPersistentList()))
                 }.onFailure {
                     _state.value = _state.value.copy(users = UiState.Failure)
                     _sideEffect.emit(DummySideEffect.SnackBar("우앵 에러났서요"))
