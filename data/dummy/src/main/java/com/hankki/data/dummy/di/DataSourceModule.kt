@@ -10,8 +10,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DataStoreModule {
+abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindRequresDataStore(impl: ReqresDataSourceImpl): ReqresDataSource
+    abstract fun bindRequresDataSource(impl: ReqresDataSourceImpl): ReqresDataSource
 }
