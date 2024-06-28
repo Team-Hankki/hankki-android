@@ -41,8 +41,8 @@ include(
 // feature
 include(
     ":feature:dummy",
-    ":feature:main"
+    ":feature:main",
+    ":feature:home",
+    ":feature:report",
+    ":feature:my"
 )
-include(":feature:home")
-include(":feature:report")
-include(":feature:my")
