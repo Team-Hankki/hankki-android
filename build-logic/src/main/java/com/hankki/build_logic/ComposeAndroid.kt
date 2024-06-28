@@ -27,6 +27,8 @@ internal fun Project.configureComposeAndroid() {
             add("implementation", libs.findLibrary("androidx.compose.material3").get())
             add("implementation", libs.findLibrary("androidx.compose.ui").get())
             add("implementation", libs.findLibrary("androidx.compose.ui.tooling.preview").get())
+            add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
+            add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
             add("androidTestImplementation", libs.findLibrary("androidx.junit").get())
             add("androidTestImplementation", libs.findLibrary("androidx.test.espresso.core").get())
             add("androidTestImplementation", libs.findLibrary("androidx.compose.ui.test").get())

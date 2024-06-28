@@ -24,7 +24,8 @@ include(
     ":core:common",
     ":core:datastore",
     ":core:designsystem",
-    ":core:network"
+    ":core:network",
+    ":core:navigation"
 )
 
 // data
@@ -40,5 +41,8 @@ include(
 // feature
 include(
     ":feature:dummy",
-    ":feature:main"
+    ":feature:main",
+    ":feature:home",
+    ":feature:report",
+    ":feature:my"
 )

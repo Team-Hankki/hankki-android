@@ -33,7 +33,8 @@ android {
 dependencies{
     implementation(projects.core.common)
 
-    implementation(libs.okhttp.logging)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.bundles.okhttp)
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
