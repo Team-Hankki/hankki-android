@@ -12,10 +12,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.hankki.core.designsystem.R
 
-// 예시 파일입니다. 이렇게 사용하시면 되고, 아래에 body1에 적용한 예시까지 있습니다.
-// 아무 폰트나 넣은거라 폰트가 맞는지 확인 후 사용해주세요.
-// 적용 하신 후 주석 제거해주세요.
+val PretendardBold = FontFamily(Font(R.font.pretendard_bold, FontWeight.Bold))
+val PretendardSemiBold = FontFamily(Font(R.font.pretendard_semibold, FontWeight.SemiBold))
 val PretendardMedium = FontFamily(Font(R.font.pretendard_medium, FontWeight.Medium))
+val PretendardRegular = FontFamily(Font(R.font.pretendard_regular, FontWeight.Normal))
+val SuiteBold = FontFamily(Font(R.font.suite_bold, FontWeight.Bold))
+val SuiteSemiBold = FontFamily(Font(R.font.suite_semibold, FontWeight.SemiBold))
+val SuiteMedium = FontFamily(Font(R.font.suite_medium, FontWeight.Medium))
+val SuiteRegular = FontFamily(Font(R.font.suite_regular, FontWeight.Normal))
 
 @Stable
 class HankkiTypography internal constructor(
@@ -129,39 +133,46 @@ class HankkiTypography internal constructor(
 fun hankkiTypography(): HankkiTypography {
     return HankkiTypography(
         h1 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = PretendardBold,
             fontWeight = FontWeight.Bold,
-            fontSize = 30.sp
+            fontSize = 24.sp,
+            lineHeight = 36.sp
         ),
         h2 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = PretendardBold,
             fontWeight = FontWeight.Bold,
-            fontSize = 24.sp
+            fontSize = 20.sp,
+            lineHeight = 30.sp
         ),
         suitH1 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = SuiteBold,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
+            fontSize = 24.sp,
+            lineHeight = 36.sp
         ),
         sub1 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
+            fontFamily = PretendardSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 18.sp,
+            lineHeight = 27.sp
         ),
         sub2 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp
+            fontFamily = PretendardSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 17.sp,
+            lineHeight = 25.5.sp
         ),
         sub3 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp
+            fontFamily = PretendardSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+            lineHeight = 24.sp
         ),
         suitS1 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Bold,
-            fontSize = 10.sp
+            fontFamily = SuiteSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+            lineHeight = 24.sp
         ),
         body1 = TextStyle(
             fontFamily = PretendardMedium,
@@ -170,44 +181,52 @@ fun hankkiTypography(): HankkiTypography {
             lineHeight = 24.sp
         ),
         body2 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp
+            fontFamily = PretendardBold,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            lineHeight = 21.sp
         ),
         body3 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
+            fontFamily = PretendardSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 14.sp,
+            lineHeight = 21.sp
         ),
         body4 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
-            fontSize = 10.sp
+            fontSize = 14.sp,
+            lineHeight = 21.sp
         ),
         suitBody1 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
-            fontSize = 8.sp
+            fontFamily = SuiteMedium,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            lineHeight = 24.sp
         ),
         suitBody2 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = SuiteRegular,
             fontWeight = FontWeight.Normal,
-            fontSize = 6.sp
+            fontSize = 14.sp,
+            lineHeight = 21.sp
         ),
         button1 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
+            fontFamily = PretendardRegular,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp,
+            lineHeight = 18.sp
         ),
         caption1 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
+            fontFamily = PretendardMedium,
+            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp,
+            lineHeight = 18.sp
         ),
         caption2 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
-            fontSize = 10.sp
+            fontSize = 11.sp,
+            lineHeight = 16.5.sp
         )
     )
 }
