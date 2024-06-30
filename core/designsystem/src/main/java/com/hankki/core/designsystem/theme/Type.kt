@@ -6,9 +6,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.hankki.core.designsystem.R
+
+// 예시 파일입니다. 이렇게 사용하시면 되고, 아래에 body1에 적용한 예시까지 있습니다.
+// 아무 폰트나 넣은거라 폰트가 맞는지 확인 후 사용해주세요.
+// 적용 하신 후 주석 제거해주세요.
+val PretendardMedium = FontFamily(Font(R.font.pretendard_medium, FontWeight.Medium))
 
 @Stable
 class HankkiTypography internal constructor(
@@ -157,9 +164,10 @@ fun hankkiTypography(): HankkiTypography {
             fontSize = 10.sp
         ),
         body1 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontFamily = PretendardMedium,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            lineHeight = 24.sp
         ),
         body2 = TextStyle(
             fontFamily = FontFamily.Default,
