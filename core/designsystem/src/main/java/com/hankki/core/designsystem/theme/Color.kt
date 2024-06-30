@@ -16,7 +16,7 @@ val SubColor01 = Color(0xFFFFFFEB)
 val SubColor02 = Color(0xFFF8F891)
 
 //gray scale
-val white = Color(0xFFFFFFFF)
+val White = Color(0xFFFFFFFF)
 val Gray50 = Color(0xFFFAFAFA)
 val Gray100 = Color(0xFFF5F5F5)
 val Gray200 = Color(0xFFE5E5E5)
