@@ -1,6 +1,8 @@
 package com.hankki.feature.main
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
@@ -65,6 +67,10 @@ internal fun MainScreen(
                 NavHost(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { ExitTransition.None }
                 ) {
                     dummyNavGraph(
                         onShowErrorSnackBar = onShowErrorSnackBar
