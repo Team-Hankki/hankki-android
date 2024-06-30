@@ -29,7 +29,7 @@ class HankkiTypography internal constructor(
     sub1: TextStyle,
     sub2: TextStyle,
     sub3: TextStyle,
-    suitS1: TextStyle,
+    suitSub1: TextStyle,
     body1: TextStyle,
     body2: TextStyle,
     body3: TextStyle,
@@ -52,7 +52,7 @@ class HankkiTypography internal constructor(
         private set
     var sub3: TextStyle by mutableStateOf(sub3)
         private set
-    var suitS1: TextStyle by mutableStateOf(suitS1)
+    var suitSub1: TextStyle by mutableStateOf(suitSub1)
         private set
     var body1: TextStyle by mutableStateOf(body1)
         private set
@@ -80,7 +80,7 @@ class HankkiTypography internal constructor(
         sub1: TextStyle = this.sub1,
         sub2: TextStyle = this.sub2,
         sub3: TextStyle = this.sub3,
-        suitS1: TextStyle = this.suitS1,
+        suitSub1: TextStyle = this.suitSub1,
         body1: TextStyle = this.body1,
         body2: TextStyle = this.body2,
         body3: TextStyle = this.body3,
@@ -97,7 +97,7 @@ class HankkiTypography internal constructor(
         sub1,
         sub2,
         sub3,
-        suitS1,
+        suitSub1,
         body1,
         body2,
         body3,
@@ -116,7 +116,7 @@ class HankkiTypography internal constructor(
         sub1 = other.sub1
         sub2 = other.sub2
         sub3 = other.sub3
-        suitS1 = other.suitS1
+        suitSub1 = other.suitSub1
         body1 = other.body1
         body2 = other.body2
         body3 = other.body3
@@ -168,7 +168,7 @@ fun hankkiTypography(): HankkiTypography {
             fontSize = 16.sp,
             lineHeight = 24.sp
         ),
-        suitS1 = TextStyle(
+        suitSub1 = TextStyle(
             fontFamily = SuiteSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
