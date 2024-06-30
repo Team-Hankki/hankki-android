@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.designsystem.theme.Typography
+import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -33,19 +34,20 @@ import com.naver.maps.map.compose.rememberFusedLocationSource
 @Composable
 fun HomeRoute(paddingValues: PaddingValues) {
     val context = LocalContext.current
-    val sungsil = LatLng(37.494705526855, 126.95994559383)
-    val DEFAULT_ZOOM = 16.0
 
     val focusLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
-            sungsil,
+            // 추후 대학의 위도, 경도를 서버에서 받아 넣을 예정이라 하드코딩 해놨습니다.
+            LatLng(37.494705526855, 126.95994559383),
             DEFAULT_ZOOM
         )
     }
 
-
-    HomeScreen(cameraPositionState, paddingValues) {
+    HomeScreen(
+        paddingValues = paddingValues,
+        cameraPositionState = cameraPositionState
+    ) {
         focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             cameraPositionState.move(
                 CameraUpdate.scrollAndZoomTo(
@@ -60,8 +62,8 @@ fun HomeRoute(paddingValues: PaddingValues) {
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun HomeScreen(
-    cameraPositionState: CameraPositionState,
     paddingValues: PaddingValues,
+    cameraPositionState: CameraPositionState,
     reposition: () -> Unit = {},
 ) {
     Box(
@@ -77,8 +79,8 @@ fun HomeScreen(
             cameraPositionState = cameraPositionState,
             locationSource = rememberFusedLocationSource(),
             properties = MapProperties(
-                mapType = MapType.Basic, // 지도 모양
-                locationTrackingMode = LocationTrackingMode.NoFollow, // 위치 추적 모드
+                mapType = MapType.Basic,
+                locationTrackingMode = LocationTrackingMode.NoFollow
             ),
             uiSettings = MapUiSettings(
                 isZoomControlEnabled = false,
@@ -98,4 +100,8 @@ fun HomeScreen(
             )
         }
     }
+}
+
+object MapConstants {
+    const val DEFAULT_ZOOM = 16.0
 }
