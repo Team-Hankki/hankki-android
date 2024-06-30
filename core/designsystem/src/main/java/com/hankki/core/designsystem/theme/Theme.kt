@@ -46,7 +46,7 @@ object HankkiTheme {
 }
 
 @Composable
-fun ProvideSoptColorsAndTypography(typography: HankkiTypography, content: @Composable () -> Unit) {
+fun ProvideHankkiTypography(typography: HankkiTypography, content: @Composable () -> Unit) {
     val provideTypography = remember { typography.copy() }
     provideTypography.update(typography)
     CompositionLocalProvider(
@@ -65,7 +65,7 @@ fun HankkijogboTheme(
     val colorScheme = LightColorScheme // 현재는 다크테마 미지원. 추후 지원시 수정 예정
     val typography = hankkiTypography()
 
-    ProvideSoptColorsAndTypography(typography) {
+    ProvideHankkiTypography(typography) {
         MaterialTheme(
             colorScheme = colorScheme,
             content = content
