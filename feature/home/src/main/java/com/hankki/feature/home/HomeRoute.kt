@@ -39,7 +39,7 @@ fun HomeRoute(paddingValues: PaddingValues) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
             // 추후 대학의 위도, 경도를 서버에서 받아 넣을 예정이라 하드코딩 해놨습니다.
-            LatLng(37.494705526855, 126.95994559383),
+            LatLng(37.3009489417651, 127.03549529577874),
             DEFAULT_ZOOM
         )
     }
