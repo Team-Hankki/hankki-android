@@ -39,6 +39,9 @@ dependencies {
     // data
     implementation(projects.data.dummy)
 
+    // core
+    implementation(projects.core.network)
+
     // other dependencies
     implementation(libs.timber)
 }
