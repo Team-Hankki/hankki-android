@@ -8,4 +8,9 @@ android {
     setNamespace("feature.home")
 }
 
-dependencies {}
+dependencies {
+    // naver map
+    implementation(libs.naver.map.compose)
+    implementation (libs.play.services.location)
+    implementation (libs.naver.map.location)
+}

@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.hankki.build_logic.setNamespace
 
 plugins {
@@ -20,6 +21,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        manifestPlaceholders["naverClientId"] =
+            gradleLocalProperties(rootDir, providers).getProperty("naverClientId")
     }
 
     buildTypes {

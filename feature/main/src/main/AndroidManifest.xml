@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <application>
 
         <activity
             android:name=".MainActivity"
             android:configChanges="uiMode"
             android:exported="true"
-            android:theme="@style/Theme.Hankkijogbo">
+            android:theme="@style/Theme.AppCompat">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,6 @@
 package com.hankki.feature.main
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navigator: MainNavigator = rememberMainNavigator()
+            window.navigationBarColor = Color.BLACK
 
             HankkijogboTheme {
                 MainScreen(navigator)
