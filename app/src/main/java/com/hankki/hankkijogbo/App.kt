@@ -1,9 +1,7 @@
 package com.hankki.hankkijogbo
 
 import android.app.Application
-import com.hankki.core.network.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
 
 @HiltAndroidApp
 class App : Application() {
@@ -14,6 +12,6 @@ class App : Application() {
     }
 
     private fun initTimber() {
-        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+        // if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     }
 }

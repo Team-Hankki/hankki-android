@@ -1,4 +1,4 @@
-package com.hankki.core.common.extension
+package com.hankki.core.network
 
 fun String?.isJsonObject(): Boolean = this?.startsWith("{") == true && this.endsWith("}")
 
