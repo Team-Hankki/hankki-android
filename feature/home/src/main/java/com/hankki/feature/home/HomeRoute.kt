@@ -2,6 +2,7 @@ package com.hankki.feature.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomSheetScaffold
@@ -35,7 +37,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
+import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
@@ -175,12 +180,19 @@ fun HomeScreen(
                         contentAlignment = Alignment.BottomEnd
                     ) {
                         Column {
-                            Button(
-                                modifier = Modifier.padding(16.dp),
-                                onClick = reposition
+                            Box(
+                                modifier = Modifier
+                                    .padding(end = 21.dp, bottom = 14.dp)
+                                    .size(38.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Gray300, CircleShape)
+                                    .background(White)
+                                    .padding(9.dp)
+                                    .noRippleClickable(onClick = reposition)
                             ) {
-                                Text(
-                                    text = "+"
+                                AsyncImage(
+                                    model = R.drawable.ic_map_here,
+                                    contentDescription = "here"
                                 )
                             }
                             Spacer(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp * 0.3).dp))
