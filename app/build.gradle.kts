@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.hankki.build_logic.setNamespace
 
 plugins {
@@ -20,6 +21,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField(
+            "String",
+            "KAKAO_NATIVE_APP_KEY",
+            gradleLocalProperties(rootDir, providers).getProperty("kakaoNativeAppKey"),
+        )
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] =
+            gradleLocalProperties(rootDir, providers).getProperty("kakaoNative.AppKey")
     }
 
     buildTypes {
@@ -27,12 +36,22 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
     implementation(projects.feature.main)
+
     implementation(projects.data.dummy)
+
     implementation(projects.core.network)
 
     implementation(libs.timber)
+
+    implementation(libs.kakao.all)
+    implementation(libs.kakao.user)
 }
+
