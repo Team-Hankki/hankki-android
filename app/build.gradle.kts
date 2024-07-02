@@ -33,9 +33,15 @@ android {
 }
 
 dependencies {
+    // feature
     implementation(projects.feature.main)
+
+    // data
     implementation(projects.data.dummy)
+
+    // core
     implementation(projects.core.network)
 
+    // other dependencies
     implementation(libs.timber)
 }

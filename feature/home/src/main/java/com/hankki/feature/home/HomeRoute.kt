@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
-import com.hankki.core.designsystem.theme.Typography
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -95,8 +94,7 @@ fun HomeScreen(
             onClick = reposition
         ) {
             Text(
-                text = "+",
-                style = Typography.bodyLarge
+                text = "+"
             )
         }
     }
