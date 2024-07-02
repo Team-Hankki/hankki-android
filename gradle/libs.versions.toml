@@ -59,6 +59,9 @@ espressoCoreVersion = "3.5.1"
 material = "1.12.0"
 lifecycleRuntimeKtx = "2.8.2"
 
+## Kakao
+kakao = "2.20.1"
+
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -118,6 +121,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 
+kakao-all = { group = "com.kakao.sdk", name = "v2-all", version.ref="kakao" }
+kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]
 
