@@ -1,18 +1,44 @@
 package com.hankki.feature.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.android.gms.location.LocationServices
+import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -27,6 +53,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalNaverMapApi::class)
 @SuppressLint("MissingPermission")
@@ -58,44 +85,152 @@ fun HomeRoute(paddingValues: PaddingValues) {
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class)
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     reposition: () -> Unit = {},
 ) {
-    Box(
+    var coroutineScope = rememberCoroutineScope()
+    var isOpenBottomSheet by remember { mutableStateOf(false) }
+    var isOpenRealBottomSheet by remember { mutableStateOf(false) }
+
+    var bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
+
+    if (isOpenRealBottomSheet) {
+        ModalBottomSheet(onDismissRequest = { isOpenRealBottomSheet = false }) {
+            Text(
+                modifier = Modifier.padding(vertical = 80.dp),
+                text = "오 진짜 나오네"
+            )
+        }
+    }
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
-        contentAlignment = Alignment.BottomEnd
+            .padding(paddingValues)
     ) {
-        NaverMap(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(),
-            cameraPositionState = cameraPositionState,
-            locationSource = rememberFusedLocationSource(),
-            properties = MapProperties(
-                mapType = MapType.Basic,
-                locationTrackingMode = LocationTrackingMode.NoFollow
-            ),
-            uiSettings = MapUiSettings(
-                isZoomControlEnabled = false,
-                isScaleBarEnabled = false
-            )
-        ) {
-            // Markers
-        }
-
-        Button(
-            modifier = Modifier.padding(16.dp),
-            onClick = reposition
+                .fillMaxWidth()
+                .height(60.dp)
+                .background(White),
+            contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "+"
+                text = "건국대학교",
+                style = HankkiTheme.typography.suitH1,
+                color = Gray900
             )
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            NaverMap(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.74f)
+                    .padding(),
+                cameraPositionState = cameraPositionState,
+                locationSource = rememberFusedLocationSource(),
+                properties = MapProperties(
+                    mapType = MapType.Basic,
+                    locationTrackingMode = LocationTrackingMode.NoFollow
+                ),
+                uiSettings = MapUiSettings(
+                    isZoomControlEnabled = false,
+                    isScaleBarEnabled = false
+                )
+            ) {
+                // Markers
+            }
+
+            Column {
+                Row {
+                    Button(
+                        modifier = Modifier.padding(16.dp),
+                        onClick = {
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.bottomSheetState.partialExpand()
+                            }
+                        }
+                    ) {
+                        Text(
+                            text = "+"
+                        )
+                    }
+                    Button(
+                        modifier = Modifier.padding(16.dp),
+                        onClick = reposition
+                    ) {
+                        Text(
+                            text = "+"
+                        )
+                    }
+                }
+                if (!isOpenBottomSheet) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        Column {
+                            Button(
+                                modifier = Modifier.padding(16.dp),
+                                onClick = reposition
+                            ) {
+                                Text(
+                                    text = "+"
+                                )
+                            }
+                            Spacer(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp * 0.3).dp))
+                        }
+
+                        BottomSheetScaffold(
+                            scaffoldState = bottomSheetScaffoldState,
+                            sheetContent = {
+                                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                                    item {
+                                        Button(onClick = { isOpenRealBottomSheet = true }) {
+                                            Text(text = "이거 누르면 바텀시트 올라옴 ㅋㅋ")
+                                        }
+                                    }
+                                    items(100) {
+                                        Text("Sheet Content")
+                                    }
+                                    item {
+                                        Button(onClick = { isOpenRealBottomSheet = true }) {
+                                            Text(text = "이거 누르면 바텀시트 올라옴 ㅋㅋ")
+                                        }
+                                    }
+                                }
+                            },
+                            sheetSwipeEnabled = false,
+                            sheetPeekHeight = (LocalConfiguration.current.screenHeightDp * 0.3).dp
+                        ) {}
+                    }
+                }
+            }
+        }
+
+
+        if (isOpenBottomSheet) {
+            Column {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(120.dp)
+                        .clip(
+                            CircleShape
+                        )
+                        .background(Color.White),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text("대충 가게 정보~", color = Color.Blue, fontSize = 24.sp)
+                }
+                Spacer(modifier = Modifier.height(60.dp))
+            }
         }
     }
 }
