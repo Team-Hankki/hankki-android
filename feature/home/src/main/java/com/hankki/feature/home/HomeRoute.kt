@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -217,6 +218,7 @@ fun HomeScreen(
                                     }
                                 }
                             },
+                            sheetContainerColor = Gray100,
                             sheetSwipeEnabled = false,
                             sheetPeekHeight = (LocalConfiguration.current.screenHeightDp * 0.3).dp
                         ) {}
