@@ -14,4 +14,5 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.report)
     implementation(projects.feature.my)
+    implementation(projects.feature.login)
 }
