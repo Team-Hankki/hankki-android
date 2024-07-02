@@ -36,6 +36,7 @@ import androidx.navigation.compose.NavHost
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.feature.dummy.navigation.dummyNavGraph
 import com.hankki.feature.home.navigation.homeNavGraph
+import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.navigation.reportNavGraph
 import kotlinx.collections.immutable.ImmutableList
@@ -72,8 +73,10 @@ internal fun MainScreen(
                     homeNavGraph()
                     reportNavGraph()
                     myNavGraph(
-                        navigateToDummy = { navigator.navigateToDummy() }
+                        navigateToDummy = { navigator.navigateToDummy() },
+                        navigateToLogin = { navigator.navigateToLogin() }
                     )
+                    loginNavgraph()
                 }
 
             }

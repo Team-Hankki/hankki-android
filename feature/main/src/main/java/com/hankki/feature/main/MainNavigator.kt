@@ -13,6 +13,7 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.navigation.navigateDummy
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
+import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.report.navigation.navigateReport
 
@@ -48,6 +49,10 @@ internal class MainNavigator(
 
     fun navigateToDummy() {
         navController.navigateDummy()
+    }
+
+    fun navigateToLogin() {
+        navController.navigateLogin()
     }
 
     private fun navigateUp() {
