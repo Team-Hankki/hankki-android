@@ -1,7 +1,5 @@
 package com.hankki.core.network
 
-import com.hankki.core.common.extension.isJsonArray
-import com.hankki.core.common.extension.isJsonObject
 import com.hankki.core.network.BuildConfig.BASE_URL
 import dagger.Module
 import dagger.Provides

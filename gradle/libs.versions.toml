@@ -42,6 +42,11 @@ kotlinxImmutable = "0.3.7"
 ## Coil
 coil = "2.6.0"
 
+## Naver Map
+naverMapCompose = "1.7.2"
+naverMapLocation = "21.0.2"
+playServicesLocation = "21.0.1"
+
 ## Coroutine
 coroutine = "1.8.1"
 
@@ -97,6 +102,10 @@ hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-comp
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+naver-map-compose = { module = "io.github.fornewid:naver-map-compose", version.ref = "naverMapCompose" }
+naver-map-location = { module = "io.github.fornewid:naver-map-location", version.ref = "naverMapLocation" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
 okhttp = { module = "com.squareup.okhttp3:okhttp" }

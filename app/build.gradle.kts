@@ -21,6 +21,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        manifestPlaceholders["naverClientId"] =
+            gradleLocalProperties(rootDir, providers).getProperty("naverClientId")
 
         buildConfigField(
             "String",
@@ -43,14 +45,16 @@ android {
 }
 
 dependencies {
+    // feature
     implementation(projects.feature.main)
 
+    // data
     implementation(projects.data.dummy)
 
+    // core
     implementation(projects.core.network)
 
+    // other dependencies
     implementation(libs.timber)
-
     implementation(libs.kakao.user)
 }
-

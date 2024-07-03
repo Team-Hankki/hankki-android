@@ -1,5 +1,6 @@
 package com.hankki.feature.my.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,9 +13,12 @@ fun NavController.navigateMy(navOptions: NavOptions) {
     navigate(My, navOptions)
 }
 
-fun NavGraphBuilder.myNavGraph(navigateToDummy: () -> Unit) {
+fun NavGraphBuilder.myNavGraph(
+    paddingValues: PaddingValues,
+    navigateToDummy: () -> Unit
+) {
     composable<My> {
-        MyRoute(navigateToDummy)
+        MyRoute(paddingValues, navigateToDummy)
     }
 }
 

@@ -1,5 +1,6 @@
 package com.hankki.feature.report.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,9 +13,9 @@ fun NavController.navigateReport(navOptions: NavOptions) {
     navigate(Report, navOptions)
 }
 
-fun NavGraphBuilder.reportNavGraph(navigateToLogin: () -> Unit) {
+fun NavGraphBuilder.reportNavGraph(paddingValues: PaddingValues, navigateToLogin: () -> Unit) {
     composable<Report> {
-        ReportRoute(navigateToLogin)
+        ReportRoute(paddingValues, navigateToLogin)
     }
 }
 

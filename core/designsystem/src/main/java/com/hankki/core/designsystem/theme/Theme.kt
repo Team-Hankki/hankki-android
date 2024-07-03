@@ -1,14 +1,13 @@
 package com.hankki.core.designsystem.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -32,6 +31,30 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+private val LocalHankkiTypography = staticCompositionLocalOf<HankkiTypography> {
+    error("No HankkiTypography provided")
+}
+
+/* HankkiTheme
+*
+* Typo를 변경하고 싶다면 HankkiTheme.typography.h1으로 접근하시면 됩니다.
+* ex) Text(text = "Hankki Example Typo", style = HankkiTheme.typography.h1)
+*/
+object HankkiTheme {
+    val typography: HankkiTypography
+        @Composable get() = LocalHankkiTypography.current
+}
+
+@Composable
+fun ProvideHankkiTypography(typography: HankkiTypography, content: @Composable () -> Unit) {
+    val provideTypography = remember { typography.copy() }
+    provideTypography.update(typography)
+    CompositionLocalProvider(
+        LocalHankkiTypography provides provideTypography,
+        content = content
+    )
+}
+
 @Composable
 fun HankkijogboTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -39,19 +62,13 @@ fun HankkijogboTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colorScheme = LightColorScheme // 현재는 다크테마 미지원. 추후 지원시 수정 예정
+    val typography = hankkiTypography()
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    ProvideHankkiTypography(typography) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            content = content
+        )
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
 }

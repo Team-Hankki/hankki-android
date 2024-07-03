@@ -31,8 +31,6 @@ android {
 }
 
 dependencies{
-    implementation(projects.core.common)
-
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 
