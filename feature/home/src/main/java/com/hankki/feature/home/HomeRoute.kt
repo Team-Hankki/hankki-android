@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -34,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -121,17 +123,23 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(paddingValues)
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
                 .background(White),
-            contentAlignment = Alignment.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "건국대학교",
                 style = HankkiTheme.typography.suitH1,
                 color = Gray900
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_dropdown_btn),
+                contentDescription = "button",
+                tint = Gray300
             )
         }
 
