@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -40,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray900
@@ -48,6 +48,7 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.designsystem.ChipState
 import com.hankki.feature.home.designsystem.HankkiFilterChip
+import com.hankki.feature.home.designsystem.StoreItem
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -205,18 +206,19 @@ fun HomeScreen(
                         BottomSheetScaffold(
                             scaffoldState = bottomSheetScaffoldState,
                             sheetContent = {
-                                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                                    item {
-                                        Button(onClick = { isOpenRealBottomSheet = true }) {
-                                            Text(text = "이거 누르면 바텀시트 올라옴 ㅋㅋ")
-                                        }
-                                    }
-                                    items(100) {
-                                        Text("Sheet Content")
-                                    }
-                                    item {
-                                        Button(onClick = { isOpenRealBottomSheet = true }) {
-                                            Text(text = "이거 누르면 바텀시트 올라옴 ㅋㅋ")
+                                LazyColumn(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                                ) {
+                                    items(count = 100) { // TODO: 추후 data class로 분리시 key 추가 예정
+                                        StoreItem(
+                                            storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                                            category = "한식",
+                                            storeName = "한끼네 한정식",
+                                            price = 7900,
+                                            heartCount = 300
+                                        ) {
+                                            isOpenRealBottomSheet = true
                                         }
                                     }
                                 }
