@@ -25,9 +25,11 @@ fun LoginRoute() {
                 is LoginSideEffect.StartLogin -> {
                     viewModel.loginWithKakaoTalk(context)
                 }
+
                 is LoginSideEffect.LoginSuccess -> {
                     viewModel.updateState(sideEffect)
                 }
+
                 is LoginSideEffect.LoginError -> {
                     viewModel.updateState(sideEffect)
                 }
@@ -37,7 +39,7 @@ fun LoginRoute() {
 
     LoginScreen(
         loginState = loginState,
-        onLoginClick = {  viewModel.initLoginButton() }
+        onLoginClick = { viewModel.initLoginButton() }
     )
 }
 
