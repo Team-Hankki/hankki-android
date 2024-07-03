@@ -20,18 +20,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.SubColor01
 import com.hankki.core.designsystem.theme.White
-import com.hankki.feature.home.R
 
 @Composable
 fun HankkiFilterChip(
     chipState: ChipState,
     title: String,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     val icon = remember {
@@ -43,7 +44,7 @@ fun HankkiFilterChip(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(100.dp))
             .border(1.dp, chipState.borderColor, RoundedCornerShape(100.dp))
             .background(chipState.containerColor)
