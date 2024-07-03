@@ -46,6 +46,8 @@ import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
+import com.hankki.feature.home.designsystem.ChipState
+import com.hankki.feature.home.designsystem.HankkiFilterChip
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -153,27 +155,28 @@ fun HomeScreen(
             }
 
             Column {
-                Row {
-                    Button(
-                        modifier = Modifier.padding(16.dp),
-                        onClick = {
-                            coroutineScope.launch {
-                                bottomSheetScaffoldState.bottomSheetState.partialExpand()
-                            }
+                Row(
+                    modifier = Modifier.padding(start = 22.dp, top = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    HankkiFilterChip(
+                        chipState = ChipState.SELECTED,
+                        title = "종류"
+                    ) {
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.partialExpand()
                         }
-                    ) {
-                        Text(
-                            text = "+"
-                        )
                     }
-                    Button(
-                        modifier = Modifier.padding(16.dp),
+                    HankkiFilterChip(
+                        chipState = ChipState.FIXED,
+                        title = "가격대",
                         onClick = reposition
-                    ) {
-                        Text(
-                            text = "+"
-                        )
-                    }
+                    )
+                    HankkiFilterChip(
+                        chipState = ChipState.UNSELECTED,
+                        title = "정렬",
+                        onClick = reposition
+                    )
                 }
                 if (!isOpenBottomSheet) {
                     Box(
