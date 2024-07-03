@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -75,6 +76,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalNaverMapApi::class)
@@ -115,7 +117,7 @@ fun HomeScreen(
     cameraPositionState: CameraPositionState,
     reposition: () -> Unit = {},
 ) {
-    var coroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     var isOpenBottomSheet by remember { mutableStateOf(false) }
     var isOpenRealBottomSheet by remember { mutableStateOf(false) }
 
@@ -187,9 +189,7 @@ fun HomeScreen(
                         chipState = ChipState.UNSELECTED,
                         title = "종류",
                         onClick = {
-                            coroutineScope.launch {
-                                bottomSheetScaffoldState.bottomSheetState.partialExpand()
-                            }
+                            closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
                             open = !open
                         }
                     )
@@ -200,10 +200,10 @@ fun HomeScreen(
                             "6000원 이하",
                             "6000 ~ 8000원"
                         ),
-                    ) {
-                        coroutineScope.launch {
-                            bottomSheetScaffoldState.bottomSheetState.partialExpand()
+                        onDismissRequest = {
                         }
+                    ) {
+                        closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
                     }
 
                     DropdownFilterChip(
@@ -213,11 +213,12 @@ fun HomeScreen(
                             "최신순",
                             "가격 낮은순",
                             "추천순"
-                        )
-                    ) {
-                        coroutineScope.launch {
-                            bottomSheetScaffoldState.bottomSheetState.partialExpand()
+                        ),
+                        onDismissRequest = {
+
                         }
+                    ) {
+                        closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
                     }
                 }
                 if (!isOpenBottomSheet) {
@@ -333,6 +334,16 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+private fun closeBottomSheet(
+    coroutineScope: CoroutineScope,
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+) {
+    coroutineScope.launch {
+        bottomSheetScaffoldState.bottomSheetState.partialExpand()
+    }
+}
+
 object MapConstants {
     const val DEFAULT_ZOOM = 16.0
 }
@@ -342,19 +353,25 @@ fun DropdownFilterChip(
     chipState: ChipState,
     title: String,
     menus: List<String> = emptyList(),
-    onClick: () -> Unit = {},
+    onDismissRequest: () -> Unit = {},
+    onClickMenu: () -> Unit = {},
+    onClickChip: () -> Unit = {},
 ) {
     var isOpenDropDownMenu by remember { mutableStateOf(false) }
     HankkiFilterChip(
         chipState = chipState,
         title = title,
         onClick = {
+            onClickChip()
             isOpenDropDownMenu = true
         }
     ) {
         DropdownMenu(
             expanded = isOpenDropDownMenu, // chipState관련으로 수정해야함.
-            onDismissRequest = { isOpenDropDownMenu = false },
+            onDismissRequest = {
+                onDismissRequest()
+                isOpenDropDownMenu = false
+            },
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .border(1.dp, Gray200, RoundedCornerShape(10.dp))
@@ -371,7 +388,7 @@ fun DropdownFilterChip(
                         )
                     }, onClick = {
                         isOpenDropDownMenu = false
-                        onClick()
+                        onClickMenu()
                     }
                 )
             }
