@@ -14,6 +14,7 @@ val Pink40 = Color(0xFF7D5260)
 val PrimaryColor = Color(0xFFFF4C24)
 val SubColor01 = Color(0xFFFFFFEB)
 val SubColor02 = Color(0xFFF8F891)
+val SubColor03 = Color(0xFFFFF5F3)
 
 //gray scale
 val White = Color(0xFFFFFFFF)
