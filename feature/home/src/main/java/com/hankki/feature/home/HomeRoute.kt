@@ -301,6 +301,7 @@ fun HomeScreen(
                                     }
                                 }
                             },
+                            sheetDragHandle = { Spacer(modifier = Modifier.height(24.dp)) },
                             sheetContainerColor = Gray100,
                             sheetSwipeEnabled = false,
                             sheetPeekHeight = (LocalConfiguration.current.screenHeightDp * 0.3).dp
