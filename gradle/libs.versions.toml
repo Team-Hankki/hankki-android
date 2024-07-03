@@ -121,7 +121,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 
-kakao-all = { group = "com.kakao.sdk", name = "v2-all", version.ref="kakao" }
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]

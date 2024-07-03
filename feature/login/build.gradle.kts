@@ -9,7 +9,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kakao.all)
     implementation(libs.kakao.user)
     implementation(libs.androidx.lifecycle.runtimeCompose)
 }

@@ -51,7 +51,6 @@ dependencies {
 
     implementation(libs.timber)
 
-    implementation(libs.kakao.all)
     implementation(libs.kakao.user)
 }
 
