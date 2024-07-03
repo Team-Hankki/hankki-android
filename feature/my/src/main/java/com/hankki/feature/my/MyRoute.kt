@@ -6,23 +6,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun MyRoute(navigateToDummy: () -> Unit, navigateToLogin: () -> Unit) {
-    MyScreen(navigateToDummy = navigateToDummy, navigateToLogin = navigateToLogin)
+fun MyRoute(navigateToDummy: () -> Unit) {
+    MyScreen(navigateToDummy = navigateToDummy)
 }
 
 @Composable
 fun MyScreen(
-    navigateToDummy: () -> Unit,
-    navigateToLogin: () -> Unit
+    navigateToDummy: () -> Unit
 ) {
     Column {
         Text(text = "My")
+
         Button(onClick = navigateToDummy) {
             Text(text = "Go to Dummy")
-        }
-
-        Button(onClick = navigateToLogin) {
-            Text("Login")
         }
     }
 }

@@ -71,10 +71,11 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar
                     )
                     homeNavGraph()
-                    reportNavGraph()
-                    myNavGraph(
-                        navigateToDummy = { navigator.navigateToDummy() },
+                    reportNavGraph(
                         navigateToLogin = { navigator.navigateToLogin() }
+                    )
+                    myNavGraph(
+                        navigateToDummy = { navigator.navigateToDummy() }
                     )
                     loginNavgraph()
                 }

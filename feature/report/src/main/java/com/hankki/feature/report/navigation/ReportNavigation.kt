@@ -12,9 +12,9 @@ fun NavController.navigateReport(navOptions: NavOptions) {
     navigate(Report, navOptions)
 }
 
-fun NavGraphBuilder.reportNavGraph() {
+fun NavGraphBuilder.reportNavGraph(navigateToLogin: () -> Unit) {
     composable<Report> {
-        ReportRoute()
+        ReportRoute(navigateToLogin)
     }
 }
 

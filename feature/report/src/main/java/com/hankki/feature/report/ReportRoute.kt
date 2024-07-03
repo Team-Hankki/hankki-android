@@ -2,20 +2,25 @@ package com.hankki.feature.report
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ReportRoute() {
-    ReportScreen()
+fun ReportRoute(navigateToLogin: () -> Unit) {
+    ReportScreen(navigateToLogin = navigateToLogin)
 }
 
 @Composable
 fun ReportScreen(
-
+    navigateToLogin: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "Report")
+
+        Button(onClick = navigateToLogin) {
+            Text("Login")
+        }
     }
 }
