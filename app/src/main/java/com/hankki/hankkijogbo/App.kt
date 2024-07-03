@@ -11,14 +11,14 @@ class App : Application() {
         super.onCreate()
 
         initTimber()
-        initKakaoSkd()
+        initKakaoSdk()
     }
 
     private fun initTimber() {
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     }
 
-    private fun initKakaoSkd() {
+    private fun initKakaoSdk() {
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
     }
 }
