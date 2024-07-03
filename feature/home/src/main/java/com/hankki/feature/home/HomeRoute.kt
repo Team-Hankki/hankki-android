@@ -15,9 +15,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -36,14 +42,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
@@ -96,6 +107,7 @@ fun HomeRoute(paddingValues: PaddingValues) {
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -164,34 +176,92 @@ fun HomeScreen(
             }
 
             Column {
+                var open by remember {
+                    mutableStateOf(false)
+                }
                 Row(
                     modifier = Modifier.padding(start = 22.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     HankkiFilterChip(
+                        chipState = ChipState.UNSELECTED,
+                        title = "종류",
+                        onClick = {
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.bottomSheetState.partialExpand()
+                            }
+                            open = !open
+                        }
+                    )
+                    DropdownFilterChip(
                         chipState = ChipState.SELECTED,
-                        title = "종류"
+                        title = "가격대",
+                        menus = listOf(
+                            "6000원 이하",
+                            "6000 ~ 8000원"
+                        ),
                     ) {
                         coroutineScope.launch {
                             bottomSheetScaffoldState.bottomSheetState.partialExpand()
                         }
                     }
-                    HankkiFilterChip(
+
+                    DropdownFilterChip(
                         chipState = ChipState.FIXED,
-                        title = "가격대",
-                        onClick = reposition
-                    )
-                    HankkiFilterChip(
-                        chipState = ChipState.UNSELECTED,
                         title = "정렬",
-                        onClick = reposition
-                    )
+                        menus = listOf(
+                            "최신순",
+                            "가격 낮은순",
+                            "추천순"
+                        )
+                    ) {
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.partialExpand()
+                        }
+                    }
                 }
                 if (!isOpenBottomSheet) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.TopStart
+                        ) {
+                            val menus =
+                                listOf("한식", "중식", "일식", "양식", "분식", "패스트푸드", "디저트", "카페", "기타")
+                            if (open) {
+                                Popup(
+                                    onDismissRequest = { open = false },
+                                ) {
+                                    LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                        item {
+                                            Spacer(modifier = Modifier.width(22.dp))
+                                        }
+                                        items(menus) { menu ->
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(60.dp)
+                                                    .clip(RoundedCornerShape(10.dp))
+                                                    .background(White),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text(
+                                                    text = menu,
+                                                    style = HankkiTheme.typography.caption1,
+                                                    color = Gray400
+                                                )
+                                            }
+                                        }
+                                        item {
+                                            Spacer(modifier = Modifier.width(22.dp))
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
                         Column {
                             Box(
                                 modifier = Modifier
@@ -264,4 +334,46 @@ fun HomeScreen(
 
 object MapConstants {
     const val DEFAULT_ZOOM = 16.0
+}
+
+@Composable
+fun DropdownFilterChip(
+    chipState: ChipState,
+    title: String,
+    menus: List<String> = emptyList(),
+    onClick: () -> Unit = {},
+) {
+    var isOpenDropDownMenu by remember { mutableStateOf(false) }
+    HankkiFilterChip(
+        chipState = chipState,
+        title = title,
+        onClick = {
+            isOpenDropDownMenu = true
+        }
+    ) {
+        DropdownMenu(
+            expanded = isOpenDropDownMenu, // chipState관련으로 수정해야함.
+            onDismissRequest = { isOpenDropDownMenu = false },
+            modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .border(1.dp, Gray200, RoundedCornerShape(10.dp))
+                .background(White),
+            offset = DpOffset((-20).dp, 0.dp)
+        ) {
+            menus.forEach { item ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = item,
+                            style = HankkiTheme.typography.caption1,
+                            color = Gray600
+                        )
+                    }, onClick = {
+                        isOpenDropDownMenu = false
+                        onClick()
+                    }
+                )
+            }
+        }
+    }
 }

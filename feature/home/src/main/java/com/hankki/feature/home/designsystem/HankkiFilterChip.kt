@@ -4,7 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +38,8 @@ fun HankkiFilterChip(
     chipState: ChipState,
     title: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    filterContent: @Composable ColumnScope.() -> Unit = {},
 ) {
     val icon = remember {
         when (chipState) {
@@ -44,32 +49,36 @@ fun HankkiFilterChip(
         }
     }
 
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(100.dp))
-            .border(1.dp, chipState.borderColor, RoundedCornerShape(100.dp))
-            .background(chipState.containerColor)
-            .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp)
-            .noRippleClickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Row(
-            modifier = Modifier,
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
+    Column {
+        Box(
+            modifier = modifier
+                .clip(RoundedCornerShape(100.dp))
+                .border(1.dp, chipState.borderColor, RoundedCornerShape(100.dp))
+                .background(chipState.containerColor)
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp)
+                .noRippleClickable(onClick = onClick),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = title,
-                style = HankkiTheme.typography.caption1,
-                color = chipState.labelColor
-            )
-            AsyncImage(
-                model = icon,
-                contentDescription = "icon",
-                modifier = Modifier.size(24.dp),
-                colorFilter = ColorFilter.tint(chipState.iconColor),
-            )
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = title,
+                    style = HankkiTheme.typography.caption1,
+                    color = chipState.labelColor
+                )
+                AsyncImage(
+                    model = icon,
+                    contentDescription = "icon",
+                    modifier = Modifier.size(24.dp),
+                    colorFilter = ColorFilter.tint(chipState.iconColor),
+                )
+            }
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        filterContent()
     }
 }
 
