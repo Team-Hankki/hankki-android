@@ -39,7 +39,7 @@ fun LoginRoute() {
 
     LoginScreen(
         loginState = loginState,
-        onLoginClick = { viewModel.initLoginButton(context) }
+        onLoginClick = { viewModel.startKakaoLogin(context) }
     )
 }
 

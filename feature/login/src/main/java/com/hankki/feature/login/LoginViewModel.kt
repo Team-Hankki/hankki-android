@@ -20,18 +20,17 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         get() = _loginState
 
     private val _loginSideEffects = MutableSharedFlow<LoginSideEffect>()
-    val loginSideEffects: SharedFlow<LoginSideEffect> = _loginSideEffects
+    val loginSideEffects: SharedFlow<LoginSideEffect>
+        get() = _loginSideEffects
 
-    fun initLoginButton(context: Context) {
-        viewModelScope.launch {
-            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-                UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                    handleLoginResult(token, error)
-                }
-            } else {
-                UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-                    handleLoginResult(token, error)
-                }
+    fun startKakaoLogin(context: Context) {
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+            UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                handleLoginResult(token, error)
+            }
+        } else {
+            UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+                handleLoginResult(token, error)
             }
         }
     }
