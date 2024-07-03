@@ -51,7 +51,7 @@ fun LoginScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "Login")
         if (loginState.isLoggedIn) {
-            Text(text = "Logged in: ${loginState.accessToken}")
+            Text(text = "Logged in success")
         } else {
             Button(onClick = { onLoginClick() }) {
                 Text(text = "Login with KakaoTalk")
