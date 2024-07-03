@@ -26,6 +26,7 @@ import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.SubColor01
+import com.hankki.core.designsystem.theme.SubColor02
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -79,8 +80,8 @@ enum class ChipState(
     val iconColor: Color,
 ) {
     SELECTED(
-        containerColor = SubColor01,
-        borderColor = SubColor01,
+        containerColor = Gray100,
+        borderColor = Gray300,
         labelColor = Gray600,
         iconColor = Gray600
     ),
@@ -91,8 +92,8 @@ enum class ChipState(
         iconColor = Gray300
     ),
     FIXED(
-        containerColor = Gray100,
-        borderColor = Gray300,
+        containerColor = SubColor01,
+        borderColor = SubColor02,
         labelColor = Gray600,
         iconColor = Gray600
     )
