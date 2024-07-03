@@ -44,4 +44,5 @@ dependencies {
 
     // other dependencies
     implementation(libs.timber)
+    implementation(libs.appcompat)
 }
