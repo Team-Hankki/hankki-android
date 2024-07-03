@@ -13,9 +13,9 @@ fun NavController.navigateReport(navOptions: NavOptions) {
     navigate(Report, navOptions)
 }
 
-fun NavGraphBuilder.reportNavGraph(paddingValues: PaddingValues) {
+fun NavGraphBuilder.reportNavGraph(paddingValues: PaddingValues, navigateToLogin: () -> Unit) {
     composable<Report> {
-        ReportRoute(paddingValues)
+        ReportRoute(paddingValues, navigateToLogin)
     }
 }
 

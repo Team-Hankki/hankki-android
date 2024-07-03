@@ -23,12 +23,24 @@ android {
         }
         manifestPlaceholders["naverClientId"] =
             gradleLocalProperties(rootDir, providers).getProperty("naverClientId")
+
+        buildConfigField(
+            "String",
+            "KAKAO_NATIVE_APP_KEY",
+            gradleLocalProperties(rootDir, providers).getProperty("kakaoNativeAppKey"),
+        )
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] =
+            gradleLocalProperties(rootDir, providers).getProperty("kakaoNative.AppKey")
     }
 
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -44,4 +56,5 @@ dependencies {
 
     // other dependencies
     implementation(libs.timber)
+    implementation(libs.kakao.user)
 }
