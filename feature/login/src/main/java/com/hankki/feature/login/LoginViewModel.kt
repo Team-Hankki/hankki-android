@@ -15,72 +15,59 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
     private val _loginState = MutableStateFlow(LoginState())
-    val loginState: StateFlow<LoginState> = _loginState
+    val loginState: StateFlow<LoginState>
+        get() = _loginState
 
     private val _loginSideEffects = MutableSharedFlow<LoginSideEffect>()
     val loginSideEffects: SharedFlow<LoginSideEffect> = _loginSideEffects
 
-    fun updateState(event: LoginSideEffect) {
-        _loginState.value = when (event) {
-            is LoginSideEffect.LoginSuccess -> LoginState(
-                isLoggedIn = true,
-                accessToken = event.accessToken,
-                errorMessage = null
-            )
-
-            is LoginSideEffect.LoginError -> LoginState(
-                isLoggedIn = false,
-                accessToken = null,
-                errorMessage = event.errorMessage
-            )
-
-            else -> _loginState.value
-        }
-    }
-
-    fun initLoginButton() {
-        viewModelScope.launch {
-            _loginSideEffects.emit(LoginSideEffect.StartLogin)
-        }
-    }
-
-    fun loginWithKakaoTalk(context: Context) {
+    fun initLoginButton(context: Context) {
         viewModelScope.launch {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
                 UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                    handleLoginResult(context, token, error)
+                    handleLoginResult(token, error)
                 }
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-                    handleLoginResult(context, token, error)
+                    handleLoginResult(token, error)
                 }
             }
         }
     }
 
-    private fun handleLoginResult(context: Context, token: OAuthToken?, error: Throwable?) {
+    private fun handleLoginResult(token: OAuthToken?, error: Throwable?) {
         viewModelScope.launch {
             if (error != null) {
                 if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                    _loginSideEffects.emit(LoginSideEffect.LoginError("로그인 취소"))
+                    handleLoginError("로그인 취소")
                 } else {
-                    UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-                        processTokenOrError(token, error)
-                    }
+                    handleLoginError("카카오계정으로 로그인 실패: ${error.localizedMessage}")
                 }
-            } else {
-                processTokenOrError(token, null)
+            } else if (token != null) {
+                handleLoginSuccess(token.accessToken)
             }
         }
     }
 
-    private fun processTokenOrError(token: OAuthToken?, error: Throwable?) {
+    private fun handleLoginSuccess(accessToken: String) {
+        _loginState.value = _loginState.value.copy(
+            isLoggedIn = true,
+            accessToken = accessToken,
+            errorMessage = null
+        )
         viewModelScope.launch {
-            if (error != null) {
-                _loginSideEffects.emit(LoginSideEffect.LoginError("카카오계정으로 로그인 실패: ${error.localizedMessage}"))
-            } else if (token != null) {
-                _loginSideEffects.emit(LoginSideEffect.LoginSuccess(token.accessToken))
-            }
+            _loginSideEffects.emit(LoginSideEffect.LoginSuccess(accessToken))
+        }
+    }
+
+    private fun handleLoginError(errorMessage: String) {
+        _loginState.value = _loginState.value.copy(
+            isLoggedIn = false,
+            accessToken = null,
+            errorMessage = errorMessage
+        )
+        viewModelScope.launch {
+            _loginSideEffects.emit(LoginSideEffect.LoginError(errorMessage))
         }
     }
 }

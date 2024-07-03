@@ -23,15 +23,15 @@ fun LoginRoute() {
         viewModel.loginSideEffects.collectLatest { sideEffect ->
             when (sideEffect) {
                 is LoginSideEffect.StartLogin -> {
-                    viewModel.loginWithKakaoTalk(context)
+                    // 필요 시 StartLogin 추가 처리
                 }
 
                 is LoginSideEffect.LoginSuccess -> {
-                    viewModel.updateState(sideEffect)
+                    // 필요 시 LoginSuccess 추가 처리
                 }
 
                 is LoginSideEffect.LoginError -> {
-                    viewModel.updateState(sideEffect)
+                    // 필요 시 LoginError 추가 처리
                 }
             }
         }
@@ -39,7 +39,7 @@ fun LoginRoute() {
 
     LoginScreen(
         loginState = loginState,
-        onLoginClick = { viewModel.initLoginButton() }
+        onLoginClick = { viewModel.initLoginButton(context) }
     )
 }
 
