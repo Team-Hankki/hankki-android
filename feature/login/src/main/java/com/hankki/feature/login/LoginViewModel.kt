@@ -46,35 +46,40 @@ class LoginViewModel : ViewModel() {
 
     fun loginWithKakaoTalk(context: Context) {
         viewModelScope.launch {
-            val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-                viewModelScope.launch {
-                    if (error != null) {
-                        _loginSideEffects.emit(LoginSideEffect.LoginError("카카오계정으로 로그인 실패: ${error.localizedMessage}"))
-                    } else if (token != null) {
-                        _loginSideEffects.emit(LoginSideEffect.LoginSuccess(token.accessToken))
-                    }
-                }
-            }
-
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
                 UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                    viewModelScope.launch {
-                        if (error != null) {
-                            if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                                _loginSideEffects.emit(LoginSideEffect.LoginError("로그인 취소"))
-                            } else {
-                                UserApiClient.instance.loginWithKakaoAccount(
-                                    context,
-                                    callback = callback
-                                )
-                            }
-                        } else if (token != null) {
-                            _loginSideEffects.emit(LoginSideEffect.LoginSuccess(token.accessToken))
-                        }
+                    handleLoginResult(context, token, error)
+                }
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+                    handleLoginResult(context, token, error)
+                }
+            }
+        }
+    }
+
+    private fun handleLoginResult(context: Context, token: OAuthToken?, error: Throwable?) {
+        viewModelScope.launch {
+            if (error != null) {
+                if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                    _loginSideEffects.emit(LoginSideEffect.LoginError("로그인 취소"))
+                } else {
+                    UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+                        processTokenOrError(token, error)
                     }
                 }
             } else {
-                UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+                processTokenOrError(token, null)
+            }
+        }
+    }
+
+    private fun processTokenOrError(token: OAuthToken?, error: Throwable?) {
+        viewModelScope.launch {
+            if (error != null) {
+                _loginSideEffects.emit(LoginSideEffect.LoginError("카카오계정으로 로그인 실패: ${error.localizedMessage}"))
+            } else if (token != null) {
+                _loginSideEffects.emit(LoginSideEffect.LoginSuccess(token.accessToken))
             }
         }
     }
