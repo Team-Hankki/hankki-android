@@ -1,11 +1,15 @@
 package com.hankki.feature.home
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,7 +28,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -137,24 +140,8 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(paddingValues)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .background(White),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "건국대학교",
-                style = HankkiTheme.typography.suitH1,
-                color = Gray900
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_dropdown_btn),
-                contentDescription = "button",
-                tint = Gray300
-            )
+        HankkiTopBar("건국대학교") {
+            // TODO: 학교 선택 Screen 이동
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -312,8 +299,7 @@ fun HomeScreen(
             }
         }
 
-
-        if (isOpenBottomSheet) {
+        AnimatedVisibility(visible = isOpenBottomSheet) { // 애니메이션 뭐넣지... 하암...
             Column {
                 Row(
                     modifier = Modifier
@@ -331,6 +317,33 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(60.dp))
             }
         }
+    }
+}
+
+@Composable
+fun HankkiTopBar(
+    title: String,
+    onClick: () -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(White),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = HankkiTheme.typography.suitH1,
+            color = Gray900
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.ic_dropdown_btn),
+            contentDescription = "button",
+            modifier = Modifier.noRippleClickable(onClick = onClick),
+            tint = Gray300
+        )
     }
 }
 
@@ -357,40 +370,52 @@ fun DropdownFilterChip(
     onClickMenu: () -> Unit = {},
     onClickChip: () -> Unit = {},
 ) {
-    var isOpenDropDownMenu by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
+
     HankkiFilterChip(
         chipState = chipState,
         title = title,
         onClick = {
             onClickChip()
-            isOpenDropDownMenu = true
+            expanded = true
         }
     ) {
-        DropdownMenu(
-            expanded = isOpenDropDownMenu, // chipState관련으로 수정해야함.
-            onDismissRequest = {
-                onDismissRequest()
-                isOpenDropDownMenu = false
-            },
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .border(1.dp, Gray200, RoundedCornerShape(10.dp))
-                .background(White),
-            offset = DpOffset((-20).dp, 0.dp)
+        AnimatedVisibility(
+            visible = expanded,
+            enter = expandVertically(),
+            exit = shrinkVertically()
         ) {
-            menus.forEach { item ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = item,
-                            style = HankkiTheme.typography.caption1,
-                            color = Gray600
-                        )
-                    }, onClick = {
-                        isOpenDropDownMenu = false
-                        onClickMenu()
+            Box {
+                Popup(
+                    onDismissRequest = {
+                        onDismissRequest()
+                        expanded = false
+                    },
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .offset((-20).dp, 0.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .border(1.dp, Gray200, RoundedCornerShape(10.dp))
+                            .background(White)
+                            .width(IntrinsicSize.Max),
+                    ) {
+                        menus.forEach { item ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = item,
+                                        style = HankkiTheme.typography.caption1,
+                                        color = Gray600
+                                    )
+                                }, onClick = {
+                                    onClickMenu()
+                                    expanded = false
+                                }
+                            )
+                        }
                     }
-                )
+                }
             }
         }
     }
