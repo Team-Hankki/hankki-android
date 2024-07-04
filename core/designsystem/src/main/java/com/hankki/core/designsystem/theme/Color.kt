@@ -11,9 +11,10 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 //main color
-val PrimaryColor = Color(0xFFFF4C24)
-val SubColor01 = Color(0xFFFFFFEB)
-val SubColor02 = Color(0xFFF8F891)
+val Red = Color(0xFFFF4C24)
+val RedLight = Color(0xFFFFF5F3)
+val Yellow = Color(0xFFF8F891)
+val YellowLight = Color(0xFFFFFFEB)
 
 //gray scale
 val White = Color(0xFFFFFFFF)
