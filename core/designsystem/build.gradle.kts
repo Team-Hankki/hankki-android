@@ -11,4 +11,5 @@ android {
 
 dependencies {
     implementation(libs.androidx.appcompat)
+    implementation(projects.core.common)
 }
