@@ -10,8 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ReportRoute(paddingValues: PaddingValues, navigateToLogin: () -> Unit, navigateToUniversity: () -> Unit) {
-    ReportScreen(paddingValues, navigateToLogin = navigateToLogin, navigateToUniversity = navigateToUniversity)
+fun ReportRoute(
+    paddingValues: PaddingValues,
+    navigateToLogin: () -> Unit,
+    navigateToUniversity: () -> Unit
+) {
+    ReportScreen(
+        paddingValues,
+        navigateToLogin = navigateToLogin,
+        navigateToUniversity = navigateToUniversity
+    )
 }
 
 @Composable
