@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.feature.home.component.ChipState
 import com.hankki.feature.home.component.StoreItemEntity
+import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,7 +27,14 @@ class HomeViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
+        getUniversityLatLng()
         getStoreItems()
+    }
+
+    private fun getUniversityLatLng() {
+        _state.value = _state.value.copy(
+            latLng = LatLng(37.3009489417651, 127.03549529577874)
+        )
     }
 
     private fun getStoreItems() {

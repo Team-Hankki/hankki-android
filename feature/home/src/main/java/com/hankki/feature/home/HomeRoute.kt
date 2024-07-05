@@ -71,14 +71,12 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val focusLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
-            // 추후 대학의 위도, 경도를 서버에서 받아 넣을 예정이라 하드코딩 해놨습니다.
-            LatLng(37.3009489417651, 127.03549529577874),
+            state.latLng,
             DEFAULT_ZOOM
         )
     }
