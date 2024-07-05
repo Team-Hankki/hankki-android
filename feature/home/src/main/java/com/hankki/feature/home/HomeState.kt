@@ -1,7 +1,7 @@
 package com.hankki.feature.home
 
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
-import com.hankki.feature.home.designsystem.ChipState
+import com.hankki.feature.home.component.ChipState
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 

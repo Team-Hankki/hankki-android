@@ -2,7 +2,7 @@ package com.hankki.feature.home
 
 import androidx.lifecycle.ViewModel
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
-import com.hankki.feature.home.designsystem.ChipState
+import com.hankki.feature.home.component.ChipState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow

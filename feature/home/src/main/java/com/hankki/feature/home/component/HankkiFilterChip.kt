@@ -1,4 +1,4 @@
-package com.hankki.feature.home.designsystem
+package com.hankki.feature.home.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
