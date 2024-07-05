@@ -10,14 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ReportRoute(paddingValues: PaddingValues, navigateToLogin: () -> Unit) {
-    ReportScreen(paddingValues, navigateToLogin = navigateToLogin)
+fun ReportRoute(paddingValues: PaddingValues, navigateToLogin: () -> Unit, navigateToUniversity: () -> Unit) {
+    ReportScreen(paddingValues, navigateToLogin = navigateToLogin, navigateToUniversity = navigateToUniversity)
 }
 
 @Composable
 fun ReportScreen(
     paddingValues: PaddingValues,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    navigateToUniversity: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -28,6 +29,10 @@ fun ReportScreen(
 
         Button(onClick = navigateToLogin) {
             Text("Login")
+        }
+
+        Button(onClick = navigateToUniversity) {
+            Text("University")
         }
     }
 }
