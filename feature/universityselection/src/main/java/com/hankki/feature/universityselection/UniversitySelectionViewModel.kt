@@ -9,11 +9,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class UniversitySelectionViewModel @Inject constructor() : ViewModel() {
-    private val _universities = MutableStateFlow<List<UniversitySelectionModel>>(emptyList())
-    val universities: StateFlow<List<UniversitySelectionModel>> = _universities
-
-    private val _selectedUniversity = MutableStateFlow<String?>(null)
-    val selectedUniversity: StateFlow<String?> = _selectedUniversity
+    private val _universitySelectionState = MutableStateFlow(UniversitySelectionState())
+    val universitySelectionState: StateFlow<UniversitySelectionState> = _universitySelectionState
 
     init {
         loadDummyData()
@@ -33,11 +30,13 @@ class UniversitySelectionViewModel @Inject constructor() : ViewModel() {
                 UniversitySelectionModel(17, "단국대"), UniversitySelectionModel(18, "명지대"),
                 UniversitySelectionModel(19, "서울대"), UniversitySelectionModel(20, "국민대")
             ).sortedBy { it.name }
-            _universities.value = dummyData
+            _universitySelectionState.value =
+                _universitySelectionState.value.copy(universities = dummyData)
         }
     }
 
     fun selectUniversity(university: String) {
-        _selectedUniversity.value = university
+        _universitySelectionState.value =
+            _universitySelectionState.value.copy(selectedUniversity = university)
     }
 }

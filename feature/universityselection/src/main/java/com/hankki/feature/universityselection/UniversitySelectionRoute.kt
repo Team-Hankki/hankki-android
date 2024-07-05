@@ -35,12 +35,9 @@ import com.hankki.feature.university.R
 @Composable
 fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
-    val universities by universitySelectionViewModel.universities.collectAsStateWithLifecycle()
-    val selectedUniversity by universitySelectionViewModel.selectedUniversity.collectAsStateWithLifecycle()
-
+    val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
     UniversitySelectionScreen(
-        universities = universities,
-        selectedUniversity = selectedUniversity,
+        universitySelectionState = universitySelectionState,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
         navigateHome = navigateToHome
     )
@@ -48,8 +45,7 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
 
 @Composable
 fun UniversitySelectionScreen(
-    universities: List<UniversitySelectionModel>,
-    selectedUniversity: String?,
+    universitySelectionState: UniversitySelectionState,
     onSelectUniversity: (String) -> Unit,
     navigateHome: () -> Unit
 ) {
@@ -79,7 +75,7 @@ fun UniversitySelectionScreen(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            items(universities) { university ->
+            items(universitySelectionState.universities) { university ->
                 Text(
                     text = university.name,
                     style = HankkiTheme.typography.body1,
@@ -89,9 +85,9 @@ fun UniversitySelectionScreen(
                             onSelectUniversity(university.name)
                         }
                         .padding(14.dp),
-                    color = if (selectedUniversity == university.name) Red else Gray800
+                    color = if (universitySelectionState.selectedUniversity == university.name) Red else Gray800
                 )
-                if (university != universities.last()) {
+                if (university != universitySelectionState.universities.last()) {
                     HorizontalDivider(thickness = 1.dp, color = Gray200)
                 }
             }
@@ -104,7 +100,7 @@ fun UniversitySelectionScreen(
             onClick = navigateHome,
             modifier = Modifier
                 .fillMaxWidth(),
-            enabled = selectedUniversity != null
+            enabled = universitySelectionState.selectedUniversity != null
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -138,9 +134,13 @@ fun PreviewUniversityScreen() {
         UniversitySelectionModel(19, "서울대"), UniversitySelectionModel(20, "국민대")
     ).sortedBy { it.name }
 
-    UniversitySelectionScreen(
+    val previewState = UniversitySelectionState(
         universities = dummyData,
-        selectedUniversity = null,
+        selectedUniversity = null
+    )
+
+    UniversitySelectionScreen(
+        universitySelectionState = previewState,
         onSelectUniversity = {},
         navigateHome = {}
     )
