@@ -10,5 +10,6 @@ android {
 
 dependencies {
     implementation(libs.coil.compose)
+    implementation(projects.domain.my)
 }
 
