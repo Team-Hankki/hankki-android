@@ -1,4 +1,4 @@
-package com.hankki.feature.universityselection
+package com.hankki.feature.universityselection.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.domain.universityselection.UniversitySelectionModel
