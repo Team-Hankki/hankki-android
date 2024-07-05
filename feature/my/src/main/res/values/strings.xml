@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">MY</string>
+    <string name="profile_image">profile image</string>
+    <string name="sub_title">%1$s 님\n한끼 잘 챙겨 드세요</string>
+    <string name="my_jogbo">나의 족보</string>
+    <string name="description_store_report">내가 제보한 식당</string>
+    <string name="description_store_like">좋아요 누른 식당</string>
+    <string name="faq">FAQ</string>
+    <string name="inquiry">1:1 문의</string>
+    <string name="logout">로그아웃</string>
+    <string name="quit">탈퇴하기</string>
+</resources>
