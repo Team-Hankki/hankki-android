@@ -36,7 +36,8 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
 
     UniversitySelectionScreen(
-        universitySelectionState = universitySelectionState,
+        universities = universitySelectionState.universities,
+        selectedUniversity = universitySelectionState.selectedUniversity,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
         navigateHome = navigateToHome
     )
@@ -44,7 +45,8 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
 
 @Composable
 fun UniversitySelectionScreen(
-    universitySelectionState: UniversitySelectionState,
+    universities: List<UniversitySelectionModel>,
+    selectedUniversity: String?,
     onSelectUniversity: (String) -> Unit,
     navigateHome: () -> Unit
 ) {
@@ -74,13 +76,13 @@ fun UniversitySelectionScreen(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            items(universitySelectionState.universities) { university ->
+            items(universities) { university ->
                 UniversityItem(
                     university = university,
-                    isSelected = universitySelectionState.selectedUniversity == university.name,
+                    isSelected = selectedUniversity == university.name,
                     onSelectUniversity = onSelectUniversity
                 )
-                if (university != universitySelectionState.universities.last()) {
+                if (university != universities.last()) {
                     HorizontalDivider(thickness = 1.dp, color = Gray200)
                 }
             }
@@ -93,7 +95,7 @@ fun UniversitySelectionScreen(
             onClick = navigateHome,
             modifier = Modifier
                 .fillMaxWidth(),
-            enabled = universitySelectionState.selectedUniversity != null
+            enabled = selectedUniversity != null
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -127,13 +129,9 @@ fun PreviewUniversityScreen() {
         UniversitySelectionModel(19, "서울대"), UniversitySelectionModel(20, "국민대")
     ).sortedBy { it.name }
 
-    val previewState = UniversitySelectionState(
-        universities = dummyData,
-        selectedUniversity = null
-    )
-
     UniversitySelectionScreen(
-        universitySelectionState = previewState,
+        universities = dummyData,
+        selectedUniversity = null,
         onSelectUniversity = {},
         navigateHome = {}
     )
