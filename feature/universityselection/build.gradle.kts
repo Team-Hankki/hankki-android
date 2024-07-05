@@ -10,7 +10,6 @@ android {
 
 dependencies {
     //domain
-    implementation(projects.domain.dummy)
     implementation(projects.domain.universityselection)
 
     //androidx
