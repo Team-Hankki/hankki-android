@@ -2,14 +2,10 @@ package com.hankki.feature.home
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,8 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
@@ -44,28 +38,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
-import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
-import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.core.designsystem.theme.Gray100
-import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray600
-import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.designsystem.ChipState
+import com.hankki.feature.home.designsystem.DropdownFilterChip
 import com.hankki.feature.home.designsystem.HankkiFilterChip
+import com.hankki.feature.home.designsystem.HankkiTopBar
+import com.hankki.feature.home.designsystem.RepositionButton
 import com.hankki.feature.home.designsystem.StoreItem
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -374,58 +362,6 @@ fun HomeScreen(
     }
 }
 
-@Composable
-fun HankkiTopBar(
-    title: String,
-    onClick: () -> Unit = {},
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(White),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = title,
-            style = HankkiTheme.typography.suitH1,
-            color = Gray900
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.ic_dropdown_btn),
-            contentDescription = "button",
-            modifier = Modifier.noRippleClickable(onClick = onClick),
-            tint = Gray300
-        )
-    }
-}
-
-@Composable
-fun RepositionButton(
-    height: Dp,
-    onClick: () -> Unit = {},
-) {
-    Column {
-        Box(
-            modifier = Modifier
-                .padding(end = 21.dp, bottom = 14.dp)
-                .size(38.dp)
-                .clip(CircleShape)
-                .border(1.dp, Gray300, CircleShape)
-                .background(White)
-                .padding(9.dp)
-                .noRippleClickable(onClick = onClick)
-        ) {
-            AsyncImage(
-                model = R.drawable.ic_map_here,
-                contentDescription = "here"
-            )
-        }
-        Spacer(modifier = Modifier.height(height))
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 private fun closeBottomSheet(
     coroutineScope: CoroutineScope,
@@ -438,70 +374,4 @@ private fun closeBottomSheet(
 
 object MapConstants {
     const val DEFAULT_ZOOM = 16.0
-}
-
-@Composable
-fun DropdownFilterChip(
-    chipState: ChipState,
-    title: String,
-    menus: List<String> = emptyList(),
-    onDismissRequest: () -> Unit = {},
-    onClickMenu: () -> Unit = {},
-    onClickChip: () -> Unit = {},
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    HankkiFilterChip(
-        chipState = chipState,
-        title = title,
-        onClick = {
-            onClickChip()
-            expanded = true
-        }
-    ) {
-        AnimatedVisibility(
-            visible = expanded,
-            enter = expandVertically(),
-            exit = shrinkVertically()
-        ) {
-            Box {
-                Popup(
-                    onDismissRequest = {
-                        onDismissRequest()
-                        expanded = false
-                    },
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .border(1.dp, Gray200, RoundedCornerShape(10.dp))
-                            .background(White)
-                            .width(IntrinsicSize.Max)
-                            .padding(10.dp),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        menus.forEach { item ->
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = item,
-                                    style = HankkiTheme.typography.caption1,
-                                    color = Gray600
-                                )
-                            }
-                            if (item != menus.last()) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 8.dp),
-                                    thickness = 1.dp,
-                                    color = Gray200
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }

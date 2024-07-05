@@ -161,7 +161,7 @@ fun JogboItem(
         }
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            painter = painterResource(id = R.drawable.ic_plus_btn),
+            painter = painterResource(id = R.drawable.ic_plus_btn_filled),
             contentDescription = "more",
             tint = Gray400
         )

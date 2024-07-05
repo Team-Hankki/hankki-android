@@ -1,7 +1,6 @@
 package com.hankki.feature.home.designsystem
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -52,61 +51,60 @@ fun StoreItem(
             .background(White)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row {
-            AsyncImage(
-                model = storeImageUrl,
-                contentDescription = "Store Image",
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                // .aspectRatio(1f, matchHeightConstraintsFirst = true)
+        AsyncImage(
+            model = storeImageUrl,
+            contentDescription = "Store Image",
+            modifier = Modifier
+                .size(72.dp)
+                .clip(RoundedCornerShape(8.dp))
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.wrapContentHeight()) {
+            HankkiCategoryChip(text = "#$category")
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = storeName,
+                style = HankkiTheme.typography.suitSub1
             )
-            Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.wrapContentHeight()) {
-                HankkiCategoryChip(text = "#$category")
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = storeName,
-                    style = HankkiTheme.typography.suitSub1
+            Spacer(modifier = Modifier.height(2.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_food),
+                    contentDescription = "icon",
+                    tint = Gray300
                 )
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_food),
-                        contentDescription = "icon",
-                        tint = Gray300
-                    )
-                    Spacer(modifier = Modifier.width(3.dp))
-                    Text(
-                        text = "${price}원",
-                        style = HankkiTheme.typography.button1,
-                        color = Gray500
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_ellipse),
-                        contentDescription = "icon",
-                        tint = Gray300
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_heart),
-                        contentDescription = "icon",
-                        tint = Gray300
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Text(
-                        text = "$heartCount",
-                        style = HankkiTheme.typography.button1,
-                        color = Gray500
-                    )
-                }
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = "${price}원",
+                    style = HankkiTheme.typography.button1,
+                    color = Gray500
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_ellipse),
+                    contentDescription = "icon",
+                    tint = Gray300
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_heart),
+                    contentDescription = "icon",
+                    tint = Gray300
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = "$heartCount",
+                    style = HankkiTheme.typography.button1,
+                    color = Gray500
+                )
             }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
         Icon(
-            painter = painterResource(id = R.drawable.ic_plus_btn),
+            painter = painterResource(id = R.drawable.ic_plus_btn_filled),
             contentDescription = "plus button",
             modifier = Modifier.noRippleClickable(onClick = onClick),
             tint = Color.Unspecified
