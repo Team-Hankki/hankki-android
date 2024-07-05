@@ -25,17 +25,17 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.HankkiButton
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.Red
 import com.hankki.domain.universityselection.UniversitySelectionModel
-import com.hankki.feature.university.R
+import com.hankki.feature.universityselection.R
+import com.hankki.feature.universityselection.component.UniversityItem
 
 @Composable
 fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
+
     UniversitySelectionScreen(
         universitySelectionState = universitySelectionState,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
@@ -76,16 +76,10 @@ fun UniversitySelectionScreen(
                 .fillMaxWidth()
         ) {
             items(universitySelectionState.universities) { university ->
-                Text(
-                    text = university.name,
-                    style = HankkiTheme.typography.body1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .noRippleClickable {
-                            onSelectUniversity(university.name)
-                        }
-                        .padding(14.dp),
-                    color = if (universitySelectionState.selectedUniversity == university.name) Red else Gray800
+                UniversityItem(
+                    university = university,
+                    isSelected = universitySelectionState.selectedUniversity == university.name,
+                    onSelectUniversity = onSelectUniversity
                 )
                 if (university != universitySelectionState.universities.last()) {
                     HorizontalDivider(thickness = 1.dp, color = Gray200)
