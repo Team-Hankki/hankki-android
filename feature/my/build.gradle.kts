@@ -8,4 +8,7 @@ android {
     setNamespace("feature.my")
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.coil.compose)
+}
+
