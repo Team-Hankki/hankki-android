@@ -31,14 +31,6 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 
-data class StoreItemEntity(
-    val storeImageUrl: String,
-    val category: String,
-    val storeName: String,
-    val price: Int,
-    val heartCount: Int,
-)
-
 @Composable
 fun StoreItem(
     storeImageUrl: String,

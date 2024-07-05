@@ -17,20 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
-import com.hankki.core.designsystem.theme.Gray300
-import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.SubColor01
-import com.hankki.core.designsystem.theme.SubColor02
-import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.home.model.ChipState
 
 @Composable
 fun HankkiStateChip(
@@ -44,8 +38,12 @@ fun HankkiStateChip(
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(100.dp))
-                .border(1.dp, chipState.borderColor, RoundedCornerShape(100.dp))
-                .background(chipState.containerColor)
+                .border(
+                    width = 1.dp,
+                    color = chipState.borderColor,
+                    shape = RoundedCornerShape(100.dp)
+                )
+                .background(color = chipState.containerColor)
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp)
                 .noRippleClickable(onClick = onClick),
             contentAlignment = Alignment.Center
@@ -79,33 +77,6 @@ fun HankkiStateChip(
         Spacer(modifier = Modifier.height(8.dp))
         filterContent()
     }
-}
-
-enum class ChipState(
-    val containerColor: Color,
-    val borderColor: Color,
-    val labelColor: Color,
-    val iconColor: Color,
-    var title: String = "",
-) {
-    SELECTED(
-        containerColor = White,
-        borderColor = Gray300,
-        labelColor = Gray600,
-        iconColor = Gray600
-    ),
-    UNSELECTED(
-        containerColor = White,
-        borderColor = Gray300,
-        labelColor = Gray400,
-        iconColor = Gray400
-    ),
-    FIXED(
-        containerColor = SubColor01,
-        borderColor = SubColor02,
-        labelColor = Gray600,
-        iconColor = Gray600
-    )
 }
 
 @Preview

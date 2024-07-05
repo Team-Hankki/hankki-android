@@ -31,6 +31,7 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.home.model.ChipState
 
 @Composable
 fun HankkiFilterChip(
