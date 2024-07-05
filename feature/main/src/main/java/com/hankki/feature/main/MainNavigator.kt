@@ -17,7 +17,7 @@ import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.report.navigation.navigateReport
-import com.hankki.feature.university.navigation.navigateToUniversity
+import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
     val navController: NavHostController,
@@ -72,7 +72,7 @@ internal class MainNavigator(
     }
 
     fun navigateToUniversity() {
-        navController.navigateToUniversity()
+        navController.navigateToUniversitySelection()
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {

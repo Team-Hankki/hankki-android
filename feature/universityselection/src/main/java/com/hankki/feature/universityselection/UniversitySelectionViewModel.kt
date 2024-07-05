@@ -1,4 +1,4 @@
-package com.hankki.feature.university
+package com.hankki.feature.universityselection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UniversityViewModel @Inject constructor() : ViewModel() {
+class UniversitySelectionViewModel @Inject constructor() : ViewModel() {
     private val _universities = MutableStateFlow<List<UniversityModel>>(emptyList())
     val universities: StateFlow<List<UniversityModel>> = _universities
 

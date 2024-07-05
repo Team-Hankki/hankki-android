@@ -1,4 +1,4 @@
-package com.hankki.feature.university
+package com.hankki.feature.universityselection
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,23 +31,24 @@ import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.hankkiTypography
 import com.hankki.domain.dummy.entity.response.UniversityModel
+import com.hankki.feature.university.R
 
 @Composable
-fun UniversityRoute(navigateToHome: () -> Unit) {
-    val universityViewModel: UniversityViewModel = hiltViewModel()
-    val universities by universityViewModel.universities.collectAsStateWithLifecycle()
-    val selectedUniversity by universityViewModel.selectedUniversity.collectAsStateWithLifecycle()
+fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
+    val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
+    val universities by universitySelectionViewModel.universities.collectAsStateWithLifecycle()
+    val selectedUniversity by universitySelectionViewModel.selectedUniversity.collectAsStateWithLifecycle()
 
-    UniversityScreen(
+    UniversitySelectionScreen(
         universities = universities,
         selectedUniversity = selectedUniversity,
-        onSelectUniversity = { universityViewModel.selectUniversity(it) },
+        onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
         navigateHome = navigateToHome
     )
 }
 
 @Composable
-fun UniversityScreen(
+fun UniversitySelectionScreen(
     universities: List<UniversityModel>,
     selectedUniversity: String?,
     onSelectUniversity: (String) -> Unit,
@@ -136,7 +137,7 @@ fun PreviewUniversityScreen() {
         UniversityModel(19, "서울대"), UniversityModel(20, "국민대")
     ).sortedBy { it.name }
 
-    UniversityScreen(
+    UniversitySelectionScreen(
         universities = dummyData,
         selectedUniversity = null,
         onSelectUniversity = {},

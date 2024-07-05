@@ -54,5 +54,5 @@ include(
     ":feature:report",
     ":feature:my",
     ":feature:login",
-    ":feature:university"
+    ":feature:universityselection"
 )

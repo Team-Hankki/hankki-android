@@ -15,5 +15,5 @@ dependencies {
     implementation(projects.feature.report)
     implementation(projects.feature.my)
     implementation(projects.feature.login)
-    implementation(projects.feature.university)
+    implementation(projects.feature.universityselection)
 }
