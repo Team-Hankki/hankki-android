@@ -42,6 +42,7 @@ import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.navigation.reportNavGraph
+import com.hankki.feature.university.navigation.universityNavgraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -79,12 +80,16 @@ internal fun MainScreen(
                     homeNavGraph(paddingValues = paddingValue)
                     reportNavGraph(
                         paddingValues = paddingValue,
-                        navigateToLogin = { navigator.navigateToLogin() })
+                        navigateToLogin = { navigator.navigateToLogin() },
+                        navigateToUniversity = { navigator.navigateToUniversity() })
                     myNavGraph(
                         paddingValues = paddingValue,
                         navigateToDummy = { navigator.navigateToDummy() }
                     )
                     loginNavgraph()
+                    universityNavgraph(
+                        navigateToHome = { navigator.navigateToHome() }
+                    )
                 }
 
             }
