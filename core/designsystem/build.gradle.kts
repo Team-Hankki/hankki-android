@@ -10,5 +10,10 @@ android {
 }
 
 dependencies {
+    // core
+    implementation(projects.core.common)
+
+    // others
     implementation(libs.androidx.appcompat)
+    implementation(libs.coil.compose)
 }

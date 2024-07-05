@@ -11,8 +11,8 @@ android {
 dependencies {
     // naver map
     implementation(libs.naver.map.compose)
-    implementation (libs.play.services.location)
-    implementation (libs.naver.map.location)
+    implementation(libs.play.services.location)
+    implementation(libs.naver.map.location)
 
     // coil
     implementation(libs.coil.compose)
