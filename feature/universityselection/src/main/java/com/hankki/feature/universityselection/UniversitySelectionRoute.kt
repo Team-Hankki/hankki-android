@@ -29,7 +29,7 @@ import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.hankkiTypography
-import com.hankki.domain.dummy.entity.response.UniversityModel
+import com.hankki.domain.universityselection.UniversitySelectionModel
 import com.hankki.feature.university.R
 
 @Composable
@@ -48,7 +48,7 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
 
 @Composable
 fun UniversitySelectionScreen(
-    universities: List<UniversityModel>,
+    universities: List<UniversitySelectionModel>,
     selectedUniversity: String?,
     onSelectUniversity: (String) -> Unit,
     navigateHome: () -> Unit
@@ -124,16 +124,16 @@ fun UniversitySelectionScreen(
 @Composable
 fun PreviewUniversityScreen() {
     val dummyData = listOf(
-        UniversityModel(1, "한양대"), UniversityModel(2, "성신여대"),
-        UniversityModel(3, "성균관대"), UniversityModel(4, "건국대"),
-        UniversityModel(5, "경희대"), UniversityModel(6, "외대"),
-        UniversityModel(7, "연세대"), UniversityModel(8, "이화여대"),
-        UniversityModel(9, "홍익대"), UniversityModel(10, "숭실대"),
-        UniversityModel(11, "고려대"), UniversityModel(12, "중앙대"),
-        UniversityModel(13, "동국대"), UniversityModel(14, "서강대"),
-        UniversityModel(15, "경기대"), UniversityModel(16, "숙명여대"),
-        UniversityModel(17, "단국대"), UniversityModel(18, "명지대"),
-        UniversityModel(19, "서울대"), UniversityModel(20, "국민대")
+        UniversitySelectionModel(1, "한양대"), UniversitySelectionModel(2, "성신여대"),
+        UniversitySelectionModel(3, "성균관대"), UniversitySelectionModel(4, "건국대"),
+        UniversitySelectionModel(5, "경희대"), UniversitySelectionModel(6, "외대"),
+        UniversitySelectionModel(7, "연세대"), UniversitySelectionModel(8, "이화여대"),
+        UniversitySelectionModel(9, "홍익대"), UniversitySelectionModel(10, "숭실대"),
+        UniversitySelectionModel(11, "고려대"), UniversitySelectionModel(12, "중앙대"),
+        UniversitySelectionModel(13, "동국대"), UniversitySelectionModel(14, "서강대"),
+        UniversitySelectionModel(15, "경기대"), UniversitySelectionModel(16, "숙명여대"),
+        UniversitySelectionModel(17, "단국대"), UniversitySelectionModel(18, "명지대"),
+        UniversitySelectionModel(19, "서울대"), UniversitySelectionModel(20, "국민대")
     ).sortedBy { it.name }
 
     UniversitySelectionScreen(
