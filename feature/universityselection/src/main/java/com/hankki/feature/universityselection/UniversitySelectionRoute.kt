@@ -29,7 +29,6 @@ import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red
-import com.hankki.core.designsystem.theme.hankkiTypography
 import com.hankki.domain.universityselection.UniversitySelectionModel
 import com.hankki.feature.university.R
 
@@ -92,7 +91,9 @@ fun UniversitySelectionScreen(
                         .padding(14.dp),
                     color = if (selectedUniversity == university.name) Red else Gray800
                 )
-                HorizontalDivider(thickness = 1.dp, color = Gray200)
+                if (university != universities.last()) {
+                    HorizontalDivider(thickness = 1.dp, color = Gray200)
+                }
             }
         }
 
