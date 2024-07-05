@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
-import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.SubColor01
@@ -89,7 +89,7 @@ enum class ChipState(
     val iconColor: Color,
 ) {
     SELECTED(
-        containerColor = Gray100,
+        containerColor = White,
         borderColor = Gray300,
         labelColor = Gray600,
         iconColor = Gray600
@@ -97,8 +97,8 @@ enum class ChipState(
     UNSELECTED(
         containerColor = White,
         borderColor = Gray300,
-        labelColor = Gray300,
-        iconColor = Gray300
+        labelColor = Gray400,
+        iconColor = Gray400
     ),
     FIXED(
         containerColor = SubColor01,
