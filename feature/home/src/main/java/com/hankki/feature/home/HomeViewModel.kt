@@ -3,6 +3,7 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.feature.home.component.ChipState
+import com.hankki.feature.home.component.StoreItemEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,6 +24,59 @@ class HomeViewModel @Inject constructor(
     private val _sideEffect: MutableSharedFlow<HomeSideEffect> = MutableSharedFlow()
     val sideEffect: SharedFlow<HomeSideEffect>
         get() = _sideEffect.asSharedFlow()
+
+    init {
+        getStoreItems()
+    }
+
+    private fun getStoreItems() {
+        _state.value = _state.value.copy(
+            storeItems = persistentListOf(
+                StoreItemEntity(
+                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                    category = "한식",
+                    storeName = "한끼네 한정식",
+                    price = 7900,
+                    heartCount = 300
+                ),
+                StoreItemEntity(
+                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                    category = "한식",
+                    storeName = "한끼네 한정식",
+                    price = 7900,
+                    heartCount = 300
+                ),
+                StoreItemEntity(
+                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                    category = "한식",
+                    storeName = "한끼네 한정식",
+                    price = 7900,
+                    heartCount = 300
+                ),
+                StoreItemEntity(
+                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                    category = "한식",
+                    storeName = "한끼네 한정식",
+                    price = 7900,
+                    heartCount = 300
+                ),
+                StoreItemEntity(
+                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                    category = "한식",
+                    storeName = "한끼네 한정식",
+                    price = 7900,
+                    heartCount = 300
+                ),
+                StoreItemEntity(
+                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                    category = "한식",
+                    storeName = "한끼네 한정식",
+                    price = 7900,
+                    heartCount = 300
+                )
+            )
+        )
+    }
 
     fun getJogboItems() {
         _state.value = _state.value.copy(

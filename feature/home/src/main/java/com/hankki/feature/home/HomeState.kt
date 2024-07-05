@@ -2,6 +2,7 @@ package com.hankki.feature.home
 
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.feature.home.component.ChipState
+import com.hankki.feature.home.component.StoreItemEntity
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -18,5 +19,6 @@ data class HomeState(
     val isSortChipOpen: Boolean = false,
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,
+    val storeItems: PersistentList<StoreItemEntity> = emptyList<StoreItemEntity>().toPersistentList(),
     val jogboItems: PersistentList<JogboItemEntity> = emptyList<JogboItemEntity>().toPersistentList()
 )

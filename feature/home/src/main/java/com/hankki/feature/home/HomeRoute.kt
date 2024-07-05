@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
@@ -45,6 +46,7 @@ import com.hankki.feature.home.component.HankkiTopBar
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
+import com.hankki.feature.home.component.StoreItemEntity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -85,6 +87,7 @@ fun HomeRoute(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
         universityName = state.universityName,
+        storeItems = state.storeItems,
         jogboItems = state.jogboItems,
         categoryChipState = state.categoryChipState,
         categoryChipItems = state.categoryChipItems,
@@ -123,6 +126,7 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
+    storeItems: List<StoreItemEntity>,
     jogboItems: List<JogboItemEntity>,
     categoryChipState: ChipState,
     categoryChipItems: List<String>,
@@ -248,13 +252,13 @@ fun HomeScreen(
                                 LazyColumn(
                                     modifier = Modifier.fillMaxSize(),
                                 ) {
-                                    items(count = 100) { // TODO: 추후 data class로 분리시 key 추가 예정
+                                    items(storeItems) {
                                         StoreItem(
-                                            storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                                            category = "한식",
-                                            storeName = "한끼네 한정식",
-                                            price = 7900,
-                                            heartCount = 300
+                                            storeImageUrl = it.storeImageUrl,
+                                            category = it.category,
+                                            storeName = it.storeName,
+                                            price = it.price,
+                                            heartCount = it.heartCount
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems()
