@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,7 +54,7 @@ fun MyRoute(
         myViewModel.loadMockInformation()
     }
 
-    MyScreen(paddingValues, navigateToDummy = navigateToDummy,myState)
+    MyScreen(paddingValues, navigateToDummy = navigateToDummy, myState)
 }
 
 @Composable
@@ -61,11 +63,14 @@ fun MyScreen(
     navigateToDummy: () -> Unit,
     myState: MyState
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .padding(paddingValues)
             .padding(horizontal = 22.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MyTitle(title = stringResource(R.string.title))
@@ -143,8 +148,10 @@ fun MyScreen(
 @Composable
 fun MyScreenPreview() {
     HankkijogboTheme {
-        MyScreen(paddingValues = PaddingValues(), navigateToDummy = {}, myState = MyState(
-            UserInfoEntity(name = "송한끼", image = R.drawable.ic_good)
-        ))
+        MyScreen(
+            paddingValues = PaddingValues(), navigateToDummy = {}, myState = MyState(
+                UserInfoEntity(name = "송한끼", image = R.drawable.ic_good)
+            )
+        )
     }
 }
