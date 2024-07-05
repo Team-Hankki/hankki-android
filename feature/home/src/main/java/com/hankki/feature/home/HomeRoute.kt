@@ -128,16 +128,8 @@ fun HomeRoute(
         dismissSortChip = viewModel::dismissSortChip,
         getJogboItems = viewModel::getJogboItems,
     ) {
-        // 이걸 sideEffect로 빼보자...?
-        // 그럼 처음 서버로부터 받아오고도 이게 siceEffect인것 같은데???
-        // 계속해서 사용자가 이동하는 값을 가지고있을 필요도 없고, 한번 이동시키면 끝이니까!!!
         focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            cameraPositionState.move(
-                CameraUpdate.scrollAndZoomTo(
-                    LatLng(location.latitude, location.longitude),
-                    DEFAULT_ZOOM
-                ).animate(CameraAnimation.Fly)
-            )
+            viewModel.moveMap(location.latitude, location.longitude)
         }
     }
 }

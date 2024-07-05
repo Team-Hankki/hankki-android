@@ -1,6 +1,7 @@
 package com.hankki.feature.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.feature.home.component.ChipState
 import com.hankki.feature.home.component.StoreItemEntity
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,12 +29,19 @@ class HomeViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
-        getUniversityLatLng()
+        getUniversityInfo()
         getStoreItems()
     }
 
-    private fun getUniversityLatLng() {
+    fun moveMap(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.MoveMap(latitude, longitude))
+        }
+    }
+
+    private fun getUniversityInfo() {
         _state.value = _state.value.copy(
+            universityName = "한끼 대학교",
             latLng = LatLng(37.3009489417651, 127.03549529577874)
         )
     }
