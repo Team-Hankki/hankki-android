@@ -35,7 +35,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.feature.dummy.navigation.dummyNavGraph
 import com.hankki.feature.home.navigation.homeNavGraph
@@ -88,7 +90,16 @@ internal fun MainScreen(
                     )
                     loginNavgraph()
                     universitySelectionNavgraph(
-                        navigateToHome = { navigator.navigateToHome() }
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        }
                     )
                 }
 

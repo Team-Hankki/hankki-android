@@ -67,7 +67,7 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateToHome(navOptions: NavOptions? = null) {
+    fun navigateToHome(navOptions: NavOptions) {
         navController.navigate(Home, navOptions)
     }
 
