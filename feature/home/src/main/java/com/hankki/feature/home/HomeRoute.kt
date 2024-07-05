@@ -41,9 +41,9 @@ import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.designsystem.ChipState
 import com.hankki.feature.home.designsystem.DropdownFilterChip
-import com.hankki.feature.home.designsystem.DropdownFilterChip2
 import com.hankki.feature.home.designsystem.HankkiTopBar
 import com.hankki.feature.home.designsystem.RepositionButton
+import com.hankki.feature.home.designsystem.RowFilterChip
 import com.hankki.feature.home.designsystem.StoreItem
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -187,7 +187,7 @@ fun HomeScreen(
                     modifier = Modifier.padding(start = 22.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    DropdownFilterChip2(
+                    RowFilterChip(
                         chipState = categoryChipState,
                         defaultTitle = "종류",
                         menus = categoryChipItems,

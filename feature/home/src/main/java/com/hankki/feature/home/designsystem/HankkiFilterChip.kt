@@ -1,118 +1,156 @@
 package com.hankki.feature.home.designsystem
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.ui.window.Popup
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.R
-import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.SubColor01
-import com.hankki.core.designsystem.theme.SubColor02
 import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun HankkiFilterChip(
     chipState: ChipState,
-    title: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    filterContent: @Composable ColumnScope.() -> Unit = {},
+    defaultTitle: String,
+    menus: List<String> = emptyList(),
+    onDismissRequest: () -> Unit = {},
+    onClickMenu: (String) -> Unit = {},
+    onClickChip: () -> Unit = {},
+    content: @Composable () -> Unit = {},
 ) {
-    val icon = remember {
-        when (chipState) {
-            ChipState.SELECTED -> R.drawable.ic_arrow_up
-            ChipState.UNSELECTED -> R.drawable.ic_arrow_down
-            ChipState.FIXED -> R.drawable.ic_x
+    HankkiStateChip(
+        chipState = chipState,
+        defaultTitle = defaultTitle,
+        onClick = onClickChip
+    ) {
+        AnimatedVisibility(
+            visible = chipState == ChipState.SELECTED,
+            enter = expandVertically(),
+            exit = shrinkVertically()
+        ) {
+            Popup(
+                onDismissRequest = onDismissRequest,
+                content = content
+            )
         }
     }
+}
 
-    Column {
-        Box(
-            modifier = modifier
-                .clip(RoundedCornerShape(100.dp))
-                .border(1.dp, chipState.borderColor, RoundedCornerShape(100.dp))
-                .background(chipState.containerColor)
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp)
-                .noRippleClickable(onClick = onClick),
-            contentAlignment = Alignment.Center
+@Composable
+fun DropdownFilterChip(
+    chipState: ChipState,
+    defaultTitle: String,
+    menus: List<String> = emptyList(),
+    onDismissRequest: () -> Unit = {},
+    onClickMenu: (String) -> Unit = {},
+    onClickChip: () -> Unit = {},
+) {
+    HankkiFilterChip(
+        chipState = chipState,
+        defaultTitle = defaultTitle,
+        menus = menus,
+        onDismissRequest = onDismissRequest,
+        onClickMenu = onClickMenu,
+        onClickChip = onClickChip
+    ) {
+        Column(
+            modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .border(1.dp, Gray200, RoundedCornerShape(10.dp))
+                .background(White)
+                .width(IntrinsicSize.Max)
+                .padding(10.dp),
+            verticalArrangement = Arrangement.Center
         ) {
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = title,
-                    style = HankkiTheme.typography.caption1,
-                    color = chipState.labelColor
-                )
-                AsyncImage(
-                    model = icon,
-                    contentDescription = "icon",
-                    modifier = Modifier.size(24.dp),
-                    colorFilter = ColorFilter.tint(chipState.iconColor),
-                )
+            menus.forEach { item ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .noRippleClickable(onClick = { onClickMenu(item) }),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = item,
+                        style = HankkiTheme.typography.caption1,
+                        color = Gray600
+                    )
+                }
+                if (item != menus.last()) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        thickness = 1.dp,
+                        color = Gray200
+                    )
+                }
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        filterContent()
     }
 }
 
-enum class ChipState(
-    val containerColor: Color,
-    val borderColor: Color,
-    val labelColor: Color,
-    val iconColor: Color,
-) {
-    SELECTED(
-        containerColor = White,
-        borderColor = Gray300,
-        labelColor = Gray600,
-        iconColor = Gray600
-    ),
-    UNSELECTED(
-        containerColor = White,
-        borderColor = Gray300,
-        labelColor = Gray400,
-        iconColor = Gray400
-    ),
-    FIXED(
-        containerColor = SubColor01,
-        borderColor = SubColor02,
-        labelColor = Gray600,
-        iconColor = Gray600
-    )
-}
-
-@Preview
 @Composable
-fun CustomChipPreview() {
+fun RowFilterChip(
+    chipState: ChipState,
+    defaultTitle: String,
+    menus: List<String> = emptyList(),
+    onDismissRequest: () -> Unit = {},
+    onClickMenu: (String) -> Unit = {},
+    onClickChip: () -> Unit = {},
+) {
     HankkiFilterChip(
-        ChipState.SELECTED,
-        "한식"
-    )
+        chipState = chipState,
+        defaultTitle = defaultTitle,
+        menus = menus,
+        onDismissRequest = onDismissRequest,
+        onClickMenu = onClickMenu,
+        onClickChip = onClickChip
+    ) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            item {
+                Spacer(modifier = Modifier.width(22.dp))
+            }
+            items(menus) { menu ->
+                Box(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(White)
+                        .noRippleClickable(onClick = { onClickMenu(menu) }),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = menu,
+                        style = HankkiTheme.typography.caption1,
+                        color = Gray400
+                    )
+                }
+            }
+            item {
+                Spacer(modifier = Modifier.width(22.dp))
+            }
+        }
+    }
 }
