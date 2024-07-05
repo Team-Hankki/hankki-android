@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,10 +27,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
@@ -47,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -54,6 +53,8 @@ import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
+import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
+import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -127,12 +128,78 @@ fun HomeScreen(
     var bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
 
     if (isOpenRealBottomSheet) {
-        ModalBottomSheet(onDismissRequest = { isOpenRealBottomSheet = false }) {
-            Text(
-                modifier = Modifier.padding(vertical = 80.dp),
-                text = "오 진짜 나오네"
-            )
-        }
+        HankkiStoreJogboBottomSheet(
+            jogboItems = listOf(
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+                JogboItemEntity(
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "학교 5년째 다니는 화석의 추천",
+                    tags = listOf("#미친가성비", "#꼭가보세요")
+                ),
+            ),
+            onDismissRequest = {
+                isOpenRealBottomSheet = false
+            }
+        )
     }
 
     Column(
@@ -250,24 +317,11 @@ fun HomeScreen(
 
                             }
                         }
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .padding(end = 21.dp, bottom = 14.dp)
-                                    .size(38.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, Gray300, CircleShape)
-                                    .background(White)
-                                    .padding(9.dp)
-                                    .noRippleClickable(onClick = reposition)
-                            ) {
-                                AsyncImage(
-                                    model = R.drawable.ic_map_here,
-                                    contentDescription = "here"
-                                )
-                            }
-                            Spacer(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp * 0.3).dp))
-                        }
+                        val height = (LocalConfiguration.current.screenHeightDp * 0.3).dp
+                        RepositionButton(
+                            height = height,
+                            onClick = reposition
+                        )
 
                         BottomSheetScaffold(
                             scaffoldState = bottomSheetScaffoldState,
@@ -292,7 +346,7 @@ fun HomeScreen(
                             sheetDragHandle = { Spacer(modifier = Modifier.height(24.dp)) },
                             sheetContainerColor = Gray100,
                             sheetSwipeEnabled = false,
-                            sheetPeekHeight = (LocalConfiguration.current.screenHeightDp * 0.3).dp
+                            sheetPeekHeight = height
                         ) {}
                     }
                 }
@@ -347,6 +401,31 @@ fun HankkiTopBar(
     }
 }
 
+@Composable
+fun RepositionButton(
+    height: Dp,
+    onClick: () -> Unit = {},
+) {
+    Column {
+        Box(
+            modifier = Modifier
+                .padding(end = 21.dp, bottom = 14.dp)
+                .size(38.dp)
+                .clip(CircleShape)
+                .border(1.dp, Gray300, CircleShape)
+                .background(White)
+                .padding(9.dp)
+                .noRippleClickable(onClick = onClick)
+        ) {
+            AsyncImage(
+                model = R.drawable.ic_map_here,
+                contentDescription = "here"
+            )
+        }
+        Spacer(modifier = Modifier.height(height))
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 private fun closeBottomSheet(
     coroutineScope: CoroutineScope,
@@ -394,25 +473,31 @@ fun DropdownFilterChip(
                 ) {
                     Column(
                         modifier = Modifier
-                            .offset((-20).dp, 0.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .border(1.dp, Gray200, RoundedCornerShape(10.dp))
                             .background(White)
-                            .width(IntrinsicSize.Max),
+                            .width(IntrinsicSize.Max)
+                            .padding(10.dp),
+                        verticalArrangement = Arrangement.Center
                     ) {
                         menus.forEach { item ->
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = item,
-                                        style = HankkiTheme.typography.caption1,
-                                        color = Gray600
-                                    )
-                                }, onClick = {
-                                    onClickMenu()
-                                    expanded = false
-                                }
-                            )
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = item,
+                                    style = HankkiTheme.typography.caption1,
+                                    color = Gray600
+                                )
+                            }
+                            if (item != menus.last()) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = 8.dp),
+                                    thickness = 1.dp,
+                                    color = Gray200
+                                )
+                            }
                         }
                     }
                 }
