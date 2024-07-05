@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    setNamespace("feature.university")
+    setNamespace("feature.universityselection")
 }
 
 dependencies {

@@ -28,7 +28,6 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.domain.universityselection.UniversitySelectionModel
-import com.hankki.feature.universityselection.R
 import com.hankki.feature.universityselection.component.UniversityItem
 
 @Composable
