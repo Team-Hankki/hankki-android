@@ -34,7 +34,8 @@ fun HankkiButton(
     ) {
         Text(
             text = text,
-            style = textStyle.copy(color = White)
+            style = textStyle,
+            color = White
         )
     }
 }
