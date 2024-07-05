@@ -3,8 +3,8 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
-import com.hankki.feature.home.component.ChipState
-import com.hankki.feature.home.component.StoreItemEntity
+import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -101,32 +101,32 @@ class HomeViewModel @Inject constructor(
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
+                    tags = persistentListOf("#미친가성비", "#꼭가보세요")
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
+                    tags = persistentListOf("#미친가성비", "#꼭가보세요")
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
+                    tags = persistentListOf("#미친가성비", "#꼭가보세요")
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
+                    tags = persistentListOf("#미친가성비", "#꼭가보세요")
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
+                    tags = persistentListOf("#미친가성비", "#꼭가보세요")
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
+                    tags = persistentListOf("#미친가성비", "#꼭가보세요")
                 )
             )
         )

@@ -40,11 +40,13 @@ import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HankkiStoreJogboBottomSheet(
-    jogboItems: List<JogboItemEntity>,
+    jogboItems: PersistentList<JogboItemEntity>,
     modifier: Modifier = Modifier,
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
@@ -124,8 +126,8 @@ fun AddNewJogboButton(
 fun JogboItem(
     imageUrl: String,
     title: String,
-    tags: List<String>,
-    modifier: Modifier = Modifier,
+    tags: PersistentList<String>,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -140,6 +142,7 @@ fun JogboItem(
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.width(12.dp))
+
         Column {
             Text(
                 text = title,
@@ -160,6 +163,7 @@ fun JogboItem(
             }
         }
         Spacer(modifier = Modifier.weight(1f))
+
         Icon(
             painter = painterResource(id = R.drawable.ic_plus_btn_empty),
             contentDescription = "more",
@@ -171,7 +175,7 @@ fun JogboItem(
 data class JogboItemEntity(
     val imageUrl: String,
     val title: String,
-    val tags: List<String>,
+    val tags: PersistentList<String>,
 )
 
 @Preview
@@ -179,21 +183,21 @@ data class JogboItemEntity(
 fun HankkiStoreJogboBottomSheetPreview() {
     HankkijogboTheme {
         HankkiStoreJogboBottomSheet(
-            jogboItems = listOf(
+            jogboItems = persistentListOf(
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "title",
-                    tags = listOf("tag1", "tag2", "tag3")
+                    tags = persistentListOf("tag1", "tag2", "tag3")
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "title",
-                    tags = listOf("tag1", "tag2", "tag3")
+                    tags = persistentListOf("tag1", "tag2", "tag3")
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "title",
-                    tags = listOf("tag1", "tag2", "tag3")
+                    tags = persistentListOf("tag1", "tag2", "tag3")
                 ),
             )
         )

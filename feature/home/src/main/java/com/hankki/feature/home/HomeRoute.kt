@@ -43,13 +43,13 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
-import com.hankki.feature.home.component.ChipState
 import com.hankki.feature.home.component.DropdownFilterChip
 import com.hankki.feature.home.component.HankkiTopBar
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
-import com.hankki.feature.home.component.StoreItemEntity
+import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -63,6 +63,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -140,14 +141,14 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
-    storeItems: List<StoreItemEntity>,
-    jogboItems: List<JogboItemEntity>,
+    storeItems: PersistentList<StoreItemEntity>,
+    jogboItems: PersistentList<JogboItemEntity>,
     categoryChipState: ChipState,
-    categoryChipItems: List<String>,
+    categoryChipItems: PersistentList<String>,
     priceChipState: ChipState,
-    priceChipItems: List<String>,
+    priceChipItems: PersistentList<String>,
     sortChipState: ChipState,
-    sortChipItems: List<String>,
+    sortChipItems: PersistentList<String>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
     controlMyJogboBottomSheet: () -> Unit = {},

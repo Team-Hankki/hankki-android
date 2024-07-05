@@ -16,4 +16,5 @@ dependencies {
     // others
     implementation(libs.androidx.appcompat)
     implementation(libs.coil.compose)
+    implementation(libs.kotlinx.immutable)
 }
