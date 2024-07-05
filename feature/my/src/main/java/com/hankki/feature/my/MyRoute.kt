@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
@@ -87,7 +88,7 @@ fun MyScreen(
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = stringResource(R.string.sub_title, myState.userState.name),
-            color = com.hankki.core.designsystem.theme.Gray900,
+            color = Gray900,
             style = HankkiTheme.typography.suitH2,
             textAlign = TextAlign.Center
         )
