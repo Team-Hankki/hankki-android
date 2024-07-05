@@ -10,4 +10,5 @@ android {
 
 dependencies {
     implementation(projects.domain.dummy)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
 }
