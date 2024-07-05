@@ -6,6 +6,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
@@ -16,6 +17,7 @@ import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.report.navigation.navigateReport
+import com.hankki.feature.university.navigation.navigateToUniversity
 
 internal class MainNavigator(
     val navController: NavHostController,
@@ -63,6 +65,14 @@ internal class MainNavigator(
         if (!isSameCurrentDestination<Home>()) {
             navigateUp()
         }
+    }
+
+    fun navigateToHome(navOptions: NavOptions? = null) {
+        navController.navigate(Home, navOptions)
+    }
+
+    fun navigateToUniversity() {
+        navController.navigateToUniversity()
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
