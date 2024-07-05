@@ -14,13 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,10 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,18 +32,16 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.core.designsystem.theme.Gray100
-import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.designsystem.ChipState
 import com.hankki.feature.home.designsystem.DropdownFilterChip
-import com.hankki.feature.home.designsystem.HankkiFilterChip
+import com.hankki.feature.home.designsystem.DropdownFilterChip2
 import com.hankki.feature.home.designsystem.HankkiTopBar
 import com.hankki.feature.home.designsystem.RepositionButton
 import com.hankki.feature.home.designsystem.StoreItem
@@ -74,8 +64,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalNaverMapApi::class)
 @SuppressLint("MissingPermission")
 @Composable
-fun HomeRoute(paddingValues: PaddingValues) {
+fun HomeRoute(
+    paddingValues: PaddingValues,
+    viewModel: HomeViewModel = hiltViewModel(),
+) {
     val context = LocalContext.current
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val focusLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     val cameraPositionState = rememberCameraPositionState {
@@ -88,7 +83,27 @@ fun HomeRoute(paddingValues: PaddingValues) {
 
     HomeScreen(
         paddingValues = paddingValues,
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
+        jogboItems = state.jogboItems,
+        categoryChipState = state.categoryChipState,
+        categoryChipItems = state.categoryChipItems,
+        priceChipState = state.priceChipState,
+        priceChipItems = state.priceChipItems,
+        sortChipState = state.sortChipState,
+        sortChipItems = state.sortChipItems,
+        isMainBottomSheetOpen = state.isMainBottomSheetOpen,
+        isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
+        controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
+        clickCategoryChip = viewModel::clickCategoryChip,
+        selectCategoryChipItem = { viewModel.selectCategoryChipItem(it) },
+        dismissCategoryChip = viewModel::dismissCategoryChip,
+        clickPriceChip = viewModel::clickPriceChip,
+        selectPriceChipItem = { viewModel.selectPriceChipItem(it) },
+        dismissPriceChip = viewModel::dismissPriceChip,
+        clickSortChip = viewModel::clickSortChip,
+        selectSortChipItem = { viewModel.selectSortChipItem(it) },
+        dismissSortChip = viewModel::dismissSortChip,
+        getJogboItems = viewModel::getJogboItems,
     ) {
         focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             cameraPositionState.move(
@@ -101,92 +116,40 @@ fun HomeRoute(paddingValues: PaddingValues) {
     }
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
+    jogboItems: List<JogboItemEntity>,
+    categoryChipState: ChipState,
+    categoryChipItems: List<String>,
+    priceChipState: ChipState,
+    priceChipItems: List<String>,
+    sortChipState: ChipState,
+    sortChipItems: List<String>,
+    isMainBottomSheetOpen: Boolean,
+    isMyJogboBottomSheetOpen: Boolean,
+    controlMyJogboBottomSheet: () -> Unit = {},
+    clickCategoryChip: () -> Unit = {},
+    selectCategoryChipItem: (String) -> Unit = {},
+    dismissCategoryChip: () -> Unit = {},
+    clickPriceChip: () -> Unit = {},
+    selectPriceChipItem: (String) -> Unit = {},
+    dismissPriceChip: () -> Unit = {},
+    clickSortChip: () -> Unit = {},
+    selectSortChipItem: (String) -> Unit = {},
+    dismissSortChip: () -> Unit = {},
+    getJogboItems: () -> Unit = {},
     reposition: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
-    var isOpenBottomSheet by remember { mutableStateOf(false) }
-    var isOpenRealBottomSheet by remember { mutableStateOf(false) }
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
 
-    var bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
-
-    if (isOpenRealBottomSheet) {
+    if (isMyJogboBottomSheetOpen) {
         HankkiStoreJogboBottomSheet(
-            jogboItems = listOf(
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = listOf("#미친가성비", "#꼭가보세요")
-                ),
-            ),
-            onDismissRequest = {
-                isOpenRealBottomSheet = false
-            }
+            jogboItems = jogboItems,
+            onDismissRequest = controlMyJogboBottomSheet
         )
     }
 
@@ -220,91 +183,57 @@ fun HomeScreen(
             }
 
             Column {
-                var open by remember {
-                    mutableStateOf(false)
-                }
                 Row(
                     modifier = Modifier.padding(start = 22.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    HankkiFilterChip(
-                        chipState = ChipState.UNSELECTED,
-                        title = "종류",
-                        onClick = {
+                    DropdownFilterChip2(
+                        chipState = categoryChipState,
+                        defaultTitle = "종류",
+                        menus = categoryChipItems,
+                        onDismissRequest = dismissCategoryChip,
+                        onClickMenu = {
+                            selectCategoryChipItem(it)
+                        },
+                        onClickChip = {
+                            clickCategoryChip()
                             closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
-                            open = !open
                         }
                     )
-                    DropdownFilterChip(
-                        chipState = ChipState.SELECTED,
-                        title = "가격대",
-                        menus = listOf(
-                            "6000원 이하",
-                            "6000 ~ 8000원"
-                        ),
-                        onDismissRequest = {
-                        }
-                    ) {
-                        closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
-                    }
 
                     DropdownFilterChip(
-                        chipState = ChipState.FIXED,
-                        title = "정렬",
-                        menus = listOf(
-                            "최신순",
-                            "가격 낮은순",
-                            "추천순"
-                        ),
-                        onDismissRequest = {
-
+                        chipState = priceChipState,
+                        defaultTitle = "가격대",
+                        menus = priceChipItems,
+                        onDismissRequest = dismissPriceChip,
+                        onClickMenu = {
+                            selectPriceChipItem(it)
+                        },
+                        onClickChip = {
+                            clickPriceChip()
+                            closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
                         }
-                    ) {
-                        closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
-                    }
+                    )
+
+                    DropdownFilterChip(
+                        chipState = sortChipState,
+                        defaultTitle = "정렬",
+                        menus = sortChipItems,
+                        onDismissRequest = dismissSortChip,
+                        onClickMenu = {
+                            selectSortChipItem(it)
+                        },
+                        onClickChip = {
+                            clickSortChip()
+                            closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
+                        }
+                    )
                 }
-                if (!isOpenBottomSheet) {
+                if (isMainBottomSheetOpen) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.TopStart
-                        ) {
-                            val menus =
-                                listOf("한식", "중식", "일식", "양식", "분식", "패스트푸드", "디저트", "카페", "기타")
-                            if (open) {
-                                Popup(
-                                    onDismissRequest = { open = false },
-                                ) {
-                                    LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                                        item {
-                                            Spacer(modifier = Modifier.width(22.dp))
-                                        }
-                                        items(menus) { menu ->
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(60.dp)
-                                                    .clip(RoundedCornerShape(10.dp))
-                                                    .background(White),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text(
-                                                    text = menu,
-                                                    style = HankkiTheme.typography.caption1,
-                                                    color = Gray400
-                                                )
-                                            }
-                                        }
-                                        item {
-                                            Spacer(modifier = Modifier.width(22.dp))
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
                         val height = (LocalConfiguration.current.screenHeightDp * 0.3).dp
                         RepositionButton(
                             height = height,
@@ -316,7 +245,6 @@ fun HomeScreen(
                             sheetContent = {
                                 LazyColumn(
                                     modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp),
                                 ) {
                                     items(count = 100) { // TODO: 추후 data class로 분리시 key 추가 예정
                                         StoreItem(
@@ -326,8 +254,11 @@ fun HomeScreen(
                                             price = 7900,
                                             heartCount = 300
                                         ) {
-                                            isOpenRealBottomSheet = true
+                                            controlMyJogboBottomSheet()
+                                            getJogboItems()
                                         }
+
+                                        Spacer(modifier = Modifier.height(12.dp))
                                     }
                                 }
                             },
@@ -341,7 +272,7 @@ fun HomeScreen(
             }
         }
 
-        AnimatedVisibility(visible = isOpenBottomSheet) { // 애니메이션 뭐넣지... 하암...
+        AnimatedVisibility(visible = !isMainBottomSheetOpen) { // 애니메이션 뭐넣지... 하암...
             Column {
                 Row(
                     modifier = Modifier
@@ -372,6 +303,6 @@ private fun closeBottomSheet(
     }
 }
 
-object MapConstants {
+private object MapConstants {
     const val DEFAULT_ZOOM = 16.0
 }
