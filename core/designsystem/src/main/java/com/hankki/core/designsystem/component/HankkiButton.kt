@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.SemiRed
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -27,7 +28,7 @@ fun HankkiButton(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(if (enabled) Red else Red.copy(alpha = 0.38f))
+            .background(if (enabled) Red else SemiRed)
             .clickable(enabled = enabled, onClick = onClick)
             .padding(vertical = 16.dp)
     ) {
