@@ -27,6 +27,7 @@ import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.hankkiTypography
 import com.hankki.domain.universityselection.UniversitySelectionModel
@@ -62,14 +63,14 @@ fun UniversitySelectionScreen(
         Spacer(modifier = Modifier.height(68.dp))
         Text(
             text = stringResource(id = R.string.select_university),
-            style = hankkiTypography().h1,
+            style = HankkiTheme.typography.h1,
             color = Gray900
         )
 
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = stringResource(id = R.string.wait_a_minute),
-            style = hankkiTypography().body4,
+            style = HankkiTheme.typography.body4,
             color = Gray400
         )
 
@@ -82,7 +83,7 @@ fun UniversitySelectionScreen(
             items(universities) { university ->
                 Text(
                     text = university.name,
-                    style = hankkiTypography().body1,
+                    style = HankkiTheme.typography.body1,
                     modifier = Modifier
                         .fillMaxWidth()
                         .noRippleClickable {
@@ -98,7 +99,7 @@ fun UniversitySelectionScreen(
         Spacer(modifier = Modifier.height(10.dp))
         HankkiButton(
             text = stringResource(id = R.string.select),
-            textStyle = hankkiTypography().sub2,
+            textStyle = HankkiTheme.typography.sub2,
             onClick = navigateHome,
             modifier = Modifier
                 .fillMaxWidth(),
@@ -109,7 +110,7 @@ fun UniversitySelectionScreen(
 
         Text(
             text = stringResource(id = R.string.no_university_looking),
-            style = hankkiTypography().caption1,
+            style = HankkiTheme.typography.caption1,
             color = Gray400,
             textDecoration = TextDecoration.Underline,
             modifier = Modifier
