@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -34,7 +35,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
@@ -68,9 +71,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeRoute(
     paddingValues: PaddingValues,
+    onShowSnackBar: (Int) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val focusLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
@@ -79,6 +84,22 @@ fun HomeRoute(
             state.latLng,
             DEFAULT_ZOOM
         )
+    }
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is HomeSideEffect.SnackBar -> onShowSnackBar(sideEffect.message)
+                is HomeSideEffect.MoveMap -> {
+                    cameraPositionState.move(
+                        CameraUpdate.scrollAndZoomTo(
+                            LatLng(sideEffect.latitude, sideEffect.longitude),
+                            DEFAULT_ZOOM
+                        ).animate(CameraAnimation.Fly)
+                    )
+                }
+            }
+        }
     }
 
     HomeScreen(
@@ -107,6 +128,9 @@ fun HomeRoute(
         dismissSortChip = viewModel::dismissSortChip,
         getJogboItems = viewModel::getJogboItems,
     ) {
+        // 이걸 sideEffect로 빼보자...?
+        // 그럼 처음 서버로부터 받아오고도 이게 siceEffect인것 같은데???
+        // 계속해서 사용자가 이동하는 값을 가지고있을 필요도 없고, 한번 이동시키면 끝이니까!!!
         focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             cameraPositionState.move(
                 CameraUpdate.scrollAndZoomTo(

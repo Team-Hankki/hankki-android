@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -51,10 +52,11 @@ internal fun MainScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
-    val onShowErrorSnackBar: (String) -> Unit = { errorMessage ->
+    val localContextResource = LocalContext.current.resources
+    val onShowSnackBar: (Int) -> Unit = { errorMessage ->
         coroutineScope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
-            snackBarHostState.showSnackbar(errorMessage)
+            snackBarHostState.showSnackbar(localContextResource.getString(errorMessage))
         }
     }
 
@@ -73,16 +75,18 @@ internal fun MainScreen(
                     popExitTransition = { ExitTransition.None }
                 ) {
                     dummyNavGraph(
-                        onShowErrorSnackBar = onShowErrorSnackBar
+                        onShowErrorSnackBar = {} // onShowSnackBar
                     )
-                    homeNavGraph(paddingValues = paddingValue)
+                    homeNavGraph(
+                        paddingValues = paddingValue,
+                        onShowSnackBar = onShowSnackBar
+                    )
                     reportNavGraph(paddingValues = paddingValue)
                     myNavGraph(
                         paddingValues = paddingValue,
                         navigateToDummy = { navigator.navigateToDummy() }
                     )
                 }
-
             }
         },
         bottomBar = {
