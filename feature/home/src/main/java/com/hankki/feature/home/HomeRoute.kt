@@ -84,6 +84,7 @@ fun HomeRoute(
     HomeScreen(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
+        universityName = state.universityName,
         jogboItems = state.jogboItems,
         categoryChipState = state.categoryChipState,
         categoryChipItems = state.categoryChipItems,
@@ -121,6 +122,7 @@ fun HomeRoute(
 fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
+    universityName: String,
     jogboItems: List<JogboItemEntity>,
     categoryChipState: ChipState,
     categoryChipItems: List<String>,
@@ -158,7 +160,7 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(paddingValues)
     ) {
-        HankkiTopBar("건국대학교") {
+        HankkiTopBar(universityName) {
             // TODO: 학교 선택 Screen 이동
         }
 

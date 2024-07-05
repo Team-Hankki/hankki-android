@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 data class HomeState(
+    val universityName: String = "한끼 대학교",
     val categoryChipState: ChipState = ChipState.UNSELECTED,
     val categoryChipItems: PersistentList<String> = emptyList<String>().toPersistentList(),
     val isCategoryChipOpen: Boolean = false,
@@ -17,5 +18,5 @@ data class HomeState(
     val isSortChipOpen: Boolean = false,
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,
-    val jogboItems: PersistentList<JogboItemEntity> = emptyList<JogboItemEntity>().toPersistentList(),
+    val jogboItems: PersistentList<JogboItemEntity> = emptyList<JogboItemEntity>().toPersistentList()
 )
