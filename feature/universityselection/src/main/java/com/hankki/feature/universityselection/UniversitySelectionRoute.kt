@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
@@ -54,8 +53,6 @@ fun UniversitySelectionScreen(
     onSelectUniversity: (String) -> Unit,
     navigateHome: () -> Unit
 ) {
-    val typography = hankkiTypography()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,14 +62,14 @@ fun UniversitySelectionScreen(
         Spacer(modifier = Modifier.height(68.dp))
         Text(
             text = stringResource(id = R.string.select_university),
-            style = typography.h1,
+            style = hankkiTypography().h1,
             color = Gray900
         )
 
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = stringResource(id = R.string.wait_a_minute),
-            style = typography.body4,
+            style = hankkiTypography().body4,
             color = Gray400
         )
 
@@ -85,7 +82,7 @@ fun UniversitySelectionScreen(
             items(universities) { university ->
                 Text(
                     text = university.name,
-                    style = typography.body1,
+                    style = hankkiTypography().body1,
                     modifier = Modifier
                         .fillMaxWidth()
                         .noRippleClickable {
@@ -101,16 +98,18 @@ fun UniversitySelectionScreen(
         Spacer(modifier = Modifier.height(10.dp))
         HankkiButton(
             text = stringResource(id = R.string.select),
+            textStyle = hankkiTypography().sub2,
             onClick = navigateHome,
-            enabled = selectedUniversity != null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth(),
+            enabled = selectedUniversity != null
         )
 
         Spacer(modifier = Modifier.height(14.dp))
 
         Text(
             text = stringResource(id = R.string.no_university_looking),
-            fontSize = 14.sp,
+            style = hankkiTypography().caption1,
             color = Gray400,
             textDecoration = TextDecoration.Underline,
             modifier = Modifier

@@ -1,14 +1,17 @@
 package com.hankki.core.designsystem.component
 
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 
@@ -18,20 +21,19 @@ fun HankkiButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    textStyle: TextStyle = TextStyle.Default
 ) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = modifier
-            .noRippleClickable { onClick() }
-            .height(54.dp)
-            .widthIn(min = 0.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Red,
-            disabledContainerColor = Red.copy(alpha = 0.38f)
-        ),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(if (enabled) Red else Red.copy(alpha = 0.38f))
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(vertical = 16.dp)
     ) {
-        Text(text = text, color = White)
+        Text(
+            text = text,
+            style = textStyle.copy(color = White)
+        )
     }
 }
