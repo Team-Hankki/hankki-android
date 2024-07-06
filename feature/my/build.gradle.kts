@@ -9,7 +9,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.coil.compose)
+    //domain
     implementation(projects.domain.my)
+
+    //other
+    implementation(libs.coil.compose)
 }
+
 
