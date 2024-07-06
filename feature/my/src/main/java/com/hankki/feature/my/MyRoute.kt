@@ -112,7 +112,8 @@ fun MyScreen(
                     Red,
                     shape = RoundedCornerShape(12.dp)
                 )
-                .clip(RoundedCornerShape(12.dp)),
+                .clip(RoundedCornerShape(12.dp))
+                .padding(start = 28.dp, end = 29.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -120,12 +121,10 @@ fun MyScreen(
                 text = stringResource(R.string.my_jogbo),
                 style = HankkiTheme.typography.sub1,
                 color = White,
-                modifier = Modifier.padding(start = 28.dp)
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_mygraphic),
                 contentDescription = null,
-                modifier = Modifier.padding(end = 29.dp)
             )
         }
 
