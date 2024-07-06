@@ -65,11 +65,7 @@ fun HankkiStoreJogboBottomSheet(
         modifier = modifier,
         containerColor = White,
         onDismissRequest = {
-            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                if (!sheetState.isVisible) {
-                    onDismissRequest()
-                }
-            }
+            onDismissRequest()
         },
         sheetState = sheetState
     ) {
