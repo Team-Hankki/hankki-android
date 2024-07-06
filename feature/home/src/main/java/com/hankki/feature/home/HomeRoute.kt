@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
@@ -50,6 +51,7 @@ import com.hankki.feature.home.component.HankkiTopBar
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
+import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
@@ -148,7 +150,7 @@ fun HomeScreen(
     storeItems: PersistentList<StoreItemEntity>,
     jogboItems: PersistentList<JogboItemEntity>,
     categoryChipState: ChipState,
-    categoryChipItems: PersistentList<String>,
+    categoryChipItems: PersistentList<CategoryChipItem>,
     priceChipState: ChipState,
     priceChipItems: PersistentList<String>,
     sortChipState: ChipState,
@@ -170,6 +172,13 @@ fun HomeScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(key1 = bottomSheetScaffoldState.bottomSheetState.currentValue) {
+        if (bottomSheetScaffoldState.bottomSheetState.hasPartiallyExpandedState) {
+            listState.animateScrollToItem(0)
+        }
+    }
 
     if (isMyJogboBottomSheetOpen) {
         HankkiStoreJogboBottomSheet(
@@ -270,6 +279,7 @@ fun HomeScreen(
                             sheetContent = {
                                 LazyColumn(
                                     modifier = Modifier.fillMaxSize(),
+                                    state = listState
                                 ) {
                                     items(storeItems) {
                                         StoreItem(
@@ -287,9 +297,8 @@ fun HomeScreen(
                                     }
                                 }
                             },
-                            sheetDragHandle = { Spacer(modifier = Modifier.height(24.dp)) },
                             sheetContainerColor = Gray100,
-                            sheetSwipeEnabled = false,
+                            sheetSwipeEnabled = true,
                             sheetPeekHeight = height
                         ) {}
                     }
