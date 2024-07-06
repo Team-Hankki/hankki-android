@@ -153,7 +153,7 @@ fun MyScreenPreview() {
     HankkijogboTheme {
         MyScreen(
             paddingValues = PaddingValues(), navigateToDummy = {}, myState = MyState(
-                UserInfoEntity(name = "송한끼", image = R.drawable.ic_good)
+                UserInfoEntity(name = "송한끼", image = "")
             )
         )
     }
