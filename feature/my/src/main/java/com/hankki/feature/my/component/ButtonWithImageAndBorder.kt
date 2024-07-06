@@ -34,7 +34,7 @@ fun ButtonWithImageAndBorder(
             .fillMaxWidth()
             .background(
                 Gray50,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(size = 12.dp)
             )
             .border(
                 1.dp,
@@ -44,7 +44,10 @@ fun ButtonWithImageAndBorder(
             .padding(top = 18.dp, bottom = 17.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(painter = painterResource(id = buttonImage), contentDescription = buttonDescription)
+        Image(
+            painter = painterResource(id = buttonImage),
+            contentDescription = buttonDescription
+        )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = buttonDescription,

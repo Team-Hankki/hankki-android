@@ -19,7 +19,9 @@ fun MyTitle(title: String) {
             color = Gray900,
             style = HankkiTheme.typography.sub3,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 18.dp)
         )
     }
 }
