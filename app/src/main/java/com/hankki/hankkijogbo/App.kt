@@ -1,8 +1,7 @@
 package com.hankki.hankkijogbo
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import com.hankki.core.network.BuildConfig
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -13,6 +12,7 @@ class App : Application() {
 
         initTimber()
         setDarkMode()
+        initKakaoSdk()
     }
 
     private fun initTimber() {
@@ -22,5 +22,9 @@ class App : Application() {
     private fun setDarkMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // status bar color를 위해서 설정
         // statusbar color를 바꾸는 속성을 찾으면 수정 예정
+    }
+
+    private fun initKakaoSdk() {
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
     }
 }

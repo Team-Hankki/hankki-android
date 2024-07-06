@@ -20,6 +20,7 @@ fun MyScreen(
 ) {
     Column(modifier = Modifier.padding(paddingValues)) {
         Text(text = "My")
+
         Button(onClick = navigateToDummy) {
             Text(text = "Go to Dummy")
         }

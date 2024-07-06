@@ -13,9 +13,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
+        // naver
         maven{
             url = uri("https://repository.map.naver.com/archive/maven")
         }
+
+        //kakao
+        maven { url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/") }
     }
 }
 
@@ -47,5 +52,6 @@ include(
     ":feature:main",
     ":feature:home",
     ":feature:report",
-    ":feature:my"
+    ":feature:my",
+    ":feature:login"
 )
