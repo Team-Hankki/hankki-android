@@ -82,7 +82,9 @@ fun MyScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MyTitle(title = stringResource(R.string.title))
+
         Spacer(modifier = Modifier.height(15.dp))
+
         AsyncImage(
             modifier = Modifier
                 .size(98.dp)
@@ -91,14 +93,18 @@ fun MyScreen(
             contentDescription = stringResource(R.string.profile_image),
             contentScale = ContentScale.None
         )
+
         Spacer(modifier = Modifier.height(10.dp))
+
         Text(
             text = stringResource(R.string.sub_title, userName),
             color = Gray900,
             style = HankkiTheme.typography.suitH2,
             textAlign = TextAlign.Center
         )
+
         Spacer(modifier = Modifier.height(19.dp))
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -122,7 +128,9 @@ fun MyScreen(
                 modifier = Modifier.padding(end = 29.dp)
             )
         }
+
         Spacer(modifier = Modifier.height(19.dp))
+
         Row {
             ButtonWithImageAndBorder(
                 R.drawable.ic_report,
@@ -136,9 +144,13 @@ fun MyScreen(
                 Modifier.weight(1f)
             )
         }
+
         ButtonWithArrowIcon(stringResource(R.string.faq), navigateToDummy)
+
         ButtonWithArrowIcon(stringResource(R.string.inquiry), navigateToDummy)
+
         ButtonWithArrowIcon(stringResource(R.string.logout), navigateToDummy)
+
         Text(
             text = stringResource(R.string.quit),
             modifier = Modifier
