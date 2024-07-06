@@ -30,7 +30,7 @@ fun ButtonWithArrowIcon(
         modifier
             .fillMaxWidth()
             .padding(vertical = 18.dp)
-            .noRippleClickable { onClick() },
+            .noRippleClickable(onClick = onClick),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
