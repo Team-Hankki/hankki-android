@@ -20,9 +20,15 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +48,7 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,11 +58,20 @@ fun HankkiStoreJogboBottomSheet(
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+
     ModalBottomSheet(
         modifier = modifier,
         containerColor = White,
-        onDismissRequest = onDismissRequest,
-        sheetState = rememberModalBottomSheetState()
+        onDismissRequest = {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) {
+                    onDismissRequest()
+                }
+            }
+        },
+        sheetState = sheetState
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -89,7 +105,14 @@ fun HankkiStoreJogboBottomSheet(
                 JogboItem(
                     imageUrl = item.imageUrl,
                     title = item.title,
-                    tags = item.tags
+                    tags = item.tags,
+                    onDismissRequest = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                onDismissRequest()
+                            }
+                        }
+                    }
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -127,8 +150,17 @@ fun JogboItem(
     imageUrl: String,
     title: String,
     tags: PersistentList<String>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit = {},
 ) {
+    var icon by remember {
+        mutableStateOf(R.drawable.ic_plus_btn_empty)
+    }
+
+    var color by remember {
+        mutableStateOf(Gray400)
+    }
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -165,9 +197,14 @@ fun JogboItem(
         Spacer(modifier = Modifier.weight(1f))
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_plus_btn_empty),
+            painter = painterResource(id = icon),
             contentDescription = "more",
-            tint = Gray400
+            tint = color,
+            modifier = modifier.noRippleClickable {
+                icon = R.drawable.ic_check_btn
+                color = Color.Unspecified
+                onDismissRequest()
+            }
         )
     }
 }
