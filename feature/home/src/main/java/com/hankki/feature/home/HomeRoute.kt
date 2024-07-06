@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -135,7 +137,9 @@ fun HomeRoute(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class
+)
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
@@ -204,8 +208,8 @@ fun HomeScreen(
             }
 
             Column {
-                Row(
-                    modifier = Modifier.padding(start = 22.dp, top = 12.dp),
+                FlowRow(
+                    modifier = Modifier.padding(start = 22.dp, end = 22.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     RowFilterChip(

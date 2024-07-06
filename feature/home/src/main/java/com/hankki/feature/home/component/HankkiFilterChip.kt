@@ -37,6 +37,7 @@ import com.hankki.feature.home.model.ChipState
 fun HankkiFilterChip(
     chipState: ChipState,
     defaultTitle: String,
+    modifier : Modifier = Modifier,
     menus: List<String> = emptyList(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
@@ -44,6 +45,7 @@ fun HankkiFilterChip(
     content: @Composable () -> Unit = {},
 ) {
     HankkiStateChip(
+        modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
         onClick = onClickChip
@@ -65,12 +67,14 @@ fun HankkiFilterChip(
 fun DropdownFilterChip(
     chipState: ChipState,
     defaultTitle: String,
+    modifier: Modifier = Modifier,
     menus: List<String> = emptyList(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
 ) {
     HankkiFilterChip(
+        modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
         menus = menus,
@@ -116,12 +120,14 @@ fun DropdownFilterChip(
 fun RowFilterChip(
     chipState: ChipState,
     defaultTitle: String,
+    modifier: Modifier = Modifier,
     menus: List<String> = emptyList(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
 ) {
     HankkiFilterChip(
+        modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
         menus = menus,
