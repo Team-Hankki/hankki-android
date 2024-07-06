@@ -19,7 +19,7 @@ class MyViewModel @Inject constructor() : ViewModel() {
     fun loadMockInformation() {
         viewModelScope.launch {
             val mockUserName = "송한끼"
-            val mockUserImage = R.drawable.ic_good
+            val mockUserImage = ""
             val mockUserInformation = UserInfoEntity(mockUserName, mockUserImage)
             _myState.value = _myState.value.copy(
                 userState = mockUserInformation
