@@ -1,15 +1,13 @@
 package com.hankki.feature.home
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,12 +27,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,6 +46,7 @@ import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -64,6 +58,8 @@ import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapType
 import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
@@ -111,8 +107,10 @@ fun HomeRoute(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
         universityName = state.universityName,
+        selectedStoreItem = state.selectedStoreItem,
         storeItems = state.storeItems,
         jogboItems = state.jogboItems,
+        markerItems = state.markerItems,
         categoryChipState = state.categoryChipState,
         categoryChipItems = state.categoryChipItems,
         priceChipState = state.priceChipState,
@@ -122,6 +120,8 @@ fun HomeRoute(
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
+        clickMarkerItem = { viewModel.clickMarkerItem(it) },
+        clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
         selectCategoryChipItem = { viewModel.selectCategoryChipItem(it) },
         dismissCategoryChip = viewModel::dismissCategoryChip,
@@ -139,7 +139,8 @@ fun HomeRoute(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class,
+@OptIn(
+    ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class
 )
 @Composable
@@ -147,8 +148,10 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
+    selectedStoreItem: StoreItemEntity,
     storeItems: PersistentList<StoreItemEntity>,
     jogboItems: PersistentList<JogboItemEntity>,
+    markerItems: PersistentList<MarkerItem>,
     categoryChipState: ChipState,
     categoryChipItems: PersistentList<CategoryChipItem>,
     priceChipState: ChipState,
@@ -158,6 +161,8 @@ fun HomeScreen(
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
     controlMyJogboBottomSheet: () -> Unit = {},
+    clickMarkerItem: (Int) -> Unit = {},
+    clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
     selectCategoryChipItem: (String) -> Unit = {},
     dismissCategoryChip: () -> Unit = {},
@@ -200,7 +205,11 @@ fun HomeScreen(
             NaverMap(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.74f)
+                    .fillMaxHeight(
+                        animateFloatAsState(
+                            targetValue = if (isMainBottomSheetOpen) 0.74f else 1f, label = "Map"
+                        ).value
+                    )
                     .padding(),
                 cameraPositionState = cameraPositionState,
                 locationSource = rememberFusedLocationSource(),
@@ -211,9 +220,21 @@ fun HomeScreen(
                 uiSettings = MapUiSettings(
                     isZoomControlEnabled = false,
                     isScaleBarEnabled = false
-                )
+                ),
+                onMapClick = { _, _ ->
+                    clickMap()
+                }
             ) {
-                // Markers
+                markerItems.forEach { marker ->
+                    Marker(
+                        state = MarkerState(position = LatLng(marker.x, marker.y)),
+                        captionText = "한끼네 한정식",
+                        onClick = {
+                            clickMarkerItem(marker.id)
+                            true
+                        }
+                    )
+                }
             }
 
             Column {
@@ -263,11 +284,12 @@ fun HomeScreen(
                         }
                     )
                 }
-                if (isMainBottomSheetOpen) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    if (isMainBottomSheetOpen) {
                         val height = (LocalConfiguration.current.screenHeightDp * 0.3).dp
                         RepositionButton(
                             height = height,
@@ -301,27 +323,22 @@ fun HomeScreen(
                             sheetSwipeEnabled = true,
                             sheetPeekHeight = height
                         ) {}
+                    } else {
+                        Column {
+                            StoreItem(
+                                storeImageUrl = selectedStoreItem.storeImageUrl,
+                                category = selectedStoreItem.category,
+                                storeName = selectedStoreItem.storeName,
+                                price = selectedStoreItem.price,
+                                heartCount = selectedStoreItem.heartCount
+                            ) {
+                                controlMyJogboBottomSheet()
+                                getJogboItems()
+                            }
+                            Spacer(modifier = Modifier.height(22.dp))
+                        }
                     }
                 }
-            }
-        }
-
-        AnimatedVisibility(visible = !isMainBottomSheetOpen) { // 애니메이션 뭐넣지... 하암...
-            Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(120.dp)
-                        .clip(
-                            CircleShape
-                        )
-                        .background(Color.White),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text("대충 가게 정보~", color = Color.Blue, fontSize = 24.sp)
-                }
-                Spacer(modifier = Modifier.height(60.dp))
             }
         }
     }

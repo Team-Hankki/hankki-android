@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +33,7 @@ class HomeViewModel @Inject constructor(
     init {
         getUniversityInfo()
         getStoreItems()
+        getMarkerItems()
     }
 
     fun moveMap(latitude: Double, longitude: Double) {
@@ -136,6 +138,38 @@ class HomeViewModel @Inject constructor(
                     isReported = false
                 )
             )
+        )
+    }
+
+    private fun getMarkerItems() {
+        _state.value = _state.value.copy(
+            markerItems = persistentListOf(
+                MarkerItem(
+                    x = 37.3009489417651,
+                    y = 127.03549529577874,
+                    id = 1
+                ),
+            )
+        )
+    }
+
+    fun clickMarkerItem(id: Int) {
+        // id를 통해 서버통신하여 Store 정보를 받아올 예정
+        _state.value = _state.value.copy(
+            isMainBottomSheetOpen = false,
+            selectedStoreItem = StoreItemEntity(
+                storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+                category = "한식",
+                storeName = "한끼네 한정식",
+                price = 7900,
+                heartCount = 300
+            )
+        )
+    }
+
+    fun clickMap() {
+        _state.value = _state.value.copy(
+            isMainBottomSheetOpen = true
         )
     }
 

@@ -3,6 +3,7 @@ package com.hankki.feature.home
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
 import kotlinx.collections.immutable.PersistentList
@@ -22,6 +23,8 @@ data class HomeState(
     val isSortChipOpen: Boolean = false,
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,
+    val selectedStoreItem : StoreItemEntity = StoreItemEntity(),
+    val markerItems: PersistentList<MarkerItem> = persistentListOf(),
     val storeItems: PersistentList<StoreItemEntity> = persistentListOf(),
     val jogboItems: PersistentList<JogboItemEntity> = persistentListOf(),
 )
