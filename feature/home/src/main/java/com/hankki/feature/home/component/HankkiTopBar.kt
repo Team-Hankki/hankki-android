@@ -34,7 +34,7 @@ fun HankkiTopBar(
     ) {
         Text(
             text = title,
-            style = HankkiTheme.typography.suitH1,
+            style = HankkiTheme.typography.suitH2,
             color = Gray900
         )
         Icon(

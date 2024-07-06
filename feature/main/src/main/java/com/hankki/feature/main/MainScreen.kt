@@ -121,7 +121,7 @@ private fun MainBottomBar(
             modifier = Modifier
                 .navigationBarsPadding()
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(50.dp)
                 .background(Color.White),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
