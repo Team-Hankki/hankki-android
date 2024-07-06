@@ -35,6 +35,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -187,11 +188,15 @@ fun JogboItem(
         }
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
             Text(
                 text = title,
                 style = HankkiTheme.typography.body2,
-                color = if (isReported) Gray300 else Gray800
+                color = if (isReported) Gray300 else Gray800,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(6.dp))
             LazyRow(
@@ -207,19 +212,21 @@ fun JogboItem(
                 }
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(8.dp))
 
         Icon(
             painter = painterResource(id = icon),
             contentDescription = "more",
             tint = color,
-            modifier = modifier.noRippleClickable {
-                if (!isReported) {
-                    icon = R.drawable.ic_check_btn
-                    color = Color.Unspecified
-                    onDismissRequest()
+            modifier = Modifier
+                .size(24.dp)
+                .noRippleClickable {
+                    if (!isReported) {
+                        icon = R.drawable.ic_check_btn
+                        color = Color.Unspecified
+                        onDismissRequest()
+                    }
                 }
-            }
         )
     }
 }

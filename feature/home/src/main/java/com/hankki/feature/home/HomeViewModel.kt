@@ -103,7 +103,7 @@ class HomeViewModel @Inject constructor(
             jogboItems = persistentListOf(
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
+                    title = "학교 5년째 다니는 화석의 추천 학교 5년째 다니는 화석의 추천",
                     tags = persistentListOf("#미친가성비", "#꼭가보세요"),
                     isReported = true
                 ),
