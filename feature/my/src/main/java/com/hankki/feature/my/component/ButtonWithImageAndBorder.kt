@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray200
@@ -52,7 +53,8 @@ fun ButtonWithImageAndBorder(
         Text(
             text = buttonDescription,
             style = HankkiTheme.typography.body3,
-            color = Gray900
+            color = Gray900,
+            textAlign = TextAlign.Center
         )
     }
 }
