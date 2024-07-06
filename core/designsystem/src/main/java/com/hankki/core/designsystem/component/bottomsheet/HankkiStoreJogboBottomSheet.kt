@@ -2,6 +2,7 @@ package com.hankki.core.designsystem.component.bottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
+import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray50
@@ -102,6 +105,7 @@ fun HankkiStoreJogboBottomSheet(
                     imageUrl = item.imageUrl,
                     title = item.title,
                     tags = item.tags,
+                    isReported = item.isReported,
                     onDismissRequest = {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
@@ -110,6 +114,7 @@ fun HankkiStoreJogboBottomSheet(
                         }
                     }
                 )
+
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
@@ -146,35 +151,47 @@ fun JogboItem(
     imageUrl: String,
     title: String,
     tags: PersistentList<String>,
+    isReported: Boolean,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
 ) {
     var icon by remember {
-        mutableStateOf(R.drawable.ic_plus_btn_empty)
+        mutableIntStateOf(R.drawable.ic_plus_btn_empty)
     }
 
     var color by remember {
-        mutableStateOf(Gray400)
+        mutableStateOf(if (isReported) Gray200 else Gray400)
     }
 
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = "image",
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .size(56.dp),
-            contentScale = ContentScale.Crop
-        )
+        Box {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = "image",
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .size(56.dp),
+                contentScale = ContentScale.Crop
+            )
+            if (isReported) {
+                Spacer(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .size(56.dp)
+                        .background(Color(0xFFFFFFFF).copy(alpha = 0.53f))
+                )
+            }
+        }
         Spacer(modifier = Modifier.width(12.dp))
 
         Column {
             Text(
                 text = title,
                 style = HankkiTheme.typography.body2,
+                color = if (isReported) Gray300 else Gray800
             )
             Spacer(modifier = Modifier.height(6.dp))
             LazyRow(
@@ -184,7 +201,7 @@ fun JogboItem(
                     Text(
                         text = it,
                         style = HankkiTheme.typography.caption1,
-                        color = Gray400
+                        color = if (isReported) Gray200 else Gray400
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
@@ -197,9 +214,11 @@ fun JogboItem(
             contentDescription = "more",
             tint = color,
             modifier = modifier.noRippleClickable {
-                icon = R.drawable.ic_check_btn
-                color = Color.Unspecified
-                onDismissRequest()
+                if (!isReported) {
+                    icon = R.drawable.ic_check_btn
+                    color = Color.Unspecified
+                    onDismissRequest()
+                }
             }
         )
     }
@@ -209,6 +228,7 @@ data class JogboItemEntity(
     val imageUrl: String,
     val title: String,
     val tags: PersistentList<String>,
+    val isReported: Boolean,
 )
 
 @Preview
@@ -220,19 +240,36 @@ fun HankkiStoreJogboBottomSheetPreview() {
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "title",
-                    tags = persistentListOf("tag1", "tag2", "tag3")
+                    tags = persistentListOf("tag1", "tag2", "tag3"),
+                    isReported = true
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "title",
-                    tags = persistentListOf("tag1", "tag2", "tag3")
+                    tags = persistentListOf("tag1", "tag2", "tag3"),
+                    isReported = false
                 ),
                 JogboItemEntity(
                     imageUrl = "https://picsum.photos/200/300",
                     title = "title",
-                    tags = persistentListOf("tag1", "tag2", "tag3")
+                    tags = persistentListOf("tag1", "tag2", "tag3"),
+                    isReported = true
                 ),
             )
         )
     }
 }
+
+@Preview
+@Composable
+fun HankkiStoreJogboItemPreview() {
+    HankkijogboTheme {
+        JogboItem(
+            imageUrl = "https://picsum.photos/200/300",
+            title = "title",
+            tags = persistentListOf("tag1", "tag2", "tag3"),
+            isReported = false
+        )
+    }
+}
+
