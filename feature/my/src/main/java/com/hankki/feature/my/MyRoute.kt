@@ -81,7 +81,7 @@ fun MyScreen(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MyTitle(title = stringResource(R.string.title))
+        MyTitle(title = stringResource(R.string.my))
 
         Spacer(modifier = Modifier.height(15.dp))
 
@@ -97,7 +97,7 @@ fun MyScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = stringResource(R.string.sub_title, userName),
+            text = stringResource(R.string.message_user_name, userName),
             color = Gray900,
             style = HankkiTheme.typography.suitH2,
             textAlign = TextAlign.Center
