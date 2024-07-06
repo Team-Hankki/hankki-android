@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,14 +24,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipState
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -40,7 +45,6 @@ fun HankkiFilterChip(
     chipState: ChipState,
     defaultTitle: String,
     modifier: Modifier = Modifier,
-    menus: PersistentList<String> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
@@ -79,7 +83,6 @@ fun DropdownFilterChip(
         modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
-        menus = menus,
         onDismissRequest = onDismissRequest,
         onClickMenu = onClickMenu,
         onClickChip = onClickChip
@@ -123,7 +126,7 @@ fun RowFilterChip(
     chipState: ChipState,
     defaultTitle: String,
     modifier: Modifier = Modifier,
-    menus: PersistentList<String> = persistentListOf(),
+    menus: PersistentList<CategoryChipItem> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
@@ -132,7 +135,6 @@ fun RowFilterChip(
         modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
-        menus = menus,
         onDismissRequest = onDismissRequest,
         onClickMenu = onClickMenu,
         onClickChip = onClickChip
@@ -142,18 +144,29 @@ fun RowFilterChip(
                 Spacer(modifier = Modifier.width(22.dp))
             }
             items(menus) { menu ->
-                Box(
+                Column(
                     modifier = Modifier
-                        .size(60.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .size(100.dp)
                         .background(White)
-                        .noRippleClickable(onClick = { onClickMenu(menu) }),
-                    contentAlignment = Alignment.Center
+                        .padding(12.dp)
+                        .noRippleClickable(onClick = { onClickMenu(menu.name) }),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
+                    AsyncImage(
+                        modifier = Modifier.size(38.dp).clip(RoundedCornerShape(8.dp)),
+                        model = menu.imageUrl,
+                        contentDescription = "image",
+                        contentScale = ContentScale.Crop,
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+
                     Text(
-                        text = menu,
+                        text = menu.name,
                         style = HankkiTheme.typography.caption1,
-                        color = Gray400
+                        color = Gray400,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }

@@ -3,6 +3,7 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
+import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
@@ -140,15 +141,51 @@ class HomeViewModel @Inject constructor(
                 ChipState.FIXED -> ChipState.UNSELECTED
             },
             categoryChipItems = persistentListOf(
-                "한식",
-                "중식",
-                "일식",
-                "양식",
-                "분식",
-                "패스트푸드",
-                "디저트",
-                "카페",
-                "기타"
+                CategoryChipItem(
+                    name = "한식",
+                    tag = "korean",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "중식",
+                    tag = "chinese",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "일식",
+                    tag = "japanese",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "양식",
+                    tag = "western",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "분식",
+                    tag = "snack",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "패스트푸드",
+                    tag = "fastfood",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "디저트",
+                    tag = "dessert",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "카페",
+                    tag = "cafe",
+                    imageUrl = "https://picsum.photos/200/300"
+                ),
+                CategoryChipItem(
+                    name = "기타",
+                    tag = "etc",
+                    imageUrl = "https://picsum.photos/200/300"
+                )
             )
         )
     }
