@@ -32,13 +32,15 @@ import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.model.ChipState
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun HankkiFilterChip(
     chipState: ChipState,
     defaultTitle: String,
-    modifier : Modifier = Modifier,
-    menus: List<String> = emptyList(),
+    modifier: Modifier = Modifier,
+    menus: PersistentList<String> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
@@ -68,7 +70,7 @@ fun DropdownFilterChip(
     chipState: ChipState,
     defaultTitle: String,
     modifier: Modifier = Modifier,
-    menus: List<String> = emptyList(),
+    menus: PersistentList<String> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
@@ -121,7 +123,7 @@ fun RowFilterChip(
     chipState: ChipState,
     defaultTitle: String,
     modifier: Modifier = Modifier,
-    menus: List<String> = emptyList(),
+    menus: PersistentList<String> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
