@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.Color
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
-import com.hankki.core.designsystem.theme.SubColor01
-import com.hankki.core.designsystem.theme.SubColor02
+import com.hankki.core.designsystem.theme.YellowLight
+import com.hankki.core.designsystem.theme.Yellow
 import com.hankki.core.designsystem.theme.White
 
 enum class ChipState(
@@ -28,8 +28,8 @@ enum class ChipState(
         iconColor = Gray400
     ),
     FIXED(
-        containerColor = SubColor01,
-        borderColor = SubColor02,
+        containerColor = YellowLight,
+        borderColor = Yellow,
         labelColor = Gray600,
         iconColor = Gray600
     )

@@ -14,16 +14,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.PrimaryColor
-import com.hankki.core.designsystem.theme.SubColor03
+import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.RedLight
 
 @Composable
 fun HankkiCategoryChip(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = HankkiTheme.typography.caption2,
-    containerColor: Color = SubColor03,
-    labelColor: Color = PrimaryColor,
+    containerColor: Color = RedLight,
+    labelColor: Color = Red,
 ) {
     Box(
         modifier = modifier
