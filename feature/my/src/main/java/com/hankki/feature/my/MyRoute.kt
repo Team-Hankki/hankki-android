@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,7 +40,6 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
-import com.hankki.domain.my.entity.UserInfoEntity
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
 import com.hankki.feature.my.component.MyTitle
@@ -50,20 +50,26 @@ fun MyRoute(
     navigateToDummy: () -> Unit,
     myViewModel: MyViewModel = hiltViewModel()
 ) {
-    val myState = myViewModel.myState.collectAsStateWithLifecycle().value
+    val myState by myViewModel.myState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         myViewModel.loadMockInformation()
     }
 
-    MyScreen(paddingValues, navigateToDummy = navigateToDummy, myState)
+    MyScreen(
+        paddingValues = paddingValues,
+        navigateToDummy = navigateToDummy,
+        userName = myState.userState.name,
+        userImage = myState.userState.image
+    )
 }
 
 @Composable
 fun MyScreen(
     paddingValues: PaddingValues,
     navigateToDummy: () -> Unit,
-    myState: MyState
+    userName: String,
+    userImage: String
 ) {
     val scrollState = rememberScrollState()
 
@@ -81,13 +87,13 @@ fun MyScreen(
             modifier = Modifier
                 .size(98.dp)
                 .clip(CircleShape),
-            model = myState.userState.image,
+            model = userImage,
             contentDescription = stringResource(R.string.profile_image),
             contentScale = ContentScale.None
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = stringResource(R.string.sub_title, myState.userState.name),
+            text = stringResource(R.string.sub_title, userName),
             color = Gray900,
             style = HankkiTheme.typography.suitH2,
             textAlign = TextAlign.Center
@@ -152,9 +158,7 @@ fun MyScreen(
 fun MyScreenPreview() {
     HankkijogboTheme {
         MyScreen(
-            paddingValues = PaddingValues(), navigateToDummy = {}, myState = MyState(
-                UserInfoEntity(name = "송한끼", image = "")
-            )
+            paddingValues = PaddingValues(), navigateToDummy = {}, userName = "", userImage = ""
         )
     }
 }
