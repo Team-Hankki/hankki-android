@@ -3,6 +3,7 @@ package com.hankki.feature.my
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -150,16 +151,21 @@ fun MyScreen(
 
         ButtonWithArrowIcon(stringResource(R.string.logout), navigateToDummy)
 
-        Text(
-            text = stringResource(R.string.quit),
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .noRippleClickable()
-                .padding(top = 16.dp, end = 2.dp),
-            textAlign = TextAlign.End,
-            style = HankkiTheme.typography.body4,
-            color = Gray400
-        )
+                .fillMaxWidth(),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            Text(
+                text = stringResource(R.string.quit),
+                modifier = Modifier
+                    .noRippleClickable(onClick = navigateToDummy)
+                    .padding(top = 14.dp, start = 15.dp, bottom = 13.dp),
+                textAlign = TextAlign.End,
+                style = HankkiTheme.typography.body4,
+                color = Gray400,
+            )
+        }
     }
 }
 
