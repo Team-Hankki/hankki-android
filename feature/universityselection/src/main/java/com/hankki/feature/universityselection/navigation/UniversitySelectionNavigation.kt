@@ -12,12 +12,10 @@ fun NavController.navigateToUniversitySelection() {
 }
 
 fun NavGraphBuilder.universitySelectionNavGraph(
-    navigateUpIfNotHome: () -> Unit,
     navigateToHome: () -> Unit
 ) {
     composable<UniversitySelection> {
         UniversitySelectionRoute(
-            navigateUpIfNotHome = navigateUpIfNotHome,
             navigateToHome = navigateToHome
         )
     }

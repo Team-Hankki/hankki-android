@@ -33,7 +33,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun UniversitySelectionRoute(navigateUpIfNotHome:() -> Unit, navigateToHome: () -> Unit) {
+fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
 

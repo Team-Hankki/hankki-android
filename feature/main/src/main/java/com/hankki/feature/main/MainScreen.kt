@@ -90,14 +90,10 @@ internal fun MainScreen(
                     )
                     loginNavgraph()
                     universitySelectionNavGraph(
-                        navigateUpIfNotHome = { navigator.navigateUpIfNotHome() },
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
                                 launchSingleTop = true
-                                restoreState = true
                             }
                             navigator.navigateToHome(navOptions)
                         }
