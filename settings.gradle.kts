@@ -44,8 +44,7 @@ include(
 // domain
 include(
     ":domain:dummy",
-    ":domain:universityselection",
-    ":domain:my"
+    ":domain:universityselection"
 )
 
 // feature
