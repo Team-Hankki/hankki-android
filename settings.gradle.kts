@@ -44,6 +44,7 @@ include(
 // domain
 include(
     ":domain:dummy",
+    ":domain:my",
     ":domain:universityselection"
 )
 
