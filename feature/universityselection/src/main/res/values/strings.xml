@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_university">나의 대학교를 선택해보세요</string>
+    <string name="wait_a_minute">아직 등록되지 않은 대학(지역)이 있어요.\n조금만 기다려주세요 :)</string>
+    <string name="select">선택하기</string>
+    <string name="no_university_looking">찾는 대학교가 없어요. 우선 둘러볼게요!</string>
+</resources>
