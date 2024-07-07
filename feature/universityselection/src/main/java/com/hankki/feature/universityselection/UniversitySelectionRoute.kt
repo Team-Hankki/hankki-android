@@ -29,6 +29,8 @@ import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.domain.universityselection.UniversitySelectionModel
 import com.hankki.feature.universityselection.component.UniversityItem
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
@@ -36,7 +38,7 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
 
     UniversitySelectionScreen(
-        universities = universitySelectionState.universities,
+        universities = universitySelectionState.universities.toPersistentList(),
         selectedUniversity = universitySelectionState.selectedUniversity,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
         navigateHome = navigateToHome
@@ -45,7 +47,7 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
 
 @Composable
 fun UniversitySelectionScreen(
-    universities: List<UniversitySelectionModel>,
+    universities: PersistentList<UniversitySelectionModel>,
     selectedUniversity: String?,
     onSelectUniversity: (String) -> Unit,
     navigateHome: () -> Unit
@@ -127,7 +129,7 @@ fun PreviewUniversityScreen() {
         UniversitySelectionModel(15, "경기대"), UniversitySelectionModel(16, "숙명여대"),
         UniversitySelectionModel(17, "단국대"), UniversitySelectionModel(18, "명지대"),
         UniversitySelectionModel(19, "서울대"), UniversitySelectionModel(20, "국민대")
-    ).sortedBy { it.name }
+    ).sortedBy { it.name }.toPersistentList()
 
     UniversitySelectionScreen(
         universities = dummyData,
