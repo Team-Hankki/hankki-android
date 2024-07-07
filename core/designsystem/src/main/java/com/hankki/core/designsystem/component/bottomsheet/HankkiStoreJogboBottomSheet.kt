@@ -52,6 +52,7 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,7 +109,10 @@ fun HankkiStoreJogboBottomSheet(
                     tags = item.tags,
                     isReported = item.isReported,
                     onDismissRequest = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        scope.launch {
+                            delay(300)
+                            sheetState.hide()
+                        }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
                                 onDismissRequest()
                             }
