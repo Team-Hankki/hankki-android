@@ -1,12 +1,18 @@
 package com.hankki.core.common.extension
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 
 inline fun Modifier.noRippleClickable(
@@ -26,4 +32,31 @@ fun Modifier.addFocusCleaner(focusManager: FocusManager): Modifier {
             focusManager.clearFocus()
         })
     }
+}
+
+@Composable
+fun Modifier.bounceClick(
+    scaleDown: Float = 0.96f,
+    onClick: () -> Unit
+): Modifier = composed {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val animatable = remember { Animatable(1f) }
+
+    LaunchedEffect(isPressed) {
+        animatable.animateTo(if (isPressed) scaleDown else 1f)
+    }
+
+    this
+        .graphicsLayer {
+            val scale = animatable.value
+            scaleX = scale
+            scaleY = scale
+        }
+        .clickable(
+            interactionSource = interactionSource,
+            indication = null,
+            onClick = onClick
+        )
 }
