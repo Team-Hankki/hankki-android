@@ -11,9 +11,15 @@ fun NavController.navigateToUniversitySelection() {
     navigate(UniversitySelection)
 }
 
-fun NavGraphBuilder.universitySelectionNavgraph(navigateToHome: () -> Unit) {
+fun NavGraphBuilder.universitySelectionNavGraph(
+    navigateUpIfNotHome: () -> Unit,
+    navigateToHome: () -> Unit
+) {
     composable<UniversitySelection> {
-        UniversitySelectionRoute(navigateToHome = navigateToHome)
+        UniversitySelectionRoute(
+            navigateUpIfNotHome = navigateUpIfNotHome,
+            navigateToHome = navigateToHome
+        )
     }
 }
 

@@ -44,7 +44,7 @@ import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.navigation.reportNavGraph
-import com.hankki.feature.universityselection.navigation.universitySelectionNavgraph
+import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -89,7 +89,8 @@ internal fun MainScreen(
                         navigateToDummy = { navigator.navigateToDummy() }
                     )
                     loginNavgraph()
-                    universitySelectionNavgraph(
+                    universitySelectionNavGraph(
+                        navigateUpIfNotHome = { navigator.navigateUpIfNotHome() },
                         navigateToHome = {
                             val navOptions = navOptions {
                                 popUpTo(navigator.navController.graph.findStartDestination().id) {
