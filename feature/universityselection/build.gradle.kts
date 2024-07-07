@@ -14,4 +14,7 @@ dependencies {
 
     //androidx
     implementation(libs.androidx.lifecycle.runtimeCompose)
+
+    //kotlinx
+    implementation(libs.kotlinx.immutable)
 }
