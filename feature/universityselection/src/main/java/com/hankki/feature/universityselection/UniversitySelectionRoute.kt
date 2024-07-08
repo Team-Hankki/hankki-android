@@ -97,7 +97,7 @@ fun UniversitySelectionScreen(
                 item {
                     Image(
                         modifier = Modifier.fillMaxWidth(),
-                        painter = painterResource(id = R.drawable.white_gradient),
+                        painter = painterResource(id = com.hankki.core.designsystem.R.drawable.white_gradient),
                         contentDescription = "image"
                     )
                 }
@@ -105,7 +105,7 @@ fun UniversitySelectionScreen(
 
             Image(
                 modifier = Modifier.fillMaxWidth(),
-                painter = painterResource(id = R.drawable.white_gradient),
+                painter = painterResource(id = com.hankki.core.designsystem.R.drawable.white_gradient),
                 contentDescription = "image"
             )
 
