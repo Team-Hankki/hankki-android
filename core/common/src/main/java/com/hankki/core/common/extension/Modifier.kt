@@ -11,7 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 
@@ -37,13 +41,12 @@ fun Modifier.addFocusCleaner(focusManager: FocusManager): Modifier {
 @Composable
 fun Modifier.bounceClick(
     scaleDown: Float = 0.96f,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ): Modifier = composed {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val animatable = remember { Animatable(1f) }
-
     LaunchedEffect(isPressed) {
         animatable.animateTo(if (isPressed) scaleDown else 1f)
     }
@@ -59,4 +62,15 @@ fun Modifier.bounceClick(
             indication = null,
             onClick = onClick
         )
+        .drawWithContent {
+            drawContent()
+            if (isPressed) {
+                drawRoundRect(
+                    cornerRadius = CornerRadius(size.minDimension / 10),
+                    color = Color.Black.copy(alpha = 0.1f),
+                    size = size,
+                    blendMode = BlendMode.SrcAtop
+                )
+            }
+        }
 }
