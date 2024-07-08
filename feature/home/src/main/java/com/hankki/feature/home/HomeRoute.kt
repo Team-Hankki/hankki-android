@@ -1,6 +1,7 @@
 package com.hankki.feature.home
 
-import android.annotation.SuppressLint
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,7 +70,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalNaverMapApi::class)
-@SuppressLint("MissingPermission")
 @Composable
 fun HomeRoute(
     paddingValues: PaddingValues,
@@ -133,14 +134,27 @@ fun HomeRoute(
         dismissSortChip = viewModel::dismissSortChip,
         getJogboItems = viewModel::getJogboItems,
     ) {
-        focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            viewModel.moveMap(location.latitude, location.longitude)
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // open Dialog
+            // TODO: 추후 디자인 시스템 생성시 추가 예정
+        } else{
+            focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                viewModel.moveMap(location.latitude, location.longitude)
+            }
         }
     }
 }
 
 @OptIn(
-    ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalNaverMapApi::class,
+    ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class
 )
 @Composable
