@@ -13,8 +13,8 @@ val Pink40 = Color(0xFF7D5260)
 //main color
 val Red = Color(0xFFFF4C24)
 val RedLight = Color(0xFFFFF5F3)
-val YellowLight = Color(0xFFFFFFEB)
 val Yellow = Color(0xFFF8F891)
+val YellowLight = Color(0xFFFFFFEB)
 
 //gray scale
 val White = Color(0xFFFFFFFF)
