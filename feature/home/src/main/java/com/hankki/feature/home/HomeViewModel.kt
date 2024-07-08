@@ -265,7 +265,7 @@ class HomeViewModel @Inject constructor(
         _state.value = _state.value.copy(
             priceChipState = when (_state.value.priceChipState) {
                 ChipState.UNSELECTED -> ChipState.SELECTED
-                ChipState.SELECTED -> ChipState.FIXED
+                ChipState.SELECTED -> ChipState.UNSELECTED
                 ChipState.FIXED -> ChipState.UNSELECTED
             },
             priceChipItems = persistentListOf(
