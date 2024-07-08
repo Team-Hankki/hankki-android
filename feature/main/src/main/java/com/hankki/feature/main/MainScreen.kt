@@ -36,13 +36,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.feature.dummy.navigation.dummyNavGraph
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.navigation.reportNavGraph
+import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -84,12 +87,22 @@ internal fun MainScreen(
                     )
                     reportNavGraph(
                         paddingValues = paddingValue,
-                        navigateToLogin = { navigator.navigateToLogin() })
+                        navigateToLogin = { navigator.navigateToLogin() },
+                        navigateToUniversity = { navigator.navigateToUniversity() })
                     myNavGraph(
                         paddingValues = paddingValue,
                         navigateToDummy = { navigator.navigateToDummy() }
                     )
                     loginNavgraph()
+                    universitySelectionNavGraph(
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        }
+                    )
                 }
             }
         },

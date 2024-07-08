@@ -15,7 +15,7 @@ dependencyResolutionManagement {
         mavenCentral()
 
         // naver
-        maven{
+        maven {
             url = uri("https://repository.map.naver.com/archive/maven")
         }
 
@@ -43,7 +43,9 @@ include(
 
 // domain
 include(
-    ":domain:dummy"
+    ":domain:dummy",
+    ":domain:my",
+    ":domain:universityselection"
 )
 
 // feature
@@ -53,5 +55,6 @@ include(
     ":feature:home",
     ":feature:report",
     ":feature:my",
-    ":feature:login"
+    ":feature:login",
+    ":feature:universityselection"
 )
