@@ -41,6 +41,7 @@ fun Modifier.addFocusCleaner(focusManager: FocusManager): Modifier {
 @Composable
 fun Modifier.bounceClick(
     scaleDown: Float = 0.96f,
+    blackAlpha: Float = 0.2f,
     onClick: () -> Unit,
 ): Modifier = composed {
     val interactionSource = remember { MutableInteractionSource() }
@@ -67,7 +68,7 @@ fun Modifier.bounceClick(
             if (isPressed) {
                 drawRoundRect(
                     cornerRadius = CornerRadius(size.minDimension / 10),
-                    color = Color.Black.copy(alpha = 0.1f),
+                    color = Color.Black.copy(alpha = blackAlpha),
                     size = size,
                     blendMode = BlendMode.SrcAtop
                 )
