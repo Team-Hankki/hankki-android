@@ -1,12 +1,12 @@
 package com.hankki.core.common.extension
 
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -47,14 +47,16 @@ fun Modifier.bounceClick(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    val animatable = remember { Animatable(1f) }
-    LaunchedEffect(isPressed) {
-        animatable.animateTo(if (isPressed) scaleDown else 1f)
-    }
+    val scale by animateFloatAsState(
+        if (isPressed) scaleDown else 1f, label = ""
+    )
+
+    val color by animateColorAsState(
+        if (isPressed) Color.Black.copy(alpha = blackAlpha) else Color.Transparent, label = ""
+    )
 
     this
         .graphicsLayer {
-            val scale = animatable.value
             scaleX = scale
             scaleY = scale
         }
@@ -68,7 +70,7 @@ fun Modifier.bounceClick(
             if (isPressed) {
                 drawRoundRect(
                     cornerRadius = CornerRadius(size.minDimension / 10),
-                    color = Color.Black.copy(alpha = blackAlpha),
+                    color = color,
                     size = size,
                     blendMode = BlendMode.SrcAtop
                 )
