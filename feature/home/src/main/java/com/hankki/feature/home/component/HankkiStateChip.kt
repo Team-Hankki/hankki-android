@@ -12,15 +12,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -37,11 +37,11 @@ fun HankkiStateChip(
     Column {
         Box(
             modifier = modifier
-                .clip(RoundedCornerShape(100.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .border(
                     width = 1.dp,
                     color = chipState.borderColor,
-                    shape = RoundedCornerShape(100.dp)
+                    shape = RoundedCornerShape(16.dp)
                 )
                 .background(color = chipState.containerColor)
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp)
@@ -49,7 +49,6 @@ fun HankkiStateChip(
             contentAlignment = Alignment.Center
         ) {
             Row(
-                modifier = Modifier,
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -62,15 +61,17 @@ fun HankkiStateChip(
                     style = HankkiTheme.typography.caption1,
                     color = chipState.labelColor
                 )
-                AsyncImage(
-                    model = when (chipState) {
-                        ChipState.SELECTED -> R.drawable.ic_arrow_up
-                        ChipState.UNSELECTED -> R.drawable.ic_arrow_down
-                        ChipState.FIXED -> R.drawable.ic_x
-                    },
+                Icon(
+                    painter = painterResource(
+                        id = when (chipState) {
+                            ChipState.SELECTED -> R.drawable.ic_arrow_up
+                            ChipState.UNSELECTED -> R.drawable.ic_arrow_down
+                            ChipState.FIXED -> R.drawable.ic_x
+                        }
+                    ),
                     contentDescription = "icon",
                     modifier = Modifier.size(24.dp),
-                    colorFilter = ColorFilter.tint(chipState.iconColor),
+                    tint = chipState.iconColor
                 )
             }
         }
