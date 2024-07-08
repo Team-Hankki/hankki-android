@@ -43,6 +43,7 @@ import com.google.android.gms.location.LocationServices
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.component.DropdownFilterChip
 import com.hankki.feature.home.component.HankkiTopBar
@@ -251,7 +252,7 @@ fun HomeScreen(
                 markerItems.forEach { marker ->
                     Marker(
                         state = MarkerState(position = LatLng(marker.x, marker.y)),
-                        captionText = "한끼네 한정식",
+                        captionText = if(cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) "한끼네 한정식" else "",
                         onClick = {
                             clickMarkerItem(marker.id)
                             true
@@ -379,4 +380,5 @@ private fun closeBottomSheet(
 
 private object MapConstants {
     const val DEFAULT_ZOOM = 16.0
+    const val CAN_SEE_TITLE_ZOOM = 18.0
 }

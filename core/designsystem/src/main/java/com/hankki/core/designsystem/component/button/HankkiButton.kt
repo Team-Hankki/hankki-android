@@ -11,7 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.SemiRed
 import com.hankki.core.designsystem.theme.White
@@ -37,5 +39,13 @@ fun HankkiButton(
             style = textStyle,
             color = White
         )
+    }
+}
+
+@Preview
+@Composable
+fun HankkiButtonPreview() {
+    HankkijogboTheme {
+        HankkiButton(text = "버튼", onClick = {})
     }
 }

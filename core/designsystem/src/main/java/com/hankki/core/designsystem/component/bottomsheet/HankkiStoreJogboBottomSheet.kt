@@ -110,7 +110,7 @@ fun HankkiStoreJogboBottomSheet(
                     isReported = item.isReported,
                     onDismissRequest = {
                         scope.launch {
-                            delay(300)
+                            delay(200)
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
