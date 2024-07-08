@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
@@ -26,8 +28,9 @@ fun HankkiTitleTextField(
     placeholder: String,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    isError: Boolean = false,
     isFocused: Boolean = false,
+    isError: Boolean = false,
+    errorMessage: String = stringResource(id = R.string.enable_under_eight_thousand_won),
     tailingIcon: @Composable () -> Unit = {},
 ) {
     val titleColor = when {
@@ -74,7 +77,7 @@ fun HankkiTitleTextField(
             Row {
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "8천원 이하만 가능해요",
+                    text = errorMessage,
                     style = HankkiTheme.typography.caption1,
                     color = Red
                 )
@@ -109,8 +112,7 @@ fun HankkiPriceTextField(
     onTextChanged: (String) -> Unit,
     isFocused: Boolean,
     isError: Boolean,
-    modifier: Modifier = Modifier,
-    tailingIcon: @Composable () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     HankkiTitleTextField(
         title = title,
@@ -119,8 +121,13 @@ fun HankkiPriceTextField(
         onTextChanged = onTextChanged,
         isFocused = isFocused,
         isError = isError,
-        tailingIcon = tailingIcon
-    )
+    ){
+        Text(
+            text = "원",
+            style = HankkiTheme.typography.body1,
+            color = Gray800
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -157,13 +164,7 @@ fun HankkiTitleTextFieldPreview() {
                 onTextChanged = {},
                 isError = false,
                 isFocused = false
-            ) {
-                Text(
-                    text = "원",
-                    style = HankkiTheme.typography.body1,
-                    color = Gray800
-                )
-            }
+            )
 
             HankkiPriceTextField(
                 title = "가격",
@@ -172,13 +173,7 @@ fun HankkiTitleTextFieldPreview() {
                 onTextChanged = {},
                 isError = false,
                 isFocused = true
-            ) {
-                Text(
-                    text = "원",
-                    style = HankkiTheme.typography.body1,
-                    color = Gray800
-                )
-            }
+            )
 
             HankkiPriceTextField(
                 title = "가격",
@@ -187,13 +182,7 @@ fun HankkiTitleTextFieldPreview() {
                 onTextChanged = {},
                 isError = true,
                 isFocused = false
-            ) {
-                Text(
-                    text = "원",
-                    style = HankkiTheme.typography.body1,
-                    color = Gray800
-                )
-            }
+            )
         }
     }
 }
