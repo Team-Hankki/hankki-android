@@ -10,9 +10,11 @@ android {
 }
 
 dependencies {
-    //core
+    // core
     implementation(projects.core.common)
 
-    //other
+    // others
     implementation(libs.androidx.appcompat)
+    implementation(libs.coil.compose)
+    implementation(libs.kotlinx.immutable)
 }
