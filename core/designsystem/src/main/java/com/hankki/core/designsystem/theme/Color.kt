@@ -16,6 +16,8 @@ val SemiRed = Color(0xFFFFBBAC)
 val RedLight = Color(0xFFFFF5F3)
 val Yellow = Color(0xFFF8F891)
 val YellowLight = Color(0xFFFFFFEB)
+val YellowLighten = Color(0xFFF8F891)
+val YellowDark = Color(0xFFFFFFEB)
 
 //gray scale
 val White = Color(0xFFFFFFFF)
