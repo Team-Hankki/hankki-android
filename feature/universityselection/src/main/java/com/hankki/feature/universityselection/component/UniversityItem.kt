@@ -20,7 +20,7 @@ fun UniversityItem(
 ) {
     Text(
         text = university.name,
-        style = HankkiTheme.typography.body1,
+        style = if (isSelected) HankkiTheme.typography.sub3 else HankkiTheme.typography.body1,
         modifier = Modifier
             .fillMaxWidth()
             .noRippleClickable {
