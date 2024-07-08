@@ -1,7 +1,10 @@
 package com.hankki.feature.home
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -142,8 +145,14 @@ fun HomeRoute(
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // open Dialog
             // TODO: 추후 디자인 시스템 생성시 추가 예정
+            // open Dialog
+            // "설정하기" 누르면 아래처럼 이동할 예정
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.fromParts("package", "com.hankki.hankkijogbo", null)
+                context.startActivity(this)
+            }
         } else{
             focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                 viewModel.moveMap(location.latitude, location.longitude)
