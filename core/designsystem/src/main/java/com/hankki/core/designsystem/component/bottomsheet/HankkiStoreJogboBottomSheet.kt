@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -66,8 +68,11 @@ fun HankkiStoreJogboBottomSheet(
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val maxHeight = screenHeight * 0.9f
+
     ModalBottomSheet(
-        modifier = modifier,
+        modifier = modifier.heightIn(max = maxHeight),
         containerColor = White,
         onDismissRequest = {
             onDismissRequest()
@@ -110,7 +115,7 @@ fun HankkiStoreJogboBottomSheet(
                     isReported = item.isReported,
                     onDismissRequest = {
                         scope.launch {
-                            delay(300)
+                            delay(200)
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if (!sheetState.isVisible) {

@@ -147,7 +147,26 @@ class HomeViewModel @Inject constructor(
                 MarkerItem(
                     x = 37.3009489417651,
                     y = 127.03549529577874,
+                    title = "한끼네 한정식",
                     id = 1
+                ),
+                MarkerItem(
+                    x = 37.3005489417651,
+                    y = 127.03549529577874,
+                    title = "두끼네 두정식",
+                    id = 2
+                ),
+                MarkerItem(
+                    x = 37.2909489417651,
+                    y = 127.03529529577874,
+                    title = "세끼네 세정식",
+                    id = 3
+                ),
+                MarkerItem(
+                    x = 37.2909489417651,
+                    y = 127.03569529577874,
+                    title = "네끼네 네정식",
+                    id = 4
                 ),
             )
         )
