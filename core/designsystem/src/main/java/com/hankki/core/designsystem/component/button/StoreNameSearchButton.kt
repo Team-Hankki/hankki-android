@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -35,15 +36,15 @@ fun StoreNameSearchButton() {
         Icon(
             modifier = Modifier.size(24.dp),
             painter = painterResource(id = R.drawable.ic_search),
-            contentDescription = "search icon"
+            contentDescription = "search icon",
+            tint = Gray300
         )
 
         Spacer(modifier = Modifier.width(4.dp))
 
         Text(
             text = "이름으로 검색",
-
-            style = HankkiTheme.typography.body5,
+            style = HankkiTheme.typography.body6,
             color = Gray400
         )
     }
