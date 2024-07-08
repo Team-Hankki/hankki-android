@@ -17,6 +17,7 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray850
+import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
@@ -35,7 +36,7 @@ fun HankkiTitleTextField(
 ) {
     val titleColor = when {
         isError -> Red
-        isFocused -> Gray800
+        isFocused -> Gray900
         else -> Gray500
     }
 
@@ -47,7 +48,7 @@ fun HankkiTitleTextField(
 
     val textColor = when {
         isError -> Red
-        isFocused -> Gray800
+        isFocused -> Gray900
         else -> Gray400
     }
 
