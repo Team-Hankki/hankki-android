@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_store_jogbo">나의 식당 족보</string>
+    <string name="add_new_jogbo">새로운 족보 추가하기</string>
+    <string name="jogbo_list">족보 목록</string>
+</resources>

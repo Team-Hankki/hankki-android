@@ -56,5 +56,6 @@ dependencies {
 
     // other dependencies
     implementation(libs.timber)
+    implementation(libs.appcompat)
     implementation(libs.kakao.user)
 }

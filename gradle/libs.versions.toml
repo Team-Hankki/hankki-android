@@ -63,6 +63,7 @@ junitJunit = "4.13.2"
 espressoCoreVersion = "3.5.1"
 material = "1.12.0"
 lifecycleRuntimeKtx = "2.8.2"
+appcompat = "1.7.0"
 
 ## Kakao
 kakao = "2.20.1"
@@ -129,6 +130,7 @@ androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espres
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
 [bundles]
