@@ -23,7 +23,7 @@ data class HomeState(
     val isSortChipOpen: Boolean = false,
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,
-    val selectedStoreItem : StoreItemEntity = StoreItemEntity(),
+    val selectedStoreItem: StoreItemEntity = StoreItemEntity(),
     val markerItems: PersistentList<MarkerItem> = persistentListOf(),
     val storeItems: PersistentList<StoreItemEntity> = persistentListOf(),
     val jogboItems: PersistentList<JogboItemEntity> = persistentListOf(),
