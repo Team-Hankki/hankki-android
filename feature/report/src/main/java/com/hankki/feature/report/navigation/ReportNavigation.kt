@@ -12,11 +12,10 @@ fun NavController.navigateReport() {
 }
 
 fun NavGraphBuilder.reportNavGraph(
-    navigateToLogin: () -> Unit,
-    navigateToUniversity: () -> Unit,
+    navigateUp: () -> Unit
 ) {
     composable<Report> {
-        ReportRoute(navigateToLogin, navigateToUniversity)
+        ReportRoute(navigateUp)
     }
 }
 

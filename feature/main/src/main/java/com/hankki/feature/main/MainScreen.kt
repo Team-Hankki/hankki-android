@@ -86,8 +86,8 @@ internal fun MainScreen(
                         onShowSnackBar = onShowSnackBar
                     )
                     reportNavGraph(
-                        navigateToLogin = { navigator.navigateToLogin() },
-                        navigateToUniversity = { navigator.navigateToUniversity() })
+                        navigateUp = { navigator.navigateUpIfNotHome() }
+                    )
                     myNavGraph(
                         paddingValues = paddingValue,
                         navigateToDummy = { navigator.navigateToDummy() }
