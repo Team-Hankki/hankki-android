@@ -9,7 +9,7 @@ class TokenDataStoreImpl @Inject constructor(
 ) : TokenDataStore {
     override var accessToken: String
         get() = tokenDataStore.getString(ACCESS_TOKEN, "") ?: ""
-        set(value) = tokenDataStore.edit { putString(ACCESS_TOKEN, value)}
+        set(value) = tokenDataStore.edit { putString(ACCESS_TOKEN, value) }
 
     override var refreshToken: String
         get() = tokenDataStore.getString(REFRESH_TOKEN, "") ?: ""

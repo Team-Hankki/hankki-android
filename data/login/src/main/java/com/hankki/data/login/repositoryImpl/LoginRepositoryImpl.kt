@@ -13,10 +13,10 @@ class LoginRepositoryImpl @Inject constructor(
     override suspend fun postLogin(
         accessToken: String,
         loginRequest: LoginRequestModel,
-    ): Result<LoginResponseModel> =  runCatching {
-            loginDataSource.postLogin(
-                accessToken,
-                loginRequest.toLoginRequestDto(),
-            ).data.toLoginModel()
+    ): Result<LoginResponseModel> = runCatching {
+        loginDataSource.postLogin(
+            accessToken,
+            loginRequest.toLoginRequestDto(),
+        ).data.toLoginModel()
     }
 }

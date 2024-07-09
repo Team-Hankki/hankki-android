@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginRequestDto (
+data class LoginRequestDto(
     @SerialName("platform")
     val platform: String
 )
