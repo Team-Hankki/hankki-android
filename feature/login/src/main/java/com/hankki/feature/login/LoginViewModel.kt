@@ -12,11 +12,8 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,10 +21,6 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val tokenRepository: TokenRepository
 ) : ViewModel() {
-
-    private val _loginState = MutableStateFlow(LoginState())
-    val loginState: StateFlow<LoginState>
-        get() = _loginState
 
     private val _loginSideEffects = MutableSharedFlow<LoginSideEffect>()
     val loginSideEffects: SharedFlow<LoginSideEffect>
@@ -74,10 +67,6 @@ class LoginViewModel @Inject constructor(
             loginRepository.postLogin(accessToken, LoginRequestModel(platform))
                 .onSuccess { response ->
                     tokenRepository.setTokens(response.accessToken, response.refreshToken)
-                    _loginState.value = _loginState.value.copy(
-                        isLoggedIn = response.isRegistered,
-                        errorMessage = null
-                    )
                     _loginSideEffects.emit(LoginSideEffect.LoginSuccess(response.accessToken))
                 }.onFailure { throwable ->
                     val errorMessage = throwable.localizedMessage ?: "Unknown error"
@@ -91,10 +80,6 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLoginError(errorMessage: String) {
-        _loginState.value = _loginState.value.copy(
-            isLoggedIn = false,
-            errorMessage = errorMessage
-        )
         viewModelScope.launch {
             _loginSideEffects.emit(LoginSideEffect.LoginError(errorMessage))
         }
