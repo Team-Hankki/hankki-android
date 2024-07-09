@@ -9,6 +9,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -35,11 +39,12 @@ fun HankkiTitleTextField(
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    isFocused: Boolean = false,
     isError: Boolean = false,
     errorMessage: String = stringResource(id = R.string.enable_under_eight_thousand_won),
     tailingIcon: @Composable () -> Unit = {},
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+
     val titleColor = when {
         isError -> Red
         isFocused -> Gray900
@@ -77,7 +82,8 @@ fun HankkiTitleTextField(
             borderColor = borderColor,
             textColor = textColor,
             tailingIcon = tailingIcon,
-            keyboardOptions = keyboardOptions
+            keyboardOptions = keyboardOptions,
+            onFocusChanged = { isFocused = it }
         )
 
         if (isError) {
@@ -108,7 +114,6 @@ fun HankkiMenuTextField(
         value = value,
         placeholder = placeholder,
         onTextChanged = onTextChanged,
-        isFocused = isFocused
     )
 }
 
@@ -131,7 +136,6 @@ fun HankkiPriceTextField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
         ),
-        isFocused = isFocused,
         isError = isError,
     ) {
         Text(
