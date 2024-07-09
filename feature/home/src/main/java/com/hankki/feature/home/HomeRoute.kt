@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,13 +44,18 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
+import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
+import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.component.DropdownFilterChip
-import com.hankki.feature.home.component.HankkiTopBar
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
@@ -154,7 +163,7 @@ fun HomeRoute(
                 data = Uri.fromParts("package", "com.hankki.hankkijogbo", null)
                 context.startActivity(this)
             }
-        } else{
+        } else {
             focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                 viewModel.moveMap(location.latitude, location.longitude)
             }
@@ -221,9 +230,26 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(paddingValues)
     ) {
-        HankkiTopBar(universityName) {
-            // TODO: 학교 선택 Screen 이동
-        }
+        HankkiTopBar(
+            content = {
+                Row(
+                    modifier = Modifier.noRippleClickable {
+                        // TODO: 학교 선택 Screen 이동
+                    }
+                ) {
+                    Text(
+                        text = universityName,
+                        style = HankkiTheme.typography.suitH2,
+                        color = Gray900
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_dropdown_btn),
+                        contentDescription = "button",
+                        tint = Gray300
+                    )
+                }
+            }
+        )
 
         Box(modifier = Modifier.fillMaxSize()) {
             NaverMap(
@@ -252,7 +278,7 @@ fun HomeScreen(
                 markerItems.forEach { marker ->
                     Marker(
                         state = MarkerState(position = LatLng(marker.x, marker.y)),
-                        captionText = if(cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) "한끼네 한정식" else "",
+                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) "한끼네 한정식" else "",
                         onClick = {
                             clickMarkerItem(marker.id)
                             true
