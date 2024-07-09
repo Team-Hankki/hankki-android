@@ -1,5 +1,6 @@
 package com.hankki.feature.login
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -22,16 +23,12 @@ fun LoginRoute() {
     LaunchedEffect(Unit) {
         viewModel.loginSideEffects.collectLatest { sideEffect ->
             when (sideEffect) {
-                is LoginSideEffect.StartLogin -> {
-                    // 필요 시 StartLogin 추가 처리
-                }
-
                 is LoginSideEffect.LoginSuccess -> {
-                    // 필요 시 LoginSuccess 추가 처리
+                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
                 }
 
                 is LoginSideEffect.LoginError -> {
-                    // 필요 시 LoginError 추가 처리
+                    Toast.makeText(context, "Login Error: ${sideEffect.errorMessage}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
