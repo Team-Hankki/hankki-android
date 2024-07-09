@@ -6,7 +6,7 @@ import com.hankki.data.login.dto.response.LoginResponseDto
 
 interface LoginDataSource {
     suspend fun postLogin(
-        Authorization: String,
+        accessToken: String,
         platform: LoginRequestDto,
     ): BaseResponse<LoginResponseDto>
 }

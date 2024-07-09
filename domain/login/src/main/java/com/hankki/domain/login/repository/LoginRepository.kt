@@ -5,7 +5,7 @@ import com.hankki.domain.login.entity.response.LoginResponseModel
 
 interface LoginRepository {
     suspend fun postLogin(
-        Authorization: String,
-        data: LoginRequestModel
+        accessToken: String,
+        loginRequest: LoginRequestModel
     ): Result<LoginResponseModel>
 }

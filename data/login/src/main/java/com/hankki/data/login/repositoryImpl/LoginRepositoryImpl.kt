@@ -11,14 +11,12 @@ class LoginRepositoryImpl @Inject constructor(
     private val loginDataSource: LoginDataSource,
 ) : LoginRepository {
     override suspend fun postLogin(
-        Authorization: String,
-        requestLoginModel: LoginRequestModel,
-    ): Result<LoginResponseModel> {
-        return runCatching {
+        accessToken: String,
+        loginRequest: LoginRequestModel,
+    ): Result<LoginResponseModel> =  runCatching {
             loginDataSource.postLogin(
-                Authorization,
-                requestLoginModel.toLoginRequestDto(),
+                accessToken,
+                loginRequest.toLoginRequestDto(),
             ).data.toLoginModel()
-        }
     }
 }

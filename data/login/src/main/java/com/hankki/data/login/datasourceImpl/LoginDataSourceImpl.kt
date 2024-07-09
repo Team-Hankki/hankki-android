@@ -11,8 +11,8 @@ class LoginDataSourceImpl @Inject constructor(
     private val loginService: LoginService
 ) : LoginDataSource {
     override suspend fun postLogin(
-        Authorization: String,
+        accessToken: String,
         platform: LoginRequestDto
     ): BaseResponse<LoginResponseDto> =
-        loginService.postLogin(Authorization, platform)
+        loginService.postLogin(accessToken, platform)
 }
