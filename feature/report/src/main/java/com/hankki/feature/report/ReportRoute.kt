@@ -24,9 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.AddPhotoButton
@@ -45,24 +47,31 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ReportRoute(
-    navigateToLogin: () -> Unit,
-    navigateToUniversity: () -> Unit,
+    navigateUp: () -> Unit,
 ) {
-    ReportScreen()
+    ReportScreen(
+        navigateUp = navigateUp
+    )
 }
 
 @Composable
-fun ReportScreen() {
+fun ReportScreen(
+    menuList: PersistentList<Int> = persistentListOf(0, 1, 2),
+    navigateUp: () -> Unit,
+) {
     val scrollState = rememberScrollState()
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .addFocusCleaner(focusManager)
     ) {
         HankkiTopBar(
             leadingIcon = {
@@ -72,9 +81,7 @@ fun ReportScreen() {
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable {
-                            // 뒤로가기 설정
-                        }
+                        .noRippleClickable(navigateUp)
                 )
             }
         )
@@ -108,7 +115,11 @@ fun ReportScreen() {
                         .padding(horizontal = 22.dp)
                         .fillMaxWidth()
                 ) {
-                    StoreCategoryChips() // list 아이템들 연결
+                    StoreCategoryChips(
+                        categories = persistentListOf("한식", "일식", "중식", "양식", "분식", "카페", "기타")
+                    ) {
+                        // TODO: 카테고리 선택 클릭 이벤트 처리
+                    }
 
                     Spacer(modifier = Modifier.height(50.dp))
 
@@ -131,18 +142,21 @@ fun ReportScreen() {
                         AddPhotoButton(modifier = Modifier.fillMaxWidth()) {
                             // TODO: 사진 업로드
                         }
-
-                        // TODO: 리스트로 변경
                         Spacer(modifier = Modifier.height(32.dp))
-                        MenuWithPriceInputComponent()
-                        Spacer(modifier = Modifier.height(12.dp))
-                        MenuWithPriceInputComponent()
-                        Spacer(modifier = Modifier.height(12.dp))
-                        MenuWithPriceInputComponent()
-                        Spacer(modifier = Modifier.height(12.dp))
-                        MenuWithPriceInputComponent()
-                        Spacer(modifier = Modifier.height(24.dp))
 
+                        menuList.forEach { menu ->
+                            MenuWithPriceInputComponent(
+                                menu = "",
+                                price = "",
+                                onMenuChange = {},
+                                onPriceChange = {}
+                            )
+                            if (menu != menuList.last()) {
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(24.dp))
                         AddMenuButton {
                             // TODO: 메뉴 추가
                         }
@@ -168,13 +182,13 @@ fun ReportScreen() {
                     Spacer(modifier = Modifier.height(15.dp))
                 }
             }
-
         }
     }
 }
 
 @Composable
 fun ReportTopContent(
+    count: Int = 52,
     onClick: () -> Unit = {},
 ) {
     Column(
@@ -183,7 +197,7 @@ fun ReportTopContent(
             .fillMaxWidth()
     ) {
         Text(
-            text = "한끼족보의 52번째",
+            text = "한끼족보의 ${count}번째",
             style = HankkiTheme.typography.body4,
             color = Red,
             modifier = Modifier.padding(start = 4.dp)
@@ -205,7 +219,11 @@ fun ReportTopContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun StoreCategoryChips() {
+fun StoreCategoryChips(
+    categories: PersistentList<String>,
+    selectedItem: String = "일식",
+    onClick: (String) -> Unit = {},
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "식당 종류를 알려주세요",
@@ -217,15 +235,12 @@ fun StoreCategoryChips() {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            val list = persistentListOf(
-                "한식", "일식", "중식", "양식", "분식", "패스트푸드", "카페", "디저트", "기타"
-            )
-
-            list.forEach { item ->
+            categories.forEach { item ->
                 HankkiChipWithIcon(
                     iconUrl = "",
                     title = item,
-                    isSelected = item == "일식"
+                    isSelected = item == selectedItem,
+                    onClick = { onClick(item) }
                 )
             }
         }
@@ -233,22 +248,26 @@ fun StoreCategoryChips() {
 }
 
 @Composable
-fun MenuWithPriceInputComponent() {
+fun MenuWithPriceInputComponent(
+    menu: String,
+    price: String,
+    onMenuChange: (String) -> Unit,
+    onPriceChange: (String) -> Unit,
+) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier.fillMaxWidth()
     ) {
         HankkiMenuTextField(
-            value = "된장찌개",
-            onTextChanged = {},
-            isFocused = false,
+            value = menu,
+            onTextChanged = onMenuChange,
+            isFocused = false
         )
         Spacer(modifier = Modifier.width(8.dp))
         HankkiPriceTextField(
-            value = "10000",
-            onTextChanged = {},
+            value = price,
+            onTextChanged = onPriceChange,
             isFocused = false,
-            isError = true,
+            isError = true
         )
         Spacer(modifier = Modifier.width(3.dp))
 
@@ -288,6 +307,8 @@ fun AddMenuButton(onClick: () -> Unit) {
 @Composable
 fun ReportScreenPreview() {
     HankkijogboTheme {
-        ReportScreen()
+        ReportScreen(
+            navigateUp = {}
+        )
     }
 }
