@@ -24,11 +24,11 @@ fun LoginRoute() {
         viewModel.loginSideEffects.collectLatest { sideEffect ->
             when (sideEffect) {
                 is LoginSideEffect.LoginSuccess -> {
-                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                    //LoginSuccess 필요시 추가 동작
                 }
 
                 is LoginSideEffect.LoginError -> {
-                    Toast.makeText(context, "Login Error: ${sideEffect.errorMessage}", Toast.LENGTH_SHORT).show()
+                    //LoginError 필요시 추가 동작
                 }
             }
         }
@@ -59,3 +59,4 @@ fun LoginScreen(
         }
     }
 }
+
