@@ -1,7 +1,6 @@
 package com.hankki.feature.login
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.login.entity.request.LoginRequestModel
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -74,11 +74,6 @@ class LoginViewModel @Inject constructor(
             loginRepository.postLogin(accessToken, LoginRequestModel(platform))
                 .onSuccess { response ->
                     tokenRepository.setTokens(response.accessToken, response.refreshToken)
-
-                    Log.d("LoginViewModel", "Access Token: ${response.accessToken}")
-                    Log.d("LoginViewModel", "Refresh Token: ${response.refreshToken}")
-                    Log.d("LoginViewModel", "isRegistered: ${response.isRegistered}")
-
                     _loginState.value = _loginState.value.copy(
                         isLoggedIn = response.isRegistered,
                         errorMessage = null
@@ -106,6 +101,6 @@ class LoginViewModel @Inject constructor(
     }
 
     companion object {
-        const val KAKAO = "kakao"
+        const val KAKAO = "KAKAO"
     }
 }
