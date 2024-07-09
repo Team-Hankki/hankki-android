@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
@@ -25,13 +26,14 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
-fun StoreNameSearchButton() {
+fun StoreNameSearchButton(onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .background(Gray100)
             .padding(vertical = 12.dp)
-            .padding(start = 10.dp, end = 14.dp),
+            .padding(start = 10.dp, end = 14.dp)
+            .noRippleClickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
