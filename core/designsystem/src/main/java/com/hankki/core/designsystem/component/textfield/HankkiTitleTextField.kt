@@ -5,10 +5,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.R
@@ -29,6 +33,8 @@ fun HankkiTitleTextField(
     placeholder: String,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     isFocused: Boolean = false,
     isError: Boolean = false,
     errorMessage: String = stringResource(id = R.string.enable_under_eight_thousand_won),
@@ -70,7 +76,8 @@ fun HankkiTitleTextField(
             onTextChanged = onTextChanged,
             borderColor = borderColor,
             textColor = textColor,
-            tailingIcon = tailingIcon
+            tailingIcon = tailingIcon,
+            keyboardOptions = keyboardOptions
         )
 
         if (isError) {
@@ -89,40 +96,44 @@ fun HankkiTitleTextField(
 
 @Composable
 fun HankkiMenuTextField(
-    title: String,
     value: String,
-    placeholder: String,
     onTextChanged: (String) -> Unit,
     isFocused: Boolean,
-    modifier: Modifier = Modifier
-) {
-    HankkiTitleTextField(
-        title = title,
-        value = value,
-        placeholder = "예) 된장찌개",
-        onTextChanged = onTextChanged,
-        isFocused = isFocused,
-    )
-}
-
-@Composable
-fun HankkiPriceTextField(
-    title: String,
-    value: String,
-    placeholder: String,
-    onTextChanged: (String) -> Unit,
-    isFocused: Boolean,
-    isError: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    placeholder: String = "예) 된장찌개",
+    title: String = "메뉴 이름",
 ) {
     HankkiTitleTextField(
         title = title,
         value = value,
         placeholder = placeholder,
         onTextChanged = onTextChanged,
+        isFocused = isFocused
+    )
+}
+
+@Composable
+fun HankkiPriceTextField(
+    value: String,
+    onTextChanged: (String) -> Unit,
+    isFocused: Boolean,
+    isError: Boolean,
+    modifier: Modifier = Modifier,
+    title: String = "가격",
+    placeholder: String = "7900",
+) {
+    HankkiTitleTextField(
+        title = title,
+        value = value,
+        placeholder = placeholder,
+        onTextChanged = onTextChanged,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        ),
         isFocused = isFocused,
         isError = isError,
-    ){
+    ) {
         Text(
             text = "원",
             style = HankkiTheme.typography.body1,
