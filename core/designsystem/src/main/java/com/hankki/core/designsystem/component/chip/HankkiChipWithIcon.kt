@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray700
@@ -33,6 +34,7 @@ fun HankkiChipWithIcon(
     iconUrl: String,
     title: String,
     isSelected: Boolean = false,
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -40,7 +42,8 @@ fun HankkiChipWithIcon(
             .border(1.dp, if (isSelected) YellowDark else Gray200, RoundedCornerShape(16.dp))
             .background(if (isSelected) YellowLighten else White)
             .padding(vertical = 4.dp)
-            .padding(start = 8.dp, end = 10.dp),
+            .padding(start = 8.dp, end = 10.dp)
+            .noRippleClickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
