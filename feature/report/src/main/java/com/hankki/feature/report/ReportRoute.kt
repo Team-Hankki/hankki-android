@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,6 +54,8 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
 import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ReportRoute(
@@ -84,6 +87,7 @@ fun ReportScreen(
     changePrice: (Int, String) -> Unit,
     addMenu: () -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
@@ -182,7 +186,13 @@ fun ReportScreen(
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
-                        AddMenuButton(onClick = addMenu)
+                        AddMenuButton(onClick = {
+                            addMenu()
+                            coroutineScope.launch {
+                                delay(100)
+                                scrollState.animateScrollTo(scrollState.maxValue )
+                            }
+                        })
 
                         Spacer(modifier = Modifier.height(35.dp))
                         BottomBlurLayout()
