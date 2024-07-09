@@ -72,7 +72,8 @@ fun ReportRoute(
         menuList = state.menuList,
         changeMenuName = { index, menuName -> viewModel.changeMenuName(index, menuName) },
         changePrice = { index, price -> viewModel.changePrice(index, price) },
-        addMenu = viewModel::addMenu
+        addMenu = viewModel::addMenu,
+        deleteMenu = {viewModel.deleteMenu(it)},
     )
 }
 
@@ -86,6 +87,7 @@ fun ReportScreen(
     changeMenuName: (Int, String) -> Unit,
     changePrice: (Int, String) -> Unit,
     addMenu: () -> Unit,
+    deleteMenu: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -178,7 +180,8 @@ fun ReportScreen(
                                 },
                                 onPriceChange = { price ->
                                     changePrice(index, price)
-                                }
+                                },
+                                deleteMenu = { deleteMenu(index) }
                             )
                             if (index != menuList.lastIndex) {
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -286,6 +289,7 @@ fun MenuWithPriceInputComponent(
     price: String,
     onMenuChange: (String) -> Unit,
     onPriceChange: (String) -> Unit,
+    deleteMenu: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -313,6 +317,7 @@ fun MenuWithPriceInputComponent(
             modifier = Modifier
                 .size(32.dp)
                 .align(Alignment.CenterVertically)
+                .noRippleClickable(onClick = deleteMenu)
         )
     }
 }

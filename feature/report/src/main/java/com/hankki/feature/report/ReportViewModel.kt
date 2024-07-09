@@ -91,4 +91,10 @@ class ReportViewModel @Inject constructor() : ViewModel() {
             )
         )
     }
+
+    fun deleteMenu(index: Int) {
+        _state.value = _state.value.copy(
+            menuList = _state.value.menuList.removeAt(index)
+        )
+    }
 }
