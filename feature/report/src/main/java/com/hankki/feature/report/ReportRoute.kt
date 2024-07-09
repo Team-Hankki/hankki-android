@@ -21,6 +21,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +29,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
@@ -47,22 +50,39 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
+import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ReportRoute(
     navigateUp: () -> Unit,
+    viewModel: ReportViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     ReportScreen(
-        navigateUp = navigateUp
+        navigateUp = navigateUp,
+        categoryList = state.categoryList,
+        selectedCategory = state.selectedCategory,
+        selectCategory = { category -> viewModel.selectCategory(category) },
+        menuList = state.menuList,
+        changeMenuName = { index, menuName -> viewModel.changeMenuName(index, menuName) },
+        changePrice = { index, price -> viewModel.changePrice(index, price) },
+        addMenu = viewModel::addMenu
     )
 }
 
 @Composable
 fun ReportScreen(
-    menuList: PersistentList<Int> = persistentListOf(0, 1, 2),
     navigateUp: () -> Unit,
+    categoryList: PersistentList<CategoryEntity>,
+    selectedCategory: String?,
+    selectCategory: (String) -> Unit,
+    menuList: PersistentList<MenuModel>,
+    changeMenuName: (Int, String) -> Unit,
+    changePrice: (Int, String) -> Unit,
+    addMenu: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
@@ -116,9 +136,10 @@ fun ReportScreen(
                         .fillMaxWidth()
                 ) {
                     StoreCategoryChips(
-                        categories = persistentListOf("한식", "일식", "중식", "양식", "분식", "카페", "기타")
-                    ) {
-                        // TODO: 카테고리 선택 클릭 이벤트 처리
+                        selectedItem = selectedCategory,
+                        categories = categoryList
+                    ) { item ->
+                        selectCategory(item)
                     }
 
                     Spacer(modifier = Modifier.height(50.dp))
@@ -144,22 +165,24 @@ fun ReportScreen(
                         }
                         Spacer(modifier = Modifier.height(32.dp))
 
-                        menuList.forEach { menu ->
+                        menuList.forEachIndexed() { index, menu ->
                             MenuWithPriceInputComponent(
-                                menu = "",
-                                price = "",
-                                onMenuChange = {},
-                                onPriceChange = {}
+                                name = menu.name,
+                                price = menu.price,
+                                onMenuChange = { menuName ->
+                                    changeMenuName(index, menuName)
+                                },
+                                onPriceChange = { price ->
+                                    changePrice(index, price)
+                                }
                             )
-                            if (menu != menuList.last()) {
+                            if (index != menuList.lastIndex) {
                                 Spacer(modifier = Modifier.height(12.dp))
                             }
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
-                        AddMenuButton {
-                            // TODO: 메뉴 추가
-                        }
+                        AddMenuButton(onClick = addMenu)
 
                         Spacer(modifier = Modifier.height(35.dp))
                         BottomBlurLayout()
@@ -220,8 +243,8 @@ fun ReportTopContent(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StoreCategoryChips(
-    categories: PersistentList<String>,
-    selectedItem: String = "일식",
+    categories: PersistentList<CategoryEntity>,
+    selectedItem: String?,
     onClick: (String) -> Unit = {},
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -237,10 +260,10 @@ fun StoreCategoryChips(
         ) {
             categories.forEach { item ->
                 HankkiChipWithIcon(
-                    iconUrl = "",
-                    title = item,
-                    isSelected = item == selectedItem,
-                    onClick = { onClick(item) }
+                    iconUrl = item.imageUrl,
+                    title = item.name,
+                    isSelected = item.tag == selectedItem,
+                    onClick = { onClick(item.tag) }
                 )
             }
         }
@@ -249,7 +272,7 @@ fun StoreCategoryChips(
 
 @Composable
 fun MenuWithPriceInputComponent(
-    menu: String,
+    name: String,
     price: String,
     onMenuChange: (String) -> Unit,
     onPriceChange: (String) -> Unit,
@@ -257,8 +280,10 @@ fun MenuWithPriceInputComponent(
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
+        // 크기 비율로 고정시키기
+        // +버튼 정렬 하기
         HankkiMenuTextField(
-            value = menu,
+            value = name,
             onTextChanged = onMenuChange,
             isFocused = false
         )
@@ -267,7 +292,7 @@ fun MenuWithPriceInputComponent(
             value = price,
             onTextChanged = onPriceChange,
             isFocused = false,
-            isError = true
+            isError = (((price.takeIf { it.isNotEmpty() }?.toLong() ?: 0) >= 8000))
         )
         Spacer(modifier = Modifier.width(3.dp))
 
@@ -307,8 +332,9 @@ fun AddMenuButton(onClick: () -> Unit) {
 @Composable
 fun ReportScreenPreview() {
     HankkijogboTheme {
-        ReportScreen(
-            navigateUp = {}
-        )
+//        ReportScreen(
+//            navigateUp = {},
+//            selectedCategory = null
+//        )
     }
 }
