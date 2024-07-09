@@ -36,26 +36,33 @@ class LoginViewModel @Inject constructor(
     fun startKakaoLogin(context: Context) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                handleLoginResult(token, error)
+                handleLoginResult(token, error, context)
             }
         } else {
             UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-                handleLoginResult(token, error)
+                handleLoginResult(token, error, context)
             }
         }
     }
 
-    private fun handleLoginResult(token: OAuthToken?, error: Throwable?) {
+    private fun handleLoginResult(token: OAuthToken?, error: Throwable?, context: Context) {
         viewModelScope.launch {
             if (error != null) {
                 if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                     handleLoginError("로그인 취소")
                 } else {
                     handleLoginError("카카오계정으로 로그인 실패: ${error.localizedMessage}")
+                    startKakaoWebLogin(context)
                 }
             } else if (token != null) {
                 sendTokenToServer(token.accessToken)
             }
+        }
+    }
+
+    private fun startKakaoWebLogin(context: Context) {
+        UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+            handleLoginResult(token, error, context)
         }
     }
 
@@ -71,7 +78,6 @@ class LoginViewModel @Inject constructor(
                     Log.d("LoginViewModel", "Access Token: ${response.accessToken}")
                     Log.d("LoginViewModel", "Refresh Token: ${response.refreshToken}")
                     Log.d("LoginViewModel", "isRegistered: ${response.isRegistered}")
-
 
                     _loginState.value = _loginState.value.copy(
                         isLoggedIn = response.isRegistered,
