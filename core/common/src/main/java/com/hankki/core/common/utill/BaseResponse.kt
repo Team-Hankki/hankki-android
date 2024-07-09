@@ -1,4 +1,4 @@
-package com.hankki.data.login.dto
+package com.hankki.core.common.utill
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
