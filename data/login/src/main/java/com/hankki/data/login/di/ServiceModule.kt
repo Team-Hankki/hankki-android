@@ -10,9 +10,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ServicelModule {
+object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideLoginService(retrofit: Retrofit): LoginService = retrofit.create(LoginService::class.java)
+    fun provideLoginService(retrofit: Retrofit): LoginService =
+        retrofit.create(LoginService::class.java)
 }
