@@ -54,6 +54,7 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
 import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -73,7 +74,7 @@ fun ReportRoute(
         changeMenuName = { index, menuName -> viewModel.changeMenuName(index, menuName) },
         changePrice = { index, price -> viewModel.changePrice(index, price) },
         addMenu = viewModel::addMenu,
-        deleteMenu = {viewModel.deleteMenu(it)},
+        deleteMenu = { viewModel.deleteMenu(it) },
     )
 }
 
@@ -193,7 +194,7 @@ fun ReportScreen(
                             addMenu()
                             coroutineScope.launch {
                                 delay(100)
-                                scrollState.animateScrollTo(scrollState.maxValue )
+                                scrollState.animateScrollTo(scrollState.maxValue)
                             }
                         })
 
@@ -294,20 +295,24 @@ fun MenuWithPriceInputComponent(
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
-        // 크기 비율로 고정시키기
         // +버튼 정렬 하기
-        HankkiMenuTextField(
-            value = name,
-            onTextChanged = onMenuChange,
-            isFocused = false
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        HankkiPriceTextField(
-            value = price,
-            onTextChanged = onPriceChange,
-            isFocused = false,
-            isError = (((price.takeIf { it.isNotEmpty() }?.toLong() ?: 0) >= 8000))
-        )
+        // 입력값 제한하기 ex)가격엔 숫자만 들어가도록
+        Row(modifier = Modifier.weight(1f)) {
+            HankkiMenuTextField(
+                value = name,
+                onTextChanged = onMenuChange,
+                isFocused = false,
+                modifier = Modifier.fillMaxWidth(0.55f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            HankkiPriceTextField(
+                value = price,
+                onTextChanged = onPriceChange,
+                isFocused = false,
+                isError = (((price.takeIf { it.isNotBlank() }?.toLong() ?: 0) >= 8000)),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         Spacer(modifier = Modifier.width(3.dp))
 
         Icon(
@@ -347,9 +352,16 @@ fun AddMenuButton(onClick: () -> Unit) {
 @Composable
 fun ReportScreenPreview() {
     HankkijogboTheme {
-//        ReportScreen(
-//            navigateUp = {},
-//            selectedCategory = null
-//        )
+        ReportScreen(
+            navigateUp = {},
+            categoryList = persistentListOf(),
+            selectCategory = {},
+            selectedCategory = null,
+            menuList = persistentListOf(),
+            changeMenuName = { _, _ -> },
+            changePrice = { _, _ -> },
+            addMenu = {},
+            deleteMenu = {}
+        )
     }
 }
