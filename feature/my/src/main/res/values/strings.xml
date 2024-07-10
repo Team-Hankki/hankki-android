@@ -13,4 +13,5 @@
     <string name="dialog_delete_jogbo">족보를 삭제할까요?</string>
     <string name="dialog_delete">삭제</string>
     <string name="dialog_edit">편집</string>
+    <string name="add_new_jogbo_list">새로운\n족보 리스트\n추가하기</string>
 </resources>
