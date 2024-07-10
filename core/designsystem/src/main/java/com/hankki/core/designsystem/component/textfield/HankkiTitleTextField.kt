@@ -82,6 +82,7 @@ fun HankkiTitleTextField(
             borderColor = borderColor,
             textColor = textColor,
             tailingIcon = tailingIcon,
+            modifier = modifier,
             keyboardOptions = keyboardOptions,
             onFocusChanged = { isFocused = it }
         )
@@ -114,6 +115,7 @@ fun HankkiMenuTextField(
         value = value,
         placeholder = placeholder,
         onTextChanged = onTextChanged,
+        modifier = modifier,
     )
 }
 
@@ -137,6 +139,7 @@ fun HankkiPriceTextField(
             imeAction = ImeAction.Done
         ),
         isError = isError,
+        modifier = modifier
     ) {
         Text(
             text = "원",

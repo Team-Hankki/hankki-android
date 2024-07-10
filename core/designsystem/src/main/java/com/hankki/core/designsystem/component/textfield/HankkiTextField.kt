@@ -21,7 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray800
+import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
@@ -61,7 +64,7 @@ fun HankkiTextField(
         textStyle = HankkiTheme.typography.body1.copy(color = textColor),
         decorationBox = { innerTextField ->
             Row {
-                Box {
+                Box(modifier = Modifier.weight(1f)) {
                     innerTextField()
                     if (value.isEmpty()) {
                         Text(
@@ -82,41 +85,44 @@ fun HankkiTextField(
 fun HankkiTextFieldPreview() {
     HankkijogboTheme {
         Column {
-//            HankkiTextField(
-//                value = "",
-//                placeholder = "예) 된장찌개",
-//                borderColor = Gray300,
-//                textColor = Gray300,
-//                onTextChanged = {
-//
-//                }
-//            )
-//
-//            HankkiTextField(
-//                value = "김치찌개",
-//                placeholder = "예) 된장찌개",
-//                borderColor = Gray850,
-//                textColor = Gray800,
-//                onTextChanged = {
-//
-//                }
-//            )
-//
-//            HankkiTextField(
-//                value = "8000",
-//                placeholder = "5000",
-//                borderColor = Gray850,
-//                textColor = Gray800,
-//                onTextChanged = {
-//
-//                }
-//            ) {
-//                Text(
-//                    text = "원",
-//                    style = HankkiTheme.typography.body1,
-//                    color = Gray800
-//                )
-//            }
+            HankkiTextField(
+                value = "",
+                placeholder = "예) 된장찌개",
+                borderColor = Gray300,
+                textColor = Gray300,
+                onFocusChanged = {},
+                onTextChanged = {
+
+                }
+            )
+
+            HankkiTextField(
+                value = "김치찌개",
+                placeholder = "예) 된장찌개",
+                borderColor = Gray850,
+                textColor = Gray800,
+                onFocusChanged = {},
+                onTextChanged = {
+
+                }
+            )
+
+            HankkiTextField(
+                value = "8000",
+                placeholder = "5000",
+                borderColor = Gray850,
+                textColor = Gray800,
+                onFocusChanged = {},
+                onTextChanged = {
+
+                }
+            ) {
+                Text(
+                    text = "원",
+                    style = HankkiTheme.typography.body1,
+                    color = Gray800
+                )
+            }
         }
     }
 }
