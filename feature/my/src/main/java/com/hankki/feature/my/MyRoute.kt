@@ -2,6 +2,7 @@ package com.hankki.feature.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +60,7 @@ fun MyRoute(
 
     MyScreen(
         paddingValues = paddingValues,
-        navigateToDummy = navigateToDummy,
+        navigateToMyJogbo = navigateToDummy,
         userName = myState.userState.name,
         userImage = myState.userState.image
     )
@@ -68,7 +69,7 @@ fun MyRoute(
 @Composable
 fun MyScreen(
     paddingValues: PaddingValues,
-    navigateToDummy: () -> Unit,
+    navigateToMyJogbo: () -> Unit,
     userName: String,
     userImage: String
 ) {
@@ -114,7 +115,8 @@ fun MyScreen(
                     shape = RoundedCornerShape(12.dp)
                 )
                 .clip(RoundedCornerShape(12.dp))
-                .padding(start = 28.dp, end = 29.dp),
+                .padding(start = 28.dp, end = 29.dp)
+                .clickable(onClick = navigateToMyJogbo),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -145,11 +147,11 @@ fun MyScreen(
             )
         }
 
-        ButtonWithArrowIcon(stringResource(R.string.faq), navigateToDummy)
+        ButtonWithArrowIcon(stringResource(R.string.faq), {})
 
-        ButtonWithArrowIcon(stringResource(R.string.inquiry), navigateToDummy)
+        ButtonWithArrowIcon(stringResource(R.string.inquiry), {})
 
-        ButtonWithArrowIcon(stringResource(R.string.logout), navigateToDummy)
+        ButtonWithArrowIcon(stringResource(R.string.logout), {})
 
         Box(
             modifier = Modifier
@@ -159,7 +161,7 @@ fun MyScreen(
             Text(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
-                    .noRippleClickable(onClick = navigateToDummy)
+                    .noRippleClickable(onClick = {})
                     .padding(top = 14.dp, start = 15.dp, bottom = 13.dp),
                 textAlign = TextAlign.End,
                 style = HankkiTheme.typography.body4,
@@ -175,7 +177,7 @@ fun MyScreen(
 fun MyScreenPreview() {
     HankkijogboTheme {
         MyScreen(
-            paddingValues = PaddingValues(), navigateToDummy = {}, userName = "", userImage = ""
+            paddingValues = PaddingValues(), navigateToMyJogbo = {}, userName = "", userImage = ""
         )
     }
 }

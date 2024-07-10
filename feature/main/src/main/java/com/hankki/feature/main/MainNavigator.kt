@@ -16,6 +16,7 @@ import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
+import com.hankki.feature.my.navigation.navigateMyJogbo
 import com.hankki.feature.report.navigation.navigateReport
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
@@ -73,6 +74,10 @@ internal class MainNavigator(
 
     fun navigateToUniversity() {
         navController.navigateToUniversitySelection()
+    }
+
+    fun navigateToMyJogbo() {
+        navController.navigateMyJogbo()
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
