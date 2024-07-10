@@ -8,6 +8,9 @@ android {
     setNamespace("data.token")
 }
 dependencies {
-    implementation(projects.domain.token)
+    //core
     implementation(projects.core.datastore)
+
+    //domane
+    implementation(projects.domain.token)
 }
