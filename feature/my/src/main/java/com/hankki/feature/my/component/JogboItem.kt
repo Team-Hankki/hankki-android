@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,12 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray850
-import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
@@ -58,38 +54,30 @@ fun JogboItem(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Box {
-                Text(
+                JogboItemText(
                     text = "\n\n",
-                    style = HankkiTheme.typography.body3,
-                    color = Color.Transparent,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 14.dp, start = 17.dp)
+                    color = Color.Transparent
                 )
-
-                Text(
+                JogboItemText(
                     text = jogboTitle,
-                    style = HankkiTheme.typography.body3,
-                    color = White,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 14.dp, start = 17.dp, end = 25.dp),
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
+                    color = White
                 )
             }
             Image(
                 painter = painterResource(id = R.drawable.ic_my_jogbo),
-                contentDescription = null
+                contentDescription = null,
+                modifier = modifier.fillMaxWidth()
             )
         }
         if (isJogboSelected) {
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .border(2.dp, Red, shape = RoundedCornerShape(12.dp))
+                    .border(
+                        width = 2.dp,
+                        color = Red,
+                        shape = RoundedCornerShape(12.dp)
+                    )
                     .background(Red.copy(alpha = 0.4f))
             ) {
                 Image(
@@ -110,7 +98,7 @@ fun JogboItem(
 
 @Composable
 @Preview
-fun ItemPrev() {
+fun ItemPreview() {
     val isSelected = remember { mutableStateOf(true) }
 
     HankkijogboTheme {
