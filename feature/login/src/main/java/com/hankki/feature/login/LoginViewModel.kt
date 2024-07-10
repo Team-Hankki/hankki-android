@@ -1,6 +1,5 @@
 package com.hankki.feature.login
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.login.entity.request.LoginRequestEntity
@@ -9,7 +8,6 @@ import com.hankki.domain.token.repository.TokenRepository
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,36 +24,17 @@ class LoginViewModel @Inject constructor(
     val loginSideEffects: SharedFlow<LoginSideEffect>
         get() = _loginSideEffects
 
-    fun startKakaoLogin(context: Context) {
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-            UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                handleLoginResult(token, error, context)
-            }
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-                handleLoginResult(token, error, context)
-            }
-        }
-    }
-
-    private fun handleLoginResult(token: OAuthToken?, error: Throwable?, context: Context) {
+    fun handleLoginResult(token: OAuthToken?, error: Throwable?) {
         viewModelScope.launch {
             if (error != null) {
                 if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                     handleLoginError("로그인 취소")
                 } else {
-                    handleLoginError("카카오계정으로 로그인 실패: ${error.localizedMessage}")
-                    startKakaoWebLogin(context)
+                    handleLoginError("카카오계정으로 로그인 실패")
                 }
             } else if (token != null) {
                 sendTokenToServer(token.accessToken)
             }
-        }
-    }
-
-    private fun startKakaoWebLogin(context: Context) {
-        UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-            handleLoginResult(token, error, context)
         }
     }
 
