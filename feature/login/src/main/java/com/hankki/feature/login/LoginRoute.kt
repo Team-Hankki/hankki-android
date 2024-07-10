@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,13 +22,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginRoute() {
     val viewModel: LoginViewModel = hiltViewModel()
-    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.loginSideEffects.collectLatest { sideEffect ->
@@ -46,17 +43,7 @@ fun LoginRoute() {
     }
 
     LoginScreen(
-        onLoginClick = {
-            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-                UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                    viewModel.handleLoginResult(token, error)
-                }
-            } else {
-                UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-                    viewModel.handleLoginResult(token, error)
-                }
-            }
-        }
+        onLoginClick = { viewModel.startKakaoLogin() }
     )
 }
 
