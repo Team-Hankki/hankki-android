@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,11 +59,12 @@ fun LoginScreen(
             .fillMaxSize()
             .padding(horizontal = 22.dp)
             .navigationBarsPadding()
+            .statusBarsPadding()
     ) {
         Column(
             modifier = Modifier.align(Alignment.TopStart)
         ) {
-            Spacer(modifier = Modifier.height(107.dp))
+            Spacer(modifier = Modifier.height(77.dp))
             Text(
                 text = stringResource(R.string.done_worry),
                 color = Gray900,
