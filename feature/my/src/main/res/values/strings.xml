@@ -10,4 +10,7 @@
     <string name="inquiry">1:1 문의</string>
     <string name="logout">로그아웃</string>
     <string name="quit">탈퇴하기</string>
+    <string name="dialog_delete_jogbo">족보를 삭제할까요?</string>
+    <string name="dialog_delete">삭제</string>
+    <string name="dialog_edit">편집</string>
 </resources>
