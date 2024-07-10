@@ -62,7 +62,7 @@ fun StoreItem(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.wrapContentHeight()) {
-            HankkiCategoryChip(text = "#$category")
+            HankkiCategoryChip(text = category)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = storeName,
