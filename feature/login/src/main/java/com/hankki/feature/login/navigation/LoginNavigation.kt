@@ -19,3 +19,4 @@ fun NavGraphBuilder.loginNavgraph() {
 
 @Serializable
 data object Login : Route
+

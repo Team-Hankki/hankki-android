@@ -1,64 +1,92 @@
 package com.hankki.feature.login
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.designsystem.theme.HankkiTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginRoute() {
     val viewModel: LoginViewModel = hiltViewModel()
-    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.loginSideEffects.collectLatest { sideEffect ->
             when (sideEffect) {
-                is LoginSideEffect.StartLogin -> {
-                    // 필요 시 StartLogin 추가 처리
-                }
-
                 is LoginSideEffect.LoginSuccess -> {
-                    // 필요 시 LoginSuccess 추가 처리
+                    //LoginSuccess 필요시 추가 동작
                 }
 
                 is LoginSideEffect.LoginError -> {
-                    // 필요 시 LoginError 추가 처리
+                    //LoginError 필요시 추가 동작
                 }
             }
         }
     }
 
     LoginScreen(
-        loginState = loginState,
         onLoginClick = { viewModel.startKakaoLogin(context) }
     )
 }
 
 @Composable
 fun LoginScreen(
-    loginState: LoginState,
     onLoginClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Login")
-        if (loginState.isLoggedIn) {
-            Text(text = "Logged in success")
-        } else {
-            Button(onClick = { onLoginClick() }) {
-                Text(text = "Login with KakaoTalk")
-            }
-            loginState.errorMessage?.let {
-                Text(text = "Error: $it")
-            }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 22.dp)
+            .navigationBarsPadding()
+            .statusBarsPadding()
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.TopStart)
+        ) {
+            Spacer(modifier = Modifier.height(77.dp))
+            Text(
+                text = stringResource(R.string.done_worry),
+                color = Gray900,
+                style = HankkiTheme.typography.suitH1,
+                modifier = Modifier.align(Alignment.Start)
+            )
+            Spacer(modifier = Modifier.height(41.dp))
+            Image(
+                painter = painterResource(id = R.drawable.ic_android_black_24dp),
+                contentDescription = "lottie",
+                modifier = Modifier
+                    .size(height = 315.dp, width = 411.dp)
+            )
         }
+
+        Image(
+            painter = painterResource(id = R.drawable.btn_kakao),
+            contentDescription = "Kakao Login Button",
+            modifier = Modifier
+                .noRippleClickable(onClick = onLoginClick)
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 24.dp)
+        )
     }
 }
