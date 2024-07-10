@@ -39,7 +39,7 @@ fun Title(
         DialogWithDeleteButton(
             onDismissRequest = { showDialog.value = false },
             onConfirmation = { showDialog.value = false },
-            dialogTitle = stringResource(R.string.dialog_delete_jogbo)
+            dialogTitle = stringResource(R.string.ask_delete_jogbo)
         )
     }
 
@@ -85,7 +85,7 @@ fun Title(
         )
         if (isEditButtonUsed) {
             Text(
-                text = if (isEditMode) stringResource(R.string.dialog_delete) else stringResource(R.string.dialog_edit),
+                text = if (isEditMode) stringResource(R.string.delete) else stringResource(R.string.edit),
                 color = Gray600,
                 style = HankkiTheme.typography.body1,
                 textAlign = TextAlign.Center,
