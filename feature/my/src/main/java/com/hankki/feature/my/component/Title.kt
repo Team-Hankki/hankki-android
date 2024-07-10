@@ -48,16 +48,30 @@ fun Title(
             .fillMaxWidth()
     ) {
         if (isBackButtonUsed) {
-            IconButton(
-                onClick = onBackButtonClicked,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 6.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow),
-                    contentDescription = null
-                )
+            if (isEditMode) {
+                IconButton(
+                    onClick = onEditButtonClicked,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 6.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_arrow),
+                        contentDescription = null
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = onBackButtonClicked,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 6.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_arrow),
+                        contentDescription = null
+                    )
+                }
             }
         }
         Text(
