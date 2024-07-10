@@ -11,6 +11,6 @@ dependencies {
     //core
     implementation(projects.core.datastore)
 
-    //domane
+    //domain
     implementation(projects.domain.token)
 }
