@@ -39,8 +39,8 @@ fun AddJogboItem(
         modifier =
         if (isEditMode.value) Modifier
             .wrapContentSize()
-            .background(YellowLight)
             .clip(RoundedCornerShape(12.dp))
+            .background(YellowLight)
         else Modifier
             .wrapContentSize()
             .clip(RoundedCornerShape(12.dp))
