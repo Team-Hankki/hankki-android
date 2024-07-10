@@ -1,4 +1,4 @@
-package com.hankki.feature.my.my
+package com.hankki.feature.my.mypage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
