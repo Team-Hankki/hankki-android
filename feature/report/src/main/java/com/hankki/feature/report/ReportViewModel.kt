@@ -67,6 +67,9 @@ class ReportViewModel @Inject constructor() : ViewModel() {
     }
 
     fun changeMenuName(index: Int, name: String) {
+        if (_state.value.menuList.size <= index) return
+        if (_state.value.menuList.isEmpty()) return
+
         _state.value = _state.value.copy(
             menuList = _state.value.menuList.set(
                 index,
@@ -76,6 +79,9 @@ class ReportViewModel @Inject constructor() : ViewModel() {
     }
 
     fun changePrice(index: Int, price: String) {
+        if (_state.value.menuList.size <= index) return
+        if (_state.value.menuList.isEmpty()) return
+
         _state.value = _state.value.copy(
             menuList = _state.value.menuList.set(
                 index,
