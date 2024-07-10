@@ -21,14 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray300
-import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray850
-import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
+import java.util.regex.Pattern
 
 @Composable
 fun HankkiTitleTextField(
@@ -47,7 +46,7 @@ fun HankkiTitleTextField(
 
     val titleColor = when {
         isError -> Red
-        isFocused -> Gray900
+        isFocused -> Gray800
         else -> Gray500
     }
 
@@ -59,8 +58,7 @@ fun HankkiTitleTextField(
 
     val textColor = when {
         isError -> Red
-        isFocused -> Gray900
-        else -> Gray400
+        else -> Gray800
     }
 
     Column {
@@ -114,7 +112,11 @@ fun HankkiMenuTextField(
         title = title,
         value = value,
         placeholder = placeholder,
-        onTextChanged = onTextChanged,
+        onTextChanged = { menu ->
+            if (MENU_REGEX.matcher(menu).matches()) {
+                onTextChanged(menu)
+            }
+        },
         modifier = modifier,
     )
 }
@@ -133,7 +135,11 @@ fun HankkiPriceTextField(
         title = title,
         value = value,
         placeholder = placeholder,
-        onTextChanged = onTextChanged,
+        onTextChanged = { price ->
+            if (PRICE_REGEX.matcher(price).matches()) {
+                onTextChanged(price)
+            }
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
@@ -205,3 +211,12 @@ fun HankkiTitleTextFieldPreview() {
         }
     }
 }
+
+
+private const val MENU_PATTERN =
+    "^\$|^[0-9a-zA-Zㄱ-ㅣ가-힣\\u318D\\u119E\\u11A2\\u2022\\u2025\\u00B7\\uFE55]{0,20}+$"
+private val MENU_REGEX: Pattern = Pattern.compile(MENU_PATTERN)
+
+private const val PRICE_PATTERN = "^$|^[0-9]{0,5}+$"
+private val PRICE_REGEX: Pattern = Pattern.compile(PRICE_PATTERN)
+
