@@ -105,7 +105,7 @@ fun Title(
 
 @Preview
 @Composable
-fun titlePrev() {
+fun TitlePrev() {
     val isEditMode = remember { mutableStateOf(false) }
 
     HankkijogboTheme {

@@ -110,7 +110,7 @@ fun MyJogboScreen(
 
 @Composable
 @Preview
-fun myJogboScreenPreview() {
+fun MyJogboScreenPreview() {
     HankkijogboTheme {
         MyJogboScreen(
             navigateUp = {},
@@ -122,3 +122,4 @@ fun myJogboScreenPreview() {
         )
     }
 }
+
