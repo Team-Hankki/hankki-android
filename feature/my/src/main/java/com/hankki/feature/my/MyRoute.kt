@@ -2,8 +2,8 @@ package com.hankki.feature.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -151,21 +152,30 @@ fun MyScreen(
 
         ButtonWithArrowIcon(stringResource(R.string.logout), navigateToDummy)
 
-        Box(
+        Row(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+                .clickable(onClick = {}),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
         ) {
             Text(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
                     .noRippleClickable(onClick = navigateToDummy)
-                    .padding(top = 14.dp, start = 15.dp, bottom = 13.dp),
+                    .padding(top = 13.dp, bottom = 14.dp),
                 textAlign = TextAlign.End,
                 style = HankkiTheme.typography.body4,
                 color = Gray400,
             )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_quit),
+                contentDescription = null,
+                tint = Gray400
+            )
         }
+
     }
 }
 
