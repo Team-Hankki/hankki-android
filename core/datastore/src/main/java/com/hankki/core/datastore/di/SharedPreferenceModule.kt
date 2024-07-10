@@ -13,9 +13,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object SharedPreferencesModule {
 
+    private const val PREFS = "prefs"
+
     @Provides
     @Singleton
-    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-    }
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 }
