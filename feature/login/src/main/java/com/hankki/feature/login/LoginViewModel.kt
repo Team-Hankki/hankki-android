@@ -3,7 +3,7 @@ package com.hankki.feature.login
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.login.entity.request.LoginRequestModel
+import com.hankki.domain.login.entity.request.LoginRequestEntity
 import com.hankki.domain.login.repository.LoginRepository
 import com.hankki.domain.token.repository.TokenRepository
 import com.kakao.sdk.auth.model.OAuthToken
@@ -64,7 +64,7 @@ class LoginViewModel @Inject constructor(
         platform: String = KAKAO
     ) {
         viewModelScope.launch {
-            loginRepository.postLogin(accessToken, LoginRequestModel(platform))
+            loginRepository.postLogin(accessToken, LoginRequestEntity(platform))
                 .onSuccess { response ->
                     tokenRepository.setTokens(response.accessToken, response.refreshToken)
                     _loginSideEffects.emit(LoginSideEffect.LoginSuccess(response.accessToken))

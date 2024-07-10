@@ -1,6 +1,6 @@
 package com.hankki.data.login.dto.request
 
-import com.hankki.domain.login.entity.request.LoginRequestModel
+import com.hankki.domain.login.entity.request.LoginRequestEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,5 +10,5 @@ data class LoginRequestDto(
     val platform: String
 )
 
-fun LoginRequestModel.toLoginRequestDto(): LoginRequestDto =
+fun LoginRequestEntity.toLoginRequestDto(): LoginRequestDto =
     LoginRequestDto(platform)

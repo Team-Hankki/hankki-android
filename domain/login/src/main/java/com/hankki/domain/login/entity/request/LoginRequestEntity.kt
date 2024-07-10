@@ -1,5 +1,5 @@
 package com.hankki.domain.login.entity.request
 
-data class LoginRequestModel(
+data class LoginRequestEntity(
     val platform: String
 )

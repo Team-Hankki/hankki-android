@@ -1,6 +1,6 @@
 package com.hankki.data.login.dto.response
 
-import com.hankki.domain.login.entity.response.LoginResponseModel
+import com.hankki.domain.login.entity.response.LoginResponseEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,8 +13,8 @@ data class LoginResponseDto(
     @SerialName("isRegistered")
     val isRegistered: Boolean
 ) {
-    fun toLoginModel() =
-        LoginResponseModel(
+    fun toLoginEntity() =
+        LoginResponseEntity(
             accessToken = accessToken,
             refreshToken = refreshToken,
             isRegistered = isRegistered
