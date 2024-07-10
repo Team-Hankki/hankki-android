@@ -45,8 +45,7 @@ fun AddJogboItem(
             .wrapContentSize()
             .clip(RoundedCornerShape(12.dp))
             .background(Yellow)
-            .clickable(onClick = onClick)
-        ,
+            .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
     ) {

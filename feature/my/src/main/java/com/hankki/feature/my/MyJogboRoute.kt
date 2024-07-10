@@ -75,7 +75,9 @@ fun MyJogboScreen(
             isEditMode = isEditMode.value,
             onEditButtonClicked = { isEditMode.value = !isEditMode.value },
         )
+
         Spacer(modifier = Modifier.height(18.dp))
+
         LazyVerticalGrid(
             modifier = Modifier.padding(horizontal = 22.dp),
             columns = GridCells.Fixed(2),
@@ -85,6 +87,7 @@ fun MyJogboScreen(
             item {
                 AddJogboItem(isEditMode = isEditMode)
             }
+
             items(jogboItems) { item ->
                 var isSelected by remember { mutableStateOf(item.jogboSelected) }
                 JogboItem(

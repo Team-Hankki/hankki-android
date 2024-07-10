@@ -67,6 +67,7 @@ fun JogboItem(
                         .fillMaxWidth()
                         .padding(top = 14.dp, start = 17.dp)
                 )
+
                 Text(
                     text = jogboTitle,
                     style = HankkiTheme.typography.body3,
