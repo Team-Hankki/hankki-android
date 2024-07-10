@@ -31,6 +31,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -93,7 +94,9 @@ fun HomeRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val focusLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+    val focusLocationProviderClient = remember {
+        LocationServices.getFusedLocationProviderClient(context)
+    }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
             state.latLng,
