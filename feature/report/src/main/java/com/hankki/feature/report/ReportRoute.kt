@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -143,6 +144,7 @@ fun ReportScreen(
                         .fillMaxWidth()
                 ) {
                     StoreCategoryChips(
+                        title = stringResource(id = com.hankki.feature.report.R.string.show_store_categories),
                         selectedItem = selectedCategory,
                         categories = categoryList
                     ) { item ->
@@ -155,13 +157,13 @@ fun ReportScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = "식당 이름을 알려주세요",
+                            text = stringResource(id = com.hankki.feature.report.R.string.add_menu_title),
                             style = HankkiTheme.typography.sub1,
                             color = Gray900
                         )
                         Spacer(modifier = Modifier.height(14.dp))
                         Text(
-                            text = "한끼로 적당한 메뉴를 추천해주세요",
+                            text = stringResource(id = com.hankki.feature.report.R.string.add_menu_sub_title),
                             style = HankkiTheme.typography.body4,
                             color = Gray400
                         )
@@ -228,6 +230,7 @@ fun ReportTopContent(
     count: Int = 52,
     onClick: () -> Unit = {},
 ) {
+    // TODO: 라이팅 변경 예정이라 하드코딩 해둠. 변경시 res로 추출 예정
     Column(
         modifier = Modifier
             .padding(horizontal = 22.dp)
@@ -257,13 +260,14 @@ fun ReportTopContent(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StoreCategoryChips(
+    title: String,
     categories: PersistentList<CategoryEntity>,
     selectedItem: String?,
     onClick: (String) -> Unit = {},
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "식당 종류를 알려주세요",
+            text = title,
             style = HankkiTheme.typography.sub1,
             color = Gray900
         )
@@ -296,7 +300,6 @@ fun MenuWithPriceInputComponent(
         modifier = Modifier.fillMaxWidth()
     ) {
         // +버튼 정렬 하기
-        // 입력값 제한하기 ex)가격엔 숫자만 들어가도록
         Row(modifier = Modifier.weight(1f)) {
             HankkiMenuTextField(
                 value = name,
@@ -321,7 +324,6 @@ fun MenuWithPriceInputComponent(
             tint = Gray300,
             modifier = Modifier
                 .size(32.dp)
-                .align(Alignment.CenterVertically)
                 .noRippleClickable(onClick = deleteMenu)
         )
     }
@@ -357,7 +359,12 @@ fun ReportScreenPreview() {
             categoryList = persistentListOf(),
             selectCategory = {},
             selectedCategory = null,
-            menuList = persistentListOf(),
+            menuList = persistentListOf(
+                MenuModel(
+                    name = "김치찌개",
+                    price = "8000"
+                )
+            ),
             changeMenuName = { _, _ -> },
             changePrice = { _, _ -> },
             addMenu = {},

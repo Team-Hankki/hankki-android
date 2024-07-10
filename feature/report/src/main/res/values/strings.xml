@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">report</string>
+    <string name="show_store_categories">식당 종류를 알려주세요</string>
+    <string name="add_menu_title">메뉴를 추가해주세요</string>
+    <string name="add_menu_sub_title">한끼로 적당한 메뉴를 추천해주세요</string>
 </resources>
