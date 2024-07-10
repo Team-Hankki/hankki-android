@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.my
 
 import com.hankki.domain.my.entity.UserInfoEntity
 

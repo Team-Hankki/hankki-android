@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.myjogbo
 
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf

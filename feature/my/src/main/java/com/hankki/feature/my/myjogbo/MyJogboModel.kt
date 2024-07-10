@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.myjogbo
 
 import com.hankki.domain.my.entity.MyJogboEntity
 

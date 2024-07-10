@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.myjogbo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.MyJogboEntity
+import com.hankki.feature.my.R
 import com.hankki.feature.my.component.AddJogboItem
 import com.hankki.feature.my.component.JogboItem
 import com.hankki.feature.my.component.Title

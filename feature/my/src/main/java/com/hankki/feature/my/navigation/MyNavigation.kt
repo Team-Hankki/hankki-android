@@ -7,8 +7,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.hankki.core.navigation.MainTabRoute
 import com.hankki.core.navigation.Route
-import com.hankki.feature.my.MyJogboRoute
-import com.hankki.feature.my.MyRoute
+import com.hankki.feature.my.myjogbo.MyJogboRoute
+import com.hankki.feature.my.my.MyRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateMy(navOptions: NavOptions) {
