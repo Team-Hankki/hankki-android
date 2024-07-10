@@ -39,13 +39,14 @@ fun AddJogboItem(
         modifier =
         if (isEditMode.value) Modifier
             .wrapContentSize()
-            .clip(RoundedCornerShape(12.dp))
             .background(YellowLight)
+            .clip(RoundedCornerShape(12.dp))
         else Modifier
             .wrapContentSize()
-            .clickable(onClick = onClick)
             .clip(RoundedCornerShape(12.dp))
-            .background(Yellow),
+            .background(Yellow)
+            .clickable(onClick = onClick)
+        ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
