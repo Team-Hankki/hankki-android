@@ -50,10 +50,10 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.component.DropdownFilterChip
@@ -292,7 +292,7 @@ fun HomeScreen(
 
             Column {
                 FlowRow(
-                    modifier = Modifier.padding(start = 22.dp, end = 22.dp, top = 12.dp),
+                    modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     RowFilterChip(
@@ -356,34 +356,47 @@ fun HomeScreen(
                                     modifier = Modifier.fillMaxSize(),
                                     state = listState
                                 ) {
-                                    items(storeItems) {
+                                    items(storeItems) { item ->
                                         StoreItem(
-                                            storeImageUrl = it.storeImageUrl,
-                                            category = it.category,
-                                            storeName = it.storeName,
-                                            price = it.price,
-                                            heartCount = it.heartCount
+                                            storeImageUrl = item.storeImageUrl,
+                                            category = item.category,
+                                            storeName = item.storeName,
+                                            price = item.price,
+                                            heartCount = item.heartCount
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems()
                                         }
 
-                                        Spacer(modifier = Modifier.height(12.dp))
+                                        if (item == storeItems.last()){
+                                            Spacer(modifier = Modifier.height(12.dp))
+                                        }
                                     }
                                 }
                             },
-                            sheetContainerColor = Gray100,
+                            sheetContainerColor = White,
                             sheetSwipeEnabled = true,
                             sheetPeekHeight = height
                         ) {}
                     } else {
                         Column {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.BottomEnd
+                            ){
+                                RepositionButton(
+                                    height = 0.dp,
+                                    onClick = reposition
+                                )
+                            }
+
                             StoreItem(
                                 storeImageUrl = selectedStoreItem.storeImageUrl,
                                 category = selectedStoreItem.category,
                                 storeName = selectedStoreItem.storeName,
                                 price = selectedStoreItem.price,
-                                heartCount = selectedStoreItem.heartCount
+                                heartCount = selectedStoreItem.heartCount,
+                                modifier = Modifier.padding(22.dp)
                             ) {
                                 controlMyJogboBottomSheet()
                                 getJogboItems()

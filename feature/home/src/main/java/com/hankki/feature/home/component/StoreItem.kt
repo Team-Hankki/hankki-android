@@ -44,12 +44,11 @@ fun StoreItem(
 ) {
     Row(
         modifier = modifier
-            .padding(horizontal = 22.dp)
             .fillMaxWidth()
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(16.dp),
+            .padding(22.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
