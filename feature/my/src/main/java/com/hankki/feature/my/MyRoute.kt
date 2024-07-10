@@ -44,7 +44,7 @@ import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
-import com.hankki.feature.my.component.MyTitle
+import com.hankki.feature.my.component.Title
 
 @Composable
 fun MyRoute(
@@ -83,7 +83,7 @@ fun MyScreen(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MyTitle(title = stringResource(R.string.my))
+        Title(title = stringResource(R.string.my))
 
         Spacer(modifier = Modifier.height(15.dp))
 
