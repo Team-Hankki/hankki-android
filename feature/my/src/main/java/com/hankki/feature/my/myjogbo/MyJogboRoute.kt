@@ -31,6 +31,8 @@ import com.hankki.feature.my.R
 import com.hankki.feature.my.component.AddJogboItem
 import com.hankki.feature.my.component.JogboItem
 import com.hankki.feature.my.component.Title
+import com.hankki.feature.my.myjogbo.model.MyJogboModel
+import com.hankki.feature.my.myjogbo.model.toMyJogboModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
