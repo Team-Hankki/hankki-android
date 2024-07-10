@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -46,7 +46,17 @@ fun LoginRoute() {
     }
 
     LoginScreen(
-        onLoginClick = { viewModel.startKakaoLogin(context) }
+        onLoginClick = {
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+                UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                    viewModel.handleLoginResult(token, error)
+                }
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+                    viewModel.handleLoginResult(token, error)
+                }
+            }
+        }
     )
 }
 
