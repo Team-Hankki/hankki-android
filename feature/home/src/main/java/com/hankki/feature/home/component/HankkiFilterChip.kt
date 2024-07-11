@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import coil.compose.AsyncImage
@@ -155,7 +156,9 @@ fun RowFilterChip(
                     verticalArrangement = Arrangement.Center
                 ) {
                     AsyncImage(
-                        modifier = Modifier.size(38.dp).clip(RoundedCornerShape(8.dp)),
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(RoundedCornerShape(8.dp)),
                         model = menu.imageUrl,
                         contentDescription = "image",
                         contentScale = ContentScale.Crop,
@@ -176,3 +179,65 @@ fun RowFilterChip(
         }
     }
 }
+
+@Preview
+@Composable
+fun RowFilterChipPreview() {
+    RowFilterChip(
+        chipState = ChipState.SELECTED,
+        defaultTitle = "전체",
+        menus = persistentListOf(
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "한식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "중식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "일식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "양식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "분식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "디저트"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "카페"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "편의점"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "패스트푸드"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "피자"
+            ),
+        )
+    )
+}
+
