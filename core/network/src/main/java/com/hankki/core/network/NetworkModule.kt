@@ -63,22 +63,22 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    @Reissue
-    fun provideOkHttpClient(
-        loggingInterceptor: Interceptor,
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
-
-    @Provides
-    @Singleton
     @JWT
-    fun provideReissueOkHttpClient(
+    fun provideJWTOkHttpClient(
         loggingInterceptor: Interceptor,
         @JWT oauthInterceptor: Interceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor(oauthInterceptor)
+        .build()
+
+    @Provides
+    @Singleton
+    @REISSUE
+    fun provideOkHttpClient(
+        loggingInterceptor: Interceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
         .build()
 
     @Provides
@@ -95,9 +95,9 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    @Reissue
-    fun provideReissueOkHttpClientRetrofit(
-        @Reissue client: OkHttpClient,
+    @REISSUE
+    fun provideReissueRetrofit(
+        @REISSUE client: OkHttpClient,
         factory: Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

@@ -4,7 +4,7 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class Reissue
+annotation class REISSUE
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
