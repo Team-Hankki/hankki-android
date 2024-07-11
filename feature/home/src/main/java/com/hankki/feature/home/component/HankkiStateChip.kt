@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.feature.home.model.ChipState
@@ -37,6 +37,10 @@ fun HankkiStateChip(
     Column {
         Box(
             modifier = modifier
+                .bounceClick(
+                    scaleDown = 0.88f,
+                    onClick = onClick
+                )
                 .clip(RoundedCornerShape(16.dp))
                 .border(
                     width = 1.dp,
@@ -44,8 +48,7 @@ fun HankkiStateChip(
                     shape = RoundedCornerShape(16.dp)
                 )
                 .background(color = chipState.containerColor)
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp)
-                .noRippleClickable(onClick = onClick),
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(
