@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import com.hankki.core.datastore.TokenDataStore
-import com.hankki.core.network.domain.repository.ReissueTokenRepository
+import com.hankki.domain.reissuetoken.repository.ReissueTokenRepository
 import com.hankki.feature.main.MainActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
