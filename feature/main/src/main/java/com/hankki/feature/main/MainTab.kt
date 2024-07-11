@@ -13,24 +13,26 @@ internal enum class MainTab(
     val unselectedIconResource: Int,
     internal val contentDescription: String,
     val route: MainTabRoute,
+    val showBottomSheet: Boolean = true
 ) {
     HOME(
         selectedIconResource = R.drawable.ic_home_selected,
         unselectedIconResource = R.drawable.ic_home_unselected,
         contentDescription = "홈",
-        Home
+        route = Home
     ),
     REPORT(
         selectedIconResource = R.drawable.ic_jaebo,
         unselectedIconResource = R.drawable.ic_jaebo,
         contentDescription = "제보하기",
-        Report,
+        route = Report,
+        false
     ),
     MY(
         selectedIconResource = R.drawable.ic_my_selected,
         unselectedIconResource = R.drawable.ic_my_unselected,
         contentDescription = "마이페이지",
-        My,
+        route = My
     );
 
     companion object {
