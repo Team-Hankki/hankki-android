@@ -40,7 +40,7 @@ include(
 include(
     ":data:dummy",
     ":data:token",
-    ":data:Login"
+    ":data:Login",
 )
 
 // domain
@@ -49,7 +49,7 @@ include(
     ":domain:my",
     ":domain:universityselection",
     ":domain:token",
-    ":domain:login"
+    ":domain:login",
 )
 
 // feature
