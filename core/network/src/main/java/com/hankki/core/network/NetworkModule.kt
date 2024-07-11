@@ -52,22 +52,52 @@ internal object NetworkModule {
             }
         }
     }.apply {
-        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        level =
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
     }
 
     @Provides
     @Singleton
+    @ReissueOkHttpClient(isReissue = true)
+    fun provideOauthInterceptor(authInterceptor: OauthInterceptor): Interceptor = authInterceptor
+
+    @Provides
+    @Singleton
+    @ReissueOkHttpClient(isReissue = false)
     fun provideOkHttpClient(
         loggingInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .build()
 
+    @Provides
+    @Singleton
+    @ReissueOkHttpClient(isReissue = true)
+    fun provideReissueOkHttpClient(
+        loggingInterceptor: Interceptor,
+        @ReissueOkHttpClient(isReissue = true) oauthInterceptor: Interceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .addInterceptor(oauthInterceptor)
+        .build()
 
     @Provides
     @Singleton
+    @ReissueOkHttpClient(isReissue = false)
     fun provideRetrofit(
-        client: OkHttpClient,
+        @ReissueOkHttpClient(isReissue = false) client: OkHttpClient,
+        factory: Converter.Factory,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .client(client)
+        .addConverterFactory(factory)
+        .build()
+
+    @ReissueOkHttpClient(isReissue = true)
+    @Provides
+    @Singleton
+    fun provideTempRetrofit(
+        @ReissueOkHttpClient(isReissue = true) client: OkHttpClient,
         factory: Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
