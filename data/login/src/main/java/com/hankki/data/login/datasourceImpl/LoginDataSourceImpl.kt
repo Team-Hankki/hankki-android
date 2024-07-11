@@ -1,7 +1,7 @@
 package com.hankki.data.login.datasourceImpl
 
+import com.hankki.core.network.BaseResponse
 import com.hankki.data.login.datasource.LoginDataSource
-import com.hankki.core.common.utill.BaseResponse
 import com.hankki.data.login.dto.request.LoginRequestDto
 import com.hankki.data.login.dto.response.LoginResponseDto
 import com.hankki.data.login.service.LoginService
