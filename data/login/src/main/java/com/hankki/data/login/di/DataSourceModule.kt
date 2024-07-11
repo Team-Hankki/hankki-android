@@ -14,5 +14,5 @@ internal abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun provideLoginDataSource(loginDataSourceImpl: LoginDataSourceImpl): LoginDataSource
+    abstract fun bindLoginDataSource(loginDataSourceImpl: LoginDataSourceImpl): LoginDataSource
 }
