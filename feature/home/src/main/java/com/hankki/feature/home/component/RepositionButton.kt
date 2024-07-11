@@ -38,7 +38,7 @@ fun RepositionButton(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_map_here),
-                contentDescription = null,
+                contentDescription = "reposition user location",
                 tint = Color.Unspecified
             )
         }

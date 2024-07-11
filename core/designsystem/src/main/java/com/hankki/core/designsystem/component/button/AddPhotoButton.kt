@@ -27,7 +27,10 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
-fun AddPhotoButton(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun AddPhotoButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))

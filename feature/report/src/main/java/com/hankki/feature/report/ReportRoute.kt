@@ -211,7 +211,7 @@ fun ReportScreen(
                 BottomBlurLayout()
                 Column {
                     HankkiButton(
-                        text = "제보하기",
+                        text = stringResource(id = com.hankki.feature.report.R.string.do_report),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(22.dp),
@@ -238,7 +238,7 @@ fun ReportTopContent(
             .fillMaxWidth()
     ) {
         Text(
-            text = "한끼족보의 ${count}번째",
+            text = "${count}번째 제보에요",
             style = HankkiTheme.typography.body4,
             color = Red,
             modifier = Modifier.padding(start = 4.dp)
@@ -250,7 +250,7 @@ fun ReportTopContent(
             StoreNameSearchButton(onClick = onClick)
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-                text = "을 제보할래요",
+                text = stringResource(id = com.hankki.feature.report.R.string.will_report),
                 style = HankkiTheme.typography.body6,
                 color = Gray900
             )
@@ -329,8 +329,6 @@ fun MenuWithPriceInputComponent(
             Spacer(modifier = Modifier.height(3.dp))
 
             Box(modifier = Modifier) {
-
-
                 Icon(
                     painter = painterResource(id = R.drawable.ic_circle_x),
                     contentDescription = "delete",
@@ -358,7 +356,7 @@ fun AddMenuButton(onClick: () -> Unit) {
         )
         Spacer(modifier = Modifier.width(6.dp))
         Text(
-            text = "메뉴 추가하기",
+            text = stringResource(id = com.hankki.feature.report.R.string.add_menu),
             style = HankkiTheme.typography.sub3,
             color = Gray400
         )
