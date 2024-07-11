@@ -2,7 +2,6 @@ package com.hankki.feature.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -156,7 +155,7 @@ fun MyScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
-                .clickable(onClick = {}),
+                .noRippleClickable(onClick = {}),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
@@ -164,7 +163,8 @@ fun MyScreen(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
                     .noRippleClickable(onClick = navigateToDummy)
-                    .padding(top = 13.dp, bottom = 14.dp),
+                    .padding(top = 13.dp, bottom = 14.dp)
+                    .weight(1f),
                 textAlign = TextAlign.End,
                 style = HankkiTheme.typography.body4,
                 color = Gray400,
