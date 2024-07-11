@@ -18,10 +18,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -134,7 +132,7 @@ private fun MainBottomBar(
             modifier = Modifier
                 .navigationBarsPadding()
                 .fillMaxWidth()
-                .height(50.dp)
+                .height(66.dp)
                 .background(Color.White),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -170,14 +168,15 @@ private fun RowScope.MainBottomBarItem(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            painter = painterResource(tab.iconResId),
+            painter = painterResource(
+                if (selected) {
+                    tab.selectedIconResource
+                } else {
+                    tab.unselectedIconResource
+                }
+            ),
             contentDescription = tab.contentDescription,
-            tint = if (selected) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.outline
-            },
-            modifier = Modifier.size(34.dp),
+            tint = Color.Unspecified,
         )
     }
 }
