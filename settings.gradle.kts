@@ -48,6 +48,7 @@ include(
     ":domain:dummy",
     ":domain:my",
     ":domain:universityselection",
+    ":domain:report"
     ":domain:token",
     ":domain:login"
 )

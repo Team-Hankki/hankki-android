@@ -11,21 +11,23 @@ internal enum class MainTab(
     val iconResId: Int,
     internal val contentDescription: String,
     val route: MainTabRoute,
+    val showBottomSheet: Boolean = true
 ) {
     HOME(
         iconResId = R.drawable.ic_launcher_background,
         contentDescription = "홈",
-        Home
+        route = Home
     ),
     REPORT(
         iconResId = R.drawable.ic_launcher_background,
         contentDescription = "제보하기",
-        Report,
+        route = Report,
+        false
     ),
     MY(
         iconResId = R.drawable.ic_launcher_background,
         contentDescription = "마이페이지",
-        My,
+        route = My
     );
 
     companion object {
