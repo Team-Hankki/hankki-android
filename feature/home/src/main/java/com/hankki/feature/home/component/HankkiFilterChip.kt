@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import coil.compose.AsyncImage
+import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
@@ -149,9 +150,12 @@ fun RowFilterChip(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
                         .size(100.dp)
+                        .bounceClick(
+                            scaleDown = 0.88f,
+                            onClick = { onClickMenu(menu.name) }
+                        )
                         .background(White)
-                        .padding(12.dp)
-                        .noRippleClickable(onClick = { onClickMenu(menu.name) }),
+                        .padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
