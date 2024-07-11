@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,12 +24,12 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun RepositionButton(
     height: Dp,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
     Column {
         Box(
-            modifier = Modifier
-                .padding(end = 19.dp, bottom = 19.dp)
+            modifier = modifier
                 .size(50.dp)
                 .clip(CircleShape)
                 .border(1.dp, Gray300, CircleShape)
@@ -38,7 +38,8 @@ fun RepositionButton(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_map_here),
-                contentDescription = null
+                contentDescription = null,
+                tint = Color.Unspecified
             )
         }
         Spacer(modifier = Modifier.height(height))
