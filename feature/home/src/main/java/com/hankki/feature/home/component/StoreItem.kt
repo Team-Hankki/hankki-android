@@ -48,7 +48,7 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(22.dp),
+            .padding(horizontal = 22.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
