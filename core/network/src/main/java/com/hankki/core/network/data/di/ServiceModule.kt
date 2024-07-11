@@ -1,6 +1,6 @@
 package com.hankki.core.network.data.di
 
-import com.hankki.core.network.ReissueOkHttpClient
+import com.hankki.core.network.Reissue
 import com.hankki.core.network.data.service.ReissueTokenService
 import dagger.Module
 import dagger.Provides
@@ -14,6 +14,6 @@ import javax.inject.Singleton
 object ServiceModule {
     @Provides
     @Singleton
-    fun provideReissueTokenService(@ReissueOkHttpClient(isReissue = true) retrofit: Retrofit): ReissueTokenService =
+    fun provideReissueTokenService(@Reissue retrofit: Retrofit): ReissueTokenService =
         retrofit.create(ReissueTokenService::class.java)
 }

@@ -4,4 +4,8 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class ReissueOkHttpClient(val isReissue: Boolean = false)
+annotation class Reissue
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class JWT
