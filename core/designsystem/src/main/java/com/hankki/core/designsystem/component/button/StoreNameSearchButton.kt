@@ -41,10 +41,7 @@ fun StoreNameSearchButton(
             .background(Gray100)
             .padding(vertical = 12.dp)
             .padding(start = 10.dp, end = 14.dp)
-            .bounceClick(
-                blackAlpha = 0.16f,
-                onClick = onClick
-            ),
+            .bounceClick(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -75,10 +72,7 @@ fun StoreNameSelectedButton(
             .clip(RoundedCornerShape(10.dp))
             .background(RedLight)
             .padding(vertical = 12.dp, horizontal = 14.dp)
-            .bounceClick(
-                blackAlpha = 0.16f,
-                onClick = onClick
-            ),
+            .bounceClick(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Absolute.SpaceEvenly
     ) {

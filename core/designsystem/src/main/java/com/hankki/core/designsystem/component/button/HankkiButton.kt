@@ -33,10 +33,7 @@ fun HankkiButton(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .background(if (enabled) Red else SemiRed)
-            .bounceClick(
-                blackAlpha = 0.16f,
-                onClick = onClick
-            )
+            .bounceClick(onClick = onClick)
             .padding(vertical = 15.dp, horizontal = 22.dp)
     ) {
         Text(
@@ -60,10 +57,7 @@ fun HankkiTextButton(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .background(Color.Transparent)
-            .bounceClick(
-                blackAlpha = 0.16f,
-                onClick = onClick
-            )
+            .bounceClick(onClick = onClick)
             .padding(vertical = 15.dp, horizontal = 22.dp)
     ) {
         Text(
@@ -82,6 +76,5 @@ fun HankkiButtonPreview() {
             HankkiButton(text = "로그아웃", onClick = {})
             HankkiTextButton(text = "돌아가기", onClick = {})
         }
-
     }
 }
