@@ -171,7 +171,7 @@ fun MyScreen(
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_quit),
-                contentDescription = null,
+                contentDescription = stringResource(id =R.string.quit),
                 tint = Gray400,
                 modifier = Modifier.size(16.dp)
             )
