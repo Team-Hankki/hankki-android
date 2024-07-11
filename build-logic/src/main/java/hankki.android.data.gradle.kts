@@ -23,6 +23,9 @@ configureSerializationAndroid()
 dependencies {
     val libs = project.extensions.libs
 
+    // modules
+    implementation(project(":core:common"))
+
     // timber
     implementation(libs.findLibrary("timber").get())
 
