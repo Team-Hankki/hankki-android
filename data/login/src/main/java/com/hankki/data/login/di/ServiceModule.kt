@@ -1,5 +1,6 @@
 package com.hankki.data.login.di
 
+import com.hankki.core.network.ReissueOkHttpClient
 import com.hankki.data.login.service.LoginService
 import dagger.Module
 import dagger.Provides
@@ -14,6 +15,6 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideLoginService(retrofit: Retrofit): LoginService =
+    fun provideLoginService(@ReissueOkHttpClient(isReissue = false) retrofit: Retrofit): LoginService =
         retrofit.create(LoginService::class.java)
 }
