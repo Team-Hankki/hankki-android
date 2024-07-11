@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray900
@@ -28,7 +29,8 @@ import com.hankki.feature.my.R
 fun ButtonWithImageAndBorder(
     buttonImage: Int,
     buttonDescription: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateMyStore: () -> Unit = {}
 ) {
     Column(
         modifier
@@ -42,7 +44,8 @@ fun ButtonWithImageAndBorder(
                 color = Gray200,
                 shape = RoundedCornerShape(size = 12.dp)
             )
-            .padding(top = 18.dp, bottom = 17.dp),
+            .padding(top = 18.dp, bottom = 17.dp)
+            .noRippleClickable(onClick = navigateMyStore),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
