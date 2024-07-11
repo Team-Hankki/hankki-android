@@ -41,6 +41,7 @@ include(
     ":data:dummy",
     ":data:token",
     ":data:Login",
+    ":data:reissuetoken"
 )
 
 // domain
@@ -50,6 +51,7 @@ include(
     ":domain:universityselection",
     ":domain:token",
     ":domain:login",
+    ":domain:reissuetoken"
 )
 
 // feature
