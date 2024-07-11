@@ -74,7 +74,7 @@ fun StoreNameSelectedButton(
             .padding(vertical = 12.dp, horizontal = 14.dp)
             .bounceClick(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Absolute.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
             text = text,
