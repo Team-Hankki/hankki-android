@@ -174,10 +174,11 @@ fun ReportScreen(
                         }
                         Spacer(modifier = Modifier.height(32.dp))
 
-                        menuList.forEachIndexed() { index, menu ->
+                        menuList.forEachIndexed { index, menu ->
                             MenuWithPriceInputComponent(
                                 name = menu.name,
                                 price = menu.price,
+                                isPriceError = menu.isPriceError,
                                 onMenuChange = { menuName ->
                                     changeMenuName(index, menuName)
                                 },
@@ -187,7 +188,7 @@ fun ReportScreen(
                                 deleteMenu = { deleteMenu(index) }
                             )
                             if (index != menuList.lastIndex) {
-                                Spacer(modifier = Modifier.height(12.dp))
+                                Spacer(modifier = Modifier.height(16.dp))
                             }
                         }
 
@@ -292,12 +293,13 @@ fun StoreCategoryChips(
 fun MenuWithPriceInputComponent(
     name: String,
     price: String,
+    isPriceError: Boolean,
     onMenuChange: (String) -> Unit,
     onPriceChange: (String) -> Unit,
     deleteMenu: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         // +버튼 정렬 하기
         Row(modifier = Modifier.weight(1f)) {
@@ -312,20 +314,33 @@ fun MenuWithPriceInputComponent(
                 value = price,
                 onTextChanged = onPriceChange,
                 isFocused = false,
-                isError = (((price.takeIf { it.isNotBlank() }?.toLong() ?: 0) >= 8000)),
+                isError = isPriceError,
                 modifier = Modifier.fillMaxWidth()
             )
         }
         Spacer(modifier = Modifier.width(3.dp))
 
-        Icon(
-            painter = painterResource(id = R.drawable.ic_circle_x),
-            contentDescription = "delete",
-            tint = Gray300,
-            modifier = Modifier
-                .size(32.dp)
-                .noRippleClickable(onClick = deleteMenu)
-        )
+        Column {
+            Text(
+                text = "",
+                style = HankkiTheme.typography.body5,
+            )
+
+            Spacer(modifier = Modifier.height(3.dp))
+
+            Box(modifier = Modifier) {
+
+
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_circle_x),
+                    contentDescription = "delete",
+                    tint = Gray300,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .noRippleClickable(onClick = deleteMenu)
+                )
+            }
+        }
     }
 }
 

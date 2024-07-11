@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_UNDER20_REGEX
-import com.hankki.core.common.utill.NUMBER_UNDER5_REGEX
+import com.hankki.core.common.utill.VALID_NUMBER_UNDER_100000_REGEX
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
@@ -137,7 +137,7 @@ fun HankkiPriceTextField(
         value = value,
         placeholder = placeholder,
         onTextChanged = { price ->
-            if (NUMBER_UNDER5_REGEX.matcher(price).matches()) {
+            if (VALID_NUMBER_UNDER_100000_REGEX.matcher(price).matches()) {
                 onTextChanged(price)
             }
         },

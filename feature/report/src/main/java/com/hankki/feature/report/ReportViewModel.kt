@@ -85,7 +85,10 @@ class ReportViewModel @Inject constructor() : ViewModel() {
         _state.value = _state.value.copy(
             menuList = _state.value.menuList.set(
                 index,
-                _state.value.menuList[index].copy(price = price)
+                _state.value.menuList[index].copy(
+                    price = price,
+                    isPriceError = (((price.takeIf { it.isNotBlank() }?.toLong() ?: 0) > 8000))
+                )
             )
         )
     }
