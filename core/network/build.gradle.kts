@@ -45,6 +45,9 @@ dependencies {
     //core
     implementation(projects.core.datastore)
 
+    //domain
+    implementation(projects.domain.reissuetoken)
+
     //feature
     implementation(projects.feature.main)
 }
