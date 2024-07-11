@@ -44,12 +44,11 @@ fun StoreItem(
 ) {
     Row(
         modifier = modifier
-            .padding(horizontal = 22.dp)
             .fillMaxWidth()
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(16.dp),
+            .padding(horizontal = 22.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -62,7 +61,7 @@ fun StoreItem(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.wrapContentHeight()) {
-            HankkiCategoryChip(text = "#$category")
+            HankkiCategoryChip(text = category)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = storeName,
