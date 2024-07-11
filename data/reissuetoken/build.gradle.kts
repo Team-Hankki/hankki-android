@@ -1,4 +1,3 @@
-// data
 import com.hankki.build_logic.setNamespace
 
 plugins {
