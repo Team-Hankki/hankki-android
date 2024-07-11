@@ -19,6 +19,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_UNDER20_REGEX
+import com.hankki.core.common.utill.NUMBER_UNDER5_REGEX
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
@@ -27,7 +29,6 @@ import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
-import java.util.regex.Pattern
 
 @Composable
 fun HankkiTitleTextField(
@@ -113,7 +114,7 @@ fun HankkiMenuTextField(
         value = value,
         placeholder = placeholder,
         onTextChanged = { menu ->
-            if (MENU_REGEX.matcher(menu).matches()) {
+            if (KOREAN_NUMBER_ENGLISH_UNDER20_REGEX.matcher(menu).matches()) {
                 onTextChanged(menu)
             }
         },
@@ -129,14 +130,14 @@ fun HankkiPriceTextField(
     isError: Boolean,
     modifier: Modifier = Modifier,
     title: String = "가격",
-    placeholder: String = "7900",
+    placeholder: String = "8000",
 ) {
     HankkiTitleTextField(
         title = title,
         value = value,
         placeholder = placeholder,
         onTextChanged = { price ->
-            if (PRICE_REGEX.matcher(price).matches()) {
+            if (NUMBER_UNDER5_REGEX.matcher(price).matches()) {
                 onTextChanged(price)
             }
         },
@@ -211,12 +212,3 @@ fun HankkiTitleTextFieldPreview() {
         }
     }
 }
-
-
-private const val MENU_PATTERN =
-    "^\$|^[0-9a-zA-Zㄱ-ㅣ가-힣\\u318D\\u119E\\u11A2\\u2022\\u2025\\u00B7\\uFE55]{0,20}+$"
-private val MENU_REGEX: Pattern = Pattern.compile(MENU_PATTERN)
-
-private const val PRICE_PATTERN = "^$|^[0-9]{0,5}+$"
-private val PRICE_REGEX: Pattern = Pattern.compile(PRICE_PATTERN)
-
