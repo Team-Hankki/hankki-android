@@ -195,9 +195,9 @@ class HomeViewModel @Inject constructor(
     fun clickCategoryChip() {
         _state.value = _state.value.copy(
             categoryChipState = when (_state.value.categoryChipState) {
-                ChipState.UNSELECTED -> ChipState.SELECTED
-                ChipState.SELECTED -> ChipState.UNSELECTED
-                ChipState.FIXED -> ChipState.UNSELECTED
+                is ChipState.Fixed -> ChipState.Selected()
+                is ChipState.Selected -> ChipState.Unselected()
+                is ChipState.Unselected -> ChipState.Selected()
             },
             categoryChipItems = persistentListOf(
                 CategoryChipItem(
@@ -251,22 +251,22 @@ class HomeViewModel @Inject constructor(
 
     fun selectCategoryChipItem(item: String) {
         _state.value = _state.value.copy(
-            categoryChipState = ChipState.FIXED.apply { title = item },
+            categoryChipState = ChipState.Fixed(item)
         )
     }
 
     fun dismissCategoryChip() {
         _state.value = _state.value.copy(
-            categoryChipState = ChipState.UNSELECTED
+            categoryChipState = ChipState.Unselected()
         )
     }
 
     fun clickPriceChip() {
         _state.value = _state.value.copy(
             priceChipState = when (_state.value.priceChipState) {
-                ChipState.UNSELECTED -> ChipState.SELECTED
-                ChipState.SELECTED -> ChipState.UNSELECTED
-                ChipState.FIXED -> ChipState.UNSELECTED
+                is ChipState.Fixed -> ChipState.Selected()
+                is ChipState.Selected -> ChipState.Unselected()
+                is ChipState.Unselected -> ChipState.Selected()
             },
             priceChipItems = persistentListOf(
                 "6000원 이하",
@@ -277,22 +277,22 @@ class HomeViewModel @Inject constructor(
 
     fun selectPriceChipItem(item: String) {
         _state.value = _state.value.copy(
-            priceChipState = ChipState.FIXED.apply { title = item },
+            priceChipState = ChipState.Fixed(item)
         )
     }
 
     fun dismissPriceChip() {
         _state.value = _state.value.copy(
-            priceChipState = ChipState.UNSELECTED
+            priceChipState = ChipState.Unselected()
         )
     }
 
     fun clickSortChip() {
         _state.value = _state.value.copy(
             sortChipState = when (_state.value.sortChipState) {
-                ChipState.UNSELECTED -> ChipState.SELECTED
-                ChipState.SELECTED -> ChipState.UNSELECTED
-                ChipState.FIXED -> ChipState.UNSELECTED
+                is ChipState.Fixed -> ChipState.Selected()
+                is ChipState.Selected -> ChipState.Unselected()
+                is ChipState.Unselected -> ChipState.Selected()
             },
             sortChipItems = persistentListOf(
                 "최신순",
@@ -304,13 +304,13 @@ class HomeViewModel @Inject constructor(
 
     fun selectSortChipItem(item: String) {
         _state.value = _state.value.copy(
-            sortChipState = ChipState.FIXED.apply { title = item },
+            sortChipState = ChipState.Fixed(item)
         )
     }
 
     fun dismissSortChip() {
         _state.value = _state.value.copy(
-            sortChipState = ChipState.UNSELECTED
+            sortChipState = ChipState.Unselected()
         )
     }
 

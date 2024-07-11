@@ -59,7 +59,7 @@ fun HankkiFilterChip(
         onClick = onClickChip
     ) {
         AnimatedVisibility(
-            visible = chipState == ChipState.SELECTED,
+            visible = chipState == ChipState.Selected(),
             enter = expandVertically(),
             exit = shrinkVertically()
         ) {
@@ -188,7 +188,7 @@ fun RowFilterChip(
 @Composable
 fun RowFilterChipPreview() {
     RowFilterChip(
-        chipState = ChipState.SELECTED,
+        chipState = ChipState.Selected(),
         defaultTitle = "전체",
         menus = persistentListOf(
             CategoryChipItem(
