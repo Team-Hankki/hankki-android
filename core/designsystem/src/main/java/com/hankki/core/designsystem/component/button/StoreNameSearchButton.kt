@@ -1,6 +1,8 @@
 package com.hankki.core.designsystem.component.button
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -15,23 +17,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.RedLight
 
 @Composable
-fun StoreNameSearchButton() {
+fun StoreNameSearchButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(10.dp))
             .background(Gray100)
             .padding(vertical = 12.dp)
-            .padding(start = 10.dp, end = 14.dp),
+            .padding(start = 10.dp, end = 14.dp)
+            .bounceClick(
+                blackAlpha = 0.16f,
+                onClick = onClick
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -51,10 +64,59 @@ fun StoreNameSearchButton() {
     }
 }
 
+@Composable
+fun StoreNameSelectedButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(RedLight)
+            .padding(vertical = 12.dp, horizontal = 14.dp)
+            .bounceClick(
+                blackAlpha = 0.16f,
+                onClick = onClick
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Absolute.SpaceEvenly
+    ) {
+        Text(
+            text = text,
+            style = HankkiTheme.typography.sub3,
+            color = Red,
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        Icon(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(id = R.drawable.ic_arrow_down),
+            contentDescription = "arrow down icon",
+            tint = Gray400
+        )
+    }
+}
+
+
 @Preview
 @Composable
 fun StoreNameSearchButtonPreview() {
     HankkijogboTheme {
-        StoreNameSearchButton()
+        Column {
+            StoreNameSearchButton()
+            StoreNameSelectedButton(
+                text = "고동밥집 1호점에서 먹는 맛있는 음식이라고 하네요",
+                modifier = Modifier.width(120.dp)
+            )
+            StoreNameSelectedButton(
+                text = "고동밥",
+                modifier = Modifier.width(240.dp)
+            )
+        }
     }
 }
