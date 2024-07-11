@@ -1,7 +1,6 @@
 package com.hankki.data.login.di
 
-import com.hankki.core.network.JWT
-import com.hankki.core.network.Reissue
+import com.hankki.core.network.REISSUE
 import com.hankki.data.login.service.LoginService
 import dagger.Module
 import dagger.Provides
@@ -16,6 +15,6 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideLoginService(@JWT retrofit: Retrofit): LoginService =
+    fun provideLoginService(@REISSUE retrofit: Retrofit): LoginService =
         retrofit.create(LoginService::class.java)
 }
