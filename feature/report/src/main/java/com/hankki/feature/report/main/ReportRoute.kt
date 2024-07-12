@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -99,6 +100,7 @@ fun ReportScreen(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .navigationBarsPadding()
             .addFocusCleaner(focusManager)
     ) {
         HankkiTopBar(
@@ -207,14 +209,17 @@ fun ReportScreen(
                 }
             }
 
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
                 BottomBlurLayout()
                 Column {
                     HankkiButton(
                         text = stringResource(id = com.hankki.feature.report.R.string.do_report),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(22.dp),
+                            .padding(horizontal = 22.dp),
                         onClick = {
                             // TODO: 제보하기 api 연결
                         }

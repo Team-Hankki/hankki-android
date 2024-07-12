@@ -2,6 +2,7 @@ package com.hankki.core.designsystem.component.textfield
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
@@ -38,6 +39,7 @@ fun HankkiSearchTextField(
 
     val borderColor = when {
         isFocused -> Gray850
+        value.isNotEmpty() -> Gray850
         else -> Color.Transparent
     }
 
@@ -69,6 +71,7 @@ fun HankkiSearchTextField(
                     contentDescription = "clear icon",
                     modifier = Modifier
                         .size(32.dp)
+                        .padding(6.dp)
                         .noRippleClickable(clearText),
                     tint = Color.Unspecified
                 )
@@ -82,7 +85,7 @@ fun HankkiSearchTextField(
 fun HankkiSearchTextFieldPreview() {
     HankkijogboTheme {
         HankkiSearchTextField(
-            value = "",
+            value = "고동밥집",
             onTextChanged = {},
             onFocusChanged = {},
             clearText = {}
