@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -235,10 +234,6 @@ fun HomeScreen(
     val height by rememberSaveable {
         mutableDoubleStateOf(configuration.screenHeightDp * 0.3)
     }
-
-    Log.e("TAG", "category: ${categoryChipState}", )
-    Log.e("TAG", "price: ${priceChipState}", )
-    Log.e("TAG", "sort: ${sortChipState}", )
 
     LaunchedEffect(
         key1 = bottomSheetState.currentValue,
