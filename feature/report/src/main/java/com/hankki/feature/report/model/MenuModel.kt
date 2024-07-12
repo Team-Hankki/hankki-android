@@ -1,4 +1,4 @@
-package com.hankki.feature.report.main.model
+package com.hankki.feature.report.model
 
 import com.hankki.domain.report.entity.MenuEntity
 

@@ -2,7 +2,7 @@ package com.hankki.feature.report.main
 
 import androidx.lifecycle.ViewModel
 import com.hankki.domain.report.entity.CategoryEntity
-import com.hankki.feature.report.main.model.MenuModel
+import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -53,7 +53,7 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
-import com.hankki.feature.report.main.model.MenuModel
+import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
