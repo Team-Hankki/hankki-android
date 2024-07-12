@@ -2,7 +2,6 @@ package com.hankki.core.designsystem.component.textfield
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,7 +29,6 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 fun HankkiSearchTextField(
     value: String,
     onTextChanged: (String) -> Unit,
-    onFocusChanged: (Boolean) -> Unit,
     clearText: () -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String = "식당 이름으로 검색하기",
@@ -70,8 +68,7 @@ fun HankkiSearchTextField(
                     painter = painterResource(id = R.drawable.ic_circle_dark_x),
                     contentDescription = "clear icon",
                     modifier = Modifier
-                        .size(32.dp)
-                        .padding(6.dp)
+                        .size(20.dp)
                         .noRippleClickable(clearText),
                     tint = Color.Unspecified
                 )
@@ -87,7 +84,6 @@ fun HankkiSearchTextFieldPreview() {
         HankkiSearchTextField(
             value = "고동밥집",
             onTextChanged = {},
-            onFocusChanged = {},
             clearText = {}
         )
     }
