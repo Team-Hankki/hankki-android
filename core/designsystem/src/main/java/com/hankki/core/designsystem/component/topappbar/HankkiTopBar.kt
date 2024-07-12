@@ -26,7 +26,7 @@ fun HankkiTopBar(
     trailingIcon: @Composable () -> Unit = {},
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(50.dp),
     ) {

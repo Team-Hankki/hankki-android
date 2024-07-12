@@ -40,25 +40,25 @@ class SearchStoreViewModel @Inject constructor(
                         latitude = 1f
                     ),
                     LocationModel(
-                        location = "고동밥집 1호점",
+                        location = "고동밥집 2호점",
                         address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                         longitude = 2f,
                         latitude = 2f
                     ),
                     LocationModel(
-                        location = "고동밥집 1호점",
+                        location = "고동밥집 3호점",
                         address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                         longitude = 3f,
                         latitude = 3f
                     ),
                     LocationModel(
-                        location = "고동밥집 1호점",
+                        location = "고동밥집 4호점",
                         address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                         longitude = 4f,
                         latitude = 4f
                     ),
                     LocationModel(
-                        location = "고동밥집 1호점",
+                        location = "고동밥집 5호점",
                         address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                         longitude = 5f,
                         latitude = 5f

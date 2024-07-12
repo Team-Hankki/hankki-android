@@ -1,6 +1,5 @@
 package com.hankki.feature.report.main
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,6 +49,7 @@ import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -72,7 +72,6 @@ fun ReportRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Log.e("TAG", "ReportRoute: ${location}")
     ReportScreen(
         location = location,
         navigateUp = navigateUp,
@@ -114,6 +113,7 @@ fun ReportScreen(
             .addFocusCleaner(focusManager)
     ) {
         HankkiTopBar(
+            modifier = Modifier.background(White),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_left),
@@ -257,7 +257,7 @@ fun ReportTopContent(
         Text(
             text = "${count}번째 제보에요",
             style = HankkiTheme.typography.body4,
-            color = Red,
+            color = if (location.isEmpty()) Red else Gray600,
             modifier = Modifier.padding(start = 4.dp)
         )
 
@@ -272,7 +272,7 @@ fun ReportTopContent(
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = stringResource(id = com.hankki.feature.report.R.string.will_report),
-                style = HankkiTheme.typography.body6,
+                style = HankkiTheme.typography.suitH3,
                 color = Gray900
             )
         }
