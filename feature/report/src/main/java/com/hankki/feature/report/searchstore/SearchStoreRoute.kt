@@ -11,45 +11,63 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiSearchTextField
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.report.model.LocationModel
-import com.hankki.feature.report.searchstore.component.LocationItem
+import com.hankki.feature.report.searchstore.component.EmptyLocationView
+import com.hankki.feature.report.searchstore.component.LocationList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun SearchStoreRoute() {
+fun SearchStoreRoute(
+    navigateUp: () -> Unit,
+    viewModel: SearchStoreViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
+    SearchStoreScreen(
+        value = state.value,
+        selectedLocation = state.selectedLocation,
+        state = state.uiState,
+        onValueChange = viewModel::setValue,
+        onClickLocation = viewModel::setLocation,
+        navigateUp = navigateUp
+    )
 }
 
 @Composable
 fun SearchStoreScreen(
     value: String,
-    locations: PersistentList<LocationModel>,
+    selectedLocation: LocationModel?,
+    state: EmptyUiState<PersistentList<LocationModel>>,
+    onValueChange: (String) -> Unit,
+    onClickLocation: (LocationModel) -> Unit,
     navigateUp: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -89,35 +107,29 @@ fun SearchStoreScreen(
             Spacer(modifier = Modifier.height(18.dp))
             HankkiSearchTextField(
                 value = value,
-                onTextChanged = {},
-                onFocusChanged = {},
-                clearText = { /*TODO*/ }
+                onTextChanged = onValueChange,
+                clearText = { onValueChange("") }
             )
         }
 
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                item {
-                     Spacer(modifier = Modifier.height(24.dp))
+            when (state) {
+                EmptyUiState.Empty -> {
+                    EmptyLocationView(text = value)
                 }
-                items(locations) { item ->
-                    LocationItem(
-                        location = item.location,
-                        address = item.address,
-                        onClick = {}
-                    )
 
-                    if (item != locations.last()) {
-                        HorizontalDivider(color = Gray100)
-                    }
+                EmptyUiState.Failure -> {
+                    // TODO: 오류 화면
                 }
-                item {
-                    BottomBlurLayout()
-                }
+
+                EmptyUiState.Loading -> {}
+                is EmptyUiState.Success -> LocationList(
+                    selectedLocation = selectedLocation,
+                    locations = state.data,
+                    onClick = onClickLocation
+                )
             }
 
             TopBlurLayout(
@@ -143,37 +155,14 @@ fun SearchStoreScreen(
     }
 }
 
-@Preview
-@Composable
-fun SearchStoreScreenPreview() {
-    HankkijogboTheme {
-        SearchStoreScreen(
-            "고동밥집",
-            locations = persistentListOf(
-                LocationModel(
-                    location = "고동밥집 1호점",
-                    address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
-                ),
-                LocationModel(
-                    location = "고동밥집 1호점",
-                    address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
-                ),
-                LocationModel(
-                    location = "고동밥집 1호점",
-                    address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
-                ),
-                LocationModel(
-                    location = "고동밥집 1호점",
-                    address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
-                ),
+internal class RoomPreviewParameterProvider :
+    PreviewParameterProvider<EmptyUiState<PersistentList<LocationModel>>> {
+    override val values = sequenceOf(
+        EmptyUiState.Empty,
+        EmptyUiState.Loading,
+        EmptyUiState.Failure,
+        EmptyUiState.Success(
+            persistentListOf(
                 LocationModel(
                     location = "고동밥집 1호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
@@ -205,6 +194,23 @@ fun SearchStoreScreenPreview() {
                     latitude = 0.0
                 ),
             )
-        ) {}
+        )
+    )
+}
+
+@Preview
+@Composable
+private fun BookmarkCardPreview(
+    @PreviewParameter(RoomPreviewParameterProvider::class) state: EmptyUiState<PersistentList<LocationModel>>,
+) {
+    HankkijogboTheme {
+        SearchStoreScreen(
+            "고동밥집",
+            selectedLocation = null,
+            state = state,
+            onValueChange = {},
+            onClickLocation = { },
+            navigateUp = {}
+        )
     }
 }
