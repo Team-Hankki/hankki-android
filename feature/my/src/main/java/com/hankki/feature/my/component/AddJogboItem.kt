@@ -33,11 +33,12 @@ import com.hankki.feature.my.R
 @Composable
 fun AddJogboItem(
     isEditMode: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Column(
         modifier =
-        if (isEditMode.value) Modifier
+        if (isEditMode.value) modifier
             .wrapContentSize()
             .clip(RoundedCornerShape(12.dp))
             .background(YellowLight)
