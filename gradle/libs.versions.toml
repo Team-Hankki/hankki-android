@@ -22,6 +22,7 @@ androidxComposeBom = "2024.05.00"
 androidxComposeCompiler = "1.5.14"
 androidxComposeNavigation = "2.8.0-beta04"
 androidxComposeMaterial3 = "1.2.1"
+androidxComposeMaterial = "1.6.8"
 
 ## Kotlin Symbol Processing
 ksp = "2.0.0-1.0.21"
@@ -52,6 +53,9 @@ coroutine = "1.8.1"
 
 ## Timber
 timber = "5.0.1"
+
+## ExifInterface
+exifinterface = "1.3.7"
 
 ## Test
 # https://github.com/junit-team/junit4
@@ -95,6 +99,7 @@ androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-t
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 androidx-compose-navigation-test = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxComposeNavigation" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+androidx-compose-material = {module = "androidx.compose.material:material", version.ref = "androidxComposeMaterial"}
 
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
@@ -135,9 +140,12 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
+exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
+
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
 
 jakewharton-process-phoenix= {group = "com.jakewharton", name = "process-phoenix", version.ref="phoenix"}
+
 
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]

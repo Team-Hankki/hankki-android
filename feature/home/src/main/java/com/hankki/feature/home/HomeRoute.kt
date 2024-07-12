@@ -5,13 +5,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,18 +24,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.BottomSheetScaffoldState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,13 +54,19 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
+import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
-import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.theme.Gray200
+import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.component.DropdownFilterChip
-import com.hankki.feature.home.component.HankkiTopBar
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
@@ -84,7 +104,9 @@ fun HomeRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val focusLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+    val focusLocationProviderClient = remember {
+        LocationServices.getFusedLocationProviderClient(context)
+    }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
             state.latLng,
@@ -154,7 +176,7 @@ fun HomeRoute(
                 data = Uri.fromParts("package", "com.hankki.hankkijogbo", null)
                 context.startActivity(this)
             }
-        } else{
+        } else {
             focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                 viewModel.moveMap(location.latitude, location.longitude)
             }
@@ -164,8 +186,8 @@ fun HomeRoute(
 
 @OptIn(
     ExperimentalNaverMapApi::class,
-    ExperimentalMaterial3Api::class,
-    ExperimentalLayoutApi::class
+    ExperimentalLayoutApi::class,
+    ExperimentalMaterialApi::class
 )
 @Composable
 fun HomeScreen(
@@ -200,11 +222,24 @@ fun HomeScreen(
     reposition: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
-    val listState = rememberLazyListState()
+    val bottomSheetState =
+        rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
 
-    LaunchedEffect(key1 = bottomSheetScaffoldState.bottomSheetState.currentValue) {
-        if (bottomSheetScaffoldState.bottomSheetState.hasPartiallyExpandedState) {
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = bottomSheetState
+    )
+
+    val listState = rememberLazyListState()
+    val configuration = LocalConfiguration.current
+    val height by rememberSaveable {
+        mutableDoubleStateOf(configuration.screenHeightDp * 0.3)
+    }
+
+    LaunchedEffect(
+        key1 = bottomSheetState.currentValue,
+        LocalLifecycleOwner.current
+    ) {
+        if (bottomSheetState.isCollapsed) {
             listState.animateScrollToItem(0)
         }
     }
@@ -217,24 +252,39 @@ fun HomeScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
+        modifier = Modifier.padding(paddingValues)
     ) {
-        HankkiTopBar(universityName) {
-            // TODO: 학교 선택 Screen 이동
-        }
+        HankkiTopBar(
+            content = {
+                Row(
+                    modifier = Modifier.noRippleClickable {
+                        // TODO: 학교 선택 Screen 이동
+                    }
+                ) {
+                    Text(
+                        text = universityName,
+                        style = HankkiTheme.typography.suitH2,
+                        color = Gray900
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_dropdown_btn),
+                        contentDescription = "button",
+                        tint = Gray300
+                    )
+                }
+            }
+        )
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box {
             NaverMap(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(
                         animateFloatAsState(
-                            targetValue = if (isMainBottomSheetOpen) 0.74f else 1f, label = "Map"
+                            targetValue = if (isMainBottomSheetOpen) 0.7f else 1f,
+                            label = "Map"
                         ).value
-                    )
-                    .padding(),
+                    ),
                 cameraPositionState = cameraPositionState,
                 locationSource = rememberFusedLocationSource(),
                 properties = MapProperties(
@@ -251,8 +301,13 @@ fun HomeScreen(
             ) {
                 markerItems.forEach { marker ->
                     Marker(
-                        state = MarkerState(position = LatLng(marker.x, marker.y)),
-                        captionText = if(cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) "한끼네 한정식" else "",
+                        state = MarkerState(
+                            position = LatLng(
+                                marker.x,
+                                marker.y
+                            )
+                        ),
+                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.title else "",
                         onClick = {
                             clickMarkerItem(marker.id)
                             true
@@ -263,7 +318,11 @@ fun HomeScreen(
 
             Column {
                 FlowRow(
-                    modifier = Modifier.padding(start = 22.dp, end = 22.dp, top = 12.dp),
+                    modifier = Modifier.padding(
+                        start = 12.dp,
+                        end = 12.dp,
+                        top = 12.dp
+                    ),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     RowFilterChip(
@@ -276,7 +335,10 @@ fun HomeScreen(
                         },
                         onClickChip = {
                             clickCategoryChip()
-                            closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
+                            closeBottomSheet(
+                                coroutineScope,
+                                bottomSheetScaffoldState
+                            )
                         }
                     )
 
@@ -290,7 +352,10 @@ fun HomeScreen(
                         },
                         onClickChip = {
                             clickPriceChip()
-                            closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
+                            closeBottomSheet(
+                                coroutineScope,
+                                bottomSheetScaffoldState
+                            )
                         }
                     )
 
@@ -304,62 +369,125 @@ fun HomeScreen(
                         },
                         onClickChip = {
                             clickSortChip()
-                            closeBottomSheet(coroutineScope, bottomSheetScaffoldState)
+                            closeBottomSheet(
+                                coroutineScope,
+                                bottomSheetScaffoldState
+                            )
                         }
                     )
                 }
 
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    if (isMainBottomSheetOpen) {
-                        val height = (LocalConfiguration.current.screenHeightDp * 0.3).dp
-                        RepositionButton(
-                            height = height,
-                            onClick = reposition
+                BottomSheetScaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = 30.dp,
+                                topEnd = 30.dp
+                            )
                         )
+                        .ignoreNextModifiers(),
+                    sheetBackgroundColor = Color.Transparent,
+                    backgroundColor = Color.Transparent,
+                    sheetGesturesEnabled = true,
+                    sheetContent = {
+                        if (isMainBottomSheetOpen) {
+                            Column(
+                                modifier = Modifier
+                                    .clip(
+                                        RoundedCornerShape(
+                                            topStart = 30.dp,
+                                            topEnd = 30.dp
+                                        )
+                                    )
+                                    .fillMaxSize()
+                                    .background(White)
+                            ) {
+                                Spacer(
+                                    modifier = Modifier.height(8.dp)
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_drag_handle),
+                                    contentDescription = "drag handle",
+                                    tint = Gray200,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
 
-                        BottomSheetScaffold(
-                            scaffoldState = bottomSheetScaffoldState,
-                            sheetContent = {
                                 LazyColumn(
-                                    modifier = Modifier.fillMaxSize(),
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(White),
                                     state = listState
                                 ) {
-                                    items(storeItems) {
+                                    items(storeItems) { item ->
                                         StoreItem(
-                                            storeImageUrl = it.storeImageUrl,
-                                            category = it.category,
-                                            storeName = it.storeName,
-                                            price = it.price,
-                                            heartCount = it.heartCount
+                                            storeImageUrl = item.storeImageUrl,
+                                            category = item.category,
+                                            storeName = item.storeName,
+                                            price = item.price,
+                                            heartCount = item.heartCount
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems()
                                         }
 
-                                        Spacer(modifier = Modifier.height(12.dp))
+                                        if (item == storeItems.last()) {
+                                            Spacer(modifier = Modifier.height(12.dp))
+                                        }
                                     }
                                 }
-                            },
-                            sheetContainerColor = Gray100,
-                            sheetSwipeEnabled = true,
-                            sheetPeekHeight = height
-                        ) {}
-                    } else {
-                        Column {
-                            StoreItem(
-                                storeImageUrl = selectedStoreItem.storeImageUrl,
-                                category = selectedStoreItem.category,
-                                storeName = selectedStoreItem.storeName,
-                                price = selectedStoreItem.price,
-                                heartCount = selectedStoreItem.heartCount
-                            ) {
-                                controlMyJogboBottomSheet()
-                                getJogboItems()
                             }
-                            Spacer(modifier = Modifier.height(22.dp))
+                        }
+                    },
+                    scaffoldState = bottomSheetScaffoldState,
+                    sheetPeekHeight = animateDpAsState(
+                        targetValue = if (isMainBottomSheetOpen) height.dp else 0.dp,
+                        label = ""
+                    ).value,
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        if (isMainBottomSheetOpen) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.BottomEnd
+                            ) {
+                                RepositionButton(
+                                    height = height.dp,
+                                    modifier = Modifier.padding(bottom = 19.dp, end = 19.dp),
+                                    onClick = reposition
+                                )
+                            }
+                        } else {
+                            Column(
+                                modifier = Modifier.align(Alignment.BottomCenter)
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.BottomEnd
+                                ) {
+                                    RepositionButton(
+                                        height = 0.dp,
+                                        modifier = Modifier.padding(end = 19.dp),
+                                        onClick = reposition
+                                    )
+                                }
+
+                                StoreItem(
+                                    storeImageUrl = selectedStoreItem.storeImageUrl,
+                                    category = selectedStoreItem.category,
+                                    storeName = selectedStoreItem.storeName,
+                                    price = selectedStoreItem.price,
+                                    heartCount = selectedStoreItem.heartCount,
+                                    modifier = Modifier.padding(22.dp)
+                                ) {
+                                    controlMyJogboBottomSheet()
+                                    getJogboItems()
+                                }
+                                Spacer(modifier = Modifier.height(22.dp))
+                            }
                         }
                     }
                 }
@@ -368,17 +496,26 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 private fun closeBottomSheet(
     coroutineScope: CoroutineScope,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
 ) {
     coroutineScope.launch {
-        bottomSheetScaffoldState.bottomSheetState.partialExpand()
+        bottomSheetScaffoldState.bottomSheetState.collapse()
     }
 }
 
 private object MapConstants {
     const val DEFAULT_ZOOM = 16.0
     const val CAN_SEE_TITLE_ZOOM = 18.0
+}
+
+fun Modifier.ignoreNextModifiers(): Modifier {
+    return object : Modifier by this {
+
+        override fun then(other: Modifier): Modifier {
+            return this
+        }
+    }
 }

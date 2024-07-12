@@ -11,5 +11,13 @@ android {
 }
 
 dependencies {
+    // okhttp
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp.logging)
+
+    // exifinterface
+    implementation(libs.exifinterface)
+    
+    // serialization
     implementation(libs.retrofit.kotlin.serialization)
 }
