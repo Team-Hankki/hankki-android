@@ -72,7 +72,7 @@ fun SearchStoreRoute(
 @Composable
 fun SearchStoreScreen(
     value: String,
-    selectedLocation: LocationModel?,
+    selectedLocation: LocationModel,
     state: EmptyUiState<PersistentList<LocationModel>>,
     onValueChange: (String) -> Unit,
     onClickLocation: (LocationModel) -> Unit,
@@ -152,18 +152,16 @@ fun SearchStoreScreen(
                 BottomBlurLayout()
                 HankkiButton(
                     text = stringResource(
-                        id = if (selectedLocation == null) com.hankki.feature.report.R.string.choose_store
+                        id = if (selectedLocation.location.isEmpty()) com.hankki.feature.report.R.string.choose_store
                         else com.hankki.feature.report.R.string.report_this_store
                     ),
                     onClick = {
-                        selectedLocation?.let {
-                            navigateReport(
-                                it.latitude,
-                                selectedLocation.longitude,
-                                selectedLocation.location,
-                                selectedLocation.address
-                            )
-                        }
+                        navigateReport(
+                            selectedLocation.latitude,
+                            selectedLocation.longitude,
+                            selectedLocation.location,
+                            selectedLocation.address
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -192,25 +190,25 @@ internal class RoomPreviewParameterProvider :
                     latitude = 0f
                 ),
                 LocationModel(
-                    location = "고동밥집 1호점",
+                    location = "고동밥집 2호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                     longitude = 0f,
                     latitude = 0f
                 ),
                 LocationModel(
-                    location = "고동밥집 1호점",
+                    location = "고동밥집 3호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                     longitude = 0f,
                     latitude = 0f
                 ),
                 LocationModel(
-                    location = "고동밥집 1호점",
+                    location = "고동밥집 4호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                     longitude = 0f,
                     latitude = 0f
                 ),
                 LocationModel(
-                    location = "고동밥집 1호점",
+                    location = "고동밥집 5호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
                     longitude = 0f,
                     latitude = 0f
@@ -228,7 +226,7 @@ private fun BookmarkCardPreview(
     HankkijogboTheme {
         SearchStoreScreen(
             "고동밥집",
-            selectedLocation = null,
+            selectedLocation = LocationModel(),
             state = state,
             onValueChange = {},
             onClickLocation = { },
