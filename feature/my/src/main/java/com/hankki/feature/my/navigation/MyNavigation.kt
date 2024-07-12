@@ -19,16 +19,21 @@ fun NavController.navigateMyJogbo() {
     navigate(MyJogbo)
 }
 
+fun NavController.navigateMyStore() {
+    navigate(MyJogbo)
+}
+
 fun NavGraphBuilder.myNavGraph(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    navigateToMyJogbo: () -> Unit
+    navigateToMyJogbo: () -> Unit,
+    navigateToMyStore : () -> Unit
 ) {
     composable<My> {
-        MyRoute(paddingValues, navigateToMyJogbo)
+        MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
     }
     composable<MyJogbo> {
-        MyJogboRoute(paddingValues,navigateUp)
+        MyJogboRoute(paddingValues, navigateUp)
     }
 }
 

@@ -51,6 +51,7 @@ import com.hankki.feature.my.component.Title
 fun MyRoute(
     paddingValues: PaddingValues,
     navigateToDummy: () -> Unit,
+    navigateToStore: () -> Unit,
     myViewModel: MyViewModel = hiltViewModel()
 ) {
     val myState by myViewModel.myState.collectAsStateWithLifecycle()
@@ -62,6 +63,7 @@ fun MyRoute(
     MyScreen(
         paddingValues = paddingValues,
         navigateToMyJogbo = navigateToDummy,
+        navigateToMyStore = navigateToStore,
         userName = myState.userState.name,
         userImage = myState.userState.image
     )
@@ -71,6 +73,7 @@ fun MyRoute(
 fun MyScreen(
     paddingValues: PaddingValues,
     navigateToMyJogbo: () -> Unit,
+    navigateToMyStore: () -> Unit,
     userName: String,
     userImage: String
 ) {
@@ -138,13 +141,14 @@ fun MyScreen(
             ButtonWithImageAndBorder(
                 R.drawable.ic_report,
                 stringResource(R.string.description_store_report),
-                Modifier.weight(1f)
+                Modifier.weight(1f),
+                navigateMyStore = navigateToMyStore
             )
             Spacer(modifier = Modifier.width(18.dp))
             ButtonWithImageAndBorder(
                 R.drawable.ic_good,
                 stringResource(R.string.description_store_like),
-                Modifier.weight(1f)
+                Modifier.weight(1f), navigateMyStore = navigateToMyStore
             )
         }
 
@@ -178,7 +182,11 @@ fun MyScreen(
 fun MyScreenPreview() {
     HankkijogboTheme {
         MyScreen(
-            paddingValues = PaddingValues(), navigateToMyJogbo = {}, userName = "", userImage = ""
+            paddingValues = PaddingValues(),
+            navigateToMyJogbo = {},
+            navigateToMyStore = {},
+            userName = "",
+            userImage = ""
         )
     }
 }
