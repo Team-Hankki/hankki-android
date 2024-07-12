@@ -1,5 +1,6 @@
 package com.hankki.data.dummy.di
 
+import com.hankki.core.network.JWT
 import com.hankki.data.dummy.service.ReqresService
 import dagger.Module
 import dagger.Provides
@@ -13,5 +14,6 @@ import javax.inject.Singleton
 internal object ServiceModule {
     @Provides
     @Singleton
-    fun providePokeService(retrofit: Retrofit): ReqresService = retrofit.create(ReqresService::class.java)
+    fun providePokeService(@JWT retrofit: Retrofit): ReqresService =
+        retrofit.create(ReqresService::class.java)
 }

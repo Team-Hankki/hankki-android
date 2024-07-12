@@ -11,17 +11,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -39,7 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.dummy.navigation.dummyNavGraph
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavgraph
@@ -86,9 +89,8 @@ internal fun MainScreen(
                         onShowSnackBar = onShowSnackBar
                     )
                     reportNavGraph(
-                        paddingValues = paddingValue,
-                        navigateToLogin = { navigator.navigateToLogin() },
-                        navigateToUniversity = { navigator.navigateToUniversity() })
+                        navigateUp = { navigator.navigateUpIfNotHome() }
+                    )
                     myNavGraph(
                         paddingValues = paddingValue,
                         navigateUp = { navigator.navigateUpIfNotHome() },
@@ -133,20 +135,27 @@ private fun MainBottomBar(
         enter = fadeIn() + slideIn { IntOffset(0, it.height) },
         exit = fadeOut() + slideOut { IntOffset(0, it.height) }
     ) {
-        Row(
-            modifier = Modifier
-                .navigationBarsPadding()
-                .fillMaxWidth()
-                .height(50.dp)
-                .background(Color.White),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        Column(
+            modifier = Modifier.background(White)
         ) {
-            tabs.forEach { tab ->
-                MainBottomBarItem(
-                    tab = tab,
-                    selected = tab == currentTab,
-                    onClick = { onTabSelected(tab) },
-                )
+            HorizontalDivider(
+                color = Gray100
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .fillMaxWidth()
+                    .height(63.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                tabs.forEach { tab ->
+                    MainBottomBarItem(
+                        tab = tab,
+                        selected = (tab == currentTab),
+                        onClick = { onTabSelected(tab) },
+                    )
+                }
             }
         }
     }
@@ -173,14 +182,15 @@ private fun RowScope.MainBottomBarItem(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            painter = painterResource(tab.iconResId),
+            painter = painterResource(
+                if (selected) {
+                    tab.selectedIconResource
+                } else {
+                    tab.unselectedIconResource
+                }
+            ),
             contentDescription = tab.contentDescription,
-            tint = if (selected) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.outline
-            },
-            modifier = Modifier.size(34.dp),
+            tint = Color.Unspecified,
         )
     }
 }

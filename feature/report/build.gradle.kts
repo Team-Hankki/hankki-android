@@ -9,5 +9,6 @@ android {
 }
 
 dependencies {
-
+    //domain
+    implementation(projects.domain.report)
 }

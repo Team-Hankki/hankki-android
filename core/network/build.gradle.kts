@@ -13,7 +13,7 @@ android {
         load(rootProject.file("local.properties").inputStream())
     }
 
-    buildTypes{
+    buildTypes {
         debug {
             val devUrl = properties["hankkiDevUrl"] as? String ?: ""
             buildConfigField("String", "BASE_URL", devUrl)
@@ -30,7 +30,17 @@ android {
     }
 }
 
-dependencies{
+dependencies {
+    //core
+    implementation(projects.core.datastore)
+
+    //domain
+    implementation(projects.domain.reissuetoken)
+
+    //feature
+    implementation(projects.feature.main)
+
+    //others
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 
@@ -39,4 +49,6 @@ dependencies{
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
+
+    implementation(libs.jakewharton.process.phoenix)
 }

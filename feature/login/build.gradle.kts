@@ -11,4 +11,6 @@ android {
 dependencies {
     implementation(libs.kakao.user)
     implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(projects.domain.login)
+    implementation(projects.domain.token)
 }

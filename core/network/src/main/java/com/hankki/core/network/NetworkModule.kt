@@ -52,22 +52,52 @@ internal object NetworkModule {
             }
         }
     }.apply {
-        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        level =
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
     }
 
     @Provides
     @Singleton
+    @JWT
+    fun provideOauthInterceptor(authInterceptor: OauthInterceptor): Interceptor = authInterceptor
+
+    @Provides
+    @Singleton
+    @JWT
+    fun provideJWTOkHttpClient(
+        loggingInterceptor: Interceptor,
+        @JWT oauthInterceptor: Interceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .addInterceptor(oauthInterceptor)
+        .build()
+
+    @Provides
+    @Singleton
+    @REISSUE
     fun provideOkHttpClient(
         loggingInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .build()
 
+    @Provides
+    @Singleton
+    @JWT
+    fun provideJWTRetrofit(
+        @JWT client: OkHttpClient,
+        factory: Converter.Factory,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .client(client)
+        .addConverterFactory(factory)
+        .build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(
-        client: OkHttpClient,
+    @REISSUE
+    fun provideReissueRetrofit(
+        @REISSUE client: OkHttpClient,
         factory: Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

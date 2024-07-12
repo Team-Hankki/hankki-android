@@ -47,7 +47,7 @@ internal class MainNavigator(
 
         when (tab) {
             MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.REPORT -> navController.navigateReport(navOptions)
+            MainTab.REPORT -> navController.navigateReport()
             MainTab.MY -> navController.navigateMy(navOptions)
         }
     }
@@ -97,7 +97,7 @@ internal class MainNavigator(
     @Composable
     fun shouldShowBottomBar() = MainTab.contains {
         currentDestination?.hasRoute(it::class) == true
-    }
+    } && (currentTab?.showBottomSheet ?: true)
 }
 
 @Composable

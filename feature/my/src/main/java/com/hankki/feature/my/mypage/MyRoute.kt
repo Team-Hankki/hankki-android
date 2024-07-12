@@ -1,8 +1,7 @@
-package com.hankki.feature.my.mypage
+package com.hankki.feature.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,10 +41,9 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
-import com.hankki.feature.my.R
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
-import com.hankki.feature.my.component.Title
+import com.hankki.feature.my.component.MyTitle
 
 @Composable
 fun MyRoute(

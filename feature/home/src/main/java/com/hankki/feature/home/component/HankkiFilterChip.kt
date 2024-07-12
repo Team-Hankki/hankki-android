@@ -26,9 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import coil.compose.AsyncImage
+import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
@@ -57,7 +59,7 @@ fun HankkiFilterChip(
         onClick = onClickChip
     ) {
         AnimatedVisibility(
-            visible = chipState == ChipState.SELECTED,
+            visible = chipState == ChipState.Selected(),
             enter = expandVertically(),
             exit = shrinkVertically()
         ) {
@@ -148,14 +150,19 @@ fun RowFilterChip(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
                         .size(100.dp)
+                        .bounceClick(
+                            scaleDown = 0.88f,
+                            onClick = { onClickMenu(menu.name) }
+                        )
                         .background(White)
-                        .padding(12.dp)
-                        .noRippleClickable(onClick = { onClickMenu(menu.name) }),
+                        .padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     AsyncImage(
-                        modifier = Modifier.size(38.dp).clip(RoundedCornerShape(8.dp)),
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(RoundedCornerShape(8.dp)),
                         model = menu.imageUrl,
                         contentDescription = "image",
                         contentScale = ContentScale.Crop,
@@ -176,3 +183,65 @@ fun RowFilterChip(
         }
     }
 }
+
+@Preview
+@Composable
+fun RowFilterChipPreview() {
+    RowFilterChip(
+        chipState = ChipState.Selected(),
+        defaultTitle = "전체",
+        menus = persistentListOf(
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "한식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "중식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "일식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "양식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "분식"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "디저트"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "카페"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "편의점"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "패스트푸드"
+            ),
+            CategoryChipItem(
+                imageUrl = "https://picsum.photos/200/300",
+                tag = "한식",
+                name = "피자"
+            ),
+        )
+    )
+}
+

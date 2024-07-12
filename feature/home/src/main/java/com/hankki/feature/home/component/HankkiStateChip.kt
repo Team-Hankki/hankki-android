@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.feature.home.model.ChipState
@@ -37,15 +37,18 @@ fun HankkiStateChip(
     Column {
         Box(
             modifier = modifier
+                .bounceClick(
+                    scaleDown = 0.88f,
+                    onClick = onClick
+                )
                 .clip(RoundedCornerShape(16.dp))
                 .border(
                     width = 1.dp,
-                    color = chipState.borderColor,
+                    color = chipState.style.borderColor,
                     shape = RoundedCornerShape(16.dp)
                 )
-                .background(color = chipState.containerColor)
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp)
-                .noRippleClickable(onClick = onClick),
+                .background(color = chipState.style.containerColor)
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -54,24 +57,24 @@ fun HankkiStateChip(
             ) {
                 Text(
                     text = when (chipState) {
-                        ChipState.SELECTED -> defaultTitle
-                        ChipState.UNSELECTED -> defaultTitle
-                        ChipState.FIXED -> chipState.title
+                        is ChipState.Selected -> defaultTitle
+                        is ChipState.Unselected -> defaultTitle
+                        is ChipState.Fixed -> chipState.title
                     },
                     style = HankkiTheme.typography.caption1,
-                    color = chipState.labelColor
+                    color = chipState.style.labelColor
                 )
                 Icon(
                     painter = painterResource(
                         id = when (chipState) {
-                            ChipState.SELECTED -> R.drawable.ic_arrow_up
-                            ChipState.UNSELECTED -> R.drawable.ic_arrow_down
-                            ChipState.FIXED -> R.drawable.ic_x
+                            is ChipState.Selected -> R.drawable.ic_arrow_up
+                            is ChipState.Unselected -> R.drawable.ic_arrow_down
+                            is ChipState.Fixed -> R.drawable.ic_x
                         }
                     ),
                     contentDescription = "icon",
                     modifier = Modifier.size(24.dp),
-                    tint = chipState.iconColor
+                    tint = chipState.style.iconColor
                 )
             }
         }
@@ -84,7 +87,7 @@ fun HankkiStateChip(
 @Composable
 fun CustomChipPreview() {
     HankkiStateChip(
-        ChipState.SELECTED,
+        ChipState.Selected(),
         "한식"
     )
 }

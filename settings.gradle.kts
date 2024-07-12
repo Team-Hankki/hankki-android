@@ -38,14 +38,21 @@ include(
 
 // data
 include(
-    ":data:dummy"
+    ":data:dummy",
+    ":data:token",
+    ":data:login",
+    ":data:reissuetoken"
 )
 
 // domain
 include(
     ":domain:dummy",
     ":domain:my",
-    ":domain:universityselection"
+    ":domain:universityselection",
+    ":domain:report",
+    ":domain:token",
+    ":domain:login",
+    ":domain:reissuetoken"
 )
 
 // feature
