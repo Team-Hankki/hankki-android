@@ -31,9 +31,9 @@ fun HankkiButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
+            .bounceClick(onClick = onClick)
             .clip(RoundedCornerShape(16.dp))
             .background(if (enabled) Red else SemiRed)
-            .bounceClick(onClick = onClick)
             .padding(vertical = 15.dp, horizontal = 22.dp)
     ) {
         Text(
