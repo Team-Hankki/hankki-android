@@ -41,6 +41,7 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.AddPhotoButton
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreNameSearchButton
+import com.hankki.core.designsystem.component.button.StoreNameSelectedButton
 import com.hankki.core.designsystem.component.chip.HankkiChipWithIcon
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiMenuTextField
@@ -266,7 +267,7 @@ fun ReportTopContent(
             if (location.isEmpty()) {
                 StoreNameSearchButton(onClick = onClick)
             } else {
-                Text(text = location, style = HankkiTheme.typography.suitH2, color = Gray900)
+                StoreNameSelectedButton(text = location, onClick = onClick)
             }
             Spacer(modifier = Modifier.width(6.dp))
             Text(
