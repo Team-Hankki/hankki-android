@@ -1,7 +1,7 @@
-package com.hankki.feature.report
+package com.hankki.feature.report.main
 
 import com.hankki.domain.report.entity.CategoryEntity
-import com.hankki.feature.report.model.MenuModel
+import com.hankki.feature.report.main.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
