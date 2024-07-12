@@ -11,7 +11,7 @@ import com.hankki.core.designsystem.R
 fun BottomBlurLayout(modifier: Modifier = Modifier) {
     Image(
         modifier = modifier.fillMaxWidth(),
-        painter = painterResource(id = R.drawable.white_gradient_bottom),
+        painter = painterResource(id = R.drawable.white_gradiend_bottom),
         contentDescription = "blur"
     )
 }
