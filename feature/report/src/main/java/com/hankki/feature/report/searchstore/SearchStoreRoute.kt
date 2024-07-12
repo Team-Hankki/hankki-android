@@ -167,7 +167,7 @@ fun SearchStoreScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 22.dp)
                         .padding(bottom = 15.dp),
-                    enabled = selectedLocation != null
+                    enabled = selectedLocation.location.isNotEmpty()
                 )
             }
         }
