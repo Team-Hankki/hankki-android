@@ -98,6 +98,7 @@ import kotlinx.coroutines.launch
 fun HomeRoute(
     paddingValues: PaddingValues,
     onShowSnackBar: (Int) -> Unit,
+    navigateToUniversitySelection: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -146,17 +147,18 @@ fun HomeRoute(
         sortChipItems = state.sortChipItems,
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
+        navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
-        clickMarkerItem = { viewModel.clickMarkerItem(it) },
+        clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
-        selectCategoryChipItem = { viewModel.selectCategoryChipItem(it) },
+        selectCategoryChipItem = viewModel::selectCategoryChipItem,
         dismissCategoryChip = viewModel::dismissCategoryChip,
         clickPriceChip = viewModel::clickPriceChip,
-        selectPriceChipItem = { viewModel.selectPriceChipItem(it) },
+        selectPriceChipItem = viewModel::selectPriceChipItem,
         dismissPriceChip = viewModel::dismissPriceChip,
         clickSortChip = viewModel::clickSortChip,
-        selectSortChipItem = { viewModel.selectSortChipItem(it) },
+        selectSortChipItem = viewModel::selectSortChipItem,
         dismissSortChip = viewModel::dismissSortChip,
         getJogboItems = viewModel::getJogboItems,
     ) {
@@ -206,6 +208,7 @@ fun HomeScreen(
     sortChipItems: PersistentList<String>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
+    navigateToUniversitySelection: () -> Unit,
     controlMyJogboBottomSheet: () -> Unit = {},
     clickMarkerItem: (Int) -> Unit = {},
     clickMap: () -> Unit = {},
@@ -257,9 +260,7 @@ fun HomeScreen(
         HankkiTopBar(
             content = {
                 Row(
-                    modifier = Modifier.noRippleClickable {
-                        // TODO: 학교 선택 Screen 이동
-                    }
+                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
                 ) {
                     Text(
                         text = universityName,
