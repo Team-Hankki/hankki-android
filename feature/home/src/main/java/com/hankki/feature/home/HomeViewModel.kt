@@ -195,7 +195,7 @@ class HomeViewModel @Inject constructor(
     fun clickCategoryChip() {
         _state.value = _state.value.copy(
             categoryChipState = when (_state.value.categoryChipState) {
-                is ChipState.Fixed -> ChipState.Selected()
+                is ChipState.Fixed -> ChipState.Unselected()
                 is ChipState.Selected -> ChipState.Unselected()
                 is ChipState.Unselected -> ChipState.Selected()
             },
@@ -264,7 +264,7 @@ class HomeViewModel @Inject constructor(
     fun clickPriceChip() {
         _state.value = _state.value.copy(
             priceChipState = when (_state.value.priceChipState) {
-                is ChipState.Fixed -> ChipState.Selected()
+                is ChipState.Fixed -> ChipState.Unselected()
                 is ChipState.Selected -> ChipState.Unselected()
                 is ChipState.Unselected -> ChipState.Selected()
             },
@@ -290,7 +290,7 @@ class HomeViewModel @Inject constructor(
     fun clickSortChip() {
         _state.value = _state.value.copy(
             sortChipState = when (_state.value.sortChipState) {
-                is ChipState.Fixed -> ChipState.Selected()
+                is ChipState.Fixed -> ChipState.Unselected()
                 is ChipState.Selected -> ChipState.Unselected()
                 is ChipState.Unselected -> ChipState.Selected()
             },

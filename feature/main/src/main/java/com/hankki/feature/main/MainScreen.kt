@@ -149,7 +149,7 @@ private fun MainBottomBar(
                 tabs.forEach { tab ->
                     MainBottomBarItem(
                         tab = tab,
-                        selected = tab == currentTab,
+                        selected = (tab == currentTab),
                         onClick = { onTabSelected(tab) },
                     )
                 }
