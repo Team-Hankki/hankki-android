@@ -47,6 +47,12 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun SearchStoreRoute(
+    navigateReport: (
+        latitude: Float,
+        longitude: Float,
+        location: String,
+        address: String,
+    ) -> Unit,
     navigateUp: () -> Unit,
     viewModel: SearchStoreViewModel = hiltViewModel(),
 ) {
@@ -58,7 +64,8 @@ fun SearchStoreRoute(
         state = state.uiState,
         onValueChange = viewModel::setValue,
         onClickLocation = viewModel::setLocation,
-        navigateUp = navigateUp
+        navigateUp = navigateUp,
+        navigateReport = navigateReport
     )
 }
 
@@ -70,6 +77,7 @@ fun SearchStoreScreen(
     onValueChange: (String) -> Unit,
     onClickLocation: (LocationModel) -> Unit,
     navigateUp: () -> Unit,
+    navigateReport: (latitude: Float, longitude: Float, location: String, address: String) -> Unit = { _, _, _, _ -> },
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -147,7 +155,16 @@ fun SearchStoreScreen(
                         id = if (selectedLocation == null) com.hankki.feature.report.R.string.choose_store
                         else com.hankki.feature.report.R.string.report_this_store
                     ),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        selectedLocation?.let {
+                            navigateReport(
+                                it.latitude,
+                                selectedLocation.longitude,
+                                selectedLocation.location,
+                                selectedLocation.address
+                            )
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 22.dp)
@@ -171,32 +188,32 @@ internal class RoomPreviewParameterProvider :
                 LocationModel(
                     location = "고동밥집 1호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
+                    longitude = 0f,
+                    latitude = 0f
                 ),
                 LocationModel(
                     location = "고동밥집 1호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
+                    longitude = 0f,
+                    latitude = 0f
                 ),
                 LocationModel(
                     location = "고동밥집 1호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
+                    longitude = 0f,
+                    latitude = 0f
                 ),
                 LocationModel(
                     location = "고동밥집 1호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
+                    longitude = 0f,
+                    latitude = 0f
                 ),
                 LocationModel(
                     location = "고동밥집 1호점",
                     address = "서울특별시 마포구 갈매기 고양이처럼 울음 ",
-                    longitude = 0.0,
-                    latitude = 0.0
+                    longitude = 0f,
+                    latitude = 0f
                 ),
             )
         )

@@ -25,7 +25,7 @@ internal enum class MainTab(
         selectedIconResource = R.drawable.ic_jaebo,
         unselectedIconResource = R.drawable.ic_jaebo,
         contentDescription = "제보하기",
-        route = Report,
+        route = Report(),
         false
     ),
     MY(

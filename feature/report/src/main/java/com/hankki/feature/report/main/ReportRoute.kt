@@ -1,5 +1,6 @@
 package com.hankki.feature.report.main
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,6 +55,7 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -62,13 +64,16 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ReportRoute(
+    location: LocationModel,
     navigateUp: () -> Unit,
     navigateSearchStore: () -> Unit,
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    Log.e("TAG", "ReportRoute: ${location}")
     ReportScreen(
+        location = location,
         navigateUp = navigateUp,
         categoryList = state.categoryList,
         selectedCategory = state.selectedCategory,
@@ -84,6 +89,7 @@ fun ReportRoute(
 
 @Composable
 fun ReportScreen(
+    location: LocationModel,
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
     selectedCategory: String?,
@@ -132,7 +138,10 @@ fun ReportScreen(
             ) {
                 Spacer(modifier = Modifier.height(18.dp))
 
-                ReportTopContent(onClick = navigateSearchStore)
+                ReportTopContent(
+                    location = location.location,
+                    onClick = navigateSearchStore
+                )
 
                 Spacer(modifier = Modifier.height(26.dp))
                 HorizontalDivider(
@@ -235,6 +244,7 @@ fun ReportScreen(
 @Composable
 fun ReportTopContent(
     count: Int = 52,
+    location: String = "한끼네 한정식",
     onClick: () -> Unit = {},
 ) {
     // TODO: 라이팅 변경 예정이라 하드코딩 해둠. 변경시 res로 추출 예정
@@ -253,7 +263,11 @@ fun ReportTopContent(
         Spacer(modifier = Modifier.height(5.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            StoreNameSearchButton(onClick = onClick)
+            if (location.isEmpty()) {
+                StoreNameSearchButton(onClick = onClick)
+            } else {
+                Text(text = location, style = HankkiTheme.typography.suitH2, color = Gray900)
+            }
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = stringResource(id = com.hankki.feature.report.R.string.will_report),
@@ -374,6 +388,7 @@ fun AddMenuButton(onClick: () -> Unit) {
 fun ReportScreenPreview() {
     HankkijogboTheme {
         ReportScreen(
+            location = LocationModel(),
             navigateUp = {},
             categoryList = persistentListOf(),
             selectCategory = {},
