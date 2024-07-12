@@ -11,7 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class TokenRepositoryModule {
-
     @Binds
     @Singleton
     abstract fun bindTokenRepository(

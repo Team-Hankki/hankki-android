@@ -1,4 +1,4 @@
-package com.hankki.core.common.utill
+package com.hankki.core.network
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -5,9 +5,9 @@ plugins {
 }
 
 android {
-    setNamespace("data.login")
+    setNamespace("data.reissuetoken")
 }
 
 dependencies {
-    implementation(projects.domain.login)
+    implementation(projects.domain.reissuetoken)
 }
