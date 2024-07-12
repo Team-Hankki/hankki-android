@@ -9,3 +9,15 @@ sealed interface UiState<out T> {
 
     data object Failure : UiState<Nothing>
 }
+
+sealed interface EmptyUiState<out T> {
+    data object Loading : EmptyUiState<Nothing>
+
+    data object Empty : EmptyUiState<Nothing>
+
+    data class Success<T>(
+        val data: T,
+    ) : EmptyUiState<T>
+
+    data object Failure : EmptyUiState<Nothing>
+}
