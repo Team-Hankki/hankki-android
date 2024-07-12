@@ -1,5 +1,6 @@
 package com.hankki.core.designsystem.component.textfield
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -27,6 +29,7 @@ import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun HankkiTextField(
@@ -37,7 +40,10 @@ fun HankkiTextField(
     textColor: Color,
     onFocusChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = White,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    leadingIcon: @Composable () -> Unit = {},
     tailingIcon: @Composable () -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -49,6 +55,7 @@ fun HankkiTextField(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
             .border(1.dp, borderColor, RoundedCornerShape(10.dp))
+            .background(backgroundColor)
             .padding(12.dp)
             .focusRequester(focusRequester)
             .onFocusChanged { focusState ->
@@ -59,11 +66,15 @@ fun HankkiTextField(
         keyboardActions = KeyboardActions(
             onDone = {
                 focusManager.clearFocus()
+            },
+            onSearch = {
+                focusManager.clearFocus()
             }
         ),
         textStyle = HankkiTheme.typography.body1.copy(color = textColor),
         decorationBox = { innerTextField ->
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                leadingIcon()
                 Box(modifier = Modifier.weight(1f)) {
                     innerTextField()
                     if (value.isEmpty()) {
