@@ -77,7 +77,7 @@ fun SearchStoreScreen(
     onValueChange: (String) -> Unit,
     onClickLocation: (LocationModel) -> Unit,
     navigateUp: () -> Unit,
-    navigateReport: (latitude: Float, longitude: Float, location: String, address: String) -> Unit = { _, _, _, _ -> },
+    navigateReport: (latitude: Float, longitude: Float, location: String, address: String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -230,7 +230,8 @@ private fun BookmarkCardPreview(
             state = state,
             onValueChange = {},
             onClickLocation = { },
-            navigateUp = {}
+            navigateUp = {},
+            navigateReport = { _, _, _, _ -> }
         )
     }
 }
