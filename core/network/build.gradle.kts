@@ -31,6 +31,16 @@ android {
 }
 
 dependencies {
+    //core
+    implementation(projects.core.datastore)
+
+    //domain
+    implementation(projects.domain.reissuetoken)
+
+    //feature
+    implementation(projects.feature.main)
+
+    //others
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 
@@ -41,13 +51,4 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.jakewharton.process.phoenix)
-
-    //core
-    implementation(projects.core.datastore)
-
-    //domain
-    implementation(projects.domain.reissuetoken)
-
-    //feature
-    implementation(projects.feature.main)
 }
