@@ -61,8 +61,7 @@ fun StoreItem(
                     strokeWidth = 1.dp.toPx()
                 )
             }
-            .padding(vertical = 16.dp)
-            .noRippleClickable(onClick = onClick),
+            .padding(vertical = 16.dp) ,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(

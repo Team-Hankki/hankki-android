@@ -2,10 +2,10 @@ package com.hankki.feature.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,12 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,39 +25,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.input.key.Key.Companion.F
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextPainter.paint
-import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray600
-import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.my.component.JogboHashtagChip
+import com.hankki.feature.my.component.JogboShareButton
 import com.hankki.feature.my.component.StoreItem
 
 @Composable
-fun MyJogboDetailRoute() {
-    MyJogboDetailScreen()
+fun MyJogboDetailRoute(paddingValues: PaddingValues) {
+    MyJogboDetailScreen(paddingValues = paddingValues)
 }
 
 @Composable
-fun MyJogboDetailScreen() {
+fun MyJogboDetailScreen(paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
+            .padding(paddingValues)
             .fillMaxSize()
             .background(White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        asd()
+        MyJogboTitle("성대생 점심 추천 맛집임 많관부")
 
         LazyColumn(
             modifier = Modifier
@@ -68,7 +64,7 @@ fun MyJogboDetailScreen() {
                 .padding(horizontal = 22.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item{
+            item {
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
@@ -115,16 +111,8 @@ fun MyJogboDetailScreen() {
     }
 }
 
-@Preview
 @Composable
-fun MyJogboDetailScreenPreview() {
-    HankkijogboTheme {
-        MyJogboDetailScreen()
-    }
-}
-
-@Composable
-fun asd() {
+fun MyJogboTitle(jogboTitle: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -144,7 +132,7 @@ fun asd() {
                     .size(43.dp)
             )
             Text(
-                text = "성대생 점심 추천 맛집임 많관부",
+                text = jogboTitle,
                 color = Gray900,
                 style = HankkiTheme.typography.h2,
                 modifier = Modifier.padding(start = 22.dp, end = 50.dp, top = 11.dp),
@@ -156,16 +144,16 @@ fun asd() {
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 item {
-                    chip()
+                    JogboHashtagChip("여긴꼭가봐")
                 }
                 item {
-                    chip()
+                    JogboHashtagChip(chiptext = "여긴꼭가봐")
                 }
             }
             Spacer(modifier = Modifier.height(38.dp))
             Row(
                 modifier = Modifier
-                    .padding(start = 21.dp, end = 17.dp)
+                    .padding(start = 21.dp, end = 17.dp, bottom = 13.dp)
                     .fillMaxWidth(), //너비설정어케함?ㅜ
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -185,41 +173,17 @@ fun asd() {
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
-                button()
+                JogboShareButton()
             }
         }
 
     }
 }
 
+@Preview
 @Composable
-fun button() {
-    Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(88.dp))
-            .background(Gray800)
-            .padding(top = 7.dp, bottom = 9.dp, start = 9.dp, end = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_share),
-            contentDescription = "",
-            tint = Red
-        )
-        Text(text = "공유", style = HankkiTheme.typography.body3, color = White)
+fun MyJogboDetailScreenPreview() {
+    HankkijogboTheme {
+        MyJogboDetailScreen(PaddingValues())
     }
-}
-
-@Composable
-fun chip() {
-    Text(
-        text = "#여긴꼭가봐",
-        modifier = Modifier
-            .padding(top = 8.dp)
-            .clip(RoundedCornerShape(100.dp))
-            .background(Gray100)
-            .padding(horizontal = 10.dp, vertical = 4.dp),
-        color = Gray500,
-        style = HankkiTheme.typography.caption1
-    )
 }

@@ -1,5 +1,6 @@
 package com.hankki.feature.my
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -10,13 +11,25 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.feature.my.component.StoreItem
 
 @Composable
-fun MyStoreRoute() {
-    MyStoreScreen()
+fun MyStoreRoute(
+    paddingValues: PaddingValues
+) {
+    MyStoreScreen(
+        paddingValues = paddingValues
+    )
 }
 
 @Composable
-fun MyStoreScreen() {
-    LazyColumn(modifier = Modifier.padding(start = 22.dp, end = 11.dp)) {
+fun MyStoreScreen(
+    paddingValues: PaddingValues,
+    isStoreReport : Boolean = false,
+    isStoreLike: Boolean = false,
+) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(paddingValues)
+            .padding(start = 22.dp, end = 11.dp)
+    ) {
         items(5) {
             StoreItem(
                 storeImageUrl = "",
@@ -24,7 +37,7 @@ fun MyStoreScreen() {
                 storeName = "한끼네 한정식",
                 price = 7900,
                 heartCount = 300,
-                isIconUsed = false
+                isIconUsed = isStoreLike
             )
         }
 
@@ -33,8 +46,8 @@ fun MyStoreScreen() {
 
 @Preview
 @Composable
-fun MyStoreScreenPreview(){
+fun MyStoreScreenPreview() {
     HankkijogboTheme {
-        MyStoreScreen()
+        MyStoreScreen(paddingValues = PaddingValues())
     }
 }

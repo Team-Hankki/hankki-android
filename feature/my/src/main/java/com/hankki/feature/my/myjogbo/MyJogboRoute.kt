@@ -40,6 +40,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun MyJogboRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
+    navigateToJogboDetail: () -> Unit,
     myJogboViewMidel: MyJogboViewModel = hiltViewModel()
 ) {
     val myJogboState by myJogboViewMidel.myJogboState.collectAsStateWithLifecycle()
@@ -51,6 +52,7 @@ fun MyJogboRoute(
     MyJogboScreen(
         paddingValues = paddingValues,
         navigateUp = navigateUp,
+        navigateToJogboDetail = navigateToJogboDetail,
         jogboItems = myJogboState.myJogboItems
     )
 }
@@ -59,6 +61,7 @@ fun MyJogboRoute(
 fun MyJogboScreen(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
+    navigateToJogboDetail: () -> Unit,
     jogboItems: PersistentList<MyJogboModel>
 ) {
     val isEditMode = remember { mutableStateOf(false) }
@@ -101,7 +104,7 @@ fun MyJogboScreen(
                         isSelected = !isSelected
                         item.jogboSelected = isSelected
                     },
-                    moveToJogbo = {}
+                    moveToJogbo = navigateToJogboDetail
                 )
             }
         }
@@ -114,6 +117,7 @@ fun MyJogboScreenPreview() {
     HankkijogboTheme {
         MyJogboScreen(
             navigateUp = {},
+            navigateToJogboDetail = {},
             paddingValues = PaddingValues(),
             jogboItems = persistentListOf(
                 MyJogboEntity(1, "성대쪽문\n가성비 맛집\n진짜 추천드림요").toMyJogboModel(),
