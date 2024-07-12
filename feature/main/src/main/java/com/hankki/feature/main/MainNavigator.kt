@@ -17,6 +17,7 @@ import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.report.navigation.navigateReport
+import com.hankki.feature.report.navigation.navigateSearchStore
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -69,6 +70,10 @@ internal class MainNavigator(
 
     fun navigateToHome(navOptions: NavOptions) {
         navController.navigate(Home, navOptions)
+    }
+
+    fun navigateSearchStore() {
+        navController.navigateSearchStore()
     }
 
     fun navigateToUniversity() {

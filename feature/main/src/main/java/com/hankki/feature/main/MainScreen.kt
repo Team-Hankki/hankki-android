@@ -84,7 +84,8 @@ internal fun MainScreen(
                         onShowSnackBar = onShowSnackBar
                     )
                     reportNavGraph(
-                        navigateUp = { navigator.navigateUpIfNotHome() }
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateSearchStore = navigator::navigateSearchStore
                     )
                     myNavGraph(
                         paddingValues = paddingValue,

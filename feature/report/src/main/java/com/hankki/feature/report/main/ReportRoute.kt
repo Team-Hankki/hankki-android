@@ -63,6 +63,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReportRoute(
     navigateUp: () -> Unit,
+    navigateSearchStore: () -> Unit,
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -71,12 +72,13 @@ fun ReportRoute(
         navigateUp = navigateUp,
         categoryList = state.categoryList,
         selectedCategory = state.selectedCategory,
-        selectCategory = { category -> viewModel.selectCategory(category) },
+        selectCategory = viewModel::selectCategory,
         menuList = state.menuList,
-        changeMenuName = { index, menuName -> viewModel.changeMenuName(index, menuName) },
-        changePrice = { index, price -> viewModel.changePrice(index, price) },
+        changeMenuName = viewModel::changeMenuName,
+        changePrice = viewModel::changePrice,
         addMenu = viewModel::addMenu,
-        deleteMenu = { viewModel.deleteMenu(it) },
+        deleteMenu = viewModel::deleteMenu,
+        navigateSearchStore = navigateSearchStore
     )
 }
 
@@ -91,6 +93,7 @@ fun ReportScreen(
     changePrice: (Int, String) -> Unit,
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
+    navigateSearchStore: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -129,9 +132,7 @@ fun ReportScreen(
             ) {
                 Spacer(modifier = Modifier.height(18.dp))
 
-                ReportTopContent {
-                    // TODO: Store 검색 화면 이동
-                }
+                ReportTopContent(onClick = navigateSearchStore)
 
                 Spacer(modifier = Modifier.height(26.dp))
                 HorizontalDivider(
