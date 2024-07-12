@@ -28,12 +28,13 @@ fun HankkiButton(
     enabled: Boolean = true,
     textStyle: TextStyle = TextStyle.Default,
 ) {
+    val newModifier = if (enabled) modifier.bounceClick(onClick = onClick) else modifier
+
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
+        modifier = newModifier
             .clip(RoundedCornerShape(16.dp))
             .background(if (enabled) Red else SemiRed)
-            .bounceClick(onClick = onClick)
             .padding(vertical = 15.dp, horizontal = 22.dp)
     ) {
         Text(
@@ -55,9 +56,11 @@ fun HankkiTextButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
+            .apply {
+                if (enabled) bounceClick(onClick = onClick)
+            }
             .clip(RoundedCornerShape(16.dp))
             .background(Color.Transparent)
-            .bounceClick(onClick = onClick)
             .padding(vertical = 15.dp, horizontal = 22.dp)
     ) {
         Text(

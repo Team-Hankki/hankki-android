@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -100,7 +101,7 @@ fun SearchStoreScreen(
                 .padding(horizontal = 22.dp)
         ) {
             Text(
-                text = "식당이름으로 검색하면\n주소를 찾아드릴게요",
+                text = stringResource(id = com.hankki.feature.report.R.string.search_store_sub_title),
                 style = HankkiTheme.typography.suitH2,
                 color = Gray900
             )
@@ -142,12 +143,16 @@ fun SearchStoreScreen(
             ) {
                 BottomBlurLayout()
                 HankkiButton(
-                    text = "식당을 선택해주세요",
+                    text = stringResource(
+                        id = if (selectedLocation == null) com.hankki.feature.report.R.string.choose_store
+                        else com.hankki.feature.report.R.string.report_this_store
+                    ),
                     onClick = { /*TODO*/ },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 22.dp)
-                        .padding(bottom = 15.dp)
+                        .padding(bottom = 15.dp),
+                    enabled = selectedLocation != null
                 )
             }
         }
