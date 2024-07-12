@@ -1,13 +1,20 @@
 package com.hankki.feature.report.searchstore.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
@@ -15,31 +22,54 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.RedLight
+import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun LocationItem(
     location: String,
     address: String,
+    isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 22.dp, vertical = 24.dp)
+            .background(if (isSelected) RedLight else White)
+            .padding(vertical = 24.dp)
+            .padding(start = 22.dp, end = 14.dp)
             .noRippleClickable(onClick)
     ) {
-        Text(
-            text = location,
-            style = HankkiTheme.typography.suitSub1,
-            color = Gray900
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = address,
-            style = HankkiTheme.typography.body5,
-            color = Gray400
-        )
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            Text(
+                text = location,
+                style = HankkiTheme.typography.suitSub1,
+                color = if (isSelected) Red else Gray900
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = address,
+                style = HankkiTheme.typography.body5,
+                color = Gray400
+            )
+        }
+        if (isSelected) {
+            Icon(
+                painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_check_btn),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(24.dp)
+            )
+        }
     }
 }
 
@@ -50,6 +80,7 @@ fun LocationItemPreview() {
         LocationItem(
             location = "한끼네 한정식",
             address = "서울시 강남구 역삼동 123-456",
+            isSelected = true,
             onClick = {}
         )
     }
