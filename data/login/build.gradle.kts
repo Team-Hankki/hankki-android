@@ -9,6 +9,5 @@ android {
 }
 
 dependencies {
-    //domain
     implementation(projects.domain.login)
 }

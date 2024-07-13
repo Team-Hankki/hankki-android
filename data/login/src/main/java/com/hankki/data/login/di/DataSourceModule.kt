@@ -11,7 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class DataSourceModule {
-
     @Binds
     @Singleton
     abstract fun provideLoginDataSource(loginDataSourceImpl: LoginDataSourceImpl): LoginDataSource
