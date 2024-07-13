@@ -47,6 +47,7 @@ import com.hankki.feature.dummy.navigation.dummyNavGraph
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
+import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
@@ -89,7 +90,22 @@ internal fun MainScreen(
                         onShowSnackBar = onShowSnackBar
                     )
                     reportNavGraph(
-                        navigateUp = { navigator.navigateUpIfNotHome() }
+                        navigateReport = { latitude, longitude, location, address ->
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateReport(
+                                LocationModel(
+                                    latitude,
+                                    longitude,
+                                    location,
+                                    address
+                                ), navOptions
+                            )
+                        },
+                        navigateSearchStore = navigator::navigateSearchStore,
+                        navigateUp = navigator::navigateUpIfNotHome
                     )
                     myNavGraph(
                         paddingValues = paddingValue,

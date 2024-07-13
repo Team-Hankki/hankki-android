@@ -1,4 +1,4 @@
-package com.hankki.feature.report
+package com.hankki.feature.report.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -39,6 +40,7 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.AddPhotoButton
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreNameSearchButton
+import com.hankki.core.designsystem.component.button.StoreNameSelectedButton
 import com.hankki.core.designsystem.component.chip.HankkiChipWithIcon
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiMenuTextField
@@ -47,12 +49,14 @@ import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -61,26 +65,31 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ReportRoute(
+    location: LocationModel,
     navigateUp: () -> Unit,
+    navigateSearchStore: () -> Unit,
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ReportScreen(
+        location = location,
         navigateUp = navigateUp,
         categoryList = state.categoryList,
         selectedCategory = state.selectedCategory,
-        selectCategory = { category -> viewModel.selectCategory(category) },
+        selectCategory = viewModel::selectCategory,
         menuList = state.menuList,
-        changeMenuName = { index, menuName -> viewModel.changeMenuName(index, menuName) },
-        changePrice = { index, price -> viewModel.changePrice(index, price) },
+        changeMenuName = viewModel::changeMenuName,
+        changePrice = viewModel::changePrice,
         addMenu = viewModel::addMenu,
-        deleteMenu = { viewModel.deleteMenu(it) },
+        deleteMenu = viewModel::deleteMenu,
+        navigateSearchStore = navigateSearchStore
     )
 }
 
 @Composable
 fun ReportScreen(
+    location: LocationModel,
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
     selectedCategory: String?,
@@ -90,6 +99,7 @@ fun ReportScreen(
     changePrice: (Int, String) -> Unit,
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
+    navigateSearchStore: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -99,9 +109,11 @@ fun ReportScreen(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .navigationBarsPadding()
             .addFocusCleaner(focusManager)
     ) {
         HankkiTopBar(
+            modifier = Modifier.background(White),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_left),
@@ -127,9 +139,10 @@ fun ReportScreen(
             ) {
                 Spacer(modifier = Modifier.height(18.dp))
 
-                ReportTopContent {
-                    // TODO: Store 검색 화면 이동
-                }
+                ReportTopContent(
+                    location = location.location,
+                    onClick = navigateSearchStore
+                )
 
                 Spacer(modifier = Modifier.height(26.dp))
                 HorizontalDivider(
@@ -207,14 +220,17 @@ fun ReportScreen(
                 }
             }
 
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
                 BottomBlurLayout()
                 Column {
                     HankkiButton(
                         text = stringResource(id = com.hankki.feature.report.R.string.do_report),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(22.dp),
+                            .padding(horizontal = 22.dp),
                         onClick = {
                             // TODO: 제보하기 api 연결
                         }
@@ -229,6 +245,7 @@ fun ReportScreen(
 @Composable
 fun ReportTopContent(
     count: Int = 52,
+    location: String = "한끼네 한정식",
     onClick: () -> Unit = {},
 ) {
     // TODO: 라이팅 변경 예정이라 하드코딩 해둠. 변경시 res로 추출 예정
@@ -240,18 +257,22 @@ fun ReportTopContent(
         Text(
             text = "${count}번째 제보에요",
             style = HankkiTheme.typography.body4,
-            color = Red,
+            color = if (location.isEmpty()) Red else Gray600,
             modifier = Modifier.padding(start = 4.dp)
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            StoreNameSearchButton(onClick = onClick)
+            if (location.isEmpty()) {
+                StoreNameSearchButton(onClick = onClick)
+            } else {
+                StoreNameSelectedButton(text = location, onClick = onClick)
+            }
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = stringResource(id = com.hankki.feature.report.R.string.will_report),
-                style = HankkiTheme.typography.body6,
+                style = HankkiTheme.typography.suitH3,
                 color = Gray900
             )
         }
@@ -368,6 +389,7 @@ fun AddMenuButton(onClick: () -> Unit) {
 fun ReportScreenPreview() {
     HankkijogboTheme {
         ReportScreen(
+            location = LocationModel(),
             navigateUp = {},
             categoryList = persistentListOf(),
             selectCategory = {},
