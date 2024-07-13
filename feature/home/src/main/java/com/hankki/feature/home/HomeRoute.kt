@@ -59,6 +59,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
+import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
@@ -513,13 +514,4 @@ private fun closeBottomSheet(
 private object MapConstants {
     const val DEFAULT_ZOOM = 16.0
     const val CAN_SEE_TITLE_ZOOM = 18.0
-}
-
-fun Modifier.ignoreNextModifiers(): Modifier {
-    return object : Modifier by this {
-
-        override fun then(other: Modifier): Modifier {
-            return this
-        }
-    }
 }
