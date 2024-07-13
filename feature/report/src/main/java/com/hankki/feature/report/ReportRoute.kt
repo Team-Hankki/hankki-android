@@ -207,7 +207,11 @@ fun ReportScreen(
                 }
             }
 
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .noRippleClickable()
+            ) {
                 BottomBlurLayout()
                 Column {
                     HankkiButton(

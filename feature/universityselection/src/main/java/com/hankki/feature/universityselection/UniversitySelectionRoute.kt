@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hankki.core.common.extension.bounceClick
+import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
@@ -109,7 +109,9 @@ fun UniversitySelectionScreen(
                 contentDescription = "image"
             )
 
-            Column {
+            Column(
+                modifier = Modifier.noRippleClickable()
+            ) {
                 HankkiButton(
                     text = stringResource(id = R.string.select),
                     textStyle = HankkiTheme.typography.sub2,
@@ -128,7 +130,7 @@ fun UniversitySelectionScreen(
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .bounceClick(onClick = navigateHome)
+                        .noRippleClickable(onClick = navigateHome)
                 )
                 Spacer(modifier = Modifier.height(31.dp))
             }
