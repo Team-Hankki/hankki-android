@@ -38,10 +38,10 @@ fun StoreNameSearchButton(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
+            .bounceClick(onClick = onClick)
             .background(Gray100)
             .padding(vertical = 12.dp)
-            .padding(start = 10.dp, end = 14.dp)
-            .bounceClick(onClick = onClick),
+            .padding(start = 10.dp, end = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -74,13 +74,13 @@ fun StoreNameSelectedButton(
             .padding(vertical = 12.dp, horizontal = 14.dp)
             .bounceClick(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = text,
             style = HankkiTheme.typography.sub3,
             color = Red,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f, fill = false),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -109,7 +109,6 @@ fun StoreNameSearchButtonPreview() {
             )
             StoreNameSelectedButton(
                 text = "고동밥",
-                modifier = Modifier.width(240.dp)
             )
         }
     }
