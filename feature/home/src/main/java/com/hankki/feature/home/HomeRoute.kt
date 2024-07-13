@@ -5,8 +5,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -331,9 +336,7 @@ fun HomeScreen(
                         defaultTitle = "종류",
                         menus = categoryChipItems,
                         onDismissRequest = dismissCategoryChip,
-                        onClickMenu = {
-                            selectCategoryChipItem(it)
-                        },
+                        onClickMenu = selectCategoryChipItem,
                         onClickChip = {
                             clickCategoryChip()
                             closeBottomSheet(
@@ -348,9 +351,7 @@ fun HomeScreen(
                         defaultTitle = "가격대",
                         menus = priceChipItems,
                         onDismissRequest = dismissPriceChip,
-                        onClickMenu = {
-                            selectPriceChipItem(it)
-                        },
+                        onClickMenu = selectPriceChipItem,
                         onClickChip = {
                             clickPriceChip()
                             closeBottomSheet(
@@ -365,9 +366,7 @@ fun HomeScreen(
                         defaultTitle = "정렬",
                         menus = sortChipItems,
                         onDismissRequest = dismissSortChip,
-                        onClickMenu = {
-                            selectSortChipItem(it)
-                        },
+                        onClickMenu = selectSortChipItem,
                         onClickChip = {
                             clickSortChip()
                             closeBottomSheet(
@@ -392,7 +391,11 @@ fun HomeScreen(
                     backgroundColor = Color.Transparent,
                     sheetGesturesEnabled = true,
                     sheetContent = {
-                        if (isMainBottomSheetOpen) {
+                        AnimatedVisibility(
+                            visible = isMainBottomSheetOpen,
+                            enter = EnterTransition.None,
+                            exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+                        ) {
                             Column(
                                 modifier = Modifier
                                     .clip(
