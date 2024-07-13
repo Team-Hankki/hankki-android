@@ -139,7 +139,7 @@ fun HomeRoute(
     HomeScreen(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
-        universityName = state.universityName,
+        universityName = state.universityName ?: "전체",
         selectedStoreItem = state.selectedStoreItem,
         storeItems = state.storeItems,
         jogboItems = state.jogboItems,
