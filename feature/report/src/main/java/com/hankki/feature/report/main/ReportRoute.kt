@@ -22,6 +22,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,7 +34,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
@@ -68,11 +71,36 @@ fun ReportRoute(
     location: LocationModel,
     navigateUp: () -> Unit,
     navigateSearchStore: () -> Unit,
+    navigateToReportFinish: (
+        count: Long,
+        storeName: String,
+        storeId: Long,
+    ) -> Unit,
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(key1 = lifecycleOwner) {
+        if (location.location.isNotEmpty()) {
+            viewModel.setLocation(location)
+        }
+    }
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is ReportSideEffect.navigateReportFinish -> navigateToReportFinish(
+                    sideEffect.count,
+                    sideEffect.storeName,
+                    sideEffect.storeId
+                )
+            }
+        }
+    }
+
     ReportScreen(
+        count = state.count,
         location = location,
         navigateUp = navigateUp,
         categoryList = state.categoryList,
@@ -83,12 +111,14 @@ fun ReportRoute(
         changePrice = viewModel::changePrice,
         addMenu = viewModel::addMenu,
         deleteMenu = viewModel::deleteMenu,
-        navigateSearchStore = navigateSearchStore
+        navigateSearchStore = navigateSearchStore,
+        navigateToReportFinish = viewModel::navigateToReportFinish
     )
 }
 
 @Composable
 fun ReportScreen(
+    count: Long,
     location: LocationModel,
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
@@ -100,6 +130,7 @@ fun ReportScreen(
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
     navigateSearchStore: () -> Unit = {},
+    navigateToReportFinish: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -140,6 +171,7 @@ fun ReportScreen(
                 Spacer(modifier = Modifier.height(18.dp))
 
                 ReportTopContent(
+                    count = count,
                     location = location.location,
                     onClick = navigateSearchStore
                 )
@@ -234,7 +266,7 @@ fun ReportScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 22.dp),
                         onClick = {
-                            // TODO: 제보하기 api 연결
+                            navigateToReportFinish()
                         }
                     )
                     Spacer(modifier = Modifier.height(15.dp))
@@ -246,8 +278,8 @@ fun ReportScreen(
 
 @Composable
 fun ReportTopContent(
-    count: Int = 52,
-    location: String = "한끼네 한정식",
+    count: Long,
+    location: String,
     onClick: () -> Unit = {},
 ) {
     // TODO: 라이팅 변경 예정이라 하드코딩 해둠. 변경시 res로 추출 예정
@@ -391,6 +423,7 @@ fun AddMenuButton(onClick: () -> Unit) {
 fun ReportScreenPreview() {
     HankkijogboTheme {
         ReportScreen(
+            count = 1,
             location = LocationModel(),
             navigateUp = {},
             categoryList = persistentListOf(),
@@ -405,7 +438,9 @@ fun ReportScreenPreview() {
             changeMenuName = { _, _ -> },
             changePrice = { _, _ -> },
             addMenu = {},
-            deleteMenu = {}
+            deleteMenu = {},
+            navigateSearchStore = {},
+            navigateToReportFinish = {}
         )
     }
 }

@@ -18,6 +18,7 @@ import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.navigateReport
+import com.hankki.feature.report.navigation.navigateReportFinish
 import com.hankki.feature.report.navigation.navigateSearchStore
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
@@ -79,6 +80,20 @@ internal class MainNavigator(
             longitude = location.longitude,
             location = location.location,
             address = location.address,
+            navOptions = navOptions
+        )
+    }
+
+    fun navigateToReportFinish(
+        count: Long,
+        storeName: String,
+        storeId: Long,
+        navOptions: NavOptions,
+    ) {
+        navController.navigateReportFinish(
+            count = count,
+            storeName = storeName,
+            storeId = storeId,
             navOptions = navOptions
         )
     }

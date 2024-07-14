@@ -19,11 +19,35 @@ fun NavController.navigateReport(
     address: String = "",
     navOptions: NavOptions? = null,
 ) {
-    navigate(Report(latitude, longitude, location, address), navOptions)
+    navigate(
+        Report(
+            latitude = latitude,
+            longitude = longitude,
+            location = location,
+            address = address
+        ),
+        navOptions
+    )
 }
 
 fun NavController.navigateSearchStore() {
     navigate(SearchStore)
+}
+
+fun NavController.navigateReportFinish(
+    count: Long,
+    storeName: String,
+    storeId: Long,
+    navOptions: NavOptions? = null,
+) {
+    navigate(
+        ReportFinish(
+            count = count,
+            storeName = storeName,
+            storeId = storeId
+        ),
+        navOptions
+    )
 }
 
 fun NavGraphBuilder.reportNavGraph(
@@ -33,8 +57,13 @@ fun NavGraphBuilder.reportNavGraph(
         location: String,
         address: String,
     ) -> Unit,
-    navigateSearchStore: () -> Unit,
+    navigateToSearchStore: () -> Unit,
     navigateUp: () -> Unit,
+    navigateToReportFinish: (
+        count: Long,
+        storeName: String,
+        storeId: Long,
+    ) -> Unit,
 ) {
     composable<Report> { backStackEntry ->
         val items = backStackEntry.toRoute<Report>()
@@ -45,8 +74,9 @@ fun NavGraphBuilder.reportNavGraph(
                 items.location,
                 items.address
             ),
-            navigateSearchStore = navigateSearchStore,
-            navigateUp = navigateUp
+            navigateSearchStore = navigateToSearchStore,
+            navigateUp = navigateUp,
+            navigateToReportFinish = navigateToReportFinish
         )
     }
     composable<SearchStore> {
@@ -57,7 +87,7 @@ fun NavGraphBuilder.reportNavGraph(
             navigateUp = navigateUp
         )
     }
-    composable<ReportFinish> {backStackEntry ->
+    composable<ReportFinish> { backStackEntry ->
         val items = backStackEntry.toRoute<ReportFinish>()
         ReportFinishRoute(
             count = items.count,

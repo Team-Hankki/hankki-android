@@ -104,8 +104,20 @@ internal fun MainScreen(
                                 ), navOptions
                             )
                         },
-                        navigateSearchStore = navigator::navigateSearchStore,
-                        navigateUp = navigator::navigateUpIfNotHome
+                        navigateToSearchStore = navigator::navigateSearchStore,
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateToReportFinish = { count, storeName, storeId ->
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToReportFinish(
+                                count,
+                                storeName,
+                                storeId,
+                                navOptions
+                            )
+                        }
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
