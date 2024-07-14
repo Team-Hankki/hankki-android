@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -36,12 +37,12 @@ fun MyStoreRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     type: String,
-    myStoreViewMidel: MyStoreViewModel = hiltViewModel()
+    myStoreViewModel: MyStoreViewModel = hiltViewModel()
 ) {
-    val myStoreState by myStoreViewMidel.myStoreState.collectAsStateWithLifecycle()
+    val myStoreState by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myStoreViewMidel.getMockStoreList()
+        myStoreViewModel.getMockStoreList()
     }
 
     MyStoreScreen(
@@ -49,10 +50,10 @@ fun MyStoreRoute(
         navigateUp = navigateUp,
         type = type,
         storeItems = myStoreState.myStoreItems,
-        updateStoreSeleted = { index, isjogboSelected ->
-            myStoreViewMidel.updateStoreSeleted(
+        updateStoreSelected = { index, isJogboSelected ->
+            myStoreViewModel.updateStoreSeleted(
                 index,
-                isjogboSelected
+                isJogboSelected
             )
         }
     )
@@ -60,12 +61,12 @@ fun MyStoreRoute(
 
 @Composable
 fun MyStoreScreen(
-    modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     type: String,
     storeItems: PersistentList<MyStoreModel>,
-    updateStoreSeleted: (Int, Boolean) -> Unit
+    modifier: Modifier = Modifier,
+    updateStoreSelected: (Int, Boolean) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -98,10 +99,9 @@ fun MyStoreScreen(
             modifier = Modifier
                 .padding(start = 22.dp, end = 11.dp)
         ) {
-            items(storeItems.size) { index ->
-                val store = storeItems[index]
 
-                store.isLiked?.let {
+            items(storeItems) { store ->
+                if (store.isLiked == true) {
                     StoreItem(
                         imageUrl = store.imageURL,
                         category = store.category,
@@ -109,21 +109,27 @@ fun MyStoreScreen(
                         price = store.lowestPrice,
                         heartCount = store.heartCount,
                         isIconUsed = (type == "like"),
-                        isIconSelected = it,
-                        eidtSelected = {
-                            updateStoreSeleted(
-                                index,
+                        isIconSelected = store.isLiked,
+                        editSelected = {
+                            updateStoreSelected(
+                                storeItems.indexOf(store),
                                 !store.isLiked
                             )
                         }
                     )
-                    if (index != storeItems.lastIndex) {
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 1.dp), thickness = 1.dp, color = Gray200)
-                    }                }
+                    if (storeItems.indexOf(store) != storeItems.lastIndex) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 1.dp),
+                            thickness = 1.dp,
+                            color = Gray200
+                        )
+                    }
+                }
             }
         }
     }
 }
+
 
 @Preview
 @Composable
@@ -134,7 +140,7 @@ fun MyStoreScreenPreview() {
             navigateUp = {},
             type = "like",
             storeItems = persistentListOf(StoreEntity("", 0, 0, "", true, 0, "").toMyStoreModel()),
-            updateStoreSeleted = { _, _ -> }
+            updateStoreSelected = { _, _ -> }
         )
     }
 }

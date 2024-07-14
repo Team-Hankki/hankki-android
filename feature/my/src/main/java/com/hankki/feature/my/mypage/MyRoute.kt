@@ -2,9 +2,7 @@ package com.hankki.feature.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,7 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,8 +49,8 @@ import com.hankki.feature.my.mypage.MyViewModel
 @Composable
 fun MyRoute(
     paddingValues: PaddingValues,
-    navigateToMyJogbo: () -> Unit,
-    navigateToStore: () -> Unit,
+    navigateToJogbo: () -> Unit,
+    navigateToStore: (String) -> Unit,
     myViewModel: MyViewModel = hiltViewModel()
 ) {
     val myState by myViewModel.myState.collectAsStateWithLifecycle()
@@ -63,19 +61,18 @@ fun MyRoute(
 
     MyScreen(
         paddingValues = paddingValues,
-        navigateToMyJogbo = navigateToMyJogbo,
+        navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.userState.name,
         userImage = myState.userState.image
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyScreen(
     paddingValues: PaddingValues,
     navigateToMyJogbo: () -> Unit,
-    navigateToMyStore: () -> Unit,
+    navigateToMyStore: (String) -> Unit,
     userName: String,
     userImage: String
 ) {
@@ -93,8 +90,8 @@ fun MyScreen(
             content = {
                 Text(
                     text = stringResource(id = R.string.my),
-                    style = HankkiTheme.typography.sub3,
-                    color = Gray900
+                    color = Gray900,
+                    style = HankkiTheme.typography.sub3
                 )
             }
         )
@@ -130,7 +127,7 @@ fun MyScreen(
                 )
                 .clip(RoundedCornerShape(12.dp))
                 .padding(start = 28.dp, end = 29.dp)
-                .clickable(onClick = navigateToMyJogbo),
+                .noRippleClickable(onClick = navigateToMyJogbo),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -141,7 +138,7 @@ fun MyScreen(
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_mygraphic),
-                contentDescription = null,
+                contentDescription = "jogbo graphic",
             )
         }
 
@@ -151,14 +148,17 @@ fun MyScreen(
             ButtonWithImageAndBorder(
                 R.drawable.ic_report,
                 stringResource(R.string.description_store_report),
-                Modifier.weight(1f),
-                navigateMyStore = navigateToMyStore
+                Modifier
+                    .weight(1f)
+                    .noRippleClickable(onClick = { navigateToMyStore("report") }), // 변경된 부분
             )
             Spacer(modifier = Modifier.width(18.dp))
             ButtonWithImageAndBorder(
                 R.drawable.ic_good,
                 stringResource(R.string.description_store_like),
-                Modifier.weight(1f), navigateMyStore = navigateToMyStore
+                Modifier
+                    .weight(1f)
+                    .noRippleClickable(onClick = { navigateToMyStore("like") }), // 변경된 부분
             )
         }
 
@@ -168,19 +168,29 @@ fun MyScreen(
 
         ButtonWithArrowIcon(stringResource(R.string.logout), {})
 
-        Box(
+        Row(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+                .noRippleClickable(onClick = {}),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
         ) {
             Text(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
                     .noRippleClickable(onClick = {})
-                    .padding(top = 14.dp, start = 15.dp, bottom = 13.dp),
+                    .padding(top = 13.dp, bottom = 14.dp)
+                    .weight(1f),
                 textAlign = TextAlign.End,
                 style = HankkiTheme.typography.body4,
                 color = Gray400,
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_quit),
+                contentDescription = stringResource(id = R.string.quit),
+                tint = Gray400,
+                modifier = Modifier.size(16.dp)
             )
         }
     }

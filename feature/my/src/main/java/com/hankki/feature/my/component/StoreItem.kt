@@ -43,7 +43,7 @@ fun StoreItem(
     isIconUsed: Boolean,
     isIconSelected: Boolean,
     modifier: Modifier = Modifier,
-    eidtSelected: () -> Unit = {}
+    editSelected: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -128,7 +128,7 @@ fun StoreItem(
                 contentDescription = "plus button",
                 modifier = Modifier
                     .size(52.dp)
-                    .noRippleClickable(onClick = eidtSelected),
+                    .noRippleClickable(onClick = editSelected),
                 tint = if (isIconSelected) Red else Gray200
             )
         }
@@ -147,7 +147,7 @@ fun StoreItemPreview() {
             heartCount = 300,
             isIconUsed = true,
             isIconSelected = true,
-            eidtSelected = {}
+            editSelected = {}
         )
     }
 }
