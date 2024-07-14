@@ -88,6 +88,7 @@ class ReportViewModel @Inject constructor() : ViewModel() {
         _state.value = _state.value.copy(
             selectedCategory = category
         )
+        checkButtonEnabled()
     }
 
     fun changeMenuName(index: Int, name: String) {
@@ -100,6 +101,7 @@ class ReportViewModel @Inject constructor() : ViewModel() {
                 _state.value.menuList[index].copy(name = name)
             )
         )
+        checkButtonEnabled()
     }
 
     fun changePrice(index: Int, price: String) {
@@ -115,6 +117,7 @@ class ReportViewModel @Inject constructor() : ViewModel() {
                 )
             )
         )
+        checkButtonEnabled()
     }
 
     fun addMenu() {
@@ -123,12 +126,14 @@ class ReportViewModel @Inject constructor() : ViewModel() {
                 MenuModel("", "")
             )
         )
+        checkButtonEnabled()
     }
 
     fun deleteMenu(index: Int) {
         _state.value = _state.value.copy(
             menuList = _state.value.menuList.removeAt(index)
         )
+        checkButtonEnabled()
     }
 
     fun navigateToReportFinish() {
@@ -141,6 +146,19 @@ class ReportViewModel @Inject constructor() : ViewModel() {
                         storeId = storeId
                     )
                 }
+            )
+        }
+    }
+
+    fun checkButtonEnabled() {
+        with(_state.value) {
+            _state.value = _state.value.copy(
+                buttonEnabled = menuList.isNotEmpty()
+                        && menuList.none { it.isPriceError }
+                        && menuList.none { it.name.isEmpty() }
+                        && menuList.none { it.price.isEmpty() }
+                        && selectedCategory != null
+                        && location.location.isNotEmpty()
             )
         }
     }

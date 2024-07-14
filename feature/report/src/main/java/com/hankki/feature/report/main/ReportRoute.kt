@@ -102,6 +102,7 @@ fun ReportRoute(
     ReportScreen(
         count = state.count,
         location = location,
+        buttonEnabled = state.buttonEnabled,
         navigateUp = navigateUp,
         categoryList = state.categoryList,
         selectedCategory = state.selectedCategory,
@@ -120,6 +121,7 @@ fun ReportRoute(
 fun ReportScreen(
     count: Long,
     location: LocationModel,
+    buttonEnabled: Boolean,
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
     selectedCategory: String?,
@@ -267,7 +269,8 @@ fun ReportScreen(
                             .padding(horizontal = 22.dp),
                         onClick = {
                             navigateToReportFinish()
-                        }
+                        },
+                        enabled = buttonEnabled
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                 }
@@ -424,6 +427,7 @@ fun ReportScreenPreview() {
     HankkijogboTheme {
         ReportScreen(
             count = 1,
+            buttonEnabled = false,
             location = LocationModel(),
             navigateUp = {},
             categoryList = persistentListOf(),
