@@ -355,9 +355,10 @@ fun MenuWithPriceInputComponent(
     onMenuChange: (String) -> Unit,
     onPriceChange: (String) -> Unit,
     deleteMenu: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     ) {
         // +버튼 정렬 하기
         Row(modifier = Modifier.weight(1f)) {
