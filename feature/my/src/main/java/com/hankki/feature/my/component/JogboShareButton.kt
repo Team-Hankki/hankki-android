@@ -33,7 +33,7 @@ fun JogboShareButton(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_share),
-            contentDescription = "",
+            contentDescription = "share",
             tint = Red
         )
         Text(text = "공유", style = HankkiTheme.typography.body3, color = White)

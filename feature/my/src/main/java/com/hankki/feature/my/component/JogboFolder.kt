@@ -34,7 +34,7 @@ fun JogboFolder(
     title: String,
     chips: List<String>,
     userName: String,
-    userImage: String,
+    userProfileImage: String,
     shareJogbo: () -> Unit
 ) {
     Box(
@@ -50,7 +50,7 @@ fun JogboFolder(
         Column(modifier = Modifier.padding(horizontal = 22.dp)) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_my_store),
-                contentDescription = null,
+                contentDescription = "store image",
                 modifier = Modifier
                     .padding(top = 16.dp, start = 18.dp)
                     .size(43.dp),
@@ -88,8 +88,8 @@ fun JogboFolder(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AsyncImage(
-                        model = userImage,
-                        contentDescription = null,
+                        model = userProfileImage,
+                        contentDescription = "user profile image",
                         modifier = Modifier.size(26.dp)
                     )
                     Text(

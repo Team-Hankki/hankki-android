@@ -63,7 +63,7 @@ fun JogboItem(
                     )
                     Image(
                         painter = painterResource(id = R.drawable.ic_add_jogbo_disable),
-                        contentDescription = null,
+                        contentDescription = "add jogbo",
                         modifier = Modifier.alpha(0f)
                     )
                 }
@@ -74,7 +74,7 @@ fun JogboItem(
             }
             AsyncImage(
                 model = image,
-                contentDescription = null,
+                contentDescription = "jogbo image",
                 modifier = modifier.fillMaxWidth()
             )
         }

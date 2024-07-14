@@ -142,7 +142,7 @@ fun MyJogboDetailScreen(
             title = storeItem.title,
             chips = storeItem.tags,
             userName = userInformation.nickname,
-            userImage = userInformation.profileImageUrl,
+            userProfileImage = userInformation.profileImageUrl,
             shareJogbo = { shareDialog.value = true }
         )
 
@@ -193,7 +193,7 @@ fun MyJogboDetailScreen(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_add),
-                        contentDescription = null,
+                        contentDescription = "add",
                         modifier = Modifier.size(24.dp),
                         tint = Gray500
                     )
