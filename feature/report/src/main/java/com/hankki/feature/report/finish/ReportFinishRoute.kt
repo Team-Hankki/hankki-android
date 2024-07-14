@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +35,22 @@ import com.hankki.feature.report.finish.component.ReportFinishCard
 
 @Composable
 fun ReportFinishRoute(
+    storeName: String,
+    storeId: Long,
+    count: Long,
+    navigateToStoreDetail: () -> Unit,
+    navigateToHome: () -> Unit,
     viewModel: ReportFinishViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.setStoreInfo(
+            count = count,
+            storeName = storeName,
+            storeId = storeId
+        )
+    }
 
     ReportFinishScreen(
         count = state.count,
@@ -48,7 +62,7 @@ fun ReportFinishRoute(
 
 @Composable
 fun ReportFinishScreen(
-    count: Int,
+    count: Long,
     name: String,
     storeName: String,
     addMyJogbo: () -> Unit = { },

@@ -18,11 +18,15 @@ class ReportFinishViewModel @Inject constructor(
         getUserName()
     }
 
-    fun setStoreInfo() {
+    fun setStoreInfo(
+        count: Long,
+        storeName: String,
+        storeId: Long
+    ) {
         _state.value = _state.value.copy(
-            count = 1,
-            storeName = "고동밥집",
-            storeId = 1
+            count = count,
+            storeName = storeName,
+            storeId = storeId
         )
     }
 

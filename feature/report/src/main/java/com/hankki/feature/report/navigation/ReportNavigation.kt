@@ -6,6 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
+import com.hankki.feature.report.finish.ReportFinishRoute
 import com.hankki.feature.report.main.ReportRoute
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.searchstore.SearchStoreRoute
@@ -16,7 +17,7 @@ fun NavController.navigateReport(
     longitude: Float = 0f,
     location: String = "",
     address: String = "",
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     navigate(Report(latitude, longitude, location, address), navOptions)
 }
@@ -56,6 +57,16 @@ fun NavGraphBuilder.reportNavGraph(
             navigateUp = navigateUp
         )
     }
+    composable<ReportFinish> {backStackEntry ->
+        val items = backStackEntry.toRoute<ReportFinish>()
+        ReportFinishRoute(
+            count = items.count,
+            storeName = items.storeName,
+            storeId = items.storeId,
+            navigateToStoreDetail = {},
+            navigateToHome = {}
+        )
+    }
 }
 
 @Serializable
@@ -68,3 +79,10 @@ data class Report(
 
 @Serializable
 data object SearchStore : MainTabRoute
+
+@Serializable
+data class ReportFinish(
+    val storeName: String,
+    val storeId: Long,
+    val count: Long,
+) : MainTabRoute
