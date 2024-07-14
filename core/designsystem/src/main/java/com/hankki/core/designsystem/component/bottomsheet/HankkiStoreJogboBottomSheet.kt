@@ -64,6 +64,7 @@ fun HankkiStoreJogboBottomSheet(
     modifier: Modifier = Modifier,
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -122,7 +123,8 @@ fun HankkiStoreJogboBottomSheet(
                                 onDismissRequest()
                             }
                         }
-                    }
+                    },
+                    onClick = onClick
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -164,6 +166,7 @@ fun JogboItem(
     isReported: Boolean,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
+    onClick: () -> Unit = {}
 ) {
     var icon by remember {
         mutableIntStateOf(R.drawable.ic_plus_btn_empty)
@@ -174,7 +177,9 @@ fun JogboItem(
     }
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .noRippleClickable(onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box {
