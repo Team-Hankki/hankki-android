@@ -20,6 +20,9 @@ class MyJogboDetailViewModel @Inject constructor(
                 title = "",
                 tags = listOf("", ""),
                 stores = listOf(
+                    Store(0, "", "", "", 0, 0),
+                    Store(0, "", "", "", 0, 0),
+                    Store(0, "", "", "", 0, 0),
                     Store(0, "", "", "", 0, 0)
                 )
             )

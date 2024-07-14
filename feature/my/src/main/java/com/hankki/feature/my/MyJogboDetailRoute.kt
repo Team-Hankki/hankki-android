@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DialogWithDescription
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -157,7 +159,7 @@ fun MyJogboDetailScreen(
 
             item {
                 val storeList = storeItem.stores
-                storeList.forEach { store ->
+                storeList.forEachIndexed { index,store ->
                     StoreItem(
                         imageUrl = store.imageUrl,
                         category = store.category,
@@ -171,6 +173,9 @@ fun MyJogboDetailScreen(
                             onLongClick = { deleteDialogState.value = true }
                         )
                     )
+                    if (index != storeList.lastIndex) {
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 1.dp), thickness = 1.dp, color = Gray200)
+                    }
                 }
             }
 

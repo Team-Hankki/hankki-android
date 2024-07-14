@@ -17,8 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,8 +42,8 @@ fun StoreItem(
     heartCount: Int,
     isIconUsed: Boolean,
     isIconSelected: Boolean,
-    eidtSelected: () -> Unit = {},
     modifier: Modifier = Modifier,
+    eidtSelected: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -53,14 +51,6 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .drawBehind {
-                drawLine(
-                    color = Gray200,
-                    start = Offset(0f, size.height - 1.dp.toPx() / 2),
-                    end = Offset(size.width, size.height - 1.dp.toPx() / 2),
-                    strokeWidth = 1.dp.toPx()
-                )
-            }
             .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
