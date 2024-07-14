@@ -1,6 +1,5 @@
 package com.hankki.feature.report.finish
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.HankkiTextButton
 import com.hankki.core.designsystem.theme.Gray500
@@ -39,10 +40,11 @@ fun ReportFinishRoute(
     storeName: String,
     storeId: Long,
     count: Long,
-    navigateToStoreDetail: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToStoreDetail: (storeId: Long) -> Unit,
     viewModel: ReportFinishViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = true) {
@@ -53,19 +55,24 @@ fun ReportFinishRoute(
         )
     }
 
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is ReportFinishSideEffect.navigateToStoreDetail -> navigateToStoreDetail(
+                    sideEffect.storeId
+                )
+                is ReportFinishSideEffect.navigateToHome -> navigateToHome()
+            }
+        }
+    }
+
     ReportFinishScreen(
         count = state.count,
         name = state.name,
         storeName = state.storeName,
         addMyJogbo = viewModel::addMyJogbo,
-        moveToStoreDetail = {
-            Log.e("TAG", "ReportFinishRoute: hdoihaoffd;la;lweqn", )
-            navigateToHome()
-        },
-        moveToHome = {
-            Log.e("TAG", "ReportFinishRoute: hdoihaoffd;la;lweqn", )
-            navigateToHome()
-        }
+        moveToStoreDetail = viewModel::navigateToStoreDetail,
+        moveToHome = viewModel::navigateToHome
     )
 }
 
@@ -76,7 +83,7 @@ fun ReportFinishScreen(
     storeName: String,
     addMyJogbo: () -> Unit = { },
     moveToStoreDetail: () -> Unit = { },
-    moveToHome: () -> Unit = { }
+    moveToHome: () -> Unit = { },
 ) {
     Box(
         modifier = Modifier

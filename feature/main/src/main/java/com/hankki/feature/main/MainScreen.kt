@@ -124,6 +124,9 @@ internal fun MainScreen(
                                 launchSingleTop = true
                             }
                             navigator.navigateToHome(navOptions)
+                        },
+                        navigateToStoreDetail = {
+                            // TODO: StoreDetail 구현시 적용 예정
                         }
                     )
                     myNavGraph(
