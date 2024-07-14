@@ -62,42 +62,56 @@ fun StoreItem(
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop
         )
+
         Spacer(modifier = Modifier.width(12.dp))
+
         Column(modifier = Modifier.wrapContentHeight()) {
             Row(modifier = Modifier.padding(top = 11.5.dp)) {
                 Text(
                     text = name,
                     style = HankkiTheme.typography.suitSub1
                 )
+
                 Spacer(modifier = Modifier.width(5.dp))
-                HankkiCategoryChip(text = "$category")
+
+                HankkiCategoryChip(text = category)
             }
+
             Spacer(modifier = Modifier.height(7.dp))
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_food),
                     contentDescription = "icon",
                     tint = Gray300
                 )
+
                 Spacer(modifier = Modifier.width(3.dp))
+
                 Text(
                     text = "${price}원",
                     style = HankkiTheme.typography.button1,
                     color = Gray500
                 )
+
                 Spacer(modifier = Modifier.width(4.dp))
+
                 Icon(
                     painter = painterResource(id = R.drawable.ic_ellipse),
                     contentDescription = "icon",
                     tint = Gray300
                 )
+
                 Spacer(modifier = Modifier.width(2.dp))
+
                 Icon(
                     painter = painterResource(id = R.drawable.ic_heart),
                     contentDescription = "icon",
                     tint = Gray300
                 )
+
                 Spacer(modifier = Modifier.width(2.dp))
+
                 Text(
                     text = "$heartCount",
                     style = HankkiTheme.typography.button1,
@@ -115,7 +129,7 @@ fun StoreItem(
                 modifier = Modifier
                     .size(52.dp)
                     .noRippleClickable(onClick = eidtSelected),
-                tint = if (isIconSelected == true) Red else Gray200
+                tint = if (isIconSelected) Red else Gray200
             )
         }
     }
