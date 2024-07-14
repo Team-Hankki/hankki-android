@@ -53,12 +53,12 @@ import com.hankki.feature.my.component.StoreItem
 fun MyJogboDetailRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    myJogboDetailViewMidel: MyJogboDetailViewModel = hiltViewModel()
+    myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
-    val myJogboDetailState by myJogboDetailViewMidel.myJogboDetailState.collectAsStateWithLifecycle()
+    val myJogboDetailState by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myJogboDetailViewMidel.getMockStoreList()
+        myJogboDetailViewModel.getMockStoreList()
     }
 
     MyJogboDetailScreen(
