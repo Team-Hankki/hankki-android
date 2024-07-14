@@ -117,6 +117,13 @@ internal fun MainScreen(
                                 storeId,
                                 navOptions
                             )
+                        },
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
                         }
                     )
                     myNavGraph(

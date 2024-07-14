@@ -1,5 +1,6 @@
 package com.hankki.feature.report.finish
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,7 +57,15 @@ fun ReportFinishRoute(
         count = state.count,
         name = state.name,
         storeName = state.storeName,
-        addMyJogbo = viewModel::addMyJogbo
+        addMyJogbo = viewModel::addMyJogbo,
+        moveToStoreDetail = {
+            Log.e("TAG", "ReportFinishRoute: hdoihaoffd;la;lweqn", )
+            navigateToHome()
+        },
+        moveToHome = {
+            Log.e("TAG", "ReportFinishRoute: hdoihaoffd;la;lweqn", )
+            navigateToHome()
+        }
     )
 }
 
@@ -67,7 +76,7 @@ fun ReportFinishScreen(
     storeName: String,
     addMyJogbo: () -> Unit = { },
     moveToStoreDetail: () -> Unit = { },
-    moveToHome: () -> Unit = { },
+    moveToHome: () -> Unit = { }
 ) {
     Box(
         modifier = Modifier
@@ -140,13 +149,13 @@ fun ReportFinishScreen(
             ) {
                 HankkiButton(
                     text = "제보한 식당 보러가기",
-                    onClick = { /*TODO*/ },
+                    onClick = moveToStoreDetail,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 HankkiTextButton(
                     text = "홈으로",
-                    onClick = { /*TODO*/ },
+                    onClick = moveToHome,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(4.dp))

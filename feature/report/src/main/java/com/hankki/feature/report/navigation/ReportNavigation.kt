@@ -64,6 +64,7 @@ fun NavGraphBuilder.reportNavGraph(
         storeName: String,
         storeId: Long,
     ) -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     composable<Report> { backStackEntry ->
         val items = backStackEntry.toRoute<Report>()
@@ -76,7 +77,7 @@ fun NavGraphBuilder.reportNavGraph(
             ),
             navigateSearchStore = navigateToSearchStore,
             navigateUp = navigateUp,
-            navigateToReportFinish = navigateToReportFinish
+            navigateToReportFinish = navigateToReportFinish,
         )
     }
     composable<SearchStore> {
@@ -94,7 +95,7 @@ fun NavGraphBuilder.reportNavGraph(
             storeName = items.storeName,
             storeId = items.storeId,
             navigateToStoreDetail = {},
-            navigateToHome = {}
+            navigateToHome = navigateToHome
         )
     }
 }
