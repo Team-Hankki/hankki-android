@@ -16,4 +16,5 @@ dependencies {
     implementation(projects.feature.my)
     implementation(projects.feature.login)
     implementation(projects.feature.universityselection)
+    implementation(projects.feature.storedetail)
 }
