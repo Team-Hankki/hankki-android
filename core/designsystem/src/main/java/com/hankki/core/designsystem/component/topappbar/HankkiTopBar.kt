@@ -22,12 +22,13 @@ import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun HankkiTopBar(
+    modifier: Modifier = Modifier,
     leadingIcon: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
     trailingIcon: @Composable () -> Unit = {},
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
             .background(White),
