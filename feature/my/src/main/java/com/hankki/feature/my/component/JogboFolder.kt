@@ -32,8 +32,7 @@ import com.hankki.feature.my.R
 @Composable
 fun JogboFolder(
     title: String,
-    chip1: String,
-    chip2: String,
+    chips: List<String>,
     userName: String,
     userImage: String,
     shareJogbo: () -> Unit
@@ -72,10 +71,10 @@ fun JogboFolder(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 item {
-                    JogboHashtagChip(chiptext = chip1)
+                    JogboHashtagChip(chiptext = chips[0])
                 }
                 item {
-                    JogboHashtagChip(chiptext = chip2)
+                    JogboHashtagChip(chiptext = chips[1])
                 }
             }
 

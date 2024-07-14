@@ -3,7 +3,6 @@ package com.hankki.feature.my
 import androidx.lifecycle.ViewModel
 import com.hankki.domain.my.entity.MyJogboDetailEntity
 import com.hankki.domain.my.entity.Store
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,27 +16,11 @@ class MyJogboDetailViewModel @Inject constructor(
 
     fun getMockStoreList() {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            myStoreItems = persistentListOf(
-                MyJogboDetailEntity(
-                    title = "",
-                    tags = listOf("", ""),
-                    stores = listOf(
-                        Store(0, "", "", "", 0, 0)
-                    )
-                ),
-                MyJogboDetailEntity(
-                    title = "",
-                    tags = listOf("", ""),
-                    stores = listOf(
-                        Store(0, "", "", "", 0, 0)
-                    )
-                ),
-                MyJogboDetailEntity(
-                    title = "",
-                    tags = listOf("", ""),
-                    stores = listOf(
-                        Store(0, "", "", "", 0, 0)
-                    )
+            myStoreItems = MyJogboDetailEntity(
+                title = "",
+                tags = listOf("", ""),
+                stores = listOf(
+                    Store(0, "", "", "", 0, 0)
                 )
             )
         )

@@ -19,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.G
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,18 +32,20 @@ import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun StoreItem(
-    storeImageUrl: String,
+    imageUrl: String,
     category: String,
-    storeName: String,
+    name: String,
     price: Int,
     heartCount: Int,
+    isIconUsed: Boolean,
+    isIconSelected: Boolean,
+    eidtSelected: () -> Unit = {},
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    isIconUsed : Boolean
 ) {
     Row(
         modifier = modifier
@@ -61,11 +61,11 @@ fun StoreItem(
                     strokeWidth = 1.dp.toPx()
                 )
             }
-            .padding(vertical = 16.dp) ,
+            .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
-            model = storeImageUrl,
+            model = imageUrl,
             contentDescription = "Store Image",
             modifier = Modifier
                 .size(72.dp)
@@ -76,7 +76,7 @@ fun StoreItem(
         Column(modifier = Modifier.wrapContentHeight()) {
             Row(modifier = Modifier.padding(top = 11.5.dp)) {
                 Text(
-                    text = storeName,
+                    text = name,
                     style = HankkiTheme.typography.suitSub1
                 )
                 Spacer(modifier = Modifier.width(5.dp))
@@ -116,15 +116,16 @@ fun StoreItem(
             }
         }
 
-        if(isIconUsed){
+        if (isIconUsed) {
             Spacer(modifier = Modifier.weight(1f))
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_heart_filled),
                 contentDescription = "plus button",
                 modifier = Modifier
-                    .noRippleClickable(onClick = onClick),
-                tint = Color.Unspecified
+                    .size(52.dp)
+                    .noRippleClickable(onClick = eidtSelected),
+                tint = if (isIconSelected == true) Red else Gray200
             )
         }
     }
@@ -135,12 +136,14 @@ fun StoreItem(
 fun StoreItemPreview() {
     HankkijogboTheme {
         StoreItem(
-            storeImageUrl = "",
+            imageUrl = "",
             category = "한식",
-            storeName = "한끼네 한정식",
+            name = "한끼네 한정식",
             price = 7900,
             heartCount = 300,
-            isIconUsed = false
+            isIconUsed = true,
+            isIconSelected = true,
+            eidtSelected = {}
         )
     }
 }

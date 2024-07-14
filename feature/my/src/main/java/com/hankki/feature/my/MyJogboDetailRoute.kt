@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +44,10 @@ import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.MyJogboDetailEntity
 import com.hankki.domain.my.entity.Store
+import com.hankki.domain.my.entity.UserInformationEntity
 import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun MyJogboDetailRoute(
@@ -64,7 +64,10 @@ fun MyJogboDetailRoute(
     MyJogboDetailScreen(
         paddingValues = paddingValues,
         navigateUp = navigateUp,
-        storeItems = myJogboDetailState.myStoreItems,
+        storeItem = myJogboDetailState.myStoreItems,
+        deleteDialogState = myJogboDetailState.showDeleteDialog,
+        shareDialog = myJogboDetailState.showShareDialog,
+        userInformation = myJogboDetailState.userInformation
     )
 }
 
@@ -73,24 +76,26 @@ fun MyJogboDetailRoute(
 fun MyJogboDetailScreen(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    storeItems: PersistentList<MyJogboDetailEntity>
+    storeItem: MyJogboDetailEntity,
+    deleteDialogState: MutableState<Boolean>,
+    shareDialog: MutableState<Boolean>,
+    userInformation: UserInformationEntity
 ) {
-    val showDeleteDialog = remember { mutableStateOf(false) }
-    val showShareDialog = remember { mutableStateOf(false) }
 
-    if (showShareDialog.value) {
+
+    if (shareDialog.value) {
         DialogWithDescription(
             title = "등록된 식당이 있어요\n식당으로 이동할까요?",
             description = "친구에게 내 족보를 공유할 수 있도록\n준비 중이에요",
             buttonTitle = "확인",
-            onConfirmation = { showShareDialog.value = false }
+            onConfirmation = { shareDialog.value = false }
         )
     }
 
-    if (showDeleteDialog.value) {
+    if (deleteDialogState.value) {
         DialogWithButton(
-            onDismissRequest = { showDeleteDialog.value = false },
-            onConfirmation = { showDeleteDialog.value = false },
+            onDismissRequest = { deleteDialogState.value = false },
+            onConfirmation = { deleteDialogState.value = false },
             title = stringResource(R.string.delete_store),
             textButtonTitle = stringResource(R.string.go_back),
             buttonTitle = stringResource(id = R.string.delete)
@@ -132,12 +137,11 @@ fun MyJogboDetailScreen(
         )
 
         JogboFolder(
-            title = storeItems[0].title,
-            chip1 = storeItems[0].tags[0],
-            chip2 = storeItems[0].tags[0],
-            userName = "", //nickname 함수 호출
-            userImage = "", //image 함수 호출
-            shareJogbo = { showShareDialog.value = true }      //공유!!!!!!!!!!!!!!!다이얼 로그 호출하기
+            title = storeItem.title,
+            chips = storeItem.tags,
+            userName = userInformation.nickname,
+            userImage = userInformation.profileImageUrl,
+            shareJogbo = { shareDialog.value = true }
         )
 
         LazyColumn(
@@ -151,8 +155,8 @@ fun MyJogboDetailScreen(
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            items(storeItems.size) { index ->
-                val storeList = storeItems[index].stores
+            item {
+                val storeList = storeItem.stores
                 storeList.forEach { store ->
                     StoreItem(
                         imageUrl = store.imageUrl,
@@ -161,11 +165,10 @@ fun MyJogboDetailScreen(
                         price = store.lowestPrice,
                         heartCount = store.heartCount,
                         isIconUsed = false,
-                        eidtSelected = {},
                         isIconSelected = false,
                         modifier = Modifier.combinedClickable(
                             onClick = {},
-                            onLongClick = { showDeleteDialog.value = true }
+                            onLongClick = { deleteDialogState.value = true }
                         )
                     )
                 }
@@ -204,23 +207,25 @@ fun MyJogboDetailScreen(
 @Preview
 @Composable
 fun MyJogboDetailScreenPreview() {
+    val showDeleteDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val showShareDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
+
     HankkijogboTheme {
         MyJogboDetailScreen(
-            PaddingValues(), {}, persistentListOf(
-                MyJogboDetailEntity(
-                    title = "",
-                    tags = listOf("", ""),
-                    stores = listOf(
-                        Store(0, "", "", "", 0, 0)
-                    )
-                ),
-                MyJogboDetailEntity(
-                    title = "",
-                    tags = listOf("", ""),
-                    stores = listOf(
-                        Store(0, "", "", "", 0, 0)
-                    )
+            PaddingValues(),
+            {},
+            MyJogboDetailEntity(
+                title = "",
+                tags = listOf("", ""),
+                stores = listOf(
+                    Store(0, "", "", "", 0, 0)
                 )
+            ),
+            showDeleteDialog,
+            showShareDialog,
+            UserInformationEntity(
+                nickname = "",
+                profileImageUrl = ""
             )
         )
     }
