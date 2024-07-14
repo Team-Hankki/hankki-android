@@ -12,7 +12,7 @@ import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.searchstore.SearchStoreRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateReport(
+fun NavController.navigateToReport(
     latitude: Float = 0f,
     longitude: Float = 0f,
     location: String = "",
@@ -30,11 +30,11 @@ fun NavController.navigateReport(
     )
 }
 
-fun NavController.navigateSearchStore() {
+fun NavController.navigateToSearchStore() {
     navigate(SearchStore)
 }
 
-fun NavController.navigateReportFinish(
+fun NavController.navigateToReportFinish(
     count: Long,
     storeName: String,
     storeId: Long,

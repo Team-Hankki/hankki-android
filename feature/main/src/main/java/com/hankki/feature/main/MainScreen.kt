@@ -95,7 +95,7 @@ internal fun MainScreen(
                                 popUpTo(navigator.navController.graph.findStartDestination().id)
                                 launchSingleTop = true
                             }
-                            navigator.navigateReport(
+                            navigator.navigateToReport(
                                 LocationModel(
                                     latitude,
                                     longitude,
@@ -104,7 +104,7 @@ internal fun MainScreen(
                                 ), navOptions
                             )
                         },
-                        navigateToSearchStore = navigator::navigateSearchStore,
+                        navigateToSearchStore = navigator::navigateToSearchStore,
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToReportFinish = { count, storeName, storeId ->
                             val navOptions = navOptions {
