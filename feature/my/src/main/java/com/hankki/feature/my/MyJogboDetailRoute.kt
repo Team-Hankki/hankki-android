@@ -85,9 +85,9 @@ fun MyJogboDetailScreen(
 
     if (shareDialog.value) {
         DialogWithDescription(
-            title = "등록된 식당이 있어요\n식당으로 이동할까요?",
-            description = "친구에게 내 족보를 공유할 수 있도록\n준비 중이에요",
-            buttonTitle = "확인",
+            title = stringResource(R.string.go_to_register_store),
+            description = stringResource(R.string.preparing_share_jogbo),
+            buttonTitle = stringResource(R.string.check),
             onConfirmation = { shareDialog.value = false }
         )
     }
