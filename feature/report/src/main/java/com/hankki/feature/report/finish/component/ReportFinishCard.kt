@@ -28,6 +28,7 @@ import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun ReportFinishCard(
+    storeName: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -55,7 +56,7 @@ fun ReportFinishCard(
                     style = HankkiTheme.typography.caption1
                 )
                 Text(
-                    text = "고봉김밥집 1호점",
+                    text = storeName,
                     color = Gray850,
                     style = HankkiTheme.typography.body1
                 )
@@ -85,6 +86,6 @@ fun ReportFinishCard(
 @Composable
 fun ReportFinishCardPreview() {
     HankkijogboTheme {
-        ReportFinishCard(onClick = {}, modifier = Modifier.fillMaxWidth())
+        ReportFinishCard(storeName = "한끼네 한정식", onClick = {}, modifier = Modifier.fillMaxWidth())
     }
 }

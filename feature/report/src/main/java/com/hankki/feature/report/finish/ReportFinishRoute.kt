@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,6 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.HankkiTextButton
 import com.hankki.core.designsystem.theme.Gray500
@@ -30,14 +33,27 @@ import com.hankki.feature.report.R
 import com.hankki.feature.report.finish.component.ReportFinishCard
 
 @Composable
-fun ReportFinishRoute() {
-    ReportFinishScreen(count = 51, name = "정욱")
+fun ReportFinishRoute(
+    viewModel: ReportFinishViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ReportFinishScreen(
+        count = state.count,
+        name = state.name,
+        storeName = state.storeName,
+        addMyJogbo = viewModel::addMyJogbo
+    )
 }
 
 @Composable
 fun ReportFinishScreen(
     count: Int,
     name: String,
+    storeName: String,
+    addMyJogbo: () -> Unit = { },
+    moveToStoreDetail: () -> Unit = { },
+    moveToHome: () -> Unit = { },
 ) {
     Box(
         modifier = Modifier
@@ -47,7 +63,7 @@ fun ReportFinishScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_yellow_circle_gradient),
-            contentDescription = "",
+            contentDescription = "gradient",
             modifier = Modifier.fillMaxSize(),
         )
 
@@ -58,7 +74,7 @@ fun ReportFinishScreen(
             Spacer(modifier = Modifier.weight(2f))
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.img_store),
-                contentDescription = "",
+                contentDescription = "store",
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -96,6 +112,7 @@ fun ReportFinishScreen(
             Spacer(modifier = Modifier.weight(3f))
 
             ReportFinishCard(
+                storeName = storeName,
                 onClick = { /*TODO*/ },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -130,6 +147,6 @@ fun ReportFinishScreen(
 @Composable
 fun PreviewReportFinishScreen() {
     HankkijogboTheme {
-        ReportFinishScreen(count = 51, name = "정욱")
+        ReportFinishScreen(count = 51, name = "정욱", storeName = "한끼네 한정식")
     }
 }
