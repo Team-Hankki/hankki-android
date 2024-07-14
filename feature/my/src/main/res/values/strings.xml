@@ -4,6 +4,7 @@
     <string name="profile_image">profile image</string>
     <string name="message_user_name">%1$s 님\n한끼 잘 챙겨 드세요</string>
     <string name="my_jogbo">나의 족보</string>
+    <string name="my_store_jogbo">나의 식당 족보</string>
     <string name="description_store_report">내가 제보한 식당</string>
     <string name="description_store_like">좋아요 누른 식당</string>
     <string name="faq">FAQ</string>
@@ -16,4 +17,7 @@
     <string name="add_new_jogbo_list">새로운\n족보 리스트\n추가하기</string>
     <string name="close">닫기</string>
     <string name="do_delete">삭제하기</string>
+    <string name="go_to_store">식당 구경하러 가기</string>
+    <string name="delete_store">족보에서 식당을 삭제할까요?</string>
+    <string name="go_back">돌아가기</string>
 </resources>
