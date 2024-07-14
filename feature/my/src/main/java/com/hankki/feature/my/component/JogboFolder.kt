@@ -70,11 +70,8 @@ fun JogboFolder(
                 modifier = Modifier.padding(start = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                item {
-                    JogboHashtagChip(chiptext = chips[0])
-                }
-                item {
-                    JogboHashtagChip(chiptext = chips[1])
+                items(chips.size) { index ->
+                    JogboHashtagChip(chiptext = chips[index])
                 }
             }
 

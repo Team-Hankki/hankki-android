@@ -15,7 +15,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 @Composable
 fun JogboHashtagChip(chiptext: String) {
     Text(
-        text = "#$chiptext",
+        text = chiptext,
         modifier = Modifier
             .padding(top = 8.dp)
             .clip(RoundedCornerShape(100.dp))
