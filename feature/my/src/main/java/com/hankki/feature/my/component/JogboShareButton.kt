@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red
@@ -19,12 +20,15 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 
 @Composable
-fun JogboShareButton() {
+fun JogboShareButton(
+    showShareDialog : () -> Unit
+) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(88.dp))
             .background(Gray800)
-            .padding(top = 7.dp, bottom = 9.dp, start = 9.dp, end = 16.dp),
+            .padding(top = 7.dp, bottom = 9.dp, start = 9.dp, end = 16.dp)
+            .noRippleClickable(showShareDialog),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
