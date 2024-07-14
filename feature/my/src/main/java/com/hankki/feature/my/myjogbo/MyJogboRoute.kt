@@ -110,7 +110,7 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable( if(editMode) resetJogboState else navigateUp)
+                        .noRippleClickable(if (editMode) resetJogboState else navigateUp)
                 )
             },
             content = {
@@ -125,16 +125,13 @@ fun MyJogboScreen(
                     text = if (editMode) stringResource(R.string.delete) else stringResource(R.string.edit),
                     style = HankkiTheme.typography.body1,
                     color = Gray800,
-                    modifier = if (editMode) Modifier
+                    modifier = Modifier
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 8.dp)
-                        .noRippleClickable(onClick = {
-                            showDialog.value = true
-                        })
-                    else Modifier
-                        .padding(vertical = 12.dp, horizontal = 14.dp)
-                        .padding(end = 8.dp)
-                        .noRippleClickable(onClick = updateEditMode)
+                        .run {
+                            if (editMode) noRippleClickable { showDialog.value = true }
+                            else noRippleClickable(updateEditMode)
+                        }
                 )
             }
         )
