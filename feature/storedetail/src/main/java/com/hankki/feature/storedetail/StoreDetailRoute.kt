@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +30,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.R
+import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailButton
 import com.hankki.core.designsystem.component.layout.StoreDetailMenuBox
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -177,20 +175,15 @@ fun StoreDetailScreen() {
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Button(
+            Spacer(modifier = Modifier.height(16.dp))
+            HankkiButton(
+                text = "제보하기",
                 onClick = { /* TODO: handle submit */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFFF6F61)),
-                shape = RoundedCornerShape(25.dp)
-            ) {
-                Text(
-                    text = "제보하기",
-                    color = Color.White,
-                    style = HankkiTheme.typography.body4
-                )
-            }
+                    .padding(horizontal = 92.dp),
+                textStyle = HankkiTheme.typography.body4
+            )
         }
     }
 }
