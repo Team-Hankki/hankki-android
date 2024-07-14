@@ -1,66 +1,149 @@
 package com.hankki.feature.my
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.dialog.DialogWithDescription
+import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray500
-import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
-import com.hankki.feature.my.component.JogboHashtagChip
-import com.hankki.feature.my.component.JogboShareButton
+import com.hankki.domain.my.entity.MyJogboDetailEntity
+import com.hankki.domain.my.entity.Store
+import com.hankki.feature.my.component.DialogWithButton
+import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun MyJogboDetailRoute(paddingValues: PaddingValues) {
-    MyJogboDetailScreen(paddingValues = paddingValues)
+fun MyJogboDetailRoute(
+    paddingValues: PaddingValues,
+    navigateUp: () -> Unit,
+    myJogboDetailViewMidel: MyJogboDetailViewModel = hiltViewModel()
+) {
+    val myJogboDetailState by myJogboDetailViewMidel.myJogboDetailState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(true) {
+        myJogboDetailViewMidel.getMockStoreList()
+    }
+
+    MyJogboDetailScreen(
+        paddingValues = paddingValues,
+        navigateUp = navigateUp,
+        storeItems = myJogboDetailState.myStoreItems,
+    )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MyJogboDetailScreen(paddingValues: PaddingValues) {
+fun MyJogboDetailScreen(
+    paddingValues: PaddingValues,
+    navigateUp: () -> Unit,
+    storeItems: PersistentList<MyJogboDetailEntity>
+) {
+    val showDeleteDialog = remember { mutableStateOf(false) }
+    val showShareDialog = remember { mutableStateOf(false) }
+
+    if (showShareDialog.value) {
+        DialogWithDescription(
+            title = "등록된 식당이 있어요\n식당으로 이동할까요?",
+            description = "친구에게 내 족보를 공유할 수 있도록\n준비 중이에요",
+            buttonTitle = "확인",
+            onConfirmation = { showShareDialog.value = false }
+        )
+    }
+
+    if (showDeleteDialog.value) {
+        DialogWithButton(
+            onDismissRequest = { showDeleteDialog.value = false },
+            onConfirmation = { showDeleteDialog.value = false },
+            title = stringResource(R.string.delete_store),
+            textButtonTitle = stringResource(R.string.go_back),
+            buttonTitle = stringResource(id = R.string.delete)
+        )
+    }
+
     Column(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize()
-            .background(White),
+            .background(Red),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MyJogboTitle("성대생 점심 추천 맛집임 많관부")
+        HankkiTopBar(
+            modifier = Modifier.background(Red),
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .padding(start = 9.dp)
+                        .size(44.dp)
+                        .noRippleClickable(onClick = navigateUp)
+                )
+            },
+            content = {
+                Text(
+                    text = stringResource(R.string.my_store_jogbo),
+                    style = HankkiTheme.typography.sub3,
+                    color = Gray900
+                )
+            }
+        )
+
+        Spacer(
+            modifier = Modifier
+                .background(Red)
+                .height(4.dp)
+        )
+
+        JogboFolder(
+            title = storeItems[0].title,
+            chip1 = storeItems[0].tags[0],
+            chip2 = storeItems[0].tags[0],
+            userName = "", //nickname 함수 호출
+            userImage = "", //image 함수 호출
+            shareJogbo = { showShareDialog.value = true }      //공유!!!!!!!!!!!!!!!다이얼 로그 호출하기
+        )
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(White)
                 .padding(horizontal = 22.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -68,19 +151,26 @@ fun MyJogboDetailScreen(paddingValues: PaddingValues) {
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            // List items
-            items(5) {
-                StoreItem(
-                    storeImageUrl = "",
-                    category = "한식",
-                    storeName = "한끼네 한정식",
-                    price = 7900,
-                    heartCount = 300,
-                    isIconUsed = false
-                )
+            items(storeItems.size) { index ->
+                val storeList = storeItems[index].stores
+                storeList.forEach { store ->
+                    StoreItem(
+                        imageUrl = store.imageUrl,
+                        category = store.category,
+                        name = store.name,
+                        price = store.lowestPrice,
+                        heartCount = store.heartCount,
+                        isIconUsed = false,
+                        eidtSelected = {},
+                        isIconSelected = false,
+                        modifier = Modifier.combinedClickable(
+                            onClick = {},
+                            onLongClick = { showDeleteDialog.value = true }
+                        )
+                    )
+                }
             }
 
-            // Footer item
             item {
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -101,7 +191,7 @@ fun MyJogboDetailScreen(paddingValues: PaddingValues) {
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = "식당 구경하러 가기",
+                        text = stringResource(R.string.go_to_store),
                         color = Gray500,
                         style = HankkiTheme.typography.body6
                     )
@@ -111,79 +201,27 @@ fun MyJogboDetailScreen(paddingValues: PaddingValues) {
     }
 }
 
-@Composable
-fun MyJogboTitle(jogboTitle: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Red)
-            .padding(top = 4.dp, bottom = 22.dp)
-            .paint(
-                painterResource(id = R.drawable.img_my_jogbo_detail),
-                contentScale = ContentScale.Fit
-            )
-    ) {
-        Column(modifier = Modifier.padding(horizontal = 22.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_pizza),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(top = 16.dp, start = 18.dp)
-                    .size(43.dp)
-            )
-            Text(
-                text = jogboTitle,
-                color = Gray900,
-                style = HankkiTheme.typography.h2,
-                modifier = Modifier.padding(start = 22.dp, end = 50.dp, top = 11.dp),
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            ) //이부분 색깔미지정되어있음 물어보기
-            LazyRow(
-                modifier = Modifier.padding(start = 20.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                item {
-                    JogboHashtagChip("여긴꼭가봐")
-                }
-                item {
-                    JogboHashtagChip(chiptext = "여긴꼭가봐")
-                }
-            }
-            Spacer(modifier = Modifier.height(38.dp))
-            Row(
-                modifier = Modifier
-                    .padding(start = 21.dp, end = 17.dp, bottom = 13.dp)
-                    .fillMaxWidth(), //너비설정어케함?ㅜ
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_spoon),
-                        contentDescription = null,
-                        modifier = Modifier.size(26.dp)
-                    )
-                    Text(
-                        text = "김한끼",
-                        style = HankkiTheme.typography.body4,
-                        color = Gray600,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-                JogboShareButton()
-            }
-        }
-
-    }
-}
-
 @Preview
 @Composable
 fun MyJogboDetailScreenPreview() {
     HankkijogboTheme {
-        MyJogboDetailScreen(PaddingValues())
+        MyJogboDetailScreen(
+            PaddingValues(), {}, persistentListOf(
+                MyJogboDetailEntity(
+                    title = "",
+                    tags = listOf("", ""),
+                    stores = listOf(
+                        Store(0, "", "", "", 0, 0)
+                    )
+                ),
+                MyJogboDetailEntity(
+                    title = "",
+                    tags = listOf("", ""),
+                    stores = listOf(
+                        Store(0, "", "", "", 0, 0)
+                    )
+                )
+            )
+        )
     }
 }
