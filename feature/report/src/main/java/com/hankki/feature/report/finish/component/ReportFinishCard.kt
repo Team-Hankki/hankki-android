@@ -38,7 +38,7 @@ fun ReportFinishCard(
             containerColor = White
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
+            defaultElevation = 1.dp
         )
     ) {
         Row(
@@ -57,7 +57,7 @@ fun ReportFinishCard(
                 Text(
                     text = "고봉김밥집 1호점",
                     color = Gray850,
-                    style = HankkiTheme.typography.body6
+                    style = HankkiTheme.typography.body1
                 )
             }
 

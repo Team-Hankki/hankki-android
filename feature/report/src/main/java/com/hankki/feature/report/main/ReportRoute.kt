@@ -174,7 +174,7 @@ fun ReportScreen(
                             style = HankkiTheme.typography.sub1,
                             color = Gray900
                         )
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = stringResource(id = com.hankki.feature.report.R.string.add_menu_sub_title),
                             style = HankkiTheme.typography.body4,
