@@ -2,6 +2,7 @@ package com.hankki.feature.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -43,12 +46,12 @@ import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
-import com.hankki.feature.my.component.MyTitle
+import com.hankki.feature.my.mypage.MyViewModel
 
 @Composable
 fun MyRoute(
     paddingValues: PaddingValues,
-    navigateToDummy: () -> Unit,
+    navigateToMyJogbo: () -> Unit,
     navigateToStore: () -> Unit,
     myViewModel: MyViewModel = hiltViewModel()
 ) {
@@ -60,13 +63,14 @@ fun MyRoute(
 
     MyScreen(
         paddingValues = paddingValues,
-        navigateToMyJogbo = navigateToDummy,
+        navigateToMyJogbo = navigateToMyJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.userState.name,
         userImage = myState.userState.image
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyScreen(
     paddingValues: PaddingValues,
@@ -85,7 +89,15 @@ fun MyScreen(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Title(title = stringResource(R.string.my))
+        HankkiTopBar(
+            content = {
+                Text(
+                    text = stringResource(id = R.string.my),
+                    style = HankkiTheme.typography.sub3,
+                    color = Gray900
+                )
+            }
+        )
 
         Spacer(modifier = Modifier.height(15.dp))
 
