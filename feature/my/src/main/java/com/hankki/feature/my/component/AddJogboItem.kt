@@ -29,16 +29,13 @@ fun AddJogboItem(
     onClick: () -> Unit = {}
 ) {
     Column(
-        modifier =
-        if (isEditMode) modifier
+        modifier = modifier
             .wrapContentSize()
             .clip(RoundedCornerShape(12.dp))
-            .background(RedLight)
-        else Modifier
-            .wrapContentSize()
-            .clip(RoundedCornerShape(12.dp))
-            .background(Red)
-            .noRippleClickable(onClick = onClick),
+            .run {
+                if (!isEditMode) { background(Red).noRippleClickable(onClick = onClick) }
+                else background(RedLight)
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
