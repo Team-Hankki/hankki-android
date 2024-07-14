@@ -31,7 +31,7 @@ fun DialogWithDescription(
     buttonTitle: String,
     onConfirmation: () -> Unit
 ) {
-    Dialog(onDismissRequest = { onConfirmation() }) {
+    Dialog(onDismissRequest = onConfirmation) {
         Card(
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
@@ -66,7 +66,7 @@ fun DialogWithDescription(
 
                 HankkiButton(
                     text = buttonTitle,
-                    onClick = { onConfirmation() },
+                    onClick = onConfirmation,
                     enabled = true,
                     textStyle = HankkiTheme.typography.sub3
                 )
