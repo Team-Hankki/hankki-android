@@ -6,6 +6,7 @@ import com.hankki.domain.my.entity.MyJogboEntity
 import com.hankki.feature.my.myjogbo.model.toMyJogboModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,14 +24,17 @@ class MyJogboViewModel @Inject constructor(
             myJogboItems = persistentListOf(
                 MyJogboEntity(
                     1,
+                    "",
                     jogboName = "족보이름테스트세트스테스테스트테스트테스",
                 ).toMyJogboModel(),
                 MyJogboEntity(
                     2,
+                    "",
                     jogboName = "족보이름2",
                 ).toMyJogboModel(),
                 MyJogboEntity(
                     3,
+                    "",
                     jogboName = "족보이름3",
                 ).toMyJogboModel()
             )
@@ -55,5 +59,13 @@ class MyJogboViewModel @Inject constructor(
                 _myJogboState.value.myJogboItems[index].copy(jogboSelected = isJogboSelected)
             )
         )
+    }
+
+    fun resetJogboState() {
+        _myJogboState.value =
+            _myJogboState.value.copy(myJogboItems = _myJogboState.value.myJogboItems.map { jogboItem ->
+                jogboItem.copy(jogboSelected = false)
+            }.toPersistentList())
+        updateMode()
     }
 }
