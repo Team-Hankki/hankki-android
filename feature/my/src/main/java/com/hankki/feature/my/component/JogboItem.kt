@@ -40,14 +40,13 @@ fun JogboItem(
     navigateToJogboDetail: () -> Unit
 ) {
     Box(
-        modifier = if (!isEditMode) modifier
+        modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .background(Gray100)
-            .noRippleClickable(onClick = navigateToJogboDetail)
-        else modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(Gray100)
-            .noRippleClickable(onClick = editJogbo)
+            .run {
+                if (!isEditMode) noRippleClickable(onClick = navigateToJogboDetail)
+                else noRippleClickable(onClick = editJogbo)
+            }
     ) {
         Column(
             modifier = Modifier
