@@ -2,7 +2,7 @@ package com.hankki.domain.my.entity
 
 data class MyJogboDetailEntity(
     val title: String,
-    val tags: List<String>,
+    val chips: List<String>,
     val stores: List<Store>
 )
 

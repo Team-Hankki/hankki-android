@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,11 +29,12 @@ import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.feature.my.R
+import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun JogboFolder(
     title: String,
-    chips: List<String>,
+    chips: PersistentList<String>,
     userName: String,
     userProfileImage: String,
     shareJogbo: () -> Unit
@@ -70,8 +72,8 @@ fun JogboFolder(
                 modifier = Modifier.padding(start = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                items(chips.size) { index ->
-                    JogboHashtagChip(chiptext = chips[index])
+                items(chips) { chip ->
+                    JogboHashtagChip(chiptext = chip)
                 }
             }
 

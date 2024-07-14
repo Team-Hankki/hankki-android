@@ -3,6 +3,8 @@ package com.hankki.feature.my
 import androidx.lifecycle.ViewModel
 import com.hankki.domain.my.entity.MyJogboDetailEntity
 import com.hankki.domain.my.entity.Store
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,14 +20,26 @@ class MyJogboDetailViewModel @Inject constructor(
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
             myStoreItems = MyJogboDetailEntity(
                 title = "",
-                tags = listOf("", ""),
-                stores = listOf(
-                    Store(0, "", "", "", 0, 0),
+                chips = listOf("", "").toPersistentList(),
+                stores = persistentListOf(
+                    Store(0, "?", "", "", 0, 0),
                     Store(0, "", "", "", 0, 0),
                     Store(0, "", "", "", 0, 0),
                     Store(0, "", "", "", 0, 0)
                 )
             )
+        )
+    }
+
+    fun updateDeleteDialog(state :Boolean){
+        _myJogboDetailState.value = _myJogboDetailState.value.copy(
+            showDeleteDialog = !state
+        )
+    }
+
+    fun updateShareDialog(state :Boolean){
+        _myJogboDetailState.value = _myJogboDetailState.value.copy(
+            showShareDialog = !state
         )
     }
 }

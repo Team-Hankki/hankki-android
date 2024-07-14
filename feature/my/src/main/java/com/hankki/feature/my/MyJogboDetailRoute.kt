@@ -14,16 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,12 +42,14 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
-import com.hankki.domain.my.entity.MyJogboDetailEntity
 import com.hankki.domain.my.entity.Store
 import com.hankki.domain.my.entity.UserInformationEntity
 import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun MyJogboDetailRoute(
@@ -66,10 +66,14 @@ fun MyJogboDetailRoute(
     MyJogboDetailScreen(
         paddingValues = paddingValues,
         navigateUp = navigateUp,
-        storeItem = myJogboDetailState.myStoreItems,
+        jogboTitle = myJogboDetailState.myStoreItems.title,
+        jogboChips = myJogboDetailState.myStoreItems.chips.toPersistentList(),
+        storeItems = myJogboDetailState.myStoreItems.stores.toPersistentList(),
         deleteDialogState = myJogboDetailState.showDeleteDialog,
-        shareDialog = myJogboDetailState.showShareDialog,
-        userInformation = myJogboDetailState.userInformation
+        shareDialogState = myJogboDetailState.showShareDialog,
+        userInformation = myJogboDetailState.userInformation,
+        updateShareDialog = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
+        updateDeleteDialog = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) }
     )
 }
 
@@ -78,26 +82,30 @@ fun MyJogboDetailRoute(
 fun MyJogboDetailScreen(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    storeItem: MyJogboDetailEntity,
-    deleteDialogState: MutableState<Boolean>,
-    shareDialog: MutableState<Boolean>,
-    userInformation: UserInformationEntity
+    jogboTitle: String,
+    jogboChips: PersistentList<String>,
+    storeItems: PersistentList<Store>,
+    deleteDialogState: Boolean,
+    shareDialogState: Boolean,
+    userInformation: UserInformationEntity,
+    updateShareDialog: () -> Unit,
+    updateDeleteDialog: () -> Unit
 ) {
 
 
-    if (shareDialog.value) {
+    if (shareDialogState) {
         DialogWithDescription(
             title = stringResource(R.string.go_to_register_store),
             description = stringResource(R.string.preparing_share_jogbo),
             buttonTitle = stringResource(R.string.check),
-            onConfirmation = { shareDialog.value = false }
+            onConfirmation = updateShareDialog
         )
     }
 
-    if (deleteDialogState.value) {
+    if (deleteDialogState) {
         DialogWithButton(
-            onDismissRequest = { deleteDialogState.value = false },
-            onConfirmation = { deleteDialogState.value = false },
+            onDismissRequest = updateDeleteDialog,
+            onConfirmation = updateDeleteDialog,
             title = stringResource(R.string.delete_store),
             textButtonTitle = stringResource(R.string.go_back),
             buttonTitle = stringResource(id = R.string.delete)
@@ -139,11 +147,11 @@ fun MyJogboDetailScreen(
         )
 
         JogboFolder(
-            title = storeItem.title,
-            chips = storeItem.tags,
+            title = jogboTitle,
+            chips = jogboChips, //?????????????????????????????????????????????????????????????
             userName = userInformation.nickname,
             userProfileImage = userInformation.profileImageUrl,
-            shareJogbo = { shareDialog.value = true }
+            shareJogbo = updateShareDialog
         )
 
         LazyColumn(
@@ -157,25 +165,26 @@ fun MyJogboDetailScreen(
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            item {
-                val storeList = storeItem.stores
-                storeList.forEachIndexed { index,store ->
-                    StoreItem(
-                        imageUrl = store.imageUrl,
-                        category = store.category,
-                        name = store.name,
-                        price = store.lowestPrice,
-                        heartCount = store.heartCount,
-                        isIconUsed = false,
-                        isIconSelected = false,
-                        modifier = Modifier.combinedClickable(
-                            onClick = {},
-                            onLongClick = { deleteDialogState.value = true }
-                        )
+            items(storeItems) { store ->
+                StoreItem(
+                    imageUrl = store.imageUrl,
+                    category = store.category,
+                    name = store.name,
+                    price = store.lowestPrice,
+                    heartCount = store.heartCount,
+                    isIconUsed = false,
+                    isIconSelected = false,
+                    modifier = Modifier.combinedClickable(
+                        onClick = {},
+                        onLongClick = updateDeleteDialog
                     )
-                    if (index != storeList.lastIndex) {
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 1.dp), thickness = 1.dp, color = Gray200)
-                    }
+                )
+                if (storeItems.indexOf(store) != storeItems.lastIndex) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 1.dp),
+                        thickness = 1.dp,
+                        color = Gray200
+                    )
                 }
             }
 
@@ -212,26 +221,26 @@ fun MyJogboDetailScreen(
 @Preview
 @Composable
 fun MyJogboDetailScreenPreview() {
-    val showDeleteDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val showShareDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     HankkijogboTheme {
         MyJogboDetailScreen(
             PaddingValues(),
             {},
-            MyJogboDetailEntity(
-                title = "",
-                tags = listOf("", ""),
-                stores = listOf(
-                    Store(0, "", "", "", 0, 0)
-                )
+            "",
+            persistentListOf("", "", ""),
+            persistentListOf(
+                Store(0, "", "", "", 0, 0),
+                Store(0, "", "", "", 0, 0),
+                Store(0, "", "", "", 0, 0)
             ),
-            showDeleteDialog,
-            showShareDialog,
+            false,
+            false,
             UserInformationEntity(
                 nickname = "",
                 profileImageUrl = ""
-            )
+            ),
+            {},
+            {}
         )
     }
 }
