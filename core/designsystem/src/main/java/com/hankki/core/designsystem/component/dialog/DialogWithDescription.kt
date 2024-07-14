@@ -53,7 +53,6 @@ fun DialogWithDescription(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-
                 Text(
                     text = description,
                     style = HankkiTheme.typography.body4,
