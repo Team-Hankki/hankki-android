@@ -62,14 +62,14 @@ fun MyJogboRoute(
         navigateToJogboDetail = navigateToJogboDetail,
         jogboItems = myJogboState.myJogboItems,
         editMode = myJogboState.editMode.value,
-        updateEditMode = { myJogboViewMidel.updateMode() },
+        updateEditMode = myJogboViewMidel::updateMode,
         updateJogboSelectedState = { index, isjogboSelected ->
             myJogboViewMidel.updateJogboSeleted(
                 index,
                 isjogboSelected
             )
         },
-        resetJogboState = { myJogboViewMidel.resetJogboState() }
+        resetJogboState = myJogboViewMidel::resetJogboState
     )
 }
 
@@ -107,14 +107,10 @@ fun MyJogboScreen(
                 Icon(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
                     contentDescription = "Back",
-                    modifier = if (editMode) Modifier
+                    modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable(onClick = resetJogboState)
-                    else Modifier
-                        .padding(start = 9.dp)
-                        .size(44.dp)
-                        .noRippleClickable(onClick = navigateUp)
+                        .noRippleClickable( if(editMode) resetJogboState else navigateUp)
                 )
             },
             content = {
