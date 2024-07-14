@@ -1,4 +1,4 @@
-package com.hankki.feature.report
+package com.hankki.feature.report.main
 
 import androidx.lifecycle.ViewModel
 import com.hankki.domain.report.entity.CategoryEntity

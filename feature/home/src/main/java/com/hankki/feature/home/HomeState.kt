@@ -11,7 +11,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class HomeState(
     val latLng: LatLng = LatLng(37.3009489417651, 127.03549529577874),
-    val universityName: String = "한끼 대학교",
+    val universityName: String? = null,
     val categoryChipState: ChipState = ChipState.Unselected(),
     val categoryChipItems: PersistentList<CategoryChipItem> = persistentListOf(),
     val isCategoryChipOpen: Boolean = false,

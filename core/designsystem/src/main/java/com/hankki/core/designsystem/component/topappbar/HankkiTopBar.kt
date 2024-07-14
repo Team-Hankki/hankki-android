@@ -1,6 +1,5 @@
 package com.hankki.core.designsystem.component.topappbar
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun HankkiTopBar(
@@ -30,8 +28,7 @@ fun HankkiTopBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp)
-            .background(White),
+            .height(50.dp),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

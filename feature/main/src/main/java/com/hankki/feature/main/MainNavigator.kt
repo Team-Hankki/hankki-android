@@ -16,10 +16,12 @@ import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
+import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.my.navigation.navigateMyJogbo
 import com.hankki.feature.my.navigation.navigateMyJogboDetail
 import com.hankki.feature.my.navigation.navigateMyStore
 import com.hankki.feature.report.navigation.navigateReport
+import com.hankki.feature.report.navigation.navigateSearchStore
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -72,6 +74,20 @@ internal class MainNavigator(
 
     fun navigateToHome(navOptions: NavOptions) {
         navController.navigate(Home, navOptions)
+    }
+
+    fun navigateReport(location: LocationModel, navOptions: NavOptions) {
+        navController.navigateReport(
+            latitude = location.latitude,
+            longitude = location.longitude,
+            location = location.location,
+            address = location.address,
+            navOptions = navOptions
+        )
+    }
+
+    fun navigateSearchStore() {
+        navController.navigateSearchStore()
     }
 
     fun navigateToUniversity() {

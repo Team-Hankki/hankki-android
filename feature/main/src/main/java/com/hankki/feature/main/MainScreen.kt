@@ -47,6 +47,7 @@ import com.hankki.feature.dummy.navigation.dummyNavGraph
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
+import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
@@ -70,8 +71,7 @@ internal fun MainScreen(
     Scaffold(
         content = { paddingValue ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 NavHost(
                     navController = navigator.navController,
@@ -86,10 +86,26 @@ internal fun MainScreen(
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
-                        onShowSnackBar = onShowSnackBar
+                        onShowSnackBar = onShowSnackBar,
+                        navigateToUniversitySelection = navigator::navigateToUniversity
                     )
                     reportNavGraph(
-                        navigateUp = { navigator.navigateUpIfNotHome() }
+                        navigateReport = { latitude, longitude, location, address ->
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateReport(
+                                LocationModel(
+                                    latitude,
+                                    longitude,
+                                    location,
+                                    address
+                                ), navOptions
+                            )
+                        },
+                        navigateSearchStore = navigator::navigateSearchStore,
+                        navigateUp = navigator::navigateUpIfNotHome
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
@@ -116,7 +132,7 @@ internal fun MainScreen(
                 visible = navigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toPersistentList(),
                 currentTab = navigator.currentTab,
-                onTabSelected = { navigator.navigate(it) }
+                onTabSelected = navigator::navigate
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
