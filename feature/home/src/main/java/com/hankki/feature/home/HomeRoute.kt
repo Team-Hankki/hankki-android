@@ -5,8 +5,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,6 +59,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
+import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
@@ -98,6 +104,7 @@ import kotlinx.coroutines.launch
 fun HomeRoute(
     paddingValues: PaddingValues,
     onShowSnackBar: (Int) -> Unit,
+    navigateToUniversitySelection: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -133,7 +140,7 @@ fun HomeRoute(
     HomeScreen(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
-        universityName = state.universityName,
+        universityName = state.universityName ?: "전체",
         selectedStoreItem = state.selectedStoreItem,
         storeItems = state.storeItems,
         jogboItems = state.jogboItems,
@@ -146,17 +153,18 @@ fun HomeRoute(
         sortChipItems = state.sortChipItems,
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
+        navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
-        clickMarkerItem = { viewModel.clickMarkerItem(it) },
+        clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
-        selectCategoryChipItem = { viewModel.selectCategoryChipItem(it) },
+        selectCategoryChipItem = viewModel::selectCategoryChipItem,
         dismissCategoryChip = viewModel::dismissCategoryChip,
         clickPriceChip = viewModel::clickPriceChip,
-        selectPriceChipItem = { viewModel.selectPriceChipItem(it) },
+        selectPriceChipItem = viewModel::selectPriceChipItem,
         dismissPriceChip = viewModel::dismissPriceChip,
         clickSortChip = viewModel::clickSortChip,
-        selectSortChipItem = { viewModel.selectSortChipItem(it) },
+        selectSortChipItem = viewModel::selectSortChipItem,
         dismissSortChip = viewModel::dismissSortChip,
         getJogboItems = viewModel::getJogboItems,
     ) {
@@ -206,6 +214,7 @@ fun HomeScreen(
     sortChipItems: PersistentList<String>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
+    navigateToUniversitySelection: () -> Unit,
     controlMyJogboBottomSheet: () -> Unit = {},
     clickMarkerItem: (Int) -> Unit = {},
     clickMap: () -> Unit = {},
@@ -257,9 +266,7 @@ fun HomeScreen(
         HankkiTopBar(
             content = {
                 Row(
-                    modifier = Modifier.noRippleClickable {
-                        // TODO: 학교 선택 Screen 이동
-                    }
+                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
                 ) {
                     Text(
                         text = universityName,
@@ -330,9 +337,7 @@ fun HomeScreen(
                         defaultTitle = "종류",
                         menus = categoryChipItems,
                         onDismissRequest = dismissCategoryChip,
-                        onClickMenu = {
-                            selectCategoryChipItem(it)
-                        },
+                        onClickMenu = selectCategoryChipItem,
                         onClickChip = {
                             clickCategoryChip()
                             closeBottomSheet(
@@ -347,9 +352,7 @@ fun HomeScreen(
                         defaultTitle = "가격대",
                         menus = priceChipItems,
                         onDismissRequest = dismissPriceChip,
-                        onClickMenu = {
-                            selectPriceChipItem(it)
-                        },
+                        onClickMenu = selectPriceChipItem,
                         onClickChip = {
                             clickPriceChip()
                             closeBottomSheet(
@@ -364,9 +367,7 @@ fun HomeScreen(
                         defaultTitle = "정렬",
                         menus = sortChipItems,
                         onDismissRequest = dismissSortChip,
-                        onClickMenu = {
-                            selectSortChipItem(it)
-                        },
+                        onClickMenu = selectSortChipItem,
                         onClickChip = {
                             clickSortChip()
                             closeBottomSheet(
@@ -391,7 +392,11 @@ fun HomeScreen(
                     backgroundColor = Color.Transparent,
                     sheetGesturesEnabled = true,
                     sheetContent = {
-                        if (isMainBottomSheetOpen) {
+                        AnimatedVisibility(
+                            visible = isMainBottomSheetOpen,
+                            enter = EnterTransition.None,
+                            exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+                        ) {
                             Column(
                                 modifier = Modifier
                                     .clip(
@@ -509,13 +514,4 @@ private fun closeBottomSheet(
 private object MapConstants {
     const val DEFAULT_ZOOM = 16.0
     const val CAN_SEE_TITLE_ZOOM = 18.0
-}
-
-fun Modifier.ignoreNextModifiers(): Modifier {
-    return object : Modifier by this {
-
-        override fun then(other: Modifier): Modifier {
-            return this
-        }
-    }
 }

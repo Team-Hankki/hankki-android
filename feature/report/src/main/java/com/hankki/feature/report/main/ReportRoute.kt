@@ -221,7 +221,9 @@ fun ReportScreen(
             }
 
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .noRippleClickable(),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 BottomBlurLayout()

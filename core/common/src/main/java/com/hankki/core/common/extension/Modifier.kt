@@ -107,3 +107,12 @@ fun Modifier.dashedBorder(strokeWidth: Dp, color: Color, cornerRadiusDp: Dp) = c
         )
     }
 )
+
+fun Modifier.ignoreNextModifiers(): Modifier {
+    return object : Modifier by this {
+
+        override fun then(other: Modifier): Modifier {
+            return this
+        }
+    }
+}

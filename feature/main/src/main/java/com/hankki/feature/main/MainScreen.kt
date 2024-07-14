@@ -71,8 +71,7 @@ internal fun MainScreen(
     Scaffold(
         content = { paddingValue ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 NavHost(
                     navController = navigator.navController,
@@ -87,7 +86,8 @@ internal fun MainScreen(
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
-                        onShowSnackBar = onShowSnackBar
+                        onShowSnackBar = onShowSnackBar,
+                        navigateToUniversitySelection = navigator::navigateToUniversity
                     )
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
@@ -109,7 +109,7 @@ internal fun MainScreen(
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
-                        navigateToDummy = { navigator.navigateToDummy() }
+                        navigateToDummy = navigator::navigateToDummy
                     )
                     loginNavgraph()
                     universitySelectionNavGraph(
@@ -129,7 +129,7 @@ internal fun MainScreen(
                 visible = navigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toPersistentList(),
                 currentTab = navigator.currentTab,
-                onTabSelected = { navigator.navigate(it) }
+                onTabSelected = navigator::navigate
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
