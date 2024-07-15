@@ -5,12 +5,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
 import com.hankki.core.navigation.Route
-import com.hankki.feature.my.MyJogboDetailRoute
-import com.hankki.feature.my.MyStoreRoute
+import com.hankki.feature.my.myjogbodetail.MyJogboDetailRoute
+import com.hankki.feature.my.MyRoute
+import com.hankki.feature.my.mystore.MyStoreRoute
 import com.hankki.feature.my.myjogbo.MyJogboRoute
-import com.hankki.feature.my.mypage.MyRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateMy(navOptions: NavOptions) {
@@ -21,8 +22,8 @@ fun NavController.navigateMyJogbo() {
     navigate(MyJogbo)
 }
 
-fun NavController.navigateMyStore() {
-    navigate(MyStore)
+fun NavController.navigateMyStore(type: String) {
+    navigate(MyStore(type))
 }
 
 fun NavController.navigateMyJogboDetail() {
@@ -33,7 +34,7 @@ fun NavGraphBuilder.myNavGraph(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToMyJogbo: () -> Unit,
-    navigateToMyStore : () -> Unit,
+    navigateToMyStore : (String) -> Unit,
     navigateToJogboDetail: () -> Unit
 ) {
     composable<My> {
@@ -42,11 +43,12 @@ fun NavGraphBuilder.myNavGraph(
     composable<MyJogbo> {
         MyJogboRoute(paddingValues, navigateUp,navigateToJogboDetail)
     }
-    composable<MyStore> {
-        MyStoreRoute(paddingValues)
+    composable<MyStore> {  backStackEntry ->
+        val type = backStackEntry.toRoute<MyStore>()
+        MyStoreRoute(paddingValues,navigateUp,type.type)
     }
     composable<MyJogboDetail> {
-        MyJogboDetailRoute(paddingValues)
+        MyJogboDetailRoute(paddingValues,navigateUp)
     }
 }
 
@@ -57,7 +59,9 @@ data object My : MainTabRoute
 data object MyJogbo : Route
 
 @Serializable
-data object MyStore : Route
+data class MyStore(
+    val type : String
+) : Route
 
 @Serializable
 data object MyJogboDetail : Route
