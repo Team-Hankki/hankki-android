@@ -57,31 +57,34 @@ fun UniversitySelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 22.dp)
             .navigationBarsPadding(),
     ) {
         Spacer(modifier = Modifier.height(68.dp))
-        Text(
-            text = stringResource(id = R.string.select_university),
-            style = HankkiTheme.typography.h1,
-            color = Gray900
-        )
 
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(id = R.string.wait_a_minute),
-            style = HankkiTheme.typography.body4,
-            color = Gray400
-        )
+        Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+            Text(
+                text = stringResource(id = R.string.select_university),
+                style = HankkiTheme.typography.h1,
+                color = Gray900
+            )
 
-        Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.wait_a_minute),
+                style = HankkiTheme.typography.body4,
+                color = Gray400
+            )
+
+            Spacer(modifier = Modifier.height(34.dp))
+        }
+
         Box(
             modifier = Modifier.weight(1f),
             contentAlignment = Alignment.BottomCenter
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().padding(horizontal = 22.dp)
             ) {
                 items(universities) { university ->
                     UniversityItem(
@@ -94,14 +97,14 @@ fun UniversitySelectionScreen(
                     }
                 }
                 item {
-                    BottomBlurLayout()
+                    BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
                 }
             }
 
-            BottomBlurLayout()
+            BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
 
             Column(
-                modifier = Modifier.noRippleClickable()
+                modifier = Modifier.noRippleClickable().padding(horizontal = 22.dp)
             ) {
                 HankkiButton(
                     text = stringResource(id = R.string.select),
