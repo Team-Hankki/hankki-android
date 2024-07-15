@@ -25,17 +25,20 @@ fun SplashScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(205f))
+
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.img_subtitle),
                 contentDescription = "subtitle"
             )
             Spacer(modifier = Modifier.height(14.dp))
+
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.img_title),
                 contentDescription = "title"
             )
             Spacer(modifier = Modifier.height(42.dp))
+
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.img_logo),
                 contentDescription = "logo"
