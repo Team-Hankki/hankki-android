@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.myjogbodetail
 
 import androidx.lifecycle.ViewModel
 import com.hankki.domain.my.entity.MyJogboDetailEntity

@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.mystore
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -28,7 +28,10 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.StoreEntity
+import com.hankki.feature.my.R
 import com.hankki.feature.my.component.StoreItem
+import com.hankki.feature.my.mystore.model.MyStoreModel
+import com.hankki.feature.my.mystore.model.toMyStoreModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -101,29 +104,27 @@ fun MyStoreScreen(
         ) {
 
             items(storeItems) { store ->
-                if (store.isLiked == true) {
-                    StoreItem(
-                        imageUrl = store.imageURL,
-                        category = store.category,
-                        name = store.name,
-                        price = store.lowestPrice,
-                        heartCount = store.heartCount,
-                        isIconUsed = (type == "like"),
-                        isIconSelected = store.isLiked,
-                        editSelected = {
-                            updateStoreSelected(
-                                storeItems.indexOf(store),
-                                !store.isLiked
-                            )
-                        }
-                    )
-                    if (storeItems.indexOf(store) != storeItems.lastIndex) {
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 1.dp),
-                            thickness = 1.dp,
-                            color = Gray200
+                StoreItem(
+                    imageUrl = store.imageURL,
+                    category = store.category,
+                    name = store.name,
+                    price = store.lowestPrice,
+                    heartCount = store.heartCount,
+                    isIconUsed = (type == "like"),
+                    isIconSelected = store.isLiked ?: false,
+                    editSelected = {
+                        updateStoreSelected(
+                            storeItems.indexOf(store),
+                            store.isLiked == true // null을 포함한 모든 경우를 처리
                         )
                     }
+                )
+                if (storeItems.indexOf(store) != storeItems.lastIndex) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 1.dp),
+                        thickness = 1.dp,
+                        color = Gray200
+                    )
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.myjogbodetail
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -44,6 +44,7 @@ import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.Store
 import com.hankki.domain.my.entity.UserInformationEntity
+import com.hankki.feature.my.R
 import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
@@ -148,7 +149,7 @@ fun MyJogboDetailScreen(
 
         JogboFolder(
             title = jogboTitle,
-            chips = jogboChips, //?????????????????????????????????????????????????????????????
+            chips = jogboChips,
             userName = userInformation.nickname,
             userProfileImage = userInformation.profileImageUrl,
             shareJogbo = updateShareDialog
