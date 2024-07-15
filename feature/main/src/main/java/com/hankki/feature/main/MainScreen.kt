@@ -89,7 +89,7 @@ internal fun MainScreen(
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = onShowSnackBar,
-                        navigateStoreDetail = { navigator.navigateToStoreDetail() }
+                        navigateStoreDetail = navigator::navigateToStoreDetail
                     )
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
@@ -134,7 +134,7 @@ internal fun MainScreen(
                 visible = navigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toPersistentList(),
                 currentTab = navigator.currentTab,
-                onTabSelected = { navigator.navigate(it) }
+                onTabSelected = navigator::navigate
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
