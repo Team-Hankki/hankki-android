@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -140,7 +141,7 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
                         },
                         content = {
                             Text(
-                                text = "나의 족보에 추가",
+                                text = stringResource(id = R.string.add_new_jogbo),
                                 style = HankkiTheme.typography.sub3
                             )
                         },
@@ -151,7 +152,7 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "내가 알고 있는 정보와 다른가요?",
+                text = stringResource(id = com.hankki.feature.storedetail.R.string.is_it_different),
                 style = HankkiTheme.typography.sub1,
                 color = Gray900
             )
@@ -160,9 +161,9 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
 
             val selectedIndex = remember { mutableIntStateOf(-1) }
             val buttonLabels = listOf(
-                "식당이 사라졌어요",
-                "더이상 8,000원 이하인 메뉴가 없어요",
-                "부적절한 제보에요"
+                stringResource(id = com.hankki.feature.storedetail.R.string.missing_store),
+                stringResource(id = com.hankki.feature.storedetail.R.string.no_longer_8000),
+                stringResource(id = com.hankki.feature.storedetail.R.string.inappropriate_report)
             )
 
             buttonLabels.forEachIndexed { index, label ->
