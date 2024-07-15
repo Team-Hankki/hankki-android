@@ -64,8 +64,8 @@ fun StoreDetailRoute() {
                     heartCount = storeState.heartCount,
                     selectedIndex = storeState.selectedIndex,
                     buttonLabels = storeState.buttonLabels,
-                    onLikeClicked = { viewModel.toggleLike() },
-                    onSelectIndex = { index -> viewModel.updateSelectedIndex(index) }
+                    onLikeClicked = viewModel::toggleLike,
+                    onSelectIndex = viewModel::updateSelectedIndex
                 )
             }
         }
