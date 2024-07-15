@@ -131,7 +131,10 @@ internal fun MainScreen(
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
-                        navigateToDummy = navigator::navigateToDummy
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateToMyJogbo = navigator::navigateToMyJogbo,
+                        navigateToMyStore = navigator::navigateToMyStore,
+                        navigateToJogboDetail = navigator::navigateToMyJogboDetail
                     )
                     loginNavgraph()
                     universitySelectionNavGraph(

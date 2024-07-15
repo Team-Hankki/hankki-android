@@ -1,4 +1,4 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
