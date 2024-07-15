@@ -9,6 +9,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.hankki.core.designsystem.R
 
@@ -153,124 +155,140 @@ class HankkiTypography internal constructor(
     }
 }
 
+fun hankkiTextStyle(
+    fontFamily: FontFamily,
+    fontWeight: FontWeight,
+    fontSize: TextUnit,
+    lineHeight: TextUnit,
+): TextStyle = TextStyle(
+    fontFamily = fontFamily,
+    fontWeight = fontWeight,
+    fontSize = fontSize,
+    lineHeight = lineHeight,
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
+    )
+)
+
 @Composable
 fun hankkiTypography(): HankkiTypography {
     return HankkiTypography(
-        h1 = TextStyle(
+        h1 = hankkiTextStyle(
             fontFamily = PretendardBold,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             lineHeight = 36.sp
         ),
-        h2 = TextStyle(
+        h2 = hankkiTextStyle(
             fontFamily = PretendardBold,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             lineHeight = 30.sp
         ),
-        suitH1 = TextStyle(
+        suitH1 = hankkiTextStyle(
             fontFamily = SuiteBold,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             lineHeight = 36.sp
         ),
-        suitH2 = TextStyle(
+        suitH2 = hankkiTextStyle(
             fontFamily = SuiteBold,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             lineHeight = 30.sp
         ),
-        suitH3 = TextStyle(
+        suitH3 = hankkiTextStyle(
             fontFamily = SuiteBold,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             lineHeight = 27.sp
         ),
-        sub1 = TextStyle(
+        sub1 = hankkiTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
             lineHeight = 27.sp
         ),
-        sub2 = TextStyle(
+        sub2 = hankkiTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 17.sp,
             lineHeight = 25.5.sp
         ),
-        sub3 = TextStyle(
+        sub3 = hankkiTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
             lineHeight = 24.sp
         ),
-        suitSub1 = TextStyle(
+        suitSub1 = hankkiTextStyle(
             fontFamily = SuiteSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
             lineHeight = 24.sp
         ),
-        body1 = TextStyle(
+        body1 = hankkiTextStyle(
             fontFamily = PretendardMedium,
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp,
             lineHeight = 24.sp
         ),
-        body2 = TextStyle(
+        body2 = hankkiTextStyle(
             fontFamily = PretendardBold,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
-        body3 = TextStyle(
+        body3 = hankkiTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
-        body4 = TextStyle(
+        body4 = hankkiTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
-        body5 = TextStyle(
+        body5 = hankkiTextStyle(
             fontFamily = PretendardMedium,
             fontWeight = FontWeight.Medium,
             fontSize = 13.sp,
             lineHeight = 19.5.sp
         ),
-        body6 = TextStyle(
+        body6 = hankkiTextStyle(
             fontFamily = PretendardMedium,
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             lineHeight = 22.5.sp
         ),
-        suitBody1 = TextStyle(
+        suitBody1 = hankkiTextStyle(
             fontFamily = SuiteMedium,
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp,
             lineHeight = 24.sp
         ),
-        suitBody2 = TextStyle(
+        suitBody2 = hankkiTextStyle(
             fontFamily = SuiteRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
-        button1 = TextStyle(
+        button1 = hankkiTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
             lineHeight = 18.sp
         ),
-        caption1 = TextStyle(
+        caption1 = hankkiTextStyle(
             fontFamily = PretendardMedium,
             fontWeight = FontWeight.Medium,
             fontSize = 12.sp,
             lineHeight = 18.sp
         ),
-        caption2 = TextStyle(
+        caption2 = hankkiTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 11.sp,

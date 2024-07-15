@@ -6,23 +6,48 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
+import com.hankki.feature.report.finish.ReportFinishRoute
 import com.hankki.feature.report.main.ReportRoute
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.searchstore.SearchStoreRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateReport(
+fun NavController.navigateToReport(
     latitude: Float = 0f,
     longitude: Float = 0f,
     location: String = "",
     address: String = "",
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
-    navigate(Report(latitude, longitude, location, address), navOptions)
+    navigate(
+        Report(
+            latitude = latitude,
+            longitude = longitude,
+            location = location,
+            address = address
+        ),
+        navOptions
+    )
 }
 
-fun NavController.navigateSearchStore() {
+fun NavController.navigateToSearchStore() {
     navigate(SearchStore)
+}
+
+fun NavController.navigateToReportFinish(
+    count: Long,
+    storeName: String,
+    storeId: Long,
+    navOptions: NavOptions? = null,
+) {
+    navigate(
+        ReportFinish(
+            count = count,
+            storeName = storeName,
+            storeId = storeId
+        ),
+        navOptions
+    )
 }
 
 fun NavGraphBuilder.reportNavGraph(
@@ -32,8 +57,15 @@ fun NavGraphBuilder.reportNavGraph(
         location: String,
         address: String,
     ) -> Unit,
-    navigateSearchStore: () -> Unit,
+    navigateToSearchStore: () -> Unit,
     navigateUp: () -> Unit,
+    navigateToReportFinish: (
+        count: Long,
+        storeName: String,
+        storeId: Long,
+    ) -> Unit,
+    navigateToStoreDetail: (storeId: Long) -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     composable<Report> { backStackEntry ->
         val items = backStackEntry.toRoute<Report>()
@@ -44,8 +76,9 @@ fun NavGraphBuilder.reportNavGraph(
                 items.location,
                 items.address
             ),
-            navigateSearchStore = navigateSearchStore,
-            navigateUp = navigateUp
+            navigateSearchStore = navigateToSearchStore,
+            navigateUp = navigateUp,
+            navigateToReportFinish = navigateToReportFinish,
         )
     }
     composable<SearchStore> {
@@ -54,6 +87,16 @@ fun NavGraphBuilder.reportNavGraph(
                 navigateReport(latitude, longitude, location, address)
             },
             navigateUp = navigateUp
+        )
+    }
+    composable<ReportFinish> { backStackEntry ->
+        val items = backStackEntry.toRoute<ReportFinish>()
+        ReportFinishRoute(
+            count = items.count,
+            storeName = items.storeName,
+            storeId = items.storeId,
+            navigateToHome = navigateToHome,
+            navigateToStoreDetail = navigateToStoreDetail
         )
     }
 }
@@ -68,3 +111,10 @@ data class Report(
 
 @Serializable
 data object SearchStore : MainTabRoute
+
+@Serializable
+data class ReportFinish(
+    val storeName: String,
+    val storeId: Long,
+    val count: Long,
+) : MainTabRoute

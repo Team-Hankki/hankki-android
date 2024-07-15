@@ -8,4 +8,9 @@
     <string name="will_report">을 제보할래요</string>
     <string name="add_menu">메뉴 추가하기</string>
     <string name="search_store_sub_title">식당이름으로 검색하면\n주소를 찾아드릴게요</string>
+    <string name="add_store">%d번째 식당을 등록했어요</string>
+    <string name="add_my_jogbo">내 족보에 추가하기</string>
+    <string name="my_reported_store">내가 등록한 식당</string>
+    <string name="to_home">홈으로</string>
+    <string name="move_reported_store">제보한 식당 보러가기</string>
 </resources>

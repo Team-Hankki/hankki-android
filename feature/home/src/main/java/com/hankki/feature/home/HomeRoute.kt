@@ -95,6 +95,7 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -282,7 +283,8 @@ fun HomeScreen(
                         tint = Gray300
                     )
                 }
-            }
+            },
+            modifier = Modifier.background(White)
         )
 
         Box {
@@ -317,6 +319,7 @@ fun HomeScreen(
                                 marker.y
                             )
                         ),
+                        icon = OverlayImage.fromResource(R.drawable.ic_marker),
                         captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.title else "",
                         onClick = {
                             clickMarkerItem(marker.id)

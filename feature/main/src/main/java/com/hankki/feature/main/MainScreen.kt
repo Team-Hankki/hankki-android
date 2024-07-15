@@ -97,7 +97,7 @@ internal fun MainScreen(
                                 popUpTo(navigator.navController.graph.findStartDestination().id)
                                 launchSingleTop = true
                             }
-                            navigator.navigateReport(
+                            navigator.navigateToReport(
                                 LocationModel(
                                     latitude,
                                     longitude,
@@ -106,12 +106,37 @@ internal fun MainScreen(
                                 ), navOptions
                             )
                         },
-                        navigateSearchStore = navigator::navigateSearchStore,
-                        navigateUp = navigator::navigateUpIfNotHome
+                        navigateToSearchStore = navigator::navigateToSearchStore,
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateToReportFinish = { count, storeName, storeId ->
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToReportFinish(
+                                count,
+                                storeName,
+                                storeId,
+                                navOptions
+                            )
+                        },
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        },
+                        navigateToStoreDetail = {
+                            // TODO: StoreDetail 구현시 적용 예정
+                        }
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
-                        navigateToDummy = navigator::navigateToDummy
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateToMyJogbo = navigator::navigateToMyJogbo,
+                        navigateToMyStore = navigator::navigateToMyStore,
+                        navigateToJogboDetail = navigator::navigateToMyJogboDetail
                     )
                     loginNavgraph()
                     universitySelectionNavGraph(
@@ -123,7 +148,7 @@ internal fun MainScreen(
                             navigator.navigateToHome(navOptions)
                         }
                     )
-                    storeDetailNavGraph{
+                    storeDetailNavGraph {
 
                     }
                 }
@@ -164,8 +189,8 @@ private fun MainBottomBar(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .fillMaxWidth()
-                    .height(63.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    .height(75.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 tabs.forEach { tab ->
                     MainBottomBarItem(
