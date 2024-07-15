@@ -5,3 +5,8 @@ data class CategoryChipItem(
     val tag: String,
     val imageUrl: String,
 )
+
+data class ChipItem(
+    val name: String,
+    val tag: String
+)

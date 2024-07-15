@@ -77,6 +77,7 @@ import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
+import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
@@ -210,9 +211,9 @@ fun HomeScreen(
     categoryChipState: ChipState,
     categoryChipItems: PersistentList<CategoryChipItem>,
     priceChipState: ChipState,
-    priceChipItems: PersistentList<String>,
+    priceChipItems: PersistentList<ChipItem>,
     sortChipState: ChipState,
-    sortChipItems: PersistentList<String>,
+    sortChipItems: PersistentList<ChipItem>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
     navigateStoreDetail: () -> Unit = {},
