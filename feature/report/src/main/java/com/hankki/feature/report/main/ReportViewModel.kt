@@ -1,12 +1,18 @@
 package com.hankki.feature.report.main
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ReportViewModel @Inject constructor() : ViewModel() {
@@ -14,13 +20,18 @@ class ReportViewModel @Inject constructor() : ViewModel() {
     val state: StateFlow<ReportState>
         get() = _state.asStateFlow()
 
+    private val _sideEffect: MutableSharedFlow<ReportSideEffect> = MutableSharedFlow()
+    val sideEffect: SharedFlow<ReportSideEffect>
+        get() = _sideEffect.asSharedFlow()
+
     init {
+        getCount()
         getCategories()
     }
 
-    fun selectCategory(category: String) {
+    private fun getCount() {
         _state.value = _state.value.copy(
-            selectedCategory = category
+            count = 51
         )
     }
 
@@ -66,6 +77,20 @@ class ReportViewModel @Inject constructor() : ViewModel() {
         )
     }
 
+    fun setLocation(location: LocationModel) {
+        _state.value = _state.value.copy(
+            location = location
+        )
+    }
+
+
+    fun selectCategory(category: String) {
+        _state.value = _state.value.copy(
+            selectedCategory = category
+        )
+        checkButtonEnabled()
+    }
+
     fun changeMenuName(index: Int, name: String) {
         if (_state.value.menuList.size <= index) return
         if (_state.value.menuList.isEmpty()) return
@@ -76,6 +101,7 @@ class ReportViewModel @Inject constructor() : ViewModel() {
                 _state.value.menuList[index].copy(name = name)
             )
         )
+        checkButtonEnabled()
     }
 
     fun changePrice(index: Int, price: String) {
@@ -91,6 +117,7 @@ class ReportViewModel @Inject constructor() : ViewModel() {
                 )
             )
         )
+        checkButtonEnabled()
     }
 
     fun addMenu() {
@@ -99,11 +126,40 @@ class ReportViewModel @Inject constructor() : ViewModel() {
                 MenuModel("", "")
             )
         )
+        checkButtonEnabled()
     }
 
     fun deleteMenu(index: Int) {
         _state.value = _state.value.copy(
             menuList = _state.value.menuList.removeAt(index)
         )
+        checkButtonEnabled()
+    }
+
+    fun navigateToReportFinish() {
+        viewModelScope.launch {
+            _sideEffect.emit(
+                with(_state.value) {
+                    ReportSideEffect.navigateReportFinish(
+                        count = count,
+                        storeName = location.location,
+                        storeId = storeId
+                    )
+                }
+            )
+        }
+    }
+
+    fun checkButtonEnabled() {
+        with(_state.value) {
+            _state.value = _state.value.copy(
+                buttonEnabled = menuList.isNotEmpty()
+                        && menuList.none { it.isPriceError }
+                        && menuList.none { it.name.isEmpty() }
+                        && menuList.none { it.price.isEmpty() }
+                        && selectedCategory != null
+                        && location.location.isNotEmpty()
+            )
+        }
     }
 }

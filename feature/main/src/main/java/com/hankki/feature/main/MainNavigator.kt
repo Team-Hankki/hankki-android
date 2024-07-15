@@ -22,6 +22,9 @@ import com.hankki.feature.my.navigation.navigateMyJogboDetail
 import com.hankki.feature.my.navigation.navigateMyStore
 import com.hankki.feature.report.navigation.navigateReport
 import com.hankki.feature.report.navigation.navigateSearchStore
+import com.hankki.feature.report.navigation.navigateToReport
+import com.hankki.feature.report.navigation.navigateToReportFinish
+import com.hankki.feature.report.navigation.navigateToSearchStore
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -49,7 +52,7 @@ internal class MainNavigator(
 
         when (tab) {
             MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.REPORT -> navController.navigateReport()
+            MainTab.REPORT -> navController.navigateToReport()
             MainTab.MY -> navController.navigateMy(navOptions)
         }
     }
@@ -76,8 +79,8 @@ internal class MainNavigator(
         navController.navigate(Home, navOptions)
     }
 
-    fun navigateReport(location: LocationModel, navOptions: NavOptions) {
-        navController.navigateReport(
+    fun navigateToReport(location: LocationModel, navOptions: NavOptions) {
+        navController.navigateToReport(
             latitude = location.latitude,
             longitude = location.longitude,
             location = location.location,
@@ -86,8 +89,22 @@ internal class MainNavigator(
         )
     }
 
-    fun navigateSearchStore() {
-        navController.navigateSearchStore()
+    fun navigateToReportFinish(
+        count: Long,
+        storeName: String,
+        storeId: Long,
+        navOptions: NavOptions,
+    ) {
+        navController.navigateToReportFinish(
+            count = count,
+            storeName = storeName,
+            storeId = storeId,
+            navOptions = navOptions
+        )
+    }
+
+    fun navigateToSearchStore() {
+        navController.navigateToSearchStore()
     }
 
     fun navigateToUniversity() {

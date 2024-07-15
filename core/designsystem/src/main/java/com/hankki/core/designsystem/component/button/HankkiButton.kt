@@ -29,13 +29,13 @@ fun HankkiButton(
     enabled: Boolean = true,
     textStyle: TextStyle = TextStyle.Default,
 ) {
-    val newModifier = if (enabled) modifier.bounceClick(onClick = onClick) else modifier
-
     Box(
         contentAlignment = Alignment.Center,
-
-        modifier = newModifier
-            .bounceClick(onClick = onClick)
+        modifier = modifier
+            .run {
+                if (enabled) bounceClick(onClick = onClick)
+                else this
+            }
             .clip(RoundedCornerShape(16.dp))
             .background(if (enabled) Red else SemiRed)
             .padding(vertical = 15.dp, horizontal = 22.dp)
