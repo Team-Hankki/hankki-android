@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -54,7 +54,7 @@ fun MyStoreRoute(
         type = type,
         storeItems = myStoreState.myStoreItems,
         updateStoreSelected = { index, isJogboSelected ->
-            myStoreViewModel.updateStoreSeleted(
+            myStoreViewModel.updateStoreSelected(
                 index,
                 isJogboSelected
             )
@@ -102,8 +102,7 @@ fun MyStoreScreen(
             modifier = Modifier
                 .padding(start = 22.dp, end = 11.dp)
         ) {
-
-            items(storeItems) { store ->
+            itemsIndexed(storeItems) { index, store ->
                 StoreItem(
                     imageUrl = store.imageURL,
                     category = store.category,
@@ -114,12 +113,12 @@ fun MyStoreScreen(
                     isIconSelected = store.isLiked ?: false,
                     editSelected = {
                         updateStoreSelected(
-                            storeItems.indexOf(store),
-                            store.isLiked == true // null을 포함한 모든 경우를 처리
+                            index,
+                            store.isLiked == true
                         )
                     }
                 )
-                if (storeItems.indexOf(store) != storeItems.lastIndex) {
+                if (index != storeItems.lastIndex) {
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 1.dp),
                         thickness = 1.dp,
