@@ -70,9 +70,9 @@ fun HankkijogboTheme(
             window.navigationBarColor = White.toArgb()
 
             WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightStatusBars = darkTheme
+                .isAppearanceLightStatusBars = true
             WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightNavigationBars = darkTheme
+                .isAppearanceLightNavigationBars = true
         }
     }
 
