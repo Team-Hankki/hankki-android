@@ -1,6 +1,5 @@
 package com.hankki.feature.my.mystore
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.hankki.domain.my.entity.StoreEntity
 import com.hankki.feature.my.mystore.model.toMyStoreModel
@@ -69,6 +68,5 @@ class MyStoreViewModel @Inject constructor(
                 _myStoreState.value.myStoreItems[index].copy(isLiked = !isStoreSelected)
             )
         )
-        Log.e("item"," $index | ${_myStoreState.value.myStoreItems}")
     }
 }
