@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +55,7 @@ fun ReportFinishCard(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "내가 등록한 식당",
+                    text = stringResource(id = com.hankki.feature.report.R.string.my_reported_store),
                     color = Gray500,
                     style = HankkiTheme.typography.caption1,
                     maxLines = 1,
@@ -81,7 +82,7 @@ fun ReportFinishCard(
                     tint = Red
                 )
                 Text(
-                    text = "내 족보에 추가",
+                    text = stringResource(id = com.hankki.feature.report.R.string.add_my_jogbo),
                     color = Red,
                     style = HankkiTheme.typography.body3,
                     modifier = Modifier

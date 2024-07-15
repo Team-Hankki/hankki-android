@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,6 +62,7 @@ fun ReportFinishRoute(
                 is ReportFinishSideEffect.navigateToStoreDetail -> navigateToStoreDetail(
                     sideEffect.storeId
                 )
+
                 is ReportFinishSideEffect.navigateToHome -> navigateToHome()
             }
         }
@@ -128,12 +130,12 @@ fun ReportFinishScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "${count}번째 식당을 등록했어요",
+                text = stringResource(id = R.string.add_store, count),
                 color = Gray900,
                 style = HankkiTheme.typography.suitH2
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
+            Text( // TODO: 이 부분은 랜덤 텍스트가 들어가고, 아직 확정나지 않아 하드코딩 해두겠습니다.
                 text = "${name}님이 모두의 지갑을 지켰어요!",
                 color = Gray500,
                 style = HankkiTheme.typography.suitBody1
@@ -155,13 +157,13 @@ fun ReportFinishScreen(
                 modifier = Modifier
             ) {
                 HankkiButton(
-                    text = "제보한 식당 보러가기",
+                    text = stringResource(id = R.string.move_reported_store),
                     onClick = moveToStoreDetail,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 HankkiTextButton(
-                    text = "홈으로",
+                    text = stringResource(id = R.string.to_home),
                     onClick = moveToHome,
                     modifier = Modifier.fillMaxWidth()
                 )
