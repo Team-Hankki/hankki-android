@@ -1,5 +1,6 @@
 package com.hankki.feature.universityselection
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.universityselection.UniversitySelectionModel
 import com.hankki.feature.universityselection.component.UniversityItem
 import kotlinx.collections.immutable.PersistentList
@@ -57,6 +59,7 @@ fun UniversitySelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(White)
             .navigationBarsPadding(),
     ) {
         Spacer(modifier = Modifier.height(68.dp))

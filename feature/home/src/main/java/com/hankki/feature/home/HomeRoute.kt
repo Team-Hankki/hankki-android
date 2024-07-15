@@ -280,7 +280,8 @@ fun HomeScreen(
                         tint = Gray300
                     )
                 }
-            }
+            },
+            modifier = Modifier.background(White)
         )
 
         Box {
