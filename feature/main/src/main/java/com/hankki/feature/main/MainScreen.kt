@@ -95,7 +95,7 @@ internal fun MainScreen(
                                 popUpTo(navigator.navController.graph.findStartDestination().id)
                                 launchSingleTop = true
                             }
-                            navigator.navigateReport(
+                            navigator.navigateToReport(
                                 LocationModel(
                                     latitude,
                                     longitude,
@@ -104,8 +104,30 @@ internal fun MainScreen(
                                 ), navOptions
                             )
                         },
-                        navigateSearchStore = navigator::navigateSearchStore,
-                        navigateUp = navigator::navigateUpIfNotHome
+                        navigateToSearchStore = navigator::navigateToSearchStore,
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateToReportFinish = { count, storeName, storeId ->
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToReportFinish(
+                                count,
+                                storeName,
+                                storeId,
+                                navOptions
+                            )
+                        },
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        },
+                        navigateToStoreDetail = {
+                            // TODO: StoreDetail 구현시 적용 예정
+                        }
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
