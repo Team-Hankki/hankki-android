@@ -171,7 +171,6 @@ fun hankkiTextStyle(
     )
 )
 
-
 @Composable
 fun hankkiTypography(): HankkiTypography {
     return HankkiTypography(
