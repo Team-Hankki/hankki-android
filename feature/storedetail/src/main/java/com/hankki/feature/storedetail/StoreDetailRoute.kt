@@ -59,18 +59,19 @@ fun StoreDetailRoute() {
         is UiState.Loading -> {}
 
         is UiState.Success -> {
-            val storeDetail = state.data
-            StoreDetailScreen(
-                title = storeDetail.name,
-                tag = storeDetail.category,
-                menuItems = storeDetail.menus.toPersistentList(),
-                isLiked = isLiked,
-                heartCount = heartCount,
-                selectedIndex = selectedIndex,
-                buttonLabels = buttonLabels,
-                onLikeClicked = { viewModel.toggleLike() },
-                onSelectIndex = { index -> viewModel.updateSelectedIndex(index) }
-            )
+            with(state.data) {
+                StoreDetailScreen(
+                    title = name,
+                    tag = category,
+                    menuItems = menus.toPersistentList(),
+                    isLiked = isLiked,
+                    heartCount = heartCount,
+                    selectedIndex = selectedIndex,
+                    buttonLabels = buttonLabels.toPersistentList(),
+                    onLikeClicked = { viewModel.toggleLike() },
+                    onSelectIndex = { index -> viewModel.updateSelectedIndex(index) }
+                )
+            }
         }
 
         is UiState.Failure -> {}
@@ -85,7 +86,7 @@ fun StoreDetailScreen(
     isLiked: Boolean,
     heartCount: Int,
     selectedIndex: Int,
-    buttonLabels: List<String>,
+    buttonLabels: PersistentList<String>,
     onLikeClicked: () -> Unit,
     onSelectIndex: (Int) -> Unit
 ) {
@@ -252,7 +253,7 @@ fun PreviewRestaurantMenuScreen() {
                 "가게 누락",
                 "더 이상 8000원이 아닙니다",
                 "부적절한 신고"
-            ),
+            ).toPersistentList(),
             onLikeClicked = {},
             onSelectIndex = {}
         )
