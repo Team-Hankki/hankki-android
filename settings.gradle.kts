@@ -65,3 +65,5 @@ include(
     ":feature:login",
     ":feature:universityselection"
 )
+include(":domain:home")
+include(":data:home")

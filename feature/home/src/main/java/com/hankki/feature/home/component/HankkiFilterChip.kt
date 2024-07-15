@@ -38,6 +38,7 @@ import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.model.CategoryChipItem
+import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -76,7 +77,7 @@ fun DropdownFilterChip(
     chipState: ChipState,
     defaultTitle: String,
     modifier: Modifier = Modifier,
-    menus: PersistentList<String> = persistentListOf(),
+    menus: PersistentList<ChipItem> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
     onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
@@ -102,11 +103,11 @@ fun DropdownFilterChip(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .noRippleClickable(onClick = { onClickMenu(item) }),
+                        .noRippleClickable(onClick = { onClickMenu(item.name) }),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = item,
+                        text = item.name,
                         style = HankkiTheme.typography.caption1,
                         color = Gray600
                     )
@@ -143,7 +144,7 @@ fun RowFilterChip(
     ) {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             item {
-                Spacer(modifier = Modifier.width(22.dp))
+                Spacer(modifier = Modifier.width(12.dp))
             }
             items(menus) { menu ->
                 Column(
