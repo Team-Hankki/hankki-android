@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="42dp"
+    android:height="51dp"
+    android:viewportWidth="42"
+    android:viewportHeight="51">
+  <path
+      android:pathData="M37,18.108C37,25.417 27.425,36.912 23.089,41.743C21.961,43 20.039,43 18.911,41.743C14.575,36.912 5,25.417 5,18.108C5,8.659 12.163,1 21,1C29.837,1 37,8.659 37,18.108Z"
+      android:strokeWidth="0.5"
+      android:fillColor="#FFFFEB"
+      android:strokeColor="#CDCD48"/>
+  <path
+      android:pathData="M16.191,13.691L24.809,13.691A2.591,2.591 0,0 1,27.4 16.282L27.4,24.9A2.591,2.591 0,0 1,24.809 27.491L16.191,27.491A2.591,2.591 0,0 1,13.6 24.9L13.6,16.282A2.591,2.591 0,0 1,16.191 13.691z"
+      android:fillColor="#FFD7CE"/>
+  <path
+      android:pathData="M17.364,10.764H23.636V16.618H17.364V10.764Z"
+      android:fillColor="#FFFDF2"/>
+  <path
+      android:pathData="M13.6,9.927h13.8v0.836h-13.8z"
+      android:fillColor="#B88261"/>
+  <path
+      android:pathData="M13.6,10.764H18.2L17.364,16.618H11.091L13.6,10.764Z"
+      android:fillColor="#EE5939"/>
+  <path
+      android:pathData="M27.4,10.764H22.8L23.636,16.618H29.909L27.4,10.764Z"
+      android:fillColor="#EE5939"/>
+  <path
+      android:pathData="M11.091,16.618H17.364C17.364,18.004 16.24,19.127 14.855,19.127H13.6C12.214,19.127 11.091,18.004 11.091,16.618Z"
+      android:fillColor="#D1482A"/>
+  <path
+      android:pathData="M17.364,16.618H23.636C23.636,18.004 22.513,19.127 21.127,19.127H19.873C18.487,19.127 17.364,18.004 17.364,16.618Z"
+      android:fillColor="#D1CFC6"/>
+  <path
+      android:pathData="M23.636,16.618H29.909C29.909,18.004 28.786,19.127 27.4,19.127H26.146C24.76,19.127 23.636,18.004 23.636,16.618Z"
+      android:fillColor="#D1482A"/>
+  <path
+      android:pathData="M18.618,23.727C18.618,22.573 19.554,21.636 20.709,21.636C21.864,21.636 22.8,22.573 22.8,23.727V27.019C22.8,27.049 22.776,27.073 22.746,27.073H18.672C18.642,27.073 18.618,27.049 18.618,27.019V23.727Z"
+      android:fillColor="#D1482A"/>
+</vector>
