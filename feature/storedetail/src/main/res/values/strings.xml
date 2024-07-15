@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_my_jogbo">나의 족보에 추가</string>
+    <string name="is_it_different">내가 알고 있는 정보와 다른가요?</string>
+    <string name="missing_store">식당이 사라졌어요</string>
+    <string name="no_longer_8000">더이상 8,000원 이하인 메뉴가 없어요</string>
+    <string name="inappropriate_report">부적절한 제보에요</string>
+</resources>

@@ -63,5 +63,6 @@ include(
     ":feature:report",
     ":feature:my",
     ":feature:login",
-    ":feature:universityselection"
+    ":feature:universityselection",
+    ":feature:storedetail"
 )

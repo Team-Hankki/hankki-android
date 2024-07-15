@@ -23,6 +23,7 @@ import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.navigateToReport
 import com.hankki.feature.report.navigation.navigateToReportFinish
 import com.hankki.feature.report.navigation.navigateToSearchStore
+import com.hankki.feature.storedetail.navigateStoreDetail
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -65,6 +66,10 @@ internal class MainNavigator(
 
     private fun navigateUp() {
         navController.navigateUp()
+    }
+
+    fun navigateToStoreDetail() {
+        navController.navigateStoreDetail()
     }
 
     fun navigateUpIfNotHome() {
