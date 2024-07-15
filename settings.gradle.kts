@@ -42,7 +42,8 @@ include(
     ":data:token",
     ":data:login",
     ":data:reissuetoken",
-    ":data:home"
+    ":data:home",
+    ":data:report"
 )
 
 // domain
