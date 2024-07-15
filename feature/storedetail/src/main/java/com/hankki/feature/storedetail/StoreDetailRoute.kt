@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -76,12 +77,14 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
             Image(
                 imageVector = ImageVector.vectorResource(id = com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
                 contentDescription = "식당 사진",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.FillWidth
             )
             Image(
                 painter = painterResource(id = R.drawable.img_black_gradient_top),
                 contentDescription = "black gradient",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.FillWidth
             )
             Column {
                 Spacer(modifier = Modifier.statusBarsPadding())
