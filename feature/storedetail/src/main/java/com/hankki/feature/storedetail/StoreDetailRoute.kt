@@ -1,6 +1,8 @@
 package com.hankki.feature.storedetail
 
+import StoreDetailViewModel
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,12 +18,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -34,40 +32,63 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailButton
-import com.hankki.core.designsystem.component.layout.StoreDetailMenuBox
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.feature.storedetail.component.StoreDetailMenuBox
 import com.hankki.feature.storedetail.model.MenuItem
-import com.hankki.feature.storedetail.model.StoreDetail
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun StoreDetailRoute() {
     val viewModel: StoreDetailViewModel = hiltViewModel()
-    val storeDetail by viewModel.storeDetail.collectAsStateWithLifecycle()
+    val storeDetailState by viewModel.storeDetail.collectAsStateWithLifecycle()
+    val isLiked by viewModel.isLiked.collectAsStateWithLifecycle()
+    val heartCount by viewModel.heartCount.collectAsStateWithLifecycle()
+    val selectedIndex by viewModel.selectedIndex.collectAsStateWithLifecycle()
+    val buttonLabels by viewModel.buttonLabels.collectAsStateWithLifecycle()
 
-    storeDetail?.let {
-        StoreDetailScreen(
-            storeDetail = it,
-            onLikeClicked = { viewModel.toggleLike() }
-        )
+    when (val state = storeDetailState) {
+        is UiState.Loading -> {}
+
+        is UiState.Success -> {
+            val storeDetail = state.data
+            StoreDetailScreen(
+                title = storeDetail.name,
+                tag = storeDetail.category,
+                menuItems = storeDetail.menus.toPersistentList(),
+                isLiked = isLiked,
+                heartCount = heartCount,
+                selectedIndex = selectedIndex,
+                buttonLabels = buttonLabels,
+                onLikeClicked = { viewModel.toggleLike() },
+                onSelectIndex = { index -> viewModel.updateSelectedIndex(index) }
+            )
+        }
+
+        is UiState.Failure -> {}
     }
 }
 
 @Composable
-fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
-    var isLiked by remember { mutableStateOf(storeDetail.isLiked) }
-    var heartCount by remember { mutableIntStateOf(storeDetail.heartCount) }
-
-    LaunchedEffect(storeDetail) {
-        isLiked = storeDetail.isLiked
-        heartCount = storeDetail.heartCount
-    }
-
+fun StoreDetailScreen(
+    title: String,
+    tag: String,
+    menuItems: PersistentList<MenuItem>,
+    isLiked: Boolean,
+    heartCount: Int,
+    selectedIndex: Int,
+    buttonLabels: List<String>,
+    onLikeClicked: () -> Unit,
+    onSelectIndex: (Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -80,12 +101,14 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.FillWidth
             )
+
             Image(
                 painter = painterResource(id = R.drawable.img_black_gradient_top),
                 contentDescription = "black gradient",
                 modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.FillWidth
             )
+
             Column {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 HankkiTopBar(
@@ -105,15 +128,15 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
 
         Column(
             modifier = Modifier
-                .offset(y = (-75).dp)
-                .padding(18.dp)
+                .offset(y = (-50).dp)
+                .padding(horizontal = 18.dp)
                 .fillMaxSize()
         ) {
             StoreDetailMenuBox(
-                title = storeDetail.name,
-                tag = storeDetail.category,
-                menuItems = storeDetail.menus.map { it.name to "${it.price}원" },
-                leadingButton1 = {
+                title = title,
+                tag = tag,
+                menuItems = menuItems,
+                likeButton = {
                     StoreDetailButton(
                         leadingIcon = {
                             Icon(
@@ -133,7 +156,7 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
                         }
                     )
                 },
-                leadingButton2 = {
+                addMyJogboButton = {
                     StoreDetailButton(
                         leadingIcon = {
                             Icon(
@@ -153,57 +176,59 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = com.hankki.feature.storedetail.R.string.is_it_different),
-                style = HankkiTheme.typography.sub1,
-                color = Gray900
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            val selectedIndex = remember { mutableIntStateOf(-1) }
-            val buttonLabels = listOf(
-                stringResource(id = com.hankki.feature.storedetail.R.string.missing_store),
-                stringResource(id = com.hankki.feature.storedetail.R.string.no_longer_8000),
-                stringResource(id = com.hankki.feature.storedetail.R.string.inappropriate_report)
-            )
-
-            buttonLabels.forEachIndexed { index, label ->
-                val isSelected = selectedIndex.intValue == index
-                StoreDetailButton(
-                    content = {
-                        Text(
-                            text = label,
-                            style = HankkiTheme.typography.body1.copy(color = if (isSelected) Color.Red else Color.Black),
-                            modifier = Modifier.weight(1f)
-                        )
-                    },
-                    onClick = {
-                        selectedIndex.intValue = index
-                    },
-                    tailingIcon = {
-                        Icon(
-                            painter = painterResource(id = if (isSelected) R.drawable.ic_check_btn else R.drawable.ic_uncheck_btn),
-                            contentDescription = "체크박스 아이콘",
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.Unspecified
-                        )
-                    },
-                    isSelected = isSelected
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            HankkiButton(
-                text = "제보하기",
-                onClick = { /* TODO: handle submit */ },
+            Spacer(modifier = Modifier.height(50.dp))
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 92.dp),
-                textStyle = HankkiTheme.typography.body4
-            )
+                    .padding(horizontal = 4.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(id = com.hankki.feature.storedetail.R.string.is_it_different),
+                    style = HankkiTheme.typography.sub1,
+                    color = Gray900,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                buttonLabels.forEachIndexed { index, label ->
+                    val isSelected = selectedIndex == index
+                    StoreDetailButton(
+                        content = {
+                            Text(
+                                text = label,
+                                style = HankkiTheme.typography.body3.copy(color = if (isSelected) Color.Red else Gray400),
+                                modifier = Modifier.weight(1f),
+                            )
+                        },
+                        onClick = {
+                            onSelectIndex(index)
+                        },
+                        tailingIcon = {
+                            Icon(
+                                painter = painterResource(id = if (isSelected) R.drawable.ic_check_btn else R.drawable.ic_uncheck_btn),
+                                contentDescription = "체크박스 아이콘",
+                                modifier = Modifier.size(24.dp),
+                                tint = Color.Unspecified
+                            )
+                        },
+                        isSelected = isSelected
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                HankkiButton(
+                    text = "제보하기",
+                    onClick = { /* TODO: handle submit */ },
+                    modifier = Modifier
+                        .fillMaxWidth(0.4f),
+                    textStyle = HankkiTheme.typography.sub3,
+                    enabled = selectedIndex != -1
+                )
+            }
         }
     }
 }
@@ -213,19 +238,23 @@ fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
 fun PreviewRestaurantMenuScreen() {
     HankkijogboTheme {
         StoreDetailScreen(
-            storeDetail = StoreDetail(
-                name = "한끼네 한정식",
-                category = "한식",
-                isLiked = false,
-                heartCount = 299,
-                imageUrls = listOf(),
-                menus = listOf(
-                    MenuItem(name = "수육정식", price = 7900),
-                    MenuItem(name = "제육정식", price = 8900),
-                    MenuItem(name = "꼬막정식", price = 7900)
-                )
+            title = "한끼네 한정식",
+            tag = "한식",
+            menuItems = listOf(
+                MenuItem(name = "수육정식", price = 7900),
+                MenuItem(name = "제육정식", price = 8900),
+                MenuItem(name = "꼬막정식", price = 7900)
+            ).toPersistentList(),
+            isLiked = false,
+            heartCount = 299,
+            selectedIndex = -1,
+            buttonLabels = listOf(
+                "가게 누락",
+                "더 이상 8000원이 아닙니다",
+                "부적절한 신고"
             ),
-            onLikeClicked = {}
+            onLikeClicked = {},
+            onSelectIndex = {}
         )
     }
 }
