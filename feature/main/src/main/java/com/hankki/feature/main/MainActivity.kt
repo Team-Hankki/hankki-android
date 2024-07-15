@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     showSplash = false
                 }
                 if (showSplash) {
-                    // TODO: 토크 검증 API 연결
+                    // TODO: 내 대학 API 호출
                     SplashScreen()
                 } else {
                     MainScreen(navigator = navigator)
