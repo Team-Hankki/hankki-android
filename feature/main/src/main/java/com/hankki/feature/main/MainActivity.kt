@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        const val SPLASH_SCREEN_DELAY = 2000L
+        const val SPLASH_SCREEN_DELAY = 1200L
         // TODO: 수정 필요. 임시로 설정한 시간
     }
 }
