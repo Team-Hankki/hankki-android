@@ -5,5 +5,5 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 data class MyStoreState (
-    val myStoreItems : PersistentList<MyStoreModel> = persistentListOf(MyStoreModel("",0,0,"",false,0,""))
+    val myStoreItems : PersistentList<MyStoreModel> = persistentListOf(MyStoreModel())
 )
