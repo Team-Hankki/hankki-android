@@ -114,7 +114,7 @@ fun MyStoreScreen(
                     editSelected = {
                         updateStoreSelected(
                             index,
-                            store.isLiked == true // null을 포함한 모든 경우를 처리
+                            store.isLiked == true
                         )
                     }
                 )
