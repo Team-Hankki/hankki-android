@@ -16,9 +16,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -26,6 +29,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -35,15 +40,31 @@ import com.hankki.core.designsystem.component.button.StoreDetailButton
 import com.hankki.core.designsystem.component.layout.StoreDetailMenuBox
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.feature.storedetail.model.MenuItem
+import com.hankki.feature.storedetail.model.StoreDetail
 
 @Composable
 fun StoreDetailRoute() {
-    StoreDetailScreen()
+    val viewModel: StoreDetailViewModel = hiltViewModel()
+    val storeDetail by viewModel.storeDetail.collectAsStateWithLifecycle()
+
+    storeDetail?.let {
+        StoreDetailScreen(
+            storeDetail = it,
+            onLikeClicked = { viewModel.toggleLike() }
+        )
+    }
 }
 
 @Composable
-fun StoreDetailScreen() {
-    val isLiked = remember { mutableStateOf(false) }
+fun StoreDetailScreen(storeDetail: StoreDetail, onLikeClicked: () -> Unit) {
+    var isLiked by remember { mutableStateOf(storeDetail.isLiked) }
+    var heartCount by remember { mutableIntStateOf(storeDetail.heartCount) }
+
+    LaunchedEffect(storeDetail) {
+        isLiked = storeDetail.isLiked
+        heartCount = storeDetail.heartCount
+    }
 
     Column(
         modifier = Modifier
@@ -85,31 +106,26 @@ fun StoreDetailScreen() {
                 .fillMaxSize()
         ) {
             StoreDetailMenuBox(
-                title = "한끼네 한정식",
-                tag = "한식",
-                menuItems = listOf(
-                    "수육 정식" to "7,900원",
-                    "제육 정식" to "7,900원",
-                    "꼬막 정식" to "7,900원"
-                ),
+                title = storeDetail.name,
+                tag = storeDetail.category,
+                menuItems = storeDetail.menus.map { it.name to "${it.price}원" },
                 leadingButton1 = {
                     StoreDetailButton(
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = if (isLiked.value) R.drawable.ic_red_like else R.drawable.ic_like),
+                                painter = painterResource(id = if (isLiked) R.drawable.ic_red_like else R.drawable.ic_like),
                                 contentDescription = "좋아요 아이콘",
                                 tint = Color.Unspecified
                             )
                         },
                         content = {
                             Text(
-                                text = "299",
+                                text = heartCount.toString(),
                                 style = HankkiTheme.typography.sub3
                             )
                         },
                         onClick = {
-                            isLiked.value = !isLiked.value
-                            /* Handle leading button click */
+                            onLikeClicked()
                         }
                     )
                 },
@@ -128,7 +144,7 @@ fun StoreDetailScreen() {
                                 style = HankkiTheme.typography.sub3
                             )
                         },
-                        onClick = { /* Handle trailing button click */ }
+                        onClick = { /*TODO: navigate add jogbo */ }
                     )
                 }
             )
@@ -192,6 +208,20 @@ fun StoreDetailScreen() {
 @Composable
 fun PreviewRestaurantMenuScreen() {
     HankkijogboTheme {
-        StoreDetailScreen()
+        StoreDetailScreen(
+            storeDetail = StoreDetail(
+                name = "한끼네 한정식",
+                category = "한식",
+                isLiked = false,
+                heartCount = 299,
+                imageUrls = listOf(),
+                menus = listOf(
+                    MenuItem(name = "수육정식", price = 7900),
+                    MenuItem(name = "제육정식", price = 8900),
+                    MenuItem(name = "꼬막정식", price = 7900)
+                )
+            ),
+            onLikeClicked = {}
+        )
     }
 }
