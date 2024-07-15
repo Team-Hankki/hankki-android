@@ -181,8 +181,8 @@ private fun MainBottomBar(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .fillMaxWidth()
-                    .height(63.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    .height(75.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 tabs.forEach { tab ->
                     MainBottomBarItem(
