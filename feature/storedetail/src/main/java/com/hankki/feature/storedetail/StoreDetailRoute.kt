@@ -49,13 +49,9 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun StoreDetailRoute() {
     val viewModel: StoreDetailViewModel = hiltViewModel()
-    val storeDetailState by viewModel.storeDetail.collectAsStateWithLifecycle()
-    val isLiked by viewModel.isLiked.collectAsStateWithLifecycle()
-    val heartCount by viewModel.heartCount.collectAsStateWithLifecycle()
-    val selectedIndex by viewModel.selectedIndex.collectAsStateWithLifecycle()
-    val buttonLabels by viewModel.buttonLabels.collectAsStateWithLifecycle()
+    val storeState by viewModel.storeState.collectAsStateWithLifecycle()
 
-    when (val state = storeDetailState) {
+    when (val state = storeState.storeDetail) {
         is UiState.Loading -> {}
 
         is UiState.Success -> {
@@ -64,10 +60,10 @@ fun StoreDetailRoute() {
                     title = name,
                     tag = category,
                     menuItems = menus.toPersistentList(),
-                    isLiked = isLiked,
-                    heartCount = heartCount,
-                    selectedIndex = selectedIndex,
-                    buttonLabels = buttonLabels.toPersistentList(),
+                    isLiked = storeState.isLiked,
+                    heartCount = storeState.heartCount,
+                    selectedIndex = storeState.selectedIndex,
+                    buttonLabels = storeState.buttonLabels,
                     onLikeClicked = { viewModel.toggleLike() },
                     onSelectIndex = { index -> viewModel.updateSelectedIndex(index) }
                 )
