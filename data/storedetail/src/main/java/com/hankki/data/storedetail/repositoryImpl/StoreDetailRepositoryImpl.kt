@@ -11,7 +11,7 @@ class StoreDetailRepositoryImpl @Inject constructor(
     override suspend fun getStoreDetail(
         id: Long,
     ): Result<StoreDetailResponseEntity> =
-        kotlin.runCatching {
+        runCatching {
             storeDetailDataSource.getStoreDetail(
                 id,
             ).data.toStoreDetailResponseEntity()
