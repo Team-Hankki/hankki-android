@@ -50,7 +50,7 @@ fun HankkiTextSnackBarWithButton(onClick: () -> Unit) {
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
                         .noRippleClickable(onClick = onClick)
-                        .widthIn(min = 40.dp)
+                        .widthIn(min = 22.dp)
                 )
             }
         }
