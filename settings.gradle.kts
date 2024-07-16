@@ -44,6 +44,7 @@ include(
     ":data:reissuetoken",
     ":data:home",
     ":data:report"
+    ":data:storedetail"
 )
 
 // domain
@@ -55,7 +56,8 @@ include(
     ":domain:token",
     ":domain:login",
     ":domain:reissuetoken",
-    ":domain:home"
+    ":domain:home",
+    ":domain:storedetail"
 )
 
 // feature

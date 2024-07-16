@@ -1,11 +1,11 @@
 package com.hankki.feature.storedetail
 
-import StoreDetailViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,19 +18,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
@@ -41,8 +41,8 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
-import com.hankki.feature.storedetail.model.MenuItem
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -50,6 +50,10 @@ import kotlinx.collections.immutable.toPersistentList
 fun StoreDetailRoute() {
     val viewModel: StoreDetailViewModel = hiltViewModel()
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchStoreDetail()
+    }
 
     when (val state = storeState.storeDetail) {
         is UiState.Loading -> {}
@@ -62,6 +66,7 @@ fun StoreDetailRoute() {
                     menuItems = menus.toPersistentList(),
                     isLiked = storeState.isLiked,
                     heartCount = storeState.heartCount,
+                    imageUrl = imageUrls.firstOrNull(),
                     selectedIndex = storeState.selectedIndex,
                     buttonLabels = storeState.buttonLabels,
                     onLikeClicked = viewModel::toggleLike,
@@ -81,6 +86,7 @@ fun StoreDetailScreen(
     menuItems: PersistentList<MenuItem>,
     isLiked: Boolean,
     heartCount: Int,
+    imageUrl: String?,
     selectedIndex: Int,
     buttonLabels: PersistentList<String>,
     onLikeClicked: () -> Unit,
@@ -92,11 +98,15 @@ fun StoreDetailScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Box {
-            Image(
-                imageVector = ImageVector.vectorResource(id = com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
+            AsyncImage(
+                model = imageUrl ?: com.hankki.feature.storedetail.R.drawable.img_default_store_detail,
                 contentDescription = "식당 사진",
-                modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.5f),
+                contentScale = ContentScale.FillWidth,
+                placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
+                error = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail)
             )
 
             Image(
@@ -244,9 +254,10 @@ fun PreviewRestaurantMenuScreen() {
             ).toPersistentList(),
             isLiked = false,
             heartCount = 299,
+            imageUrl = "wwwww",
             selectedIndex = -1,
             buttonLabels = listOf(
-                "가게 누락",
+                "식당이 사라졌어요",
                 "더 이상 8000원이 아닙니다",
                 "부적절한 신고"
             ).toPersistentList(),

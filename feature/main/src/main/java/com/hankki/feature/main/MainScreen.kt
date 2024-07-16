@@ -49,7 +49,7 @@ import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
-import com.hankki.feature.storedetail.storeDetailNavGraph
+import com.hankki.feature.storedetail.navigation.storeDetailNavGraph
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
