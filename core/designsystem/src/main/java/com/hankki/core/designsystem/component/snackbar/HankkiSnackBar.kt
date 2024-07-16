@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray900
 
@@ -14,7 +15,8 @@ fun HankkiSnackBar(content: @Composable () -> Unit) {
     val colorWithTransparency = Gray900.copy(alpha = 0.85f)
     Box(
         modifier = Modifier
-            .background(color = colorWithTransparency, shape = RoundedCornerShape(6.dp))
+            .clip(RoundedCornerShape(6.dp))
+            .background(color = colorWithTransparency)
             .padding(vertical = 14.dp, horizontal = 22.dp)
     ) {
         content()
