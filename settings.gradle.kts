@@ -43,6 +43,7 @@ include(
     ":data:login",
     ":data:reissuetoken",
     ":data:home",
+    ":data:report"
     ":data:storedetail"
 )
 
