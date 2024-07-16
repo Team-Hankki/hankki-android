@@ -58,12 +58,12 @@ fun NewJogboScreen(
     navigateUp: () -> Unit,
     title: String,
     onTitleChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     tags: String,
     onTagsChange: (String) -> Unit,
     editTagsLength: (String) -> Int,
     buttonEnabled: Boolean,
-) {
+    modifier: Modifier = Modifier,
+    ) {
     val focusManager = LocalFocusManager.current
 
     Column(
