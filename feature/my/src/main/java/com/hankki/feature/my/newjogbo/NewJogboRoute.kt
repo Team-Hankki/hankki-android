@@ -105,7 +105,7 @@ fun NewJogboScreen(
                 valueLength = title.length,
                 placeholder = stringResource(R.string.recommend_store),
                 onValueChanged = onTitleChange,
-                tailingIcon = true
+                trailingIcon = true
             )
 
             Spacer(modifier = Modifier.height(33.dp))
@@ -116,7 +116,7 @@ fun NewJogboScreen(
                 valueLength = editTagsLength(tags),
                 placeholder = stringResource(R.string.jogbo_tags),
                 onValueChanged = onTagsChange,
-                tailingIcon = false
+                trailingIcon = false
             )
 
             Spacer(modifier = Modifier.height(38.dp))

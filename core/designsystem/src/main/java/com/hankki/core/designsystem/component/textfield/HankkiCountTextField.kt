@@ -45,7 +45,7 @@ fun HankkiCountTextField(
     value: String,
     valueLength: Int,
     placeholder: String,
-    tailingIcon: Boolean,
+    trailingIcon: Boolean,
     onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -75,7 +75,7 @@ fun HankkiCountTextField(
             textColor = Gray800,
             onFocusChanged = { focusState ->
                 isFocused = focusState
-                if (!tailingIcon) {
+                if (!trailingIcon) {
                     if (focusState) {
                         if (textFieldValue.text.isEmpty()) {
                             textFieldValue = TextFieldValue(text = "#", selection = TextRange(1))
@@ -93,7 +93,7 @@ fun HankkiCountTextField(
                 if (KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER20_REGEX.matcher(newValue.text)
                         .matches()
                 ) {
-                    if (tailingIcon) {
+                    if (trailingIcon) {
                         textFieldValue = newValue.copy(
                             text = newValue.text.take(18),
                             selection = TextRange(newValue.text.length)
@@ -126,7 +126,7 @@ fun HankkiCountTextField(
                 }
             },
             tailingIcon = {
-                if (tailingIcon)
+                if (trailingIcon)
                     Text(
                         text = "(${valueLength}/18)",
                         style = HankkiTheme.typography.body3,
@@ -207,7 +207,7 @@ fun HankkiCountTextFieldPreview() {
             valueLength = 0,
             placeholder = "성대생 추천 맛집 드려요",
             onValueChanged = {},
-            tailingIcon = false
+            trailingIcon = false
         )
     }
 }
