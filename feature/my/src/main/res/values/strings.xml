@@ -23,4 +23,9 @@
     <string name="go_to_register_store">등록된 식당이 있어요\n식당으로 이동할까요?</string>
     <string name="preparing_share_jogbo">친구에게 내 족보를 공유할 수 있도록\n준비 중이에요</string>
     <string name="check">확인</string>
+    <string name="name_jogbo">족보의 제목을 지어주세요</string>
+    <string name="recommend_store">성대생 추천 맛집 드려요</string>
+    <string name="think_jogbo">족보를 떠올리면?</string>
+    <string name="jogbo_tags">#든든한 #한끼해장</string>
+    <string name="make_jogbo">족보 만들기</string>
 </resources>
