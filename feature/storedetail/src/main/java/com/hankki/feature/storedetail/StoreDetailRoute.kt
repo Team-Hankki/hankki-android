@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,15 +23,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
@@ -66,6 +66,7 @@ fun StoreDetailRoute() {
                     menuItems = menus.toPersistentList(),
                     isLiked = storeState.isLiked,
                     heartCount = storeState.heartCount,
+                    imageUrl = imageUrls.firstOrNull(),
                     selectedIndex = storeState.selectedIndex,
                     buttonLabels = storeState.buttonLabels,
                     onLikeClicked = viewModel::toggleLike,
@@ -85,6 +86,7 @@ fun StoreDetailScreen(
     menuItems: PersistentList<MenuItem>,
     isLiked: Boolean,
     heartCount: Int,
+    imageUrl: String?,
     selectedIndex: Int,
     buttonLabels: PersistentList<String>,
     onLikeClicked: () -> Unit,
@@ -96,11 +98,15 @@ fun StoreDetailScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Box {
-            Image(
-                imageVector = ImageVector.vectorResource(id = com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
+            AsyncImage(
+                model = imageUrl ?: com.hankki.feature.storedetail.R.drawable.img_default_store_detail,
                 contentDescription = "식당 사진",
-                modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.5f),
+                contentScale = ContentScale.FillWidth,
+                placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
+                error = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail)
             )
 
             Image(
@@ -248,6 +254,7 @@ fun PreviewRestaurantMenuScreen() {
             ).toPersistentList(),
             isLiked = false,
             heartCount = 299,
+            imageUrl = "wwwww",
             selectedIndex = -1,
             buttonLabels = listOf(
                 "식당이 사라졌어요",

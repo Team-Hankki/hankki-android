@@ -9,5 +9,9 @@ android {
 }
 
 dependencies {
+    //domain
     implementation(projects.domain.storedetail)
+
+    //otther
+    implementation(libs.coil.compose)
 }
