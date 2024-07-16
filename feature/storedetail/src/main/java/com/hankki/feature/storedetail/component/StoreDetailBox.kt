@@ -24,7 +24,7 @@ import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.feature.storedetail.model.MenuItem
+import com.hankki.domain.storedetail.entity.MenuItem
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
