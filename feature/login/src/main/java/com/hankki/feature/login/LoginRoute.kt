@@ -3,7 +3,6 @@ package com.hankki.feature.login
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -92,7 +91,7 @@ fun LoginScreen(
                     // 임시 버튼 추가
                     Button(onClick = {
                         coroutineScope.launch {
-                            snackbarHostState1.showSnackbar("나의 족보에 추가되었습니다.")
+                            snackbarHostState1.showSnackbar("")
                         }
                     }) {
                         Text(text = "Show gray900 Snackbar")
@@ -100,7 +99,7 @@ fun LoginScreen(
 
                     Button(onClick = {
                         coroutineScope.launch {
-                            snackbarHostState2.showSnackbar("나의 족보에 추가되었습니다.")
+                            snackbarHostState2.showSnackbar("")
                         }
                     }) {
                         Text(text = "Show white Snackbar")
@@ -108,7 +107,7 @@ fun LoginScreen(
 
                     Button(onClick = {
                         coroutineScope.launch {
-                            snackbarHostState3.showSnackbar("텍스트 입력 스낵바")
+                            snackbarHostState3.showSnackbar("텍스트 수정 가능")
                         }
                     }) {
                         Text(text = "Show Text Input SnackBar")
