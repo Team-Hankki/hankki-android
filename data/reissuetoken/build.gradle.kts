@@ -10,4 +10,6 @@ android {
 
 dependencies {
     implementation(projects.domain.reissuetoken)
+    implementation(libs.androidx.monitor)
+    implementation(libs.androidx.junit.ktx)
 }
