@@ -118,7 +118,7 @@ fun HomeRoute(
     }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
-            state.latLng,
+            LatLng(state.myUniversityModel.latitude, state.myUniversityModel.longitude),
             DEFAULT_ZOOM
         )
     }
@@ -142,7 +142,7 @@ fun HomeRoute(
     HomeScreen(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
-        universityName = state.universityName ?: "전체",
+        universityName = state.myUniversityModel.name ?: "전체",
         selectedStoreItem = state.selectedStoreItem,
         storeItems = state.storeItems,
         jogboItems = state.jogboItems,
