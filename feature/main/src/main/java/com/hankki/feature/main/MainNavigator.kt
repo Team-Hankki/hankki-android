@@ -14,6 +14,7 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.navigation.navigateDummy
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
+import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
@@ -23,7 +24,7 @@ import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.navigateToReport
 import com.hankki.feature.report.navigation.navigateToReportFinish
 import com.hankki.feature.report.navigation.navigateToSearchStore
-import com.hankki.feature.storedetail.navigateStoreDetail
+import com.hankki.feature.storedetail.navigation.navigateStoreDetail
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
