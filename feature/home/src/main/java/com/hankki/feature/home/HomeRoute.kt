@@ -106,6 +106,7 @@ import kotlinx.coroutines.launch
 fun HomeRoute(
     paddingValues: PaddingValues,
     onShowSnackBar: (Int) -> Unit,
+    navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -156,6 +157,7 @@ fun HomeRoute(
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
         navigateStoreDetail = navigateStoreDetail,
+        navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
         clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
@@ -217,6 +219,7 @@ fun HomeScreen(
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
     navigateStoreDetail: () -> Unit = {},
+    navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
     clickMarkerItem: (Int) -> Unit = {},
     clickMap: () -> Unit = {},
@@ -269,9 +272,7 @@ fun HomeScreen(
         HankkiTopBar(
             content = {
                 Row(
-                    modifier = Modifier.noRippleClickable(
-                        // TODO: 학교 선택 Screen 이동
-                    )
+                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
                 ) {
                     Text(
                         text = universityName,
