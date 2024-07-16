@@ -75,6 +75,8 @@ kakao = "2.20.1"
 
 ## Phoenix
 phoenix = "3.0.0"
+monitor = "1.7.1"
+junitKtx = "1.2.1"
 
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -147,6 +149,8 @@ exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref =
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
 
 jakewharton-process-phoenix= {group = "com.jakewharton", name = "process-phoenix", version.ref="phoenix"}
+androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 
 [bundles]
