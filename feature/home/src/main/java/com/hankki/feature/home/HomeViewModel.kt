@@ -36,7 +36,6 @@ class HomeViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
-        // getUniversityInfo()
         getStoreItems()
         getMarkerItems()
     }
