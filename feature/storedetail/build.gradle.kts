@@ -9,4 +9,5 @@ android {
 }
 
 dependencies {
+    implementation(projects.domain.storedetail)
 }
