@@ -8,13 +8,17 @@ import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class SearchStoreViewModel @Inject constructor(
     private val reportRepository: ReportRepository,
@@ -23,16 +27,32 @@ class SearchStoreViewModel @Inject constructor(
     val state: StateFlow<SearchStoreState>
         get() = _state.asStateFlow()
 
+    private val _value: MutableStateFlow<String> = MutableStateFlow("")
+    val value: StateFlow<String>
+        get() = _value.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            _value.debounce(500)
+                .collectLatest { debounced ->
+                    if (debounced.isNotBlank()) {
+                        getStores(debounced)
+                    } else {
+                        _state.value = _state.value.copy(uiState = EmptyUiState.Loading)
+                    }
+                }
+        }
+    }
+
     fun setValue(value: String) {
-        _state.value = _state.value.copy(value = value)
-        getStores(value)
+        _value.value = value
     }
 
     fun setLocation(location: LocationModel) {
         _state.value = _state.value.copy(selectedLocation = location)
     }
 
-    fun getStores(search: String) { // duration을 통해 호출할 예정
+    private fun getStores(search: String) {
         viewModelScope.launch {
             reportRepository.getStoreLocation(search)
                 .onSuccess {
