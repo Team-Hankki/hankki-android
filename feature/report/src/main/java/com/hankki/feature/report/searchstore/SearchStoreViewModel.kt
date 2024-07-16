@@ -103,7 +103,7 @@ class SearchStoreViewModel @Inject constructor(
                     )
                 }
             }.onFailure { error ->
-                Timber.e(error)
+                Timber.e(error) // TODO: SnackBar 머지시 409 -> openDialog, else Snackbar 설정
                 _sideEffect.emit(SearchStoreSideEffect.OpenDialog)
             }
         }
