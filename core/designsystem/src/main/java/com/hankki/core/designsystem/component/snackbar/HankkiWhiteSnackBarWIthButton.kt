@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
@@ -28,9 +29,9 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(horizontal = 35.dp, vertical = 16.dp)
+            .padding(horizontal = 40.dp, vertical = 16.dp)
             .clip(RoundedCornerShape(65.dp))
-            .background(color = Color.White),
+            .background(color = White),
         contentAlignment = Alignment.TopCenter
     ) {
         Row(
