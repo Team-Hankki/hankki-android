@@ -66,7 +66,8 @@ fun SearchStoreRoute(
         onValueChange = viewModel::setValue,
         onClickLocation = viewModel::setLocation,
         navigateUp = navigateUp,
-        navigateReport = navigateReport
+        reportButtonClicked = viewModel::reportButtonClicked,
+        // navigateReport = navigateReport
     )
 }
 
@@ -78,7 +79,8 @@ fun SearchStoreScreen(
     onValueChange: (String) -> Unit,
     onClickLocation: (LocationModel) -> Unit,
     navigateUp: () -> Unit,
-    navigateReport: (latitude: Float, longitude: Float, location: String, address: String) -> Unit,
+    reportButtonClicked: () -> Unit,
+    // navigateReport: (latitude: Float, longitude: Float, location: String, address: String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -157,12 +159,13 @@ fun SearchStoreScreen(
                         else com.hankki.feature.report.R.string.report_this_store
                     ),
                     onClick = {
-                        navigateReport(
-                            selectedLocation.latitude,
-                            selectedLocation.longitude,
-                            selectedLocation.location,
-                            selectedLocation.address
-                        )
+                        reportButtonClicked()
+//                        navigateReport(
+//                            selectedLocation.latitude,
+//                            selectedLocation.longitude,
+//                            selectedLocation.location,
+//                            selectedLocation.address
+//                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -232,7 +235,7 @@ private fun BookmarkCardPreview(
             onValueChange = {},
             onClickLocation = { },
             navigateUp = {},
-            navigateReport = { _, _, _, _ -> }
+            reportButtonClicked = {}
         )
     }
 }

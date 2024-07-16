@@ -3,6 +3,7 @@ package com.hankki.feature.report.searchstore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.domain.report.entity.request.ValidateStoreRequestEntity
 import com.hankki.domain.report.repository.ReportRepository
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.toModel
@@ -72,6 +73,23 @@ class SearchStoreViewModel @Inject constructor(
                         uiState = EmptyUiState.Failure
                     )
                 }
+        }
+    }
+
+    fun reportButtonClicked() {
+        viewModelScope.launch {
+            reportRepository.getStoreValidate(
+                ValidateStoreRequestEntity(
+                    universityId = _state.value.universityId,
+                    latitude = _state.value.selectedLocation.latitude.toDouble(),
+                    longitude = _state.value.selectedLocation.longitude.toDouble()
+                )
+            ).onSuccess {
+
+            }.onFailure { error ->
+                Timber.e(error)
+                // dialog sideEffect 발행 예정
+            }
         }
     }
 }
