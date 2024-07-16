@@ -1,6 +1,5 @@
 package com.hankki.feature.storedetail
 
-import StoreDetailViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,8 +41,8 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
-import com.hankki.feature.storedetail.model.MenuItem
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -50,6 +50,10 @@ import kotlinx.collections.immutable.toPersistentList
 fun StoreDetailRoute() {
     val viewModel: StoreDetailViewModel = hiltViewModel()
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchStoreDetail()
+    }
 
     when (val state = storeState.storeDetail) {
         is UiState.Loading -> {}
@@ -246,7 +250,7 @@ fun PreviewRestaurantMenuScreen() {
             heartCount = 299,
             selectedIndex = -1,
             buttonLabels = listOf(
-                "가게 누락",
+                "식당이 사라졌어요",
                 "더 이상 8000원이 아닙니다",
                 "부적절한 신고"
             ).toPersistentList(),
