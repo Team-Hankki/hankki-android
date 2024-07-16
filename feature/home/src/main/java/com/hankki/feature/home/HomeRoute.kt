@@ -129,7 +129,7 @@ fun HomeRoute(
 
     LaunchedEffect(key1 = true) {
         if (isNewUniversity) {
-            viewModel.getUniversityInfo()
+            viewModel.getUniversityInformation()
         }
     }
 

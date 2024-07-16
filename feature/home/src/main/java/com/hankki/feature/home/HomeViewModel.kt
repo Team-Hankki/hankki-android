@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
         getMarkerItems()
     }
 
-    fun getUniversityInfo() {
+    fun getUniversityInformation() {
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
