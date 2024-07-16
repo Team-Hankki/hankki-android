@@ -9,6 +9,9 @@ android {
 }
 
 dependencies {
+    // domain
+    implementation(projects.domain.home)
+
     // naver map
     implementation(libs.naver.map.compose)
     implementation(libs.play.services.location)
@@ -16,4 +19,6 @@ dependencies {
 
     // coil
     implementation(libs.coil.compose)
+
+    implementation(libs.androidx.compose.material)
 }

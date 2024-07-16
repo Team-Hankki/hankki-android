@@ -46,7 +46,7 @@ fun Modifier.addFocusCleaner(focusManager: FocusManager): Modifier {
 @Composable
 fun Modifier.bounceClick(
     scaleDown: Float = 0.96f,
-    blackAlpha: Float = 0.2f,
+    blackAlpha: Float = 0.16f,
     onClick: () -> Unit,
 ): Modifier = composed {
     val interactionSource = remember { MutableInteractionSource() }
@@ -107,3 +107,12 @@ fun Modifier.dashedBorder(strokeWidth: Dp, color: Color, cornerRadiusDp: Dp) = c
         )
     }
 )
+
+fun Modifier.ignoreNextModifiers(): Modifier {
+    return object : Modifier by this {
+
+        override fun then(other: Modifier): Modifier {
+            return this
+        }
+    }
+}

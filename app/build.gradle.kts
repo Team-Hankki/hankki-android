@@ -50,9 +50,16 @@ dependencies {
 
     // data
     implementation(projects.data.dummy)
+    implementation(projects.data.token)
+    implementation(projects.data.login)
+    implementation(projects.data.reissuetoken)
+    implementation(projects.data.home)
+    implementation(projects.data.report)
+    implementation(projects.data.storedetail)
 
     // core
     implementation(projects.core.network)
+    implementation(projects.core.datastore)
 
     // other dependencies
     implementation(libs.timber)

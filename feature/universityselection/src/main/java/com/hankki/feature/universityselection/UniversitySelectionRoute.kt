@@ -1,6 +1,6 @@
 package com.hankki.feature.universityselection
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,10 +25,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
+import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.universityselection.UniversitySelectionModel
 import com.hankki.feature.universityselection.component.UniversityItem
 import kotlinx.collections.immutable.PersistentList
@@ -58,31 +59,35 @@ fun UniversitySelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 22.dp)
+            .background(White)
             .navigationBarsPadding(),
     ) {
         Spacer(modifier = Modifier.height(68.dp))
-        Text(
-            text = stringResource(id = R.string.select_university),
-            style = HankkiTheme.typography.h1,
-            color = Gray900
-        )
 
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(id = R.string.wait_a_minute),
-            style = HankkiTheme.typography.body4,
-            color = Gray400
-        )
+        Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+            Text(
+                text = stringResource(id = R.string.select_university),
+                style = HankkiTheme.typography.h1,
+                color = Gray900
+            )
 
-        Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.wait_a_minute),
+                style = HankkiTheme.typography.body4,
+                color = Gray400
+            )
+
+            Spacer(modifier = Modifier.height(34.dp))
+        }
+
         Box(
             modifier = Modifier.weight(1f),
             contentAlignment = Alignment.BottomCenter
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().padding(horizontal = 22.dp)
             ) {
                 items(universities) { university ->
                     UniversityItem(
@@ -95,21 +100,15 @@ fun UniversitySelectionScreen(
                     }
                 }
                 item {
-                    Image(
-                        modifier = Modifier.fillMaxWidth(),
-                        painter = painterResource(id = com.hankki.core.designsystem.R.drawable.white_gradient),
-                        contentDescription = "image"
-                    )
+                    BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
                 }
             }
 
-            Image(
-                modifier = Modifier.fillMaxWidth(),
-                painter = painterResource(id = com.hankki.core.designsystem.R.drawable.white_gradient),
-                contentDescription = "image"
-            )
+            BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
 
-            Column {
+            Column(
+                modifier = Modifier.noRippleClickable().padding(horizontal = 22.dp)
+            ) {
                 HankkiButton(
                     text = stringResource(id = R.string.select),
                     textStyle = HankkiTheme.typography.sub2,
@@ -128,7 +127,7 @@ fun UniversitySelectionScreen(
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .noRippleClickable(navigateHome)
+                        .noRippleClickable(onClick = navigateHome)
                 )
                 Spacer(modifier = Modifier.height(31.dp))
             }

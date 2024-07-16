@@ -15,12 +15,14 @@ fun NavController.navigateHome(navOptions: NavOptions) {
 
 fun NavGraphBuilder.homeNavGraph(
     paddingValues: PaddingValues,
-    onShowSnackBar: (Int) -> Unit
+    onShowSnackBar: (Int) -> Unit,
+    navigateStoreDetail: () -> Unit
 ) {
     composable<Home> {
         HomeRoute(
-            paddingValues,
-            onShowSnackBar = onShowSnackBar
+            paddingValues = paddingValues,
+            onShowSnackBar = onShowSnackBar,
+            navigateStoreDetail = navigateStoreDetail
         )
     }
 }

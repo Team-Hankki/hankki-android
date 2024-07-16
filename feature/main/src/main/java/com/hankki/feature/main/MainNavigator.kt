@@ -14,9 +14,17 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.navigation.navigateDummy
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
+import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
-import com.hankki.feature.report.navigation.navigateReport
+import com.hankki.feature.my.navigation.navigateMyJogbo
+import com.hankki.feature.my.navigation.navigateMyJogboDetail
+import com.hankki.feature.my.navigation.navigateMyStore
+import com.hankki.feature.report.model.LocationModel
+import com.hankki.feature.report.navigation.navigateToReport
+import com.hankki.feature.report.navigation.navigateToReportFinish
+import com.hankki.feature.report.navigation.navigateToSearchStore
+import com.hankki.feature.storedetail.navigation.navigateStoreDetail
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -44,7 +52,7 @@ internal class MainNavigator(
 
         when (tab) {
             MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.REPORT -> navController.navigateReport(navOptions)
+            MainTab.REPORT -> navController.navigateToReport()
             MainTab.MY -> navController.navigateMy(navOptions)
         }
     }
@@ -61,6 +69,10 @@ internal class MainNavigator(
         navController.navigateUp()
     }
 
+    fun navigateToStoreDetail() {
+        navController.navigateStoreDetail()
+    }
+
     fun navigateUpIfNotHome() {
         if (!isSameCurrentDestination<Home>()) {
             navigateUp()
@@ -71,8 +83,48 @@ internal class MainNavigator(
         navController.navigate(Home, navOptions)
     }
 
+    fun navigateToReport(location: LocationModel, navOptions: NavOptions) {
+        navController.navigateToReport(
+            latitude = location.latitude,
+            longitude = location.longitude,
+            location = location.location,
+            address = location.address,
+            navOptions = navOptions
+        )
+    }
+
+    fun navigateToReportFinish(
+        count: Long,
+        storeName: String,
+        storeId: Long,
+        navOptions: NavOptions,
+    ) {
+        navController.navigateToReportFinish(
+            count = count,
+            storeName = storeName,
+            storeId = storeId,
+            navOptions = navOptions
+        )
+    }
+
+    fun navigateToSearchStore() {
+        navController.navigateToSearchStore()
+    }
+
     fun navigateToUniversity() {
         navController.navigateToUniversitySelection()
+    }
+
+    fun navigateToMyJogbo() {
+        navController.navigateMyJogbo()
+    }
+
+    fun navigateToMyStore(type: String) {
+        navController.navigateMyStore(type)
+    }
+
+    fun navigateToMyJogboDetail() {
+        navController.navigateMyJogboDetail()
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
@@ -82,7 +134,7 @@ internal class MainNavigator(
     @Composable
     fun shouldShowBottomBar() = MainTab.contains {
         currentDestination?.hasRoute(it::class) == true
-    }
+    } && (currentTab?.showBottomSheet ?: true)
 }
 
 @Composable

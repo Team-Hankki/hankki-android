@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.dashedBorder
+import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
@@ -26,7 +27,10 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
-fun AddPhotoButton(modifier: Modifier = Modifier) {
+fun AddPhotoButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
@@ -36,7 +40,8 @@ fun AddPhotoButton(modifier: Modifier = Modifier) {
                 color = Gray200,
                 cornerRadiusDp = 10.dp
             )
-            .padding(14.dp),
+            .padding(14.dp)
+            .noRippleClickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
