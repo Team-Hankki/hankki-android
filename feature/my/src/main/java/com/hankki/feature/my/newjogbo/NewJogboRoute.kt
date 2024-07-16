@@ -47,7 +47,8 @@ fun NewJogboRoute(
         onTitleChange = newJogboViewModel::setTitle,
         tags = newJogboState.tags,
         onTagsChange = newJogboViewModel::setTags,
-        buttonEnabled = newJogboState.isButtonEnabled
+        buttonEnabled = newJogboState.isButtonEnabled,
+        editTagsLength = newJogboViewModel::editTagsLength
     )
 }
 
@@ -60,6 +61,7 @@ fun NewJogboScreen(
     modifier: Modifier = Modifier,
     tags: String,
     onTagsChange: (String) -> Unit,
+    editTagsLength: (String) -> Int,
     buttonEnabled: Boolean,
 ) {
     val focusManager = LocalFocusManager.current
@@ -111,7 +113,7 @@ fun NewJogboScreen(
             HankkiCountTextField(
                 title = stringResource(R.string.think_jogbo),
                 value = tags,
-                valueLength = tags.length,
+                valueLength = editTagsLength(tags),
                 placeholder = stringResource(R.string.jogbo_tags),
                 onValueChanged = onTagsChange,
                 tailingIcon = false
@@ -133,16 +135,20 @@ fun NewJogboScreen(
 @Composable
 @Preview
 fun NewJogboScreenPreview() {
+    val dummyEditTagsLength: (String) -> Int = { tags ->
+        tags.replace("#", "").length
+    }
+
     HankkijogboTheme {
         NewJogboScreen(
-            PaddingValues(),
-            {},
-            "",
-            {},
-            Modifier,
-            "",
-            { _ -> },
-            false
+            paddingValues = PaddingValues(),
+            navigateUp = {},
+            title = "",
+            onTitleChange = {},
+            tags = "",
+            onTagsChange = {},
+            editTagsLength = dummyEditTagsLength,
+            buttonEnabled = false
         )
     }
 }
