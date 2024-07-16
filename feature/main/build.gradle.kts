@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.feature.my)
     implementation(projects.feature.login)
     implementation(projects.feature.universityselection)
+    implementation(projects.feature.storedetail)
 
     // others
     implementation(libs.androidx.core.splashscreen)

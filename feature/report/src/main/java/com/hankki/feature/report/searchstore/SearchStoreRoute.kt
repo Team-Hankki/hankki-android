@@ -56,10 +56,11 @@ fun SearchStoreRoute(
     navigateUp: () -> Unit,
     viewModel: SearchStoreViewModel = hiltViewModel(),
 ) {
+    val value by viewModel.value.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     SearchStoreScreen(
-        value = state.value,
+        value = value,
         selectedLocation = state.selectedLocation,
         state = state.uiState,
         onValueChange = viewModel::setValue,

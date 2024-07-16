@@ -3,13 +3,16 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
+import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
+import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,10 +20,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val homeRepository: HomeRepository,
 ) : ViewModel() {
     private val _state: MutableStateFlow<HomeState> = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState>
@@ -193,60 +198,27 @@ class HomeViewModel @Inject constructor(
     }
 
     fun clickCategoryChip() {
-        _state.value = _state.value.copy(
-            categoryChipState = when (_state.value.categoryChipState) {
-                is ChipState.Fixed -> ChipState.Unselected()
-                is ChipState.Selected -> ChipState.Unselected()
-                is ChipState.Unselected -> ChipState.Selected()
-            },
-            categoryChipItems = persistentListOf(
-                CategoryChipItem(
-                    name = "한식",
-                    tag = "korean",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "중식",
-                    tag = "chinese",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "일식",
-                    tag = "japanese",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "양식",
-                    tag = "western",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "분식",
-                    tag = "snack",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "패스트푸드",
-                    tag = "fastfood",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "디저트",
-                    tag = "dessert",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "카페",
-                    tag = "cafe",
-                    imageUrl = "https://picsum.photos/200/300"
-                ),
-                CategoryChipItem(
-                    name = "기타",
-                    tag = "etc",
-                    imageUrl = "https://picsum.photos/200/300"
-                )
-            )
-        )
+        viewModelScope.launch {
+            homeRepository.getCategories()
+                .onSuccess { chips ->
+                    _state.value = _state.value.copy(
+                        categoryChipState = when (_state.value.categoryChipState) {
+                            is ChipState.Fixed -> ChipState.Unselected()
+                            is ChipState.Selected -> ChipState.Unselected()
+                            is ChipState.Unselected -> ChipState.Selected()
+                        },
+                        categoryChipItems = chips.map {
+                            CategoryChipItem(
+                                name = it.name,
+                                tag = it.tag,
+                                imageUrl = it.imageUrl
+                            )
+                        }.toPersistentList()
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 
     fun selectCategoryChipItem(item: String) {
@@ -262,17 +234,26 @@ class HomeViewModel @Inject constructor(
     }
 
     fun clickPriceChip() {
-        _state.value = _state.value.copy(
-            priceChipState = when (_state.value.priceChipState) {
-                is ChipState.Fixed -> ChipState.Unselected()
-                is ChipState.Selected -> ChipState.Unselected()
-                is ChipState.Unselected -> ChipState.Selected()
-            },
-            priceChipItems = persistentListOf(
-                "6000원 이하",
-                "6000 ~ 8000원"
-            )
-        )
+        viewModelScope.launch {
+            homeRepository.getPriceCategories()
+                .onSuccess { chips ->
+                    _state.value = _state.value.copy(
+                        priceChipState = when (_state.value.priceChipState) {
+                            is ChipState.Fixed -> ChipState.Unselected()
+                            is ChipState.Selected -> ChipState.Unselected()
+                            is ChipState.Unselected -> ChipState.Selected()
+                        },
+                        priceChipItems = chips.map {
+                            ChipItem(
+                                name = it.name,
+                                tag = it.tag
+                            )
+                        }.toPersistentList()
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 
     fun selectPriceChipItem(item: String) {
@@ -288,18 +269,26 @@ class HomeViewModel @Inject constructor(
     }
 
     fun clickSortChip() {
-        _state.value = _state.value.copy(
-            sortChipState = when (_state.value.sortChipState) {
-                is ChipState.Fixed -> ChipState.Unselected()
-                is ChipState.Selected -> ChipState.Unselected()
-                is ChipState.Unselected -> ChipState.Selected()
-            },
-            sortChipItems = persistentListOf(
-                "최신순",
-                "가격 낮은순",
-                "추천순"
-            )
-        )
+        viewModelScope.launch {
+            homeRepository.getSortCategories()
+                .onSuccess { chips ->
+                    _state.value = _state.value.copy(
+                        sortChipState = when (_state.value.sortChipState) {
+                            is ChipState.Fixed -> ChipState.Unselected()
+                            is ChipState.Selected -> ChipState.Unselected()
+                            is ChipState.Unselected -> ChipState.Selected()
+                        },
+                        sortChipItems = chips.map {
+                            ChipItem(
+                                name = it.name,
+                                tag = it.tag
+                            )
+                        }.toPersistentList()
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 
     fun selectSortChipItem(item: String) {

@@ -49,6 +49,7 @@ import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
+import com.hankki.feature.storedetail.navigation.storeDetailNavGraph
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -71,7 +72,8 @@ internal fun MainScreen(
     Scaffold(
         content = { paddingValue ->
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
                 NavHost(
                     navController = navigator.navController,
@@ -87,7 +89,7 @@ internal fun MainScreen(
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = onShowSnackBar,
-                        navigateToUniversitySelection = navigator::navigateToUniversity
+                        navigateStoreDetail = navigator::navigateToStoreDetail
                     )
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
@@ -147,6 +149,9 @@ internal fun MainScreen(
                             navigator.navigateToHome(navOptions)
                         }
                     )
+                    storeDetailNavGraph {
+
+                    }
                 }
             }
         },

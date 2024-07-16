@@ -2,6 +2,7 @@ package com.hankki.feature.home
 
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
 import com.hankki.feature.home.model.CategoryChipItem
+import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
@@ -16,10 +17,10 @@ data class HomeState(
     val categoryChipItems: PersistentList<CategoryChipItem> = persistentListOf(),
     val isCategoryChipOpen: Boolean = false,
     val priceChipState: ChipState = ChipState.Unselected(),
-    val priceChipItems: PersistentList<String> = persistentListOf(),
+    val priceChipItems: PersistentList<ChipItem> = persistentListOf(),
     val isPriceChipOpen: Boolean = false,
     val sortChipState: ChipState = ChipState.Unselected(),
-    val sortChipItems: PersistentList<String> = persistentListOf(),
+    val sortChipItems: PersistentList<ChipItem> = persistentListOf(),
     val isSortChipOpen: Boolean = false,
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,

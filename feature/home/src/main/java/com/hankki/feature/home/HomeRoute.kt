@@ -77,6 +77,7 @@ import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
+import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
@@ -105,7 +106,7 @@ import kotlinx.coroutines.launch
 fun HomeRoute(
     paddingValues: PaddingValues,
     onShowSnackBar: (Int) -> Unit,
-    navigateToUniversitySelection: () -> Unit,
+    navigateStoreDetail: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -154,7 +155,7 @@ fun HomeRoute(
         sortChipItems = state.sortChipItems,
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
-        navigateToUniversitySelection = navigateToUniversitySelection,
+        navigateStoreDetail = navigateStoreDetail,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
         clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
@@ -210,12 +211,12 @@ fun HomeScreen(
     categoryChipState: ChipState,
     categoryChipItems: PersistentList<CategoryChipItem>,
     priceChipState: ChipState,
-    priceChipItems: PersistentList<String>,
+    priceChipItems: PersistentList<ChipItem>,
     sortChipState: ChipState,
-    sortChipItems: PersistentList<String>,
+    sortChipItems: PersistentList<ChipItem>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
-    navigateToUniversitySelection: () -> Unit,
+    navigateStoreDetail: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
     clickMarkerItem: (Int) -> Unit = {},
     clickMap: () -> Unit = {},
@@ -257,7 +258,8 @@ fun HomeScreen(
     if (isMyJogboBottomSheetOpen) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
-            onDismissRequest = controlMyJogboBottomSheet
+            onDismissRequest = controlMyJogboBottomSheet,
+            onClick = navigateStoreDetail
         )
     }
 
@@ -267,7 +269,9 @@ fun HomeScreen(
         HankkiTopBar(
             content = {
                 Row(
-                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
+                    modifier = Modifier.noRippleClickable(
+                        // TODO: 학교 선택 Screen 이동
+                    )
                 ) {
                     Text(
                         text = universityName,

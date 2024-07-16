@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="my_store_jogbo">나의 식당 족보</string>
-    <string name="add_new_jogbo">새로운 족보 추가하기</string>
+    <string name="add_new_jogbo">나의 족보에 추가</string>
     <string name="jogbo_list">족보 목록</string>
     <string name="search_to_name">이름으로 검색</string>
     <string name="enable_under_eight_thousand_won">8천원 이하만 가능해요</string>">
