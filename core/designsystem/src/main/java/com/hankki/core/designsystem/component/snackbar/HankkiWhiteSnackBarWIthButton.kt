@@ -28,9 +28,9 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
             .statusBarsPadding()
-            .padding(horizontal = 65.dp, vertical = 14.dp)
+            .fillMaxWidth(0.65f)
+            .padding(vertical = 14.dp)
             .clip(RoundedCornerShape(65.dp))
             .background(color = White)
     ) {
@@ -42,14 +42,14 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
             Text(
                 text = message,
                 color = Gray900,
-                style = HankkiTheme.typography.body3,
+                style = HankkiTheme.typography.sub3,
                 modifier = Modifier.padding(start = 22.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = buttonText,
                 color = Red,
-                style = HankkiTheme.typography.body3,
+                style = HankkiTheme.typography.sub3,
                 modifier = Modifier
                     .noRippleClickable(onClick = onClick)
                     .padding(end = 12.dp),

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,15 +39,18 @@ fun HankkiTextSnackBarWithButton(onClick: () -> Unit) {
                 Text(
                     text = message,
                     style = HankkiTheme.typography.body3,
-                    color = White
+                    color = White,
+                    modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = buttonText,
                     style = HankkiTheme.typography.body3,
                     color = White,
                     textDecoration = TextDecoration.Underline,
-                    modifier = Modifier.noRippleClickable(onClick = onClick)
+                    modifier = Modifier
+                        .noRippleClickable(onClick = onClick)
+                        .widthIn(min = 40.dp)
                 )
             }
         }
