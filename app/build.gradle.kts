@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.data.login)
     implementation(projects.data.reissuetoken)
     implementation(projects.data.home)
+    implementation(projects.data.storedetail)
 
     // core
     implementation(projects.core.network)
