@@ -10,12 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun HankkiTextSnackBarWithButton(onClick: () -> Unit) {
@@ -27,7 +27,6 @@ fun HankkiTextSnackBarWithButton(onClick: () -> Unit) {
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(16.dp),
-        contentAlignment = Alignment.BottomCenter
     ) {
         HankkiSnackBar {
             Row(
@@ -35,12 +34,16 @@ fun HankkiTextSnackBarWithButton(onClick: () -> Unit) {
                     .padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = message, color = Color.White)
+                Text(
+                    text = message,
+                    style = HankkiTheme.typography.body3,
+                    color = White
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = buttonText,
                     style = HankkiTheme.typography.body3,
-                    color = Color.White,
+                    color = White,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.noRippleClickable(onClick = onClick)
                 )

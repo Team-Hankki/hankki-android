@@ -13,11 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -31,8 +32,7 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
             .statusBarsPadding()
             .padding(horizontal = 40.dp, vertical = 16.dp)
             .clip(RoundedCornerShape(65.dp))
-            .background(color = White),
-        contentAlignment = Alignment.TopCenter
+            .background(color = White)
     ) {
         Row(
             modifier = Modifier
@@ -41,14 +41,14 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
         ) {
             Text(
                 text = message,
-                color = Color.Black,
+                color = Gray900,
                 style = HankkiTheme.typography.body3,
                 modifier = Modifier.padding(start = 22.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = buttonText,
-                color = Color.Red,
+                color = Red,
                 style = HankkiTheme.typography.body3,
                 modifier = Modifier
                     .noRippleClickable(onClick = onClick)
