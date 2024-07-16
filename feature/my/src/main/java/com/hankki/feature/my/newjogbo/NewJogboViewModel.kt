@@ -1,6 +1,5 @@
 package com.hankki.feature.my.newjogbo
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,13 +19,19 @@ class NewJogboViewModel @Inject constructor(
 
     fun setTags(tags: String) {
         _newJogboState.value = _newJogboState.value.copy(tags = tags)
-        Log.e("item","${_newJogboState.value.tags}")
         updateButtonState(_newJogboState.value.title, tags)
     }
 
     fun updateButtonState(title: String, tags: String) {
+        val tagsList = tags.split("#").filter { it.isNotBlank() }.joinToString("#", prefix = "#")
+
         _newJogboState.value = _newJogboState.value.copy(
-            isButtonEnabled = title.isNotEmpty() && tags.isNotEmpty()
+            isButtonEnabled = title.isNotEmpty() && tagsList.isNotEmpty()
         )
+    }
+
+    fun editTagsLength(tags: String): Int {
+        val tagsWithoutHash = tags.replace("#", "")
+        return tagsWithoutHash.length
     }
 }
