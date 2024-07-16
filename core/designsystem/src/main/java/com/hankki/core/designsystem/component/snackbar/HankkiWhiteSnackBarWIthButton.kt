@@ -30,7 +30,7 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(horizontal = 40.dp, vertical = 16.dp)
+            .padding(horizontal = 65.dp, vertical = 14.dp)
             .clip(RoundedCornerShape(65.dp))
             .background(color = White)
     ) {
