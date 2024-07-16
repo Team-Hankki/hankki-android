@@ -26,9 +26,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER18_REGEX
+import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER20_REGEX
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray800
@@ -50,14 +52,14 @@ fun HankkiCountTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     var isFocused by remember { mutableStateOf(false) }
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(text = value)) }
 
     val borderColor = when {
         isFocused -> Gray400
         else -> Gray300
     }
 
-    Column(modifier = modifier.background(White))
-    {
+    Column(modifier = modifier.background(White)) {
         Text(
             text = title,
             style = HankkiTheme.typography.suitSub1,
@@ -67,52 +69,69 @@ fun HankkiCountTextField(
         Spacer(modifier = Modifier.height(6.dp))
 
         HankkiCountInnerTextField(
-            value = value,
+            value = textFieldValue,
             placeholder = placeholder,
             borderColor = borderColor,
             textColor = Gray800,
-            onFocusChanged = { isFocused = it },
-            onTextChanged = { value ->
-                if (KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER18_REGEX.matcher(value).matches()) {
-                    if (tailingIcon) {
-                        onValueChanged(value)
+            onFocusChanged = { focusState ->
+                isFocused = focusState
+                if (!tailingIcon) {
+                    if (focusState) {
+                        if (textFieldValue.text.isEmpty()) {
+                            textFieldValue = TextFieldValue(text = "#", selection = TextRange(1))
+                            onValueChanged("#")
+                        }
                     } else {
-                        // 공백을 #으로 변환
-                        var modifiedValue = value.replace(" ", "#")
+                        if (textFieldValue.text == "#") {
+                            textFieldValue = TextFieldValue(text = "")
+                            onValueChanged("")
+                        }
+                    }
+                }
+            },
+            onTextChanged = { newValue ->
+                if (KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER20_REGEX.matcher(newValue.text)
+                        .matches()
+                ) {
+                    if (tailingIcon) {
+                        textFieldValue = newValue.copy(
+                            text = newValue.text.take(18),
+                            selection = TextRange(newValue.text.length)
+                        )
+                        onValueChanged(textFieldValue.text)
+                    } else {
+                        var modifiedValue = newValue.text.replace(" ", "#") //필드 내 공백을 #으로 변환
 
-                        // #이 연속으로 두 개 이상 있는지 확인
-                        if (modifiedValue.count { it == '#' } > 2) {
-                            // 공백 입력을 무시
+                        if (newValue.text.contains("# ") || newValue.text.contains(" #")) { //공백과 #이 같이있다면 입력 막기
                             return@HankkiCountInnerTextField
                         }
 
-                        // 기존 연속된 #이 없는지 검사 및 수정
-                        val parts = modifiedValue.split("#")
-                        val filteredParts = parts.filter { it.isNotEmpty() }
-                        val limitedParts = filteredParts.take(2)
-                        modifiedValue = limitedParts.joinToString("#", prefix = "#")
+                        val parts = modifiedValue.split("#").filter { it.isNotEmpty() }
+                        val limitedParts = parts.take(2)
+                        val processedParts = limitedParts.map { it.take(9) } //#을 기준으로 문자열 분리 후 각 태그에 대한 길이 제한
 
-                        // 공백 입력 시 처리
-                        if (value.isNotEmpty() && value.last() == ' ') {
+                        modifiedValue = processedParts.joinToString("#", prefix = "#") //각 태그 시작에 # 추가
+
+                        if (newValue.text.isNotEmpty() && newValue.text.last() == ' ' && modifiedValue.count { it == '#' } < 2) { //사용자 공백 입력시 # 추가
                             modifiedValue += "#"
                         }
 
+                        textFieldValue = newValue.copy(
+                            text = modifiedValue,
+                            selection = TextRange(modifiedValue.length)
+                        )
+
                         onValueChanged(modifiedValue)
-
-//                        1.#도 같이 글자수를 셈
-//                        2.맨끝에서 공백 누르면 추가되지않음 => 해결함
-//                        3.포인터가 이상 -> #ㅇ -> #ㄴㅏㅇ 이런식으로 한 글자!!만 추가되고 다음부터는 괜찮아짐
-
                     }
                 }
             },
             tailingIcon = {
-                //if (tailingIcon)
+                if (tailingIcon)
                     Text(
-                    text = "(${valueLength}/18)",
-                    style = HankkiTheme.typography.body3,
-                    color = Gray400
-                )
+                        text = "(${valueLength}/18)",
+                        style = HankkiTheme.typography.body3,
+                        color = Gray400
+                    )
             }
         )
     }
@@ -120,9 +139,9 @@ fun HankkiCountTextField(
 
 @Composable
 fun HankkiCountInnerTextField(
-    value: String,
+    value: TextFieldValue,
     placeholder: String,
-    onTextChanged: (String) -> Unit,
+    onTextChanged: (TextFieldValue) -> Unit,
     borderColor: Color,
     textColor: Color,
     onFocusChanged: (Boolean) -> Unit,
@@ -164,7 +183,7 @@ fun HankkiCountInnerTextField(
                 leadingIcon()
                 Box(modifier = Modifier.weight(1f)) {
                     innerTextField()
-                    if (value.isEmpty()) {
+                    if (value.text.isEmpty()) {
                         Text(
                             text = placeholder,
                             color = Gray400,
