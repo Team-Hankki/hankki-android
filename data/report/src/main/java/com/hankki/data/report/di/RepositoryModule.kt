@@ -13,7 +13,7 @@ import javax.inject.Singleton
 internal abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun getLocations(
+    abstract fun bindsReportRepository(
         reportRepositoryImpl: ReportRepositoryImpl,
     ): ReportRepository
 }

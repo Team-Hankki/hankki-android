@@ -13,5 +13,5 @@ import javax.inject.Singleton
 internal abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun provideReportDataSource(reportDataSourceImpl: ReportDataSourceImpl): ReportDataSource
+    abstract fun bindsReportDataSource(reportDataSourceImpl: ReportDataSourceImpl): ReportDataSource
 }
