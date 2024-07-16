@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,9 +33,10 @@ fun DoubleButtonDialog(
     description: String,
     negativeButtonTitle: String,
     positiveButtonTitle: String,
-    onConfirmation: () -> Unit,
+    onNegativeButtonClicked: () -> Unit,
+    onPositiveButtonClicked: () -> Unit,
 ) {
-    Dialog(onDismissRequest = onConfirmation) {
+    Dialog(onDismissRequest = onNegativeButtonClicked) {
         Card(
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
@@ -69,13 +71,14 @@ fun DoubleButtonDialog(
                 Row {
                     HankkiTextButton(
                         text = negativeButtonTitle,
-                        onClick = onConfirmation,
+                        onClick = onNegativeButtonClicked,
                         enabled = true,
                         textStyle = HankkiTheme.typography.sub3
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
                     HankkiButton(
                         text = positiveButtonTitle,
-                        onClick = onConfirmation,
+                        onClick = onPositiveButtonClicked,
                         enabled = true,
                         textStyle = HankkiTheme.typography.sub3
                     )
@@ -94,7 +97,8 @@ fun DoubleButtonDialogPreview() {
             description = "Description",
             negativeButtonTitle = "Negative",
             positiveButtonTitle = "Positive",
-            onConfirmation = {}
+            onNegativeButtonClicked = {},
+            onPositiveButtonClicked = {}
         )
     }
 }
