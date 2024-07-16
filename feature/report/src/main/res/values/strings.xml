@@ -5,6 +5,7 @@
     <string name="add_menu_title">메뉴를 추가해주세요</string>
     <string name="add_menu_sub_title">한끼로 적당한 메뉴를 추천해주세요</string>
     <string name="do_report">제보하기</string>
+    <string name="counted_report">번째 제보에요</string>
     <string name="will_report">을 제보할래요</string>
     <string name="add_menu">메뉴 추가하기</string>
     <string name="search_store_sub_title">식당이름으로 검색하면\n주소를 찾아드릴게요</string>

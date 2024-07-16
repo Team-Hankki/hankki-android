@@ -3,8 +3,10 @@ package com.hankki.feature.report.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.domain.report.repository.ReportRepository
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,9 +15,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-class ReportViewModel @Inject constructor() : ViewModel() {
+@HiltViewModel
+class ReportViewModel @Inject constructor(
+    private val reportRepository: ReportRepository,
+) : ViewModel() {
     private val _state: MutableStateFlow<ReportState> = MutableStateFlow(ReportState())
     val state: StateFlow<ReportState>
         get() = _state.asStateFlow()
@@ -30,9 +36,15 @@ class ReportViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun getCount() {
-        _state.value = _state.value.copy(
-            count = 51
-        )
+        viewModelScope.launch {
+            reportRepository.getReportCount().onSuccess {
+                _state.value = _state.value.copy(
+                    count = it.count
+                )
+            }.onFailure { error ->
+                Timber.e(error)
+            }
+        }
     }
 
     private fun getCategories() {

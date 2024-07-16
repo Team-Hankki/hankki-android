@@ -70,9 +70,9 @@ fun StoreNameSelectedButton(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
+            .bounceClick(onClick = onClick)
             .background(RedLight)
-            .padding(vertical = 12.dp, horizontal = 14.dp)
-            .bounceClick(onClick = onClick),
+            .padding(vertical = 12.dp, horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
