@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,64 +67,71 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        topBar = {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                SnackbarHost(hostState = snackbarHostState2) { data ->
-                    HankkiWhiteSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
-                }
-            }
-        },
-        snackbarHost = {
-            Column {
-                SnackbarHost(hostState = snackbarHostState1) { data ->
-                    HankkiTextSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
-                }
-                SnackbarHost(hostState = snackbarHostState3) { data ->
-                    HankkiTextSnackBar(message = data.visuals.message)
-                }
-            }
-        },
         content = { paddingValues ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                Text(text = "Login")
-                if (loginState.isLoggedIn) {
-                    Text(text = "Logged in success")
-                } else {
-                    Button(onClick = { onLoginClick() }) {
-                        Text(text = "Login with KakaoTalk")
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Text(text = "Login")
+                    if (loginState.isLoggedIn) {
+                        Text(text = "Logged in success")
+                    } else {
+                        Button(onClick = { onLoginClick() }) {
+                            Text(text = "Login with KakaoTalk")
+                        }
+                        loginState.errorMessage?.let {
+                            Text(text = "Error: $it")
+                        }
                     }
-                    loginState.errorMessage?.let {
-                        Text(text = "Error: $it")
+
+                    // 임시 버튼 추가
+                    Button(onClick = {
+                        coroutineScope.launch {
+                            snackbarHostState1.showSnackbar("나의 족보에 추가되었습니다.")
+                        }
+                    }) {
+                        Text(text = "Show gray900 Snackbar")
+                    }
+
+                    Button(onClick = {
+                        coroutineScope.launch {
+                            snackbarHostState2.showSnackbar("나의 족보에 추가되었습니다.")
+                        }
+                    }) {
+                        Text(text = "Show white Snackbar")
+                    }
+
+                    Button(onClick = {
+                        coroutineScope.launch {
+                            snackbarHostState3.showSnackbar("텍스트 입력 스낵바")
+                        }
+                    }) {
+                        Text(text = "Show Text Input SnackBar")
                     }
                 }
 
-                // 임시 버튼 추가
-                Button(onClick = {
-                    coroutineScope.launch {
-                        snackbarHostState1.showSnackbar("나의 족보에 추가되었습니다.")
-                    }
-                }) {
-                    Text(text = "Show gray900 Snackbar")
+                SnackbarHost(
+                    hostState = snackbarHostState1,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) { data ->
+                    HankkiTextSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
                 }
-
-                Button(onClick = {
-                    coroutineScope.launch {
-                        snackbarHostState2.showSnackbar("나의 족보에 추가되었습니다.")
-                    }
-                }) {
-                    Text(text = "Show white Snackbar")
+                SnackbarHost(
+                    hostState = snackbarHostState2,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                ) { data ->
+                    HankkiWhiteSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
                 }
-
-                Button(onClick = {
-                    coroutineScope.launch {
-                        snackbarHostState3.showSnackbar("텍스트 입력 스낵바")
-                    }
-                }) {
-                    Text(text = "Show Text Input SnackBar")
+                SnackbarHost(
+                    hostState = snackbarHostState3,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) { data ->
+                    HankkiTextSnackBar(message = data.visuals.message)
                 }
             }
         }
