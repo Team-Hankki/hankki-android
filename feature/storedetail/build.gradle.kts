@@ -12,6 +12,6 @@ dependencies {
     //domain
     implementation(projects.domain.storedetail)
 
-    //otther
+    //other
     implementation(libs.coil.compose)
 }
