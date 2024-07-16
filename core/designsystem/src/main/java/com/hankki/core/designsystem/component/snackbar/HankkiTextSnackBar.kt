@@ -3,6 +3,7 @@ package com.hankki.core.designsystem.component.snackbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,8 +18,8 @@ fun HankkiTextSnackBar(message: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .wrapContentHeight()
             .padding(16.dp),
-        contentAlignment = Alignment.TopCenter
     ) {
         HankkiSnackBar {
             Box(
