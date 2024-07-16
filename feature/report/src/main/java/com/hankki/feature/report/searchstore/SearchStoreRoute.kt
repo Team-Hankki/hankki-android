@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +26,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
@@ -56,8 +59,28 @@ fun SearchStoreRoute(
     navigateUp: () -> Unit,
     viewModel: SearchStoreViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val value by viewModel.value.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                SearchStoreSideEffect.OpenDialog -> {
+                    // TODO: Dialog 열기
+                }
+
+                is SearchStoreSideEffect.ValidateUniversitySuccess -> {
+                    navigateReport(
+                        sideEffect.latitude,
+                        sideEffect.longitude,
+                        sideEffect.location,
+                        sideEffect.address
+                    )
+                }
+            }
+        }
+    }
 
     SearchStoreScreen(
         value = value,
@@ -66,8 +89,7 @@ fun SearchStoreRoute(
         onValueChange = viewModel::setValue,
         onClickLocation = viewModel::setLocation,
         navigateUp = navigateUp,
-        reportButtonClicked = viewModel::reportButtonClicked,
-        // navigateReport = navigateReport
+        reportButtonClicked = viewModel::reportButtonClicked
     )
 }
 
@@ -80,7 +102,6 @@ fun SearchStoreScreen(
     onClickLocation: (LocationModel) -> Unit,
     navigateUp: () -> Unit,
     reportButtonClicked: () -> Unit,
-    // navigateReport: (latitude: Float, longitude: Float, location: String, address: String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 

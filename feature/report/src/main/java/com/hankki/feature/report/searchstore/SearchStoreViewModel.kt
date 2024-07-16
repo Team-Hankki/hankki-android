@@ -10,8 +10,11 @@ import com.hankki.feature.report.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -27,6 +30,10 @@ class SearchStoreViewModel @Inject constructor(
     private val _value: MutableStateFlow<String> = MutableStateFlow("")
     val value: StateFlow<String>
         get() = _value.asStateFlow()
+
+    private val _sideEffect: MutableSharedFlow<SearchStoreSideEffect> = MutableSharedFlow()
+    val sideEffect: SharedFlow<SearchStoreSideEffect>
+        get() = _sideEffect.asSharedFlow()
 
     private val _state: MutableStateFlow<SearchStoreState> = MutableStateFlow(SearchStoreState())
     val state: StateFlow<SearchStoreState>
@@ -85,10 +92,19 @@ class SearchStoreViewModel @Inject constructor(
                     longitude = _state.value.selectedLocation.longitude.toDouble()
                 )
             ).onSuccess {
-
+                with(_state.value.selectedLocation) {
+                    _sideEffect.emit(
+                        SearchStoreSideEffect.ValidateUniversitySuccess(
+                            latitude = latitude,
+                            longitude = longitude,
+                            location = location,
+                            address = address
+                        )
+                    )
+                }
             }.onFailure { error ->
                 Timber.e(error)
-                // dialog sideEffect 발행 예정
+                _sideEffect.emit(SearchStoreSideEffect.OpenDialog)
             }
         }
     }
