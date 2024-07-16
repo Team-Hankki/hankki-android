@@ -285,14 +285,13 @@ fun ReportTopContent(
     location: String,
     onClick: () -> Unit = {},
 ) {
-    // TODO: 라이팅 변경 예정이라 하드코딩 해둠. 변경시 res로 추출 예정
     Column(
         modifier = Modifier
             .padding(horizontal = 22.dp)
             .fillMaxWidth()
     ) {
         Text(
-            text = "${count}번째 제보에요",
+            text = count.toString() + stringResource(id = com.hankki.feature.report.R.string.counted_report),
             style = HankkiTheme.typography.body4,
             color = if (location.isEmpty()) Red else Gray600,
             modifier = Modifier.padding(start = 4.dp)
@@ -300,17 +299,23 @@ fun ReportTopContent(
 
         Spacer(modifier = Modifier.height(5.dp))
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (location.isEmpty()) {
-                StoreNameSearchButton(onClick = onClick)
-            } else {
-                StoreNameSelectedButton(text = location, onClick = onClick)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier.weight(1f, fill = false)) {
+                if (location.isEmpty()) {
+                    StoreNameSearchButton(onClick = onClick)
+                } else {
+                    StoreNameSelectedButton(text = location, onClick = onClick)
+                }
             }
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = stringResource(id = com.hankki.feature.report.R.string.will_report),
                 style = HankkiTheme.typography.suitH3,
-                color = Gray900
+                color = Gray900,
+                maxLines = 1
             )
         }
     }

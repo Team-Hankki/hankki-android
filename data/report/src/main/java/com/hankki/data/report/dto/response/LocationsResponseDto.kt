@@ -1,4 +1,4 @@
-package com.hankki.data.report.dto
+package com.hankki.data.report.dto.response
 
 import com.hankki.domain.report.entity.LocationEntity
 import kotlinx.serialization.SerialName
@@ -20,13 +20,13 @@ data class LocationsResponseDto(
         @SerialName("address")
         val address: String,
     )
-}
 
-fun LocationsResponseDto.toEntity() = locations.map {
-    LocationEntity(
-        latitude = it.latitude,
-        longitude = it.longitude,
-        name = it.name,
-        address = it.address
-    )
+    fun toEntity() = locations.map {
+        LocationEntity(
+            latitude = it.latitude,
+            longitude = it.longitude,
+            name = it.name,
+            address = it.address
+        )
+    }
 }
