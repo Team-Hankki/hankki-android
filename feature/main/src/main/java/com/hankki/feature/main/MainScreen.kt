@@ -89,7 +89,8 @@ internal fun MainScreen(
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = onShowSnackBar,
-                        navigateStoreDetail = navigator::navigateToStoreDetail
+                        navigateStoreDetail = navigator::navigateToStoreDetail,
+                        navigateToUniversitySelection = navigator::navigateToUniversity
                     )
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->

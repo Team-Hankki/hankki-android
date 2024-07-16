@@ -10,6 +10,9 @@ import javax.inject.Inject
 class HomeRepositoryImpl @Inject constructor(
     private val homeDataSource: HomeDataSource,
 ) : HomeRepository {
+    override suspend fun getMyUniversity() = runCatching {
+        homeDataSource.getMyUniversity().data.toEntity()
+    }
     override suspend fun getCategories(): Result<List<CategoryEntity>> = runCatching {
         homeDataSource.getCategories().data.toEntity()
     }
