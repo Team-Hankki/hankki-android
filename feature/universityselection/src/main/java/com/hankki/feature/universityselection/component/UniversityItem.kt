@@ -10,11 +10,11 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red
-import com.hankki.domain.universityselection.UniversitySelectionModel
+import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 
 @Composable
 fun UniversityItem(
-    university: UniversitySelectionModel,
+    university: UniversitySelectionEntity,
     isSelected: Boolean,
     onSelectUniversity: (String) -> Unit
 ) {

@@ -25,6 +25,8 @@ import com.hankki.feature.report.navigation.navigateToReport
 import com.hankki.feature.report.navigation.navigateToReportFinish
 import com.hankki.feature.report.navigation.navigateToSearchStore
 import com.hankki.feature.storedetail.navigation.navigateStoreDetail
+import com.hankki.feature.universityselection.UniversitySelectionRoute
+import com.hankki.feature.universityselection.navigation.UniversitySelection
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -34,7 +36,7 @@ internal class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Home
+    val startDestination = UniversitySelection
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->

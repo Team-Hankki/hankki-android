@@ -31,10 +31,8 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.domain.universityselection.UniversitySelectionModel
+import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import com.hankki.feature.universityselection.component.UniversityItem
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
@@ -42,18 +40,23 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
 
     UniversitySelectionScreen(
-        universities = universitySelectionState.universities.toPersistentList(),
+        universities = universitySelectionState.universities,
         selectedUniversity = universitySelectionState.selectedUniversity,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
+        onPostSelectedUniversity = {
+            universitySelectionViewModel.postUniversity()
+            navigateToHome()
+        },
         navigateHome = navigateToHome
     )
 }
 
 @Composable
 fun UniversitySelectionScreen(
-    universities: PersistentList<UniversitySelectionModel>,
-    selectedUniversity: String?,
-    onSelectUniversity: (String) -> Unit,
+    universities: List<UniversitySelectionEntity>,
+    selectedUniversity: UniversitySelectionEntity?,
+    onSelectUniversity: (UniversitySelectionEntity) -> Unit,
+    onPostSelectedUniversity: () -> Unit,
     navigateHome: () -> Unit,
 ) {
     Column(
@@ -87,13 +90,14 @@ fun UniversitySelectionScreen(
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth().padding(horizontal = 22.dp)
+                    .fillMaxSize()
+                    .padding(horizontal = 22.dp)
             ) {
                 items(universities) { university ->
                     UniversityItem(
                         university = university,
-                        isSelected = selectedUniversity == university.name,
-                        onSelectUniversity = onSelectUniversity
+                        isSelected = selectedUniversity == university,
+                        onSelectUniversity = { onSelectUniversity(university) }
                     )
                     if (university != universities.last()) {
                         HorizontalDivider(thickness = 1.dp, color = Gray200)
@@ -107,12 +111,17 @@ fun UniversitySelectionScreen(
             BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
 
             Column(
-                modifier = Modifier.noRippleClickable().padding(horizontal = 22.dp)
+                modifier = Modifier
+                    .noRippleClickable()
+                    .padding(horizontal = 22.dp)
             ) {
                 HankkiButton(
                     text = stringResource(id = R.string.select),
                     textStyle = HankkiTheme.typography.sub2,
-                    onClick = navigateHome,
+                    onClick = {
+                        navigateHome
+                        onPostSelectedUniversity()
+                    },
                     modifier = Modifier
                         .fillMaxWidth(),
                     enabled = selectedUniversity != null
@@ -133,28 +142,4 @@ fun UniversitySelectionScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewUniversityScreen() {
-    val dummyData = listOf(
-        UniversitySelectionModel(1, "한양대"), UniversitySelectionModel(2, "성신여대"),
-        UniversitySelectionModel(3, "성균관대"), UniversitySelectionModel(4, "건국대"),
-        UniversitySelectionModel(5, "경희대"), UniversitySelectionModel(6, "외대"),
-        UniversitySelectionModel(7, "연세대"), UniversitySelectionModel(8, "이화여대"),
-        UniversitySelectionModel(9, "홍익대"), UniversitySelectionModel(10, "숭실대"),
-        UniversitySelectionModel(11, "고려대"), UniversitySelectionModel(12, "중앙대"),
-        UniversitySelectionModel(13, "동국대"), UniversitySelectionModel(14, "서강대"),
-        UniversitySelectionModel(15, "경기대"), UniversitySelectionModel(16, "숙명여대"),
-        UniversitySelectionModel(17, "단국대"), UniversitySelectionModel(18, "명지대"),
-        UniversitySelectionModel(19, "서울대"), UniversitySelectionModel(20, "국민대")
-    ).sortedBy { it.name }.toPersistentList()
-
-    UniversitySelectionScreen(
-        universities = dummyData,
-        selectedUniversity = null,
-        onSelectUniversity = {},
-        navigateHome = {}
-    )
 }

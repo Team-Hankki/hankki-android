@@ -1,8 +1,8 @@
 package com.hankki.feature.universityselection
 
-import com.hankki.domain.universityselection.UniversitySelectionModel
+import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 
 data class UniversitySelectionState(
-    val universities: List<UniversitySelectionModel> = emptyList(),
-    val selectedUniversity: String? = null
+    val universities: List<UniversitySelectionEntity> = emptyList(),
+    val selectedUniversity: UniversitySelectionEntity? = null
 )
