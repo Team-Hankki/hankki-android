@@ -9,5 +9,5 @@ import javax.inject.Inject
 class ReportDataSourceImpl @Inject constructor(
     private val reportService: ReportService,
 ) : ReportDataSource {
-    override suspend fun getLocations(search: String): BaseResponse<LocationsResponseDto> = reportService.getStoreLocation(search)
+    override suspend fun getLocations(query: String): BaseResponse<LocationsResponseDto> = reportService.getStoreLocation(query)
 }

@@ -9,6 +9,6 @@ import retrofit2.http.Query
 interface ReportService {
     @GET("api/v1/locations")
     suspend fun getStoreLocation(
-        @Query("search") search: String,
+        @Query("query") query: String,
     ): BaseResponse<LocationsResponseDto>
 }

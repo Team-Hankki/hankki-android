@@ -12,6 +12,6 @@ data class LocationModel(
 fun LocationEntity.toModel() = LocationModel(
     latitude = latitude.toFloat(),
     longitude = longitude.toFloat(),
-    location = location,
+    location = name,
     address = address
 )

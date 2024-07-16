@@ -15,8 +15,8 @@ data class LocationsResponseDto(
         val latitude: Double,
         @SerialName("longitude")
         val longitude: Double,
-        @SerialName("location")
-        val location: String,
+        @SerialName("name")
+        val name: String,
         @SerialName("address")
         val address: String,
     )
@@ -26,7 +26,7 @@ fun LocationsResponseDto.toEntity() = locations.map {
     LocationEntity(
         latitude = it.latitude,
         longitude = it.longitude,
-        location = it.location,
+        name = it.name,
         address = it.address
     )
 }
