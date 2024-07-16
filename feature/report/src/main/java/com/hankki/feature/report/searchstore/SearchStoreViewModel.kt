@@ -37,8 +37,6 @@ class SearchStoreViewModel @Inject constructor(
                 .collectLatest { debounced ->
                     if (debounced.isNotBlank()) {
                         getStores(debounced)
-                    } else {
-                        _state.value = _state.value.copy(uiState = EmptyUiState.Loading)
                     }
                 }
         }
@@ -46,6 +44,9 @@ class SearchStoreViewModel @Inject constructor(
 
     fun setValue(value: String) {
         _value.value = value
+        if (value.isBlank()) {
+            _state.value = _state.value.copy(uiState = EmptyUiState.Loading)
+        }
     }
 
     fun setLocation(location: LocationModel) {
