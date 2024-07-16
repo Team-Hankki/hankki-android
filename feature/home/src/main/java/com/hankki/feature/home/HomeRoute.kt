@@ -108,6 +108,8 @@ fun HomeRoute(
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: () -> Unit,
+    isNewUniversity: Boolean = false, // splash에서 넘어오는 경우, UniversitySelect에서 넘어오는 경우 true
+    // TODO : UniversitySelect 코드 구현 완료시 연결 예정
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -117,11 +119,18 @@ fun HomeRoute(
     val focusLocationProviderClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
             LatLng(state.myUniversityModel.latitude, state.myUniversityModel.longitude),
             DEFAULT_ZOOM
         )
+    }
+
+    LaunchedEffect(key1 = true) {
+        if (isNewUniversity) {
+            viewModel.getUniversityInfo()
+        }
     }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {

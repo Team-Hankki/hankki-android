@@ -36,27 +36,31 @@ class HomeViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
-        getUniversityInfo()
+        // getUniversityInfo()
         getStoreItems()
         getMarkerItems()
     }
 
-    fun moveMap(latitude: Double, longitude: Double) {
-        viewModelScope.launch {
-            _sideEffect.emit(HomeSideEffect.MoveMap(latitude, longitude))
-        }
-    }
-
-    private fun getUniversityInfo() {
+    fun getUniversityInfo() {
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
                     _state.value = _state.value.copy(
                         myUniversityModel = university.toModel()
                     )
+                    moveMap(
+                        _state.value.myUniversityModel.latitude,
+                        _state.value.myUniversityModel.longitude
+                    )
                 }.onFailure { error ->
                     Timber.e(error)
                 }
+        }
+    }
+
+    fun moveMap(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.MoveMap(latitude, longitude))
         }
     }
 
