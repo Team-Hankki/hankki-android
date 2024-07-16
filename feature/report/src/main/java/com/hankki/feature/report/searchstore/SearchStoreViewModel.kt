@@ -23,13 +23,13 @@ import javax.inject.Inject
 class SearchStoreViewModel @Inject constructor(
     private val reportRepository: ReportRepository,
 ) : ViewModel() {
-    private val _state: MutableStateFlow<SearchStoreState> = MutableStateFlow(SearchStoreState())
-    val state: StateFlow<SearchStoreState>
-        get() = _state.asStateFlow()
-
     private val _value: MutableStateFlow<String> = MutableStateFlow("")
     val value: StateFlow<String>
         get() = _value.asStateFlow()
+
+    private val _state: MutableStateFlow<SearchStoreState> = MutableStateFlow(SearchStoreState())
+    val state: StateFlow<SearchStoreState>
+        get() = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -57,12 +57,19 @@ class SearchStoreViewModel @Inject constructor(
             reportRepository.getStoreLocation(search)
                 .onSuccess {
                     _state.value = _state.value.copy(
-                        uiState = EmptyUiState.Success(
-                            data = it.map { it.toModel() }.toPersistentList()
-                        )
+                        uiState = if (it.isEmpty()) {
+                            EmptyUiState.Empty
+                        } else {
+                            EmptyUiState.Success(
+                                data = it.map { it.toModel() }.toPersistentList()
+                            )
+                        }
                     )
                 }.onFailure { error ->
                     Timber.e(error)
+                    _state.value = _state.value.copy(
+                        uiState = EmptyUiState.Failure
+                    )
                 }
         }
     }
