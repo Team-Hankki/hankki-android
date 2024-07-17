@@ -47,9 +47,7 @@ fun HankkiCountTextField(
     placeholder: String,
     trailingIcon: Boolean,
     onValueChanged: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    modifier: Modifier = Modifier
 ) {
     var isFocused by remember { mutableStateOf(false) }
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = value)) }
@@ -100,19 +98,19 @@ fun HankkiCountTextField(
                         )
                         onValueChanged(textFieldValue.text)
                     } else {
-                        var modifiedValue = newValue.text.replace(" ", "#") //필드 내 공백을 #으로 변환
+                        var modifiedValue = newValue.text.replace(" ", "#")
 
-                        if (newValue.text.contains("# ") || newValue.text.contains(" #")) { //공백과 #이 같이있다면 입력 막기
+                        if (newValue.text.contains("# ") || newValue.text.contains(" #")) {
                             return@HankkiCountInnerTextField
                         }
 
                         val parts = modifiedValue.split("#").filter { it.isNotEmpty() }
                         val limitedParts = parts.take(2)
-                        val processedParts = limitedParts.map { it.take(9) } //#을 기준으로 문자열 분리 후 각 태그에 대한 길이 제한
+                        val processedParts = limitedParts.map { it.take(9) }
 
-                        modifiedValue = processedParts.joinToString("#", prefix = "#") //각 태그 시작에 # 추가
+                        modifiedValue = processedParts.joinToString("#", prefix = "#")
 
-                        if (newValue.text.isNotEmpty() && newValue.text.last() == ' ' && modifiedValue.count { it == '#' } < 2) { //사용자 공백 입력시 # 추가
+                        if (newValue.text.isNotEmpty() && newValue.text.last() == ' ' && modifiedValue.count { it == '#' } < 2) {
                             modifiedValue += "#"
                         }
 
@@ -148,7 +146,6 @@ fun HankkiCountInnerTextField(
     modifier: Modifier = Modifier,
     backgroundColor: Color = White,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
     leadingIcon: @Composable () -> Unit = {},
     tailingIcon: @Composable () -> Unit = {},
 ) {
