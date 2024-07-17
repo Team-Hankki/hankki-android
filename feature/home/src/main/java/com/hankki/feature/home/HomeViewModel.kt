@@ -131,37 +131,29 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getMarkerItems() {
-        _state.value = _state.value.copy(
-            markerItems = persistentListOf(
-                MarkerItem(
-                    x = 37.3009489417651,
-                    y = 127.03549529577874,
-                    title = "한끼네 한정식",
-                    id = 1
-                ),
-                MarkerItem(
-                    x = 37.3005489417651,
-                    y = 127.03549529577874,
-                    title = "두끼네 두정식",
-                    id = 2
-                ),
-                MarkerItem(
-                    x = 37.2909489417651,
-                    y = 127.03529529577874,
-                    title = "세끼네 세정식",
-                    id = 3
-                ),
-                MarkerItem(
-                    x = 37.2909489417651,
-                    y = 127.03569529577874,
-                    title = "네끼네 네정식",
-                    id = 4
-                ),
-            )
-        )
+        viewModelScope.launch {
+            homeRepository.getStoresPins(
+                universityId = _state.value.myUniversityModel.id,
+                storeCategory = if (_state.value.categoryChipState is ChipState.Fixed) {
+                    (_state.value.categoryChipState as ChipState.Fixed).tag
+                } else null,
+                priceCategory = if (_state.value.priceChipState is ChipState.Fixed) {
+                    (_state.value.priceChipState as ChipState.Fixed).tag
+                } else null,
+                sortOption = if (_state.value.sortChipState is ChipState.Fixed) {
+                    (_state.value.sortChipState as ChipState.Fixed).tag
+                } else null
+            ).onSuccess { pins ->
+                _state.value = _state.value.copy(
+                    markerItems = pins.map { it.toModel() }.toPersistentList()
+                )
+            }.onFailure { error ->
+                Timber.e(error)
+            }
+        }
     }
 
-    fun clickMarkerItem(id: Int) {
+    fun clickMarkerItem(id: Long) {
         // id를 통해 서버통신하여 Store 정보를 받아올 예정
         _state.value = _state.value.copy(
             isMainBottomSheetOpen = false,

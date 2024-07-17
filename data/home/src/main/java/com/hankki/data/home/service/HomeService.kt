@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.data.home.dto.CategoriesResponse
 import com.hankki.data.home.dto.PriceCategoriesResponse
 import com.hankki.data.home.dto.SortCategoriesResponse
+import com.hankki.data.home.dto.response.StoresPinsDto
 import com.hankki.data.home.dto.response.StoresResponseDto
 import com.hankki.data.home.dto.response.UniversityResponseDto
 import retrofit2.http.GET
@@ -29,4 +30,12 @@ interface HomeService {
         @Query("priceCategory") priceCategory: String?,
         @Query("sortOption") sortOption: String?
     ): BaseResponse<StoresResponseDto>
+
+    @GET("api/v1/stores/pins")
+    suspend fun getStoresPins(
+        @Query("universityId") universityId: Long?,
+        @Query("storeCategory") storeCategory: String?,
+        @Query("priceCategory") priceCategory: String?,
+        @Query("sortOption") sortOption: String?
+    ): BaseResponse<StoresPinsDto>
 }

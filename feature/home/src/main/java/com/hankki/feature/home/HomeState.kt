@@ -5,6 +5,7 @@ import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
+import com.hankki.feature.home.model.PinModel
 import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.UniversityModel
 import kotlinx.collections.immutable.PersistentList
@@ -28,7 +29,7 @@ data class HomeState(
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,
     val selectedStoreItem: StoreItemModel = StoreItemModel(),
-    val markerItems: PersistentList<MarkerItem> = persistentListOf(),
+    val markerItems: PersistentList<PinModel> = persistentListOf(),
     val storeItems: PersistentList<StoreItemModel> = persistentListOf(),
     val jogboItems: PersistentList<JogboItemEntity> = persistentListOf(),
 )

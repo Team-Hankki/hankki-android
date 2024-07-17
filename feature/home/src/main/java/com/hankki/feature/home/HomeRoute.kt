@@ -80,6 +80,7 @@ import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
+import com.hankki.feature.home.model.PinModel
 import com.hankki.feature.home.model.StoreItemModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -228,7 +229,7 @@ fun HomeScreen(
     selectedStoreItem: StoreItemModel,
     storeItems: PersistentList<StoreItemModel>,
     jogboItems: PersistentList<JogboItemEntity>,
-    markerItems: PersistentList<MarkerItem>,
+    markerItems: PersistentList<PinModel>,
     categoryChipState: ChipState,
     categoryChipItems: PersistentList<CategoryChipItem>,
     priceChipState: ChipState,
@@ -240,7 +241,7 @@ fun HomeScreen(
     navigateStoreDetail: () -> Unit = {},
     navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
-    clickMarkerItem: (Int) -> Unit = {},
+    clickMarkerItem: (Long) -> Unit = {},
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
     selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
@@ -337,12 +338,12 @@ fun HomeScreen(
                     Marker(
                         state = MarkerState(
                             position = LatLng(
-                                marker.x,
-                                marker.y
+                                marker.latitude,
+                                marker.longitude
                             )
                         ),
                         icon = OverlayImage.fromResource(R.drawable.ic_marker),
-                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.title else "",
+                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
                         onClick = {
                             clickMarkerItem(marker.id)
                             true
@@ -544,5 +545,5 @@ private fun closeBottomSheet(
 
 private object MapConstants {
     const val DEFAULT_ZOOM = 16.0
-    const val CAN_SEE_TITLE_ZOOM = 18.0
+    const val CAN_SEE_TITLE_ZOOM = 16.0
 }
