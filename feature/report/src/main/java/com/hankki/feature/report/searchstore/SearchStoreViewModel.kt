@@ -40,12 +40,24 @@ class SearchStoreViewModel @Inject constructor(
         get() = _state.asStateFlow()
 
     init {
+        getUniversityId()
         viewModelScope.launch {
             _value.debounce(500)
                 .collectLatest { debounced ->
                     if (debounced.isNotBlank()) {
                         getStores(debounced)
                     }
+                }
+        }
+    }
+
+    private fun getUniversityId() {
+        viewModelScope.launch {
+            reportRepository.getMyUniversity()
+                .onSuccess {
+                    _state.value = _state.value.copy(
+                        universityId = it.id
+                    )
                 }
         }
     }
