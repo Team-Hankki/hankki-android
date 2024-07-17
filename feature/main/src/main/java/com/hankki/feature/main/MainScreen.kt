@@ -89,7 +89,8 @@ internal fun MainScreen(
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = onShowSnackBar,
-                        navigateStoreDetail = navigator::navigateToStoreDetail
+                        navigateStoreDetail = navigator::navigateToStoreDetail,
+                        navigateToUniversitySelection = navigator::navigateToUniversity
                     )
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
@@ -136,7 +137,8 @@ internal fun MainScreen(
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToMyJogbo = navigator::navigateToMyJogbo,
                         navigateToMyStore = navigator::navigateToMyStore,
-                        navigateToJogboDetail = navigator::navigateToMyJogboDetail
+                        navigateToJogboDetail = navigator::navigateToMyJogboDetail,
+                        navigateToNewJogbo = navigator::navigateToNewJogbo
                     )
                     loginNavgraph()
                     universitySelectionNavGraph(
