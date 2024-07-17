@@ -14,7 +14,6 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.navigation.navigateDummy
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
-import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
@@ -70,7 +69,7 @@ internal class MainNavigator(
     }
 
     fun navigateToStoreDetail() {
-        navController.navigateStoreDetail(3L)
+        navController.navigateStoreDetail(16L)
     }
 
     fun navigateUpIfNotHome() {

@@ -18,7 +18,6 @@ import javax.inject.Inject
 class StoreDetailViewModel @Inject constructor(
     private val storeDetailRepository: StoreDetailRepository
 ) : ViewModel() {
-
     private val _storeState = MutableStateFlow(
         StoreState(
             buttonLabels = persistentListOf(
@@ -33,8 +32,7 @@ class StoreDetailViewModel @Inject constructor(
     fun fetchStoreDetail(storeId: Long) {
         viewModelScope.launch {
             _storeState.value = _storeState.value.copy(storeDetail = UiState.Loading)
-            val result = storeDetailRepository.getStoreDetail(storeId)
-            result.onSuccess {
+            storeDetailRepository.getStoreDetail(storeId).onSuccess {
                 setStoreDetail(it)
             }.onFailure {
                 _storeState.value = _storeState.value.copy(storeDetail = UiState.Failure)

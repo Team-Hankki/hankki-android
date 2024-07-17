@@ -45,8 +45,11 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun StoreDetailRoute(storeId: Long) {
-    val viewModel: StoreDetailViewModel = hiltViewModel()
+fun StoreDetailRoute(
+    storeId: Long,
+    navigateUp: () -> Unit,
+    viewModel: StoreDetailViewModel = hiltViewModel()
+) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
 
     LaunchedEffect(storeId) {
@@ -64,9 +67,11 @@ fun StoreDetailRoute(storeId: Long) {
                 menuItems = storeDetail.menus.toPersistentList(),
                 isLiked = storeState.isLiked,
                 heartCount = storeState.heartCount,
-                imageUrl = storeDetail.imageUrls.firstOrNull(),
+                imageUrl = storeDetail.imageUrls.firstOrNull() // 좀만 생각해보자
+                    ?: (com.hankki.feature.storedetail.R.drawable.img_default_store_detail).toString(),
                 selectedIndex = storeState.selectedIndex,
                 buttonLabels = storeState.buttonLabels,
+                onNavigateUp = navigateUp,
                 onLikeClicked = { viewModel.toggleLike(storeId) },
                 onSelectIndex = viewModel::updateSelectedIndex
             )
@@ -86,6 +91,7 @@ fun StoreDetailScreen(
     imageUrl: String?,
     selectedIndex: Int,
     buttonLabels: PersistentList<String>,
+    onNavigateUp: () -> Unit,
     onLikeClicked: () -> Unit,
     onSelectIndex: (Int) -> Unit
 ) {
@@ -96,8 +102,7 @@ fun StoreDetailScreen(
     ) {
         Box {
             AsyncImage(
-                model = imageUrl
-                    ?: com.hankki.feature.storedetail.R.drawable.img_default_store_detail,
+                model = imageUrl,
                 contentDescription = "식당 사진",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,7 +128,7 @@ fun StoreDetailScreen(
                             contentDescription = "뒤로가기",
                             modifier = Modifier
                                 .size(48.dp)
-                                .noRippleClickable { /* TODO: navigate back */ },
+                                .noRippleClickable(onClick = onNavigateUp),
                             tint = Color.Unspecified
                         )
                     }
