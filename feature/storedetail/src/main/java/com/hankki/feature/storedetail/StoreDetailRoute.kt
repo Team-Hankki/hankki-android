@@ -45,34 +45,34 @@ import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
+import kotlin.reflect.KFunction1
 
 @Composable
-fun StoreDetailRoute() {
+fun StoreDetailRoute(storeId: Long) {
     val viewModel: StoreDetailViewModel = hiltViewModel()
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchStoreDetail()
+    LaunchedEffect(storeId) {
+        viewModel.fetchStoreDetail(storeId)
     }
 
     when (val state = storeState.storeDetail) {
         is UiState.Loading -> {}
 
         is UiState.Success -> {
-            with(state.data) {
-                StoreDetailScreen(
-                    title = name,
-                    tag = category,
-                    menuItems = menus.toPersistentList(),
-                    isLiked = storeState.isLiked,
-                    heartCount = storeState.heartCount,
-                    imageUrl = imageUrls.firstOrNull(),
-                    selectedIndex = storeState.selectedIndex,
-                    buttonLabels = storeState.buttonLabels,
-                    onLikeClicked = viewModel::toggleLike,
-                    onSelectIndex = viewModel::updateSelectedIndex
-                )
-            }
+            val storeDetail = state.data
+            StoreDetailScreen(
+                title = storeDetail.name,
+                tag = storeDetail.category,
+                menuItems = storeDetail.menus.toPersistentList(),
+                isLiked = storeState.isLiked,
+                heartCount = storeState.heartCount,
+                imageUrl = storeDetail.imageUrls.firstOrNull(),
+                selectedIndex = storeState.selectedIndex,
+                buttonLabels = storeState.buttonLabels,
+                onLikeClicked = { viewModel.toggleLike(storeId) },
+                onSelectIndex = viewModel::updateSelectedIndex
+            )
         }
 
         is UiState.Failure -> {}
@@ -99,7 +99,8 @@ fun StoreDetailScreen(
     ) {
         Box {
             AsyncImage(
-                model = imageUrl ?: com.hankki.feature.storedetail.R.drawable.img_default_store_detail,
+                model = imageUrl
+                    ?: com.hankki.feature.storedetail.R.drawable.img_default_store_detail,
                 contentDescription = "식당 사진",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -237,32 +238,5 @@ fun StoreDetailScreen(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewRestaurantMenuScreen() {
-    HankkijogboTheme {
-        StoreDetailScreen(
-            title = "한끼네 한정식",
-            tag = "한식",
-            menuItems = listOf(
-                MenuItem(name = "수육정식", price = 7900),
-                MenuItem(name = "제육정식", price = 8900),
-                MenuItem(name = "꼬막정식", price = 7900)
-            ).toPersistentList(),
-            isLiked = false,
-            heartCount = 299,
-            imageUrl = "wwwww",
-            selectedIndex = -1,
-            buttonLabels = listOf(
-                "식당이 사라졌어요",
-                "더 이상 8000원이 아닙니다",
-                "부적절한 신고"
-            ).toPersistentList(),
-            onLikeClicked = {},
-            onSelectIndex = {}
-        )
     }
 }
