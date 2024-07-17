@@ -65,7 +65,7 @@ class ReportViewModel @Inject constructor(
         )
     }
 
-    fun selectImageUri(uri: Uri) {
+    fun selectImageUri(uri: Uri?) {
         _state.value = _state.value.copy(
             selectedImageUri = uri
         )

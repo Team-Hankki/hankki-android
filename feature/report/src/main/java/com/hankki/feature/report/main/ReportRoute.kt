@@ -1,5 +1,6 @@
 package com.hankki.feature.report.main
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -62,6 +63,7 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.feature.report.main.component.SelectedImageController
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
@@ -116,14 +118,16 @@ fun ReportRoute(
         buttonEnabled = state.buttonEnabled,
         navigateUp = navigateUp,
         categoryList = state.categoryList,
+        selectedImageUri = state.selectedImageUri,
+        selectImageUri = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
+        clearSelectedImageUri = { viewModel.selectImageUri(null) },
         selectedCategory = state.selectedCategory,
         selectCategory = viewModel::selectCategory,
         menuList = state.menuList,
         changeMenuName = viewModel::changeMenuName,
         changePrice = viewModel::changePrice,
-        addPicture = {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        },
         addMenu = viewModel::addMenu,
         deleteMenu = viewModel::deleteMenu,
         navigateSearchStore = navigateSearchStore,
@@ -138,12 +142,14 @@ fun ReportScreen(
     buttonEnabled: Boolean,
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
+    selectedImageUri: Uri?,
+    selectImageUri: () -> Unit,
+    clearSelectedImageUri: () -> Unit = {},
     selectedCategory: String?,
     selectCategory: (String) -> Unit,
     menuList: PersistentList<MenuModel>,
     changeMenuName: (Int, String) -> Unit,
     changePrice: (Int, String) -> Unit,
-    addPicture: () -> Unit,
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
     navigateSearchStore: () -> Unit = {},
@@ -230,11 +236,24 @@ fun ReportScreen(
                             color = Gray400
                         )
 
-                        Spacer(modifier = Modifier.height(32.dp))
-                        AddPhotoButton(modifier = Modifier.fillMaxWidth()) {
-                            addPicture()
+
+                        if (selectedImageUri == null) {
+                            Spacer(modifier = Modifier.height(32.dp))
+                            AddPhotoButton(
+                                onClick = selectImageUri,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(32.dp))
+                        } else {
+                            Spacer(modifier = Modifier.height(20.dp))
+                            SelectedImageController(
+                                imageUri = selectedImageUri,
+                                deleteImage = clearSelectedImageUri,
+                                changeImage = selectImageUri
+                            )
+                            Spacer(modifier = Modifier.height(42.dp))
                         }
-                        Spacer(modifier = Modifier.height(32.dp))
+
 
                         menuList.forEachIndexed { index, menu ->
                             MenuWithPriceInputComponent(
@@ -452,6 +471,8 @@ fun ReportScreenPreview() {
             location = LocationModel(),
             navigateUp = {},
             categoryList = persistentListOf(),
+            selectedImageUri = null,
+            selectImageUri = {},
             selectCategory = {},
             selectedCategory = null,
             menuList = persistentListOf(
@@ -462,7 +483,6 @@ fun ReportScreenPreview() {
             ),
             changeMenuName = { _, _ -> },
             changePrice = { _, _ -> },
-            addPicture = {},
             addMenu = {},
             deleteMenu = {},
             navigateSearchStore = {},
