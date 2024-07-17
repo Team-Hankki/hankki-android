@@ -38,7 +38,7 @@ fun DoubleButtonDialog(
 ) {
     Dialog(onDismissRequest = onNegativeButtonClicked) {
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(
                 containerColor = White
             ),
