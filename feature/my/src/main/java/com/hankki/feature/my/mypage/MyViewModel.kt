@@ -32,4 +32,9 @@ class MyViewModel @Inject constructor(
                 }
         }
     }
+
+    companion object {
+        const val LIKE = "like"
+        const val REPORT = "report"
+    }
 }

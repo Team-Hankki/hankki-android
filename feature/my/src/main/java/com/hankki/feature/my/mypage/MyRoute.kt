@@ -45,6 +45,8 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
 import com.hankki.feature.my.mypage.MyViewModel
+import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
+import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 
 @Composable
 fun MyRoute(
@@ -77,7 +79,6 @@ fun MyScreen(
     userImage: String
 ) {
     val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .padding(paddingValues)
@@ -150,7 +151,7 @@ fun MyScreen(
                 stringResource(R.string.description_store_report),
                 Modifier
                     .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore("report") }),
+                    .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
             )
             Spacer(modifier = Modifier.width(18.dp))
             ButtonWithImageAndBorder(
@@ -158,7 +159,7 @@ fun MyScreen(
                 stringResource(R.string.description_store_like),
                 Modifier
                     .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore("like") }),
+                    .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
             )
         }
 
