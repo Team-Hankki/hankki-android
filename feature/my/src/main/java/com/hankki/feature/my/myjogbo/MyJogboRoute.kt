@@ -94,8 +94,9 @@ fun MyJogboScreen(
             title = stringResource(R.string.ask_delete_jogbo),
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
-            onNegativeButtonClicked = { updateDialogState() },
-            onPositiveButtonClicked = { updateDialogState() })
+            onNegativeButtonClicked = updateDialogState,
+            onPositiveButtonClicked = updateDialogState
+        )
     }
 
     Column(

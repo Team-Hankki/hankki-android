@@ -96,7 +96,7 @@ fun MyJogboDetailScreen(
         SingleButtonDialog(title = stringResource(R.string.go_to_register_store),
             description = stringResource(R.string.preparing_share_jogbo),
             buttonTitle = stringResource(R.string.check),
-            onConfirmation = { updateShareDialogState() }
+            onConfirmation = updateShareDialogState
         )
     }
 
@@ -105,8 +105,8 @@ fun MyJogboDetailScreen(
             title = stringResource(R.string.delete_store),
             negativeButtonTitle = stringResource(R.string.go_back),
             positiveButtonTitle = stringResource(id = R.string.delete),
-            onNegativeButtonClicked = { updateDeleteDialogState() },
-            onPositiveButtonClicked = { updateDeleteDialogState() }
+            onNegativeButtonClicked = updateDeleteDialogState,
+            onPositiveButtonClicked = updateDeleteDialogState
         )
     }
 
