@@ -271,7 +271,9 @@ fun HomeScreen(
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
-            onClick = navigateStoreDetail
+            onClick = {
+                // TODO: 족보 추가 api 호출
+            }
         )
     }
 
@@ -448,7 +450,8 @@ fun HomeScreen(
                                             category = item.category,
                                             storeName = item.storeName,
                                             price = item.price,
-                                            heartCount = item.heartCount
+                                            heartCount = item.heartCount,
+                                            onItemClick = navigateStoreDetail
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems()
