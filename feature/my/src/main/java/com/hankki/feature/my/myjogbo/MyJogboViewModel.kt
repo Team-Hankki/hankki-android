@@ -2,7 +2,7 @@ package com.hankki.feature.my.myjogbo
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.hankki.domain.my.entity.MyJogboEntity
+import com.hankki.domain.my.entity.response.MyJogboEntity
 import com.hankki.feature.my.myjogbo.model.toMyJogboModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf

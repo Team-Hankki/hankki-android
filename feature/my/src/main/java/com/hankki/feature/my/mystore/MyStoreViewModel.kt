@@ -1,7 +1,7 @@
 package com.hankki.feature.my.mystore
 
 import androidx.lifecycle.ViewModel
-import com.hankki.domain.my.entity.StoreEntity
+import com.hankki.domain.my.entity.response.StoreEntity
 import com.hankki.feature.my.mystore.model.toMyStoreModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow

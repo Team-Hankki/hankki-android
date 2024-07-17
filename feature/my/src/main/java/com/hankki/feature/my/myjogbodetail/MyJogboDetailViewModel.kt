@@ -1,8 +1,8 @@
 package com.hankki.feature.my.myjogbodetail
 
 import androidx.lifecycle.ViewModel
-import com.hankki.domain.my.entity.MyJogboDetailEntity
-import com.hankki.domain.my.entity.Store
+import com.hankki.domain.my.entity.response.MyJogboDetailEntity
+import com.hankki.domain.my.entity.response.Store
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow

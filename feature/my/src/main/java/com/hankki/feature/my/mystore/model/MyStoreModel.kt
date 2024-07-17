@@ -1,6 +1,6 @@
 package com.hankki.feature.my.mystore.model
 
-import com.hankki.domain.my.entity.StoreEntity
+import com.hankki.domain.my.entity.response.StoreEntity
 
 data class MyStoreModel(
     val category: String = "",

@@ -1,6 +1,6 @@
 package com.hankki.feature.my.myjogbo.model
 
-import com.hankki.domain.my.entity.MyJogboEntity
+import com.hankki.domain.my.entity.response.MyJogboEntity
 
 data class MyJogboModel(
     val jogboId: Long,

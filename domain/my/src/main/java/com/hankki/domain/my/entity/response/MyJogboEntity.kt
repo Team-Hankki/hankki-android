@@ -1,4 +1,4 @@
-package com.hankki.domain.my.entity
+package com.hankki.domain.my.entity.response
 
 data class MyJogboEntity(
     val jogboId: Long,
