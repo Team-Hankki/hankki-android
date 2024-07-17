@@ -1,6 +1,5 @@
 package com.hankki.feature.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
@@ -8,8 +7,6 @@ import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
-import com.hankki.feature.home.model.MarkerItem
-import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -154,17 +151,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun clickMarkerItem(id: Long) {
-        // id를 통해 서버통신하여 Store 정보를 받아올 예정
-        _state.value = _state.value.copy(
-            isMainBottomSheetOpen = false,
-            selectedStoreItem = StoreItemModel(
-                imageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                category = "한식",
-                name = "한끼네 한정식",
-                lowerPrice = 7900,
-                heartCount = 300
-            )
-        )
+        viewModelScope.launch {
+            homeRepository.getStoreThumbnail(id)
+                .onSuccess { store ->
+                    _state.value = _state.value.copy(
+                        isMainBottomSheetOpen = false,
+                        selectedStoreItem = store.toModel()
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 
     fun clickMap() {

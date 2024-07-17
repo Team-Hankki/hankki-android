@@ -79,7 +79,6 @@ import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
-import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.PinModel
 import com.hankki.feature.home.model.StoreItemModel
 import com.naver.maps.geometry.LatLng
@@ -462,7 +461,7 @@ fun HomeScreen(
                                             storeImageUrl = item.imageUrl,
                                             category = item.category,
                                             storeName = item.name,
-                                            price = item.lowerPrice,
+                                            price = item.lowestPrice,
                                             heartCount = item.heartCount
                                         ) {
                                             controlMyJogboBottomSheet()
@@ -516,7 +515,7 @@ fun HomeScreen(
                                     storeImageUrl = selectedStoreItem.imageUrl,
                                     category = selectedStoreItem.category,
                                     storeName = selectedStoreItem.name,
-                                    price = selectedStoreItem.lowerPrice,
+                                    price = selectedStoreItem.lowestPrice,
                                     heartCount = selectedStoreItem.heartCount,
                                     modifier = Modifier.padding(22.dp)
                                 ) {

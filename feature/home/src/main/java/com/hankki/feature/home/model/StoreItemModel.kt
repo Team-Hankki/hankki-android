@@ -4,11 +4,11 @@ import com.hankki.domain.home.entity.response.StoreEntity
 
 data class StoreItemModel(
     val id: Long = 0,
-    val imageUrl: String = "",
-    val category: String = "",
     val name: String = "",
-    val lowerPrice: Int = 0,
+    val category: String = "",
+    val lowestPrice: Int = 0,
     val heartCount: Int = 0,
+    val imageUrl: String = ""
 )
 
 fun StoreEntity.toModel() = StoreItemModel(
@@ -16,6 +16,6 @@ fun StoreEntity.toModel() = StoreItemModel(
     imageUrl = imageUrl,
     category = category,
     name = name,
-    lowerPrice = lowestPrice,
+    lowestPrice = lowestPrice,
     heartCount = heartCount
 )

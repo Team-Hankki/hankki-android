@@ -15,12 +15,13 @@ interface HomeRepository {
         universityId: Long?,
         storeCategory: String?,
         priceCategory: String?,
-        sortOption: String?
+        sortOption: String?,
     ): Result<List<StoreEntity>>
     suspend fun getStoresPins(
         universityId: Long?,
         storeCategory: String?,
         priceCategory: String?,
-        sortOption: String?
+        sortOption: String?,
     ): Result<List<StorePinEntity>>
+    suspend fun getStoreThumbnail(storeId: Long): Result<StoreEntity>
 }

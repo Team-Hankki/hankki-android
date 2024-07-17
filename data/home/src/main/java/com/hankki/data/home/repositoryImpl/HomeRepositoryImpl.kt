@@ -55,4 +55,8 @@ class HomeRepositoryImpl @Inject constructor(
             sortOption
         ).data.toEntity()
     }
+
+    override suspend fun getStoreThumbnail(storeId: Long): Result<StoreEntity> = runCatching {
+        homeDataSource.getStoreThumbnail(storeId).data.toEntity()
+    }
 }

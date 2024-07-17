@@ -5,6 +5,7 @@ import com.hankki.data.home.datasource.HomeDataSource
 import com.hankki.data.home.dto.CategoriesResponse
 import com.hankki.data.home.dto.PriceCategoriesResponse
 import com.hankki.data.home.dto.SortCategoriesResponse
+import com.hankki.data.home.dto.response.StoreThumbnailResponseDto
 import com.hankki.data.home.dto.response.StoresPinsDto
 import com.hankki.data.home.dto.response.StoresResponseDto
 import com.hankki.data.home.dto.response.UniversityResponseDto
@@ -41,4 +42,7 @@ class HomeDataSourceImpl @Inject constructor(
         sortOption: String?,
     ): BaseResponse<StoresPinsDto> =
         homeService.getStoresPins(universityId, storeCategory, priceCategory, sortOption)
+
+    override suspend fun getStoreThumbnail(storeId: Long): BaseResponse<StoreThumbnailResponseDto> =
+        homeService.getStoreThumbnail(storeId)
 }
