@@ -74,7 +74,7 @@ fun Modifier.bounceClick(
             drawContent()
             if (isPressed) {
                 drawRoundRect(
-                    cornerRadius = CornerRadius(size.minDimension / 10),
+                    cornerRadius = CornerRadius(size.maxDimension / 20),
                     color = color,
                     size = size,
                     blendMode = BlendMode.SrcAtop

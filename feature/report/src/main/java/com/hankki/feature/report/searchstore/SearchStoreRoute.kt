@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,12 +26,15 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.HankkiButton
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiSearchTextField
@@ -56,17 +60,39 @@ fun SearchStoreRoute(
     navigateUp: () -> Unit,
     viewModel: SearchStoreViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val value by viewModel.value.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                SearchStoreSideEffect.OpenDialog -> {
+                    viewModel.setDialogState(true)
+                }
+
+                is SearchStoreSideEffect.ValidateUniversitySuccess -> {
+                    navigateReport(
+                        sideEffect.latitude,
+                        sideEffect.longitude,
+                        sideEffect.location,
+                        sideEffect.address
+                    )
+                }
+            }
+        }
+    }
 
     SearchStoreScreen(
         value = value,
         selectedLocation = state.selectedLocation,
+        isOpenDialog = state.isOpenDialog,
         state = state.uiState,
         onValueChange = viewModel::setValue,
         onClickLocation = viewModel::setLocation,
         navigateUp = navigateUp,
-        navigateReport = navigateReport
+        reportButtonClicked = viewModel::reportButtonClicked,
+        onDismissDialog = { viewModel.setDialogState(false) }
     )
 }
 
@@ -74,13 +100,23 @@ fun SearchStoreRoute(
 fun SearchStoreScreen(
     value: String,
     selectedLocation: LocationModel,
+    isOpenDialog: Boolean,
     state: EmptyUiState<PersistentList<LocationModel>>,
     onValueChange: (String) -> Unit,
     onClickLocation: (LocationModel) -> Unit,
     navigateUp: () -> Unit,
-    navigateReport: (latitude: Float, longitude: Float, location: String, address: String) -> Unit,
+    reportButtonClicked: () -> Unit,
+    onDismissDialog: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+
+    if (isOpenDialog) {
+        SingleButtonDialog(
+            title = "이미 등록된 식당이에요\n다른 식당을 제보해보세요 ",
+            buttonTitle = "확인",
+            onConfirmation = onDismissDialog
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -157,12 +193,13 @@ fun SearchStoreScreen(
                         else com.hankki.feature.report.R.string.report_this_store
                     ),
                     onClick = {
-                        navigateReport(
-                            selectedLocation.latitude,
-                            selectedLocation.longitude,
-                            selectedLocation.location,
-                            selectedLocation.address
-                        )
+                        reportButtonClicked()
+//                        navigateReport(
+//                            selectedLocation.latitude,
+//                            selectedLocation.longitude,
+//                            selectedLocation.location,
+//                            selectedLocation.address
+//                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -228,11 +265,13 @@ private fun BookmarkCardPreview(
         SearchStoreScreen(
             "고동밥집",
             selectedLocation = LocationModel(),
+            isOpenDialog = false,
             state = state,
             onValueChange = {},
             onClickLocation = { },
             navigateUp = {},
-            navigateReport = { _, _, _, _ -> }
+            reportButtonClicked = {},
+            onDismissDialog = {}
         )
     }
 }
