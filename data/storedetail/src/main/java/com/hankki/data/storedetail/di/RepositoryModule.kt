@@ -14,6 +14,6 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindStoreDetailRepository(
-        stroreDetailRepositoryImpl: StoreDetailRepositoryImpl
+        storeDetailRepositoryImpl: StoreDetailRepositoryImpl
        ) : StoreDetailRepository
 }

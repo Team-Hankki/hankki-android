@@ -42,8 +42,8 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
-import com.hankki.domain.my.entity.Store
-import com.hankki.domain.my.entity.UserInformationEntity
+import com.hankki.domain.my.entity.response.Store
+import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.component.JogboFolder

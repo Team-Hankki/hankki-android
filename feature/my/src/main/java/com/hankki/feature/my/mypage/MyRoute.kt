@@ -48,6 +48,8 @@ import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
 import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.mypage.MyViewModel
+import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
+import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 
 @Composable
 fun MyRoute(
@@ -59,15 +61,15 @@ fun MyRoute(
     val myState by myViewModel.myState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myViewModel.loadMockInformation()
+        myViewModel.getUserInformation()
     }
 
     MyScreen(
         paddingValues = paddingValues,
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
-        userName = myState.userState.name,
-        userImage = myState.userState.image
+        userName = myState.myModel.nickname,
+        userImage = myState.myModel.profileImageUrl
     )
 }
 
@@ -117,7 +119,7 @@ fun MyScreen(
                 .clip(CircleShape),
             model = userImage,
             contentDescription = stringResource(R.string.profile_image),
-            contentScale = ContentScale.None
+            contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -139,7 +141,7 @@ fun MyScreen(
                     shape = RoundedCornerShape(12.dp)
                 )
                 .clip(RoundedCornerShape(12.dp))
-                .padding(start = 28.dp, end = 29.dp)
+                .padding(start = 28.dp, end = 17.dp)
                 .noRippleClickable(onClick = navigateToMyJogbo),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -150,7 +152,7 @@ fun MyScreen(
                 color = White,
             )
             Image(
-                painter = painterResource(id = R.drawable.ic_mygraphic),
+                painter = painterResource(id = R.drawable.ic_my_graphic),
                 contentDescription = "jogbo graphic",
             )
         }
@@ -163,7 +165,7 @@ fun MyScreen(
                 stringResource(R.string.description_store_report),
                 Modifier
                     .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore("report") }), // 변경된 부분
+                    .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
             )
             Spacer(modifier = Modifier.width(18.dp))
             ButtonWithImageAndBorder(
@@ -171,7 +173,7 @@ fun MyScreen(
                 stringResource(R.string.description_store_like),
                 Modifier
                     .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore("like") }), // 변경된 부분
+                    .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
             )
         }
 

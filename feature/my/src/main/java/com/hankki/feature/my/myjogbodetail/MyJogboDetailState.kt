@@ -1,8 +1,8 @@
 package com.hankki.feature.my.myjogbodetail
 
-import com.hankki.domain.my.entity.MyJogboDetailEntity
-import com.hankki.domain.my.entity.Store
-import com.hankki.domain.my.entity.UserInformationEntity
+import com.hankki.domain.my.entity.response.MyJogboDetailEntity
+import com.hankki.domain.my.entity.response.Store
+import com.hankki.domain.my.entity.response.UserInformationEntity
 import kotlinx.collections.immutable.persistentListOf
 
 data class MyJogboDetailState(
