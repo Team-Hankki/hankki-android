@@ -2,41 +2,65 @@ package com.hankki.feature.universityselection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.universityselection.UniversitySelectionModel
+import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
+import com.hankki.domain.universityselection.entity.UniversitySelectionRequestEntity
+import com.hankki.domain.universityselection.repository.UniversitySelectionRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UniversitySelectionViewModel @Inject constructor() : ViewModel() {
+@HiltViewModel
+class UniversitySelectionViewModel @Inject constructor(
+    private val universitySelectionRepository: UniversitySelectionRepository
+) : ViewModel() {
     private val _universitySelectionState = MutableStateFlow(UniversitySelectionState())
     val universitySelectionState: StateFlow<UniversitySelectionState> = _universitySelectionState
 
+    private val _sideEffects = MutableSharedFlow<UniversitySelectionSideEffect>()
+    val sideEffects = _sideEffects.asSharedFlow()
+
     init {
-        loadDummyData()
+        loadUniversities()
     }
 
-    private fun loadDummyData() {
+    private fun loadUniversities() {
         viewModelScope.launch {
-            val dummyData = listOf(
-                UniversitySelectionModel(1, "한양대"), UniversitySelectionModel(2, "성신여대"),
-                UniversitySelectionModel(3, "성균관대"), UniversitySelectionModel(4, "건국대"),
-                UniversitySelectionModel(5, "경희대"), UniversitySelectionModel(6, "외대"),
-                UniversitySelectionModel(7, "연세대"), UniversitySelectionModel(8, "이화여대"),
-                UniversitySelectionModel(9, "홍익대"), UniversitySelectionModel(10, "숭실대"),
-                UniversitySelectionModel(11, "고려대"), UniversitySelectionModel(12, "중앙대"),
-                UniversitySelectionModel(13, "동국대"), UniversitySelectionModel(14, "서강대"),
-                UniversitySelectionModel(15, "경기대"), UniversitySelectionModel(16, "숙명여대"),
-                UniversitySelectionModel(17, "단국대"), UniversitySelectionModel(18, "명지대"),
-                UniversitySelectionModel(19, "서울대"), UniversitySelectionModel(20, "국민대")
-            ).sortedBy { it.name }
-            _universitySelectionState.value =
-                _universitySelectionState.value.copy(universities = dummyData)
+            universitySelectionRepository.getUniversitySelection().onSuccess { universities ->
+                _universitySelectionState.value = _universitySelectionState.value.copy(
+                    universities = universities.toPersistentList()
+                )
+            }.onFailure {
+                // Handle error
+            }
         }
     }
 
-    fun selectUniversity(university: String) {
+    fun selectUniversity(university: UniversitySelectionEntity) {
         _universitySelectionState.value =
             _universitySelectionState.value.copy(selectedUniversity = university)
+    }
+
+    fun postUniversity() {
+        _universitySelectionState.value.selectedUniversity?.let { selectedUniversity ->
+            viewModelScope.launch {
+                universitySelectionRepository.postUniversitySelection(
+                    UniversitySelectionRequestEntity(
+                        universityId = selectedUniversity.id.toLong(),
+                        name = selectedUniversity.name,
+                        longitude = selectedUniversity.longitude,
+                        latitude = selectedUniversity.latitude
+                    )
+                ).onSuccess {
+                    _sideEffects.emit(UniversitySelectionSideEffect.PostSuccess)
+                }.onFailure {
+                    _sideEffects.emit(UniversitySelectionSideEffect.PostError(it))
+                }
+            }
+        }
     }
 }
