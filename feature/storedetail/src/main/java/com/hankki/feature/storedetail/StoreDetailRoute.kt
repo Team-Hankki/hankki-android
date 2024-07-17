@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,39 +39,42 @@ import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun StoreDetailRoute() {
-    val viewModel: StoreDetailViewModel = hiltViewModel()
+fun StoreDetailRoute(
+    storeId: Long,
+    navigateUp: () -> Unit,
+    viewModel: StoreDetailViewModel = hiltViewModel()
+) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchStoreDetail()
+    LaunchedEffect(storeId) {
+        viewModel.fetchStoreDetail(storeId)
     }
 
     when (val state = storeState.storeDetail) {
         is UiState.Loading -> {}
 
         is UiState.Success -> {
-            with(state.data) {
-                StoreDetailScreen(
-                    title = name,
-                    tag = category,
-                    menuItems = menus.toPersistentList(),
-                    isLiked = storeState.isLiked,
-                    heartCount = storeState.heartCount,
-                    imageUrl = imageUrls.firstOrNull(),
-                    selectedIndex = storeState.selectedIndex,
-                    buttonLabels = storeState.buttonLabels,
-                    onLikeClicked = viewModel::toggleLike,
-                    onSelectIndex = viewModel::updateSelectedIndex
-                )
-            }
+            val storeDetail = state.data
+            StoreDetailScreen(
+                title = storeDetail.name,
+                tag = storeDetail.category,
+                menuItems = storeDetail.menus.toPersistentList(),
+                isLiked = storeState.isLiked,
+                heartCount = storeState.heartCount,
+                imageUrl = storeDetail.imageUrls.firstOrNull() // 좀만 생각해보자
+                    ?: (com.hankki.feature.storedetail.R.drawable.img_default_store_detail).toString(),
+                selectedIndex = storeState.selectedIndex,
+                buttonLabels = storeState.buttonLabels,
+                onNavigateUp = navigateUp,
+                onLikeClicked = { viewModel.toggleLike(storeId) },
+                onSelectIndex = viewModel::updateSelectedIndex
+            )
         }
 
         is UiState.Failure -> {}
@@ -89,6 +91,7 @@ fun StoreDetailScreen(
     imageUrl: String?,
     selectedIndex: Int,
     buttonLabels: PersistentList<String>,
+    onNavigateUp: () -> Unit,
     onLikeClicked: () -> Unit,
     onSelectIndex: (Int) -> Unit
 ) {
@@ -99,7 +102,7 @@ fun StoreDetailScreen(
     ) {
         Box {
             AsyncImage(
-                model = imageUrl ?: com.hankki.feature.storedetail.R.drawable.img_default_store_detail,
+                model = imageUrl,
                 contentDescription = "식당 사진",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,7 +128,7 @@ fun StoreDetailScreen(
                             contentDescription = "뒤로가기",
                             modifier = Modifier
                                 .size(48.dp)
-                                .noRippleClickable { /* TODO: navigate back */ },
+                                .noRippleClickable(onClick = onNavigateUp),
                             tint = Color.Unspecified
                         )
                     }
@@ -237,32 +240,5 @@ fun StoreDetailScreen(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewRestaurantMenuScreen() {
-    HankkijogboTheme {
-        StoreDetailScreen(
-            title = "한끼네 한정식",
-            tag = "한식",
-            menuItems = listOf(
-                MenuItem(name = "수육정식", price = 7900),
-                MenuItem(name = "제육정식", price = 8900),
-                MenuItem(name = "꼬막정식", price = 7900)
-            ).toPersistentList(),
-            isLiked = false,
-            heartCount = 299,
-            imageUrl = "wwwww",
-            selectedIndex = -1,
-            buttonLabels = listOf(
-                "식당이 사라졌어요",
-                "더 이상 8000원이 아닙니다",
-                "부적절한 신고"
-            ).toPersistentList(),
-            onLikeClicked = {},
-            onSelectIndex = {}
-        )
     }
 }

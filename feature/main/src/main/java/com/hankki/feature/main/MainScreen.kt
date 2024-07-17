@@ -150,9 +150,7 @@ internal fun MainScreen(
                             navigator.navigateToHome(navOptions)
                         }
                     )
-                    storeDetailNavGraph {
-
-                    }
+                    storeDetailNavGraph(navigateUp = navigator::navigateUpIfNotHome)
                 }
             }
         },

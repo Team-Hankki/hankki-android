@@ -3,6 +3,7 @@ package com.hankki.feature.storedetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.UiState
+import com.hankki.domain.storedetail.entity.StoreDetailHeartsResponseEntity
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
 import com.hankki.domain.storedetail.repository.StoreDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,6 @@ import javax.inject.Inject
 class StoreDetailViewModel @Inject constructor(
     private val storeDetailRepository: StoreDetailRepository
 ) : ViewModel() {
-
     private val _storeState = MutableStateFlow(
         StoreState(
             buttonLabels = persistentListOf(
@@ -29,12 +29,10 @@ class StoreDetailViewModel @Inject constructor(
     )
     val storeState: StateFlow<StoreState> get() = _storeState.asStateFlow()
 
-
-    fun fetchStoreDetail(id: Long = 3L) {
+    fun fetchStoreDetail(storeId: Long) {
         viewModelScope.launch {
             _storeState.value = _storeState.value.copy(storeDetail = UiState.Loading)
-            val result = storeDetailRepository.getStoreDetail(id)
-            result.onSuccess {
+            storeDetailRepository.getStoreDetail(storeId).onSuccess {
                 setStoreDetail(it)
             }.onFailure {
                 _storeState.value = _storeState.value.copy(storeDetail = UiState.Failure)
@@ -50,18 +48,30 @@ class StoreDetailViewModel @Inject constructor(
         )
     }
 
-    fun toggleLike() {
+    fun toggleLike(storeId: Long) {
         viewModelScope.launch {
             val currentState = _storeState.value
             val newLikeStatus = !currentState.isLiked
-            val newHeartCount =
-                if (newLikeStatus) currentState.heartCount + 1 else currentState.heartCount - 1
 
-            _storeState.value = currentState.copy(
-                isLiked = newLikeStatus,
-                heartCount = newHeartCount
-            )
+            val result = if (newLikeStatus) {
+                storeDetailRepository.postStoreDetailHearts(storeId)
+            } else {
+                storeDetailRepository.deleteStoreDetailHearts(storeId)
+            }
+
+            result.onSuccess { response ->
+                updateHeartStatus(response)
+            }.onFailure {
+                // 에러 처리 로직 추가
+            }
         }
+    }
+
+    private fun updateHeartStatus(response: StoreDetailHeartsResponseEntity) {
+        _storeState.value = _storeState.value.copy(
+            isLiked = response.isHearted,
+            heartCount = response.count
+        )
     }
 
     fun updateSelectedIndex(index: Int) {
