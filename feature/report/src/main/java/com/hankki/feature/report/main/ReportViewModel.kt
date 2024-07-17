@@ -2,12 +2,10 @@ package com.hankki.feature.report.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.report.entity.CategoryEntity
 import com.hankki.domain.report.repository.ReportRepository
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -123,7 +121,7 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             _sideEffect.emit(
                 with(_state.value) {
-                    ReportSideEffect.navigateReportFinish(
+                    ReportSideEffect.NavigateReportFinish(
                         count = count,
                         storeName = location.location,
                         storeId = storeId

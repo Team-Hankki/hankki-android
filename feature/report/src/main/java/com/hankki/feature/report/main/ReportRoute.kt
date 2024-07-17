@@ -90,7 +90,7 @@ fun ReportRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is ReportSideEffect.navigateReportFinish -> navigateToReportFinish(
+                is ReportSideEffect.NavigateReportFinish -> navigateToReportFinish(
                     sideEffect.count,
                     sideEffect.storeName,
                     sideEffect.storeId
