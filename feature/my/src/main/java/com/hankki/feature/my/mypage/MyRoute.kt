@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +46,7 @@ import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
+import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.mypage.MyViewModel
 
 @Composable
@@ -77,6 +80,16 @@ fun MyScreen(
     userImage: String
 ) {
     val scrollState = rememberScrollState()
+    val showDialog = remember { mutableStateOf(false) }
+    if (showDialog.value) {
+        DialogWithButton(
+            onDismissRequest = { showDialog.value = false },
+            onConfirmation = { showDialog.value = false },
+            title = stringResource(R.string.ask_logout),
+            textButtonTitle = stringResource(id = R.string.go_back),
+            buttonTitle = stringResource(id = R.string.logout)
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -166,7 +179,7 @@ fun MyScreen(
 
         ButtonWithArrowIcon(stringResource(R.string.inquiry), {})
 
-        ButtonWithArrowIcon(stringResource(R.string.logout), {})
+        ButtonWithArrowIcon(stringResource(R.string.logout), { showDialog.value = true })
 
         Row(
             modifier = Modifier
