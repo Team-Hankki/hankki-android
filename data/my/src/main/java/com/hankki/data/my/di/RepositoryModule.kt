@@ -1,5 +1,6 @@
 package com.hankki.data.my.di
 
+import com.hankki.data.my.repositoryimpl.MyRepositoryImpl
 import com.hankki.domain.my.entity.MyRepository
 import dagger.Binds
 import dagger.Module
@@ -13,6 +14,6 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun provideMyRepository(
-        myRepository: MyRepository
-    ) : MyRepository
+        myRepositoryImpl: MyRepositoryImpl
+    ): MyRepository
 }
