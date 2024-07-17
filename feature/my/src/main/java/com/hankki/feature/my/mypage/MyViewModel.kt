@@ -2,7 +2,7 @@ package com.hankki.feature.my.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.my.entity.UserInfoEntity
+import com.hankki.domain.my.entity.UserInformationEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +20,7 @@ class MyViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             val mockUserName = "송한끼"
             val mockUserImage = ""
-            val mockUserInformation = UserInfoEntity(mockUserName, mockUserImage)
+            val mockUserInformation = UserInformationEntity(mockUserName, mockUserImage)
             _myState.value = _myState.value.copy(
                 userState = mockUserInformation
             )

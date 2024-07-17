@@ -1,7 +1,7 @@
 package com.hankki.feature.my.mypage
 
-import com.hankki.domain.my.entity.UserInfoEntity
+import com.hankki.domain.my.entity.UserInformationEntity
 
 data class MyState(
-    val userState : UserInfoEntity = UserInfoEntity("","")
+    val userState: UserInformationEntity = UserInformationEntity("", "")
 )

@@ -63,8 +63,8 @@ fun MyRoute(
         paddingValues = paddingValues,
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
-        userName = myState.userState.name,
-        userImage = myState.userState.image
+        userName = myState.userState.nickname,
+        userImage = myState.userState.profileImageUrl
     )
 }
 
