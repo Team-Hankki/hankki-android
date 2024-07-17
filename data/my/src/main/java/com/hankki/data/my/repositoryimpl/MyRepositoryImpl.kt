@@ -7,7 +7,7 @@ import javax.inject.Inject
 class MyRepositoryImpl @Inject constructor(
     private val myDataSource: MyDataSource
 ) : MyRepository {
-    override suspend fun getUserInformation() = kotlin.runCatching {
+    override suspend fun getUserInformation() = runCatching {
         myDataSource.getUserInformation().data.toEntity()
     }
 }
