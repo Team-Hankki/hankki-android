@@ -1,8 +1,15 @@
-package com.hankki.data.universityselection.response
+package com.hankki.data.universityselection.dto.response
 
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@Serializable
+data class UniversitySelectionResponseDto(
+    @SerialName("universities")
+    val universities: List<University>
+)
+
 
 @Serializable
 data class University(
@@ -22,9 +29,3 @@ data class University(
         latitude = latitude,
     )
 }
-
-@Serializable
-data class UniversitySelectionResponseDto(
-    @SerialName("universities")
-    val universities: List<University>
-)

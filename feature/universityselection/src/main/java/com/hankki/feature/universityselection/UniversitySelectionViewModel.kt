@@ -3,9 +3,10 @@ package com.hankki.feature.universityselection
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
-import com.hankki.domain.universityselection.entity.UniversitySelectionRequest
+import com.hankki.domain.universityselection.entity.UniversitySelectionRequestEntity
 import com.hankki.domain.universityselection.repository.UniversitySelectionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -15,9 +16,11 @@ import javax.inject.Inject
 class UniversitySelectionViewModel @Inject constructor(
     private val universitySelectionRepository: UniversitySelectionRepository
 ) : ViewModel() {
-
     private val _universitySelectionState = MutableStateFlow(UniversitySelectionState())
     val universitySelectionState: StateFlow<UniversitySelectionState> = _universitySelectionState
+
+    private val _postSuccess = MutableStateFlow(false)
+    val postSuccess: StateFlow<Boolean> = _postSuccess
 
     init {
         loadUniversities()
@@ -25,13 +28,12 @@ class UniversitySelectionViewModel @Inject constructor(
 
     private fun loadUniversities() {
         viewModelScope.launch {
-            val result = universitySelectionRepository.getUniversitySelection()
-            result.onSuccess { universities ->
+            universitySelectionRepository.getUniversitySelection().onSuccess { universities ->
                 _universitySelectionState.value = _universitySelectionState.value.copy(
-                    universities = universities
+                    universities = universities.toPersistentList()
                 )
             }.onFailure {
-                // 에러 처리
+                // Handle error
             }
         }
     }
@@ -42,25 +44,19 @@ class UniversitySelectionViewModel @Inject constructor(
     }
 
     fun postUniversity() {
-        val selectedUniversity = _universitySelectionState.value.selectedUniversity
-        if (selectedUniversity != null) {
-            val request = UniversitySelectionRequest(
-                universityId = selectedUniversity.id.toLong(),
-                name = selectedUniversity.name,
-                longitude = selectedUniversity.longitude,
-                latitude = selectedUniversity.latitude
-            )
+        _universitySelectionState.value.selectedUniversity?.let { selectedUniversity ->
             viewModelScope.launch {
-                val result = universitySelectionRepository.postUniversitySelection(request)
-                result.onSuccess { university ->
-                    val updatedUniversities =
-                        _universitySelectionState.value.universities + university
-
-                    _universitySelectionState.value = _universitySelectionState.value.copy(
-                        universities = updatedUniversities
+                universitySelectionRepository.postUniversitySelection(
+                    UniversitySelectionRequestEntity(
+                        universityId = selectedUniversity.id.toLong(),
+                        name = selectedUniversity.name,
+                        longitude = selectedUniversity.longitude,
+                        latitude = selectedUniversity.latitude
                     )
+                ).onSuccess {
+                    _postSuccess.value = true
                 }.onFailure {
-                    // 에러 처리
+                    // Handle error
                 }
             }
         }

@@ -1,5 +1,6 @@
-package com.hankki.data.universityselection.request
+package com.hankki.data.universityselection.dto.request
 
+import com.hankki.domain.universityselection.entity.UniversitySelectionRequestEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,4 +14,11 @@ data class UniversitySelectionRequestDto(
     val longitude: Double,
     @SerialName("latitude")
     val latitude: Double
+)
+
+fun UniversitySelectionRequestEntity.toDto() = UniversitySelectionRequestDto (
+    universityId = universityId,
+    name = name,
+    longitude = longitude,
+    latitude = latitude
 )

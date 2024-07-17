@@ -1,4 +1,4 @@
-package com.hankki.data.universityselection.di
+package com.hankki.data.universityselection.dto
 
 import com.hankki.core.network.JWT
 import com.hankki.data.universityselection.service.UniversitySelectionService
@@ -7,7 +7,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module

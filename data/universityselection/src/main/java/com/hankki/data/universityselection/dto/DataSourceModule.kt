@@ -1,4 +1,4 @@
-package com.hankki.data.universityselection.di
+package com.hankki.data.universityselection.dto
 
 import com.hankki.data.universityselection.datasource.UniversitySelectionDataSource
 import com.hankki.data.universityselection.datasourceImpl.UniversirySelectionDataSourceImpl

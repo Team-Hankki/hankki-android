@@ -14,12 +14,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,9 +35,18 @@ import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import com.hankki.feature.universityselection.component.UniversityItem
 
 @Composable
-fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
+fun UniversitySelectionRoute(
+    navigateToHome: () -> Unit
+) {
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
+    val postSuccess by universitySelectionViewModel.postSuccess.collectAsStateWithLifecycle()
+
+    LaunchedEffect(postSuccess) {
+        if (postSuccess) {
+            navigateToHome()
+        }
+    }
 
     UniversitySelectionScreen(
         universities = universitySelectionState.universities,
@@ -45,7 +54,6 @@ fun UniversitySelectionRoute(navigateToHome: () -> Unit) {
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
         onPostSelectedUniversity = {
             universitySelectionViewModel.postUniversity()
-            navigateToHome()
         },
         navigateHome = navigateToHome
     )
@@ -118,10 +126,7 @@ fun UniversitySelectionScreen(
                 HankkiButton(
                     text = stringResource(id = R.string.select),
                     textStyle = HankkiTheme.typography.sub2,
-                    onClick = {
-                        navigateHome
-                        onPostSelectedUniversity()
-                    },
+                    onClick = onPostSelectedUniversity,
                     modifier = Modifier
                         .fillMaxWidth(),
                     enabled = selectedUniversity != null

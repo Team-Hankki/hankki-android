@@ -1,4 +1,4 @@
-package com.hankki.data.universityselection.di
+package com.hankki.data.universityselection.dto
 
 import com.hankki.data.universityselection.repositoryImpl.UniversitySelectionRepositoryImpl
 import com.hankki.domain.universityselection.repository.UniversitySelectionRepository
