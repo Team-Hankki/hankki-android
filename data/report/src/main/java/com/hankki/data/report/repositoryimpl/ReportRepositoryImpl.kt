@@ -2,6 +2,8 @@ package com.hankki.data.report.repositoryimpl
 
 import com.hankki.data.report.datasource.ReportDataSource
 import com.hankki.data.report.dto.request.toDto
+import com.hankki.data.report.dto.response.toEntity
+import com.hankki.domain.report.entity.CategoryEntity
 import com.hankki.domain.report.entity.CountEntity
 import com.hankki.domain.report.entity.LocationEntity
 import com.hankki.domain.report.entity.request.ValidateStoreRequestEntity
@@ -25,4 +27,8 @@ class ReportRepositoryImpl @Inject constructor(
         runCatching {
             reportDataSource.getStoreValidate(body.toDto())
         }
+
+    override suspend fun getCategories(): Result<List<CategoryEntity>> = runCatching {
+        reportDataSource.getCategories().data.toEntity()
+    }
 }
