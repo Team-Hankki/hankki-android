@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    setNamespace("data.모듈명")
+    setNamespace("data.my")
 }
 
 dependencies {
