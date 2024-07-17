@@ -1,5 +1,9 @@
 package com.hankki.feature.report.main
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -59,6 +63,7 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.feature.report.main.component.SelectedImageController
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
 import kotlinx.collections.immutable.PersistentList
@@ -81,6 +86,13 @@ fun ReportRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                viewModel.selectImageUri(uri)
+            }
+        }
+
     LaunchedEffect(key1 = lifecycleOwner) {
         if (location.location.isNotEmpty()) {
             viewModel.setLocation(location)
@@ -90,7 +102,7 @@ fun ReportRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is ReportSideEffect.navigateReportFinish -> navigateToReportFinish(
+                is ReportSideEffect.NavigateReportFinish -> navigateToReportFinish(
                     sideEffect.count,
                     sideEffect.storeName,
                     sideEffect.storeId
@@ -105,6 +117,11 @@ fun ReportRoute(
         buttonEnabled = state.buttonEnabled,
         navigateUp = navigateUp,
         categoryList = state.categoryList,
+        selectedImageUri = state.selectedImageUri,
+        selectImageUri = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
+        clearSelectedImageUri = { viewModel.selectImageUri(null) },
         selectedCategory = state.selectedCategory,
         selectCategory = viewModel::selectCategory,
         menuList = state.menuList,
@@ -113,7 +130,7 @@ fun ReportRoute(
         addMenu = viewModel::addMenu,
         deleteMenu = viewModel::deleteMenu,
         navigateSearchStore = navigateSearchStore,
-        navigateToReportFinish = viewModel::navigateToReportFinish
+        submitReport = viewModel::submitReport
     )
 }
 
@@ -124,6 +141,9 @@ fun ReportScreen(
     buttonEnabled: Boolean,
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
+    selectedImageUri: Uri?,
+    selectImageUri: () -> Unit,
+    clearSelectedImageUri: () -> Unit = {},
     selectedCategory: String?,
     selectCategory: (String) -> Unit,
     menuList: PersistentList<MenuModel>,
@@ -132,7 +152,7 @@ fun ReportScreen(
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
     navigateSearchStore: () -> Unit = {},
-    navigateToReportFinish: () -> Unit,
+    submitReport: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -215,11 +235,24 @@ fun ReportScreen(
                             color = Gray400
                         )
 
-                        Spacer(modifier = Modifier.height(32.dp))
-                        AddPhotoButton(modifier = Modifier.fillMaxWidth()) {
-                            // TODO: 사진 업로드
+
+                        if (selectedImageUri == null) {
+                            Spacer(modifier = Modifier.height(32.dp))
+                            AddPhotoButton(
+                                onClick = selectImageUri,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(32.dp))
+                        } else {
+                            Spacer(modifier = Modifier.height(20.dp))
+                            SelectedImageController(
+                                imageUri = selectedImageUri,
+                                deleteImage = clearSelectedImageUri,
+                                changeImage = selectImageUri
+                            )
+                            Spacer(modifier = Modifier.height(42.dp))
                         }
-                        Spacer(modifier = Modifier.height(32.dp))
+
 
                         menuList.forEachIndexed { index, menu ->
                             MenuWithPriceInputComponent(
@@ -267,9 +300,7 @@ fun ReportScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 22.dp),
-                        onClick = {
-                            navigateToReportFinish()
-                        },
+                        onClick = submitReport,
                         enabled = buttonEnabled
                     )
                     Spacer(modifier = Modifier.height(15.dp))
@@ -437,6 +468,8 @@ fun ReportScreenPreview() {
             location = LocationModel(),
             navigateUp = {},
             categoryList = persistentListOf(),
+            selectedImageUri = null,
+            selectImageUri = {},
             selectCategory = {},
             selectedCategory = null,
             menuList = persistentListOf(
@@ -450,7 +483,7 @@ fun ReportScreenPreview() {
             addMenu = {},
             deleteMenu = {},
             navigateSearchStore = {},
-            navigateToReportFinish = {}
+            submitReport = {}
         )
     }
 }

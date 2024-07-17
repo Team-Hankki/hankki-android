@@ -40,7 +40,8 @@ fun StoreItem(
     price: Int,
     heartCount: Int,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    onItemClick: () -> Unit = {},
+    onPlusClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -48,7 +49,8 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(horizontal = 22.dp, vertical = 16.dp),
+            .padding(horizontal = 22.dp, vertical = 16.dp)
+            .noRippleClickable(onItemClick),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -106,7 +108,7 @@ fun StoreItem(
         Icon(
             painter = painterResource(id = R.drawable.ic_plus_btn_filled),
             contentDescription = "plus button",
-            modifier = Modifier.noRippleClickable(onClick = onClick),
+            modifier = Modifier.noRippleClickable(onClick = onPlusClick),
             tint = Color.Unspecified
         )
     }

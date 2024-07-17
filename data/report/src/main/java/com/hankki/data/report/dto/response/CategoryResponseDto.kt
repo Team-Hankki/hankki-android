@@ -1,11 +1,11 @@
-package com.hankki.data.home.dto
+package com.hankki.data.report.dto.response
 
-import com.hankki.domain.home.entity.response.CategoryResponseEntity
+import com.hankki.domain.report.entity.CategoryEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CategoriesResponse(
+data class CategoriesResponseDto(
     @SerialName("categories")
     val categories: List<CategoryDto>,
 ) {
@@ -20,8 +20,8 @@ data class CategoriesResponse(
     )
 }
 
-fun CategoriesResponse.toEntity() = categories.map {
-    CategoryResponseEntity(
+fun CategoriesResponseDto.toEntity() = categories.map {
+    CategoryEntity(
         name = it.name,
         tag = it.tag,
         imageUrl = it.imageUrl

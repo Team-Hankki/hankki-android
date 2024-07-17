@@ -1,13 +1,14 @@
 package com.hankki.feature.report.main
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.report.entity.CategoryEntity
+import com.hankki.domain.report.entity.request.ReportStoreRequestEntity
 import com.hankki.domain.report.repository.ReportRepository
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,8 +32,23 @@ class ReportViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
+        setUniversityId()
         getCount()
         getCategories()
+    }
+
+    private fun setUniversityId() {
+        viewModelScope.launch {
+            reportRepository.getMyUniversity()
+                .onSuccess { university ->
+                    _state.value = _state.value.copy(
+                        universityId = university.id
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
+
     }
 
     private fun getCount() {
@@ -48,45 +64,15 @@ class ReportViewModel @Inject constructor(
     }
 
     private fun getCategories() {
-        _state.value = _state.value.copy(
-            categoryList = persistentListOf(
-                CategoryEntity(
-                    "한식",
-                    "korean",
-                    "https://cdn.pixabay.com/photo/2016/11/29/12/54/food-1869622_960_720.jpg"
-                ),
-                CategoryEntity(
-                    "중식",
-                    "chinese",
-                    "https://cdn.pixabay.com/photo/2016/11/29/12/54/food-1869622_960_720.jpg"
-                ),
-                CategoryEntity(
-                    "일식",
-                    "japanese",
-                    "https://cdn.pixabay.com/photo/2016/11/29/12/54/food-1869622_960_720.jpg"
-                ),
-                CategoryEntity(
-                    "양식",
-                    "western",
-                    "https://cdn.pixabay.com/photo/2016/11/29/12/54/food-1869622_960_720.jpg"
-                ),
-                CategoryEntity(
-                    "분식",
-                    "snack",
-                    "https://cdn.pixabay.com/photo/2016/11/29/12/54/food-1869622_960_720.jpg"
-                ),
-                CategoryEntity(
-                    "디저트",
-                    "dessert",
-                    "https://cdn.pixabay.com/photo/2016/11/29/12/54/food-1869622_960_720.jpg"
-                ),
-                CategoryEntity(
-                    "기타",
-                    "etc",
-                    "https://cdn.pixabay.com/photo/2016/11/29/12/54/food-1869622_960_720.jpg"
+        viewModelScope.launch {
+            reportRepository.getCategories().onSuccess {
+                _state.value = _state.value.copy(
+                    categoryList = it.toPersistentList()
                 )
-            )
-        )
+            }.onFailure { error ->
+                Timber.e(error)
+            }
+        }
     }
 
     fun setLocation(location: LocationModel) {
@@ -95,6 +81,11 @@ class ReportViewModel @Inject constructor(
         )
     }
 
+    fun selectImageUri(uri: Uri?) {
+        _state.value = _state.value.copy(
+            selectedImageUri = uri
+        )
+    }
 
     fun selectCategory(category: String) {
         _state.value = _state.value.copy(
@@ -135,7 +126,7 @@ class ReportViewModel @Inject constructor(
     fun addMenu() {
         _state.value = _state.value.copy(
             menuList = _state.value.menuList.add(
-                MenuModel("", "")
+                MenuModel()
             )
         )
         checkButtonEnabled()
@@ -148,21 +139,39 @@ class ReportViewModel @Inject constructor(
         checkButtonEnabled()
     }
 
-    fun navigateToReportFinish() {
+    fun submitReport() {
         viewModelScope.launch {
-            _sideEffect.emit(
-                with(_state.value) {
-                    ReportSideEffect.navigateReportFinish(
-                        count = count,
-                        storeName = location.location,
-                        storeId = storeId
+            reportRepository.postReport(
+                image = _state.value.selectedImageUri?.toString(),
+                request = ReportStoreRequestEntity(
+                    name = _state.value.location.location,
+                    category = _state.value.selectedCategory ?: "",
+                    address = _state.value.location.address,
+                    latitude = _state.value.location.latitude.toDouble(),
+                    longitude = _state.value.location.longitude.toDouble(),
+                    universityId = _state.value.universityId,
+                    menus = _state.value.menuList.map {
+                        ReportStoreRequestEntity.MenuEntity(
+                            it.name,
+                            it.price
+                        )
+                    }
+                )
+            ).onSuccess {
+                _sideEffect.emit(
+                    ReportSideEffect.NavigateReportFinish(
+                        _state.value.count,
+                        it.name,
+                        it.id
                     )
-                }
-            )
+                )
+            }.onFailure { error ->
+                Timber.e(error)
+            }
         }
     }
 
-    fun checkButtonEnabled() {
+    private fun checkButtonEnabled() {
         with(_state.value) {
             _state.value = _state.value.copy(
                 buttonEnabled = menuList.isNotEmpty()
