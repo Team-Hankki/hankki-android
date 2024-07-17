@@ -56,15 +56,15 @@ fun MyRoute(
     val myState by myViewModel.myState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myViewModel.loadMockInformation()
+        myViewModel.getUserInformation()
     }
 
     MyScreen(
         paddingValues = paddingValues,
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
-        userName = myState.userState.nickname,
-        userImage = myState.userState.profileImageUrl
+        userName = myState.myModel.nickname,
+        userImage = myState.myModel.profileImageUrl
     )
 }
 
