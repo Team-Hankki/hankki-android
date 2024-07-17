@@ -1,6 +1,7 @@
 package com.hankki.data.storedetail.repositoryImpl
 
 import com.hankki.data.storedetail.datasource.StoreDetailDataSource
+import com.hankki.domain.storedetail.entity.StoreDetailHeartsResponseEntity
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
 import com.hankki.domain.storedetail.repository.StoreDetailRepository
 import javax.inject.Inject
@@ -15,5 +16,23 @@ class StoreDetailRepositoryImpl @Inject constructor(
             storeDetailDataSource.getStoreDetail(
                 id,
             ).data.toStoreDetailResponseEntity()
+        }
+
+    override suspend fun postStoreDetailHearts(
+        storeId: Long,
+    ): Result<StoreDetailHeartsResponseEntity> =
+        runCatching {
+            storeDetailDataSource.postStoreDetailHearts(
+                storeId
+            ).data.toStoreDetailHeartsResponseEntity()
+        }
+
+    override suspend fun deleteStoreDetailHearts(
+        storeId: Long,
+    ): Result<StoreDetailHeartsResponseEntity> =
+        runCatching {
+            storeDetailDataSource.deleteStoreDetailHearts(
+                storeId
+            ).data.toStoreDetailHeartsResponseEntity()
         }
 }
