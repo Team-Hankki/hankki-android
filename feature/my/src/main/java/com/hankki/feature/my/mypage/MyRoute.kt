@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
@@ -55,6 +56,8 @@ import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
+import com.hankki.feature.my.mypage.MyViewModel.Companion.LOGOUT
+import com.hankki.feature.my.mypage.MyViewModel.Companion.QUIT
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 
 @Composable
@@ -88,18 +91,18 @@ fun MyScreen(
     navigateToMyStore: (String) -> Unit,
     userName: String,
     userImage: String,
-    showDialog: MutableState<Boolean>,
+    showDialog: MutableState<String>,
     showWebView: MutableState<String>
 ) {
     val scrollState = rememberScrollState()
 
-    if (showDialog.value) {
-        DialogWithButton(
-            onDismissRequest = { showDialog.value = false },
-            onConfirmation = { showDialog.value = false },
-            title = stringResource(R.string.ask_logout),
-            textButtonTitle = stringResource(id = R.string.go_back),
-            buttonTitle = stringResource(id = R.string.logout)
+    if (showDialog.value != "") {
+        DoubleButtonDialog(
+            title = if(showDialog.value==LOGOUT)stringResource(R.string.ask_logout)else stringResource(R.string.disappear_jogbo),
+            negativeButtonTitle = stringResource(id = R.string.go_back),
+            positiveButtonTitle = if(showDialog.value==LOGOUT)stringResource(id = R.string.logout)else stringResource(R.string.quit),
+            onNegativeButtonClicked = { showDialog.value = "" },
+            onPositiveButtonClicked = {} //TODO: 로그아웃 api
         )
     }
 
@@ -198,7 +201,7 @@ fun MyScreen(
 
         ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView.value = INQUIRY })
 
-        ButtonWithArrowIcon(stringResource(R.string.logout), { showDialog.value = true })
+        ButtonWithArrowIcon(stringResource(R.string.logout), { showDialog.value = LOGOUT })
 
         Row(
             modifier = Modifier
@@ -211,7 +214,7 @@ fun MyScreen(
             Text(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
-                    .noRippleClickable(onClick = {})
+                    .noRippleClickable(onClick = {showDialog.value=QUIT})
                     .padding(top = 13.dp, bottom = 14.dp)
                     .weight(1f),
                 textAlign = TextAlign.End,
@@ -239,7 +242,7 @@ fun MyScreenPreview() {
             navigateToMyStore = {},
             userName = "",
             userImage = "",
-            showDialog = remember { mutableStateOf(false) },
+            showDialog = remember { mutableStateOf("") },
             showWebView = remember { mutableStateOf("") }
         )
     }
@@ -248,8 +251,11 @@ fun MyScreenPreview() {
 
 @Composable
 fun webView(type: String) {
-    Intent(Intent.ACTION_VIEW, if (type == FAQ) Uri.parse("https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4") else Uri.parse(
-            "https://tally.so/r/mO0oJY")
+    Intent(
+        Intent.ACTION_VIEW,
+        if (type == FAQ) Uri.parse("https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4") else Uri.parse(
+            "https://tally.so/r/mO0oJY"
+        )
     ).apply {
     }.also { intent ->
         LocalContext.current.startActivity(intent)

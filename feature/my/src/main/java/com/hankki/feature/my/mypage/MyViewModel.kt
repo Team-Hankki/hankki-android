@@ -38,5 +38,7 @@ class MyViewModel @Inject constructor(
         const val REPORT = "report"
         const val FAQ = "FAQ"
         const val INQUIRY = "inquiry"
+        const val LOGOUT = "logout"
+        const val QUIT = "quit"
     }
 }
