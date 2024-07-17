@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:name=".App"
         android:theme="@style/Theme.Hankkijogbo"
-        tools:targetApi="31">
+        tools:targetApi="35">
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${naverClientId}" />
