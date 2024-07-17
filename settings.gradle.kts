@@ -44,7 +44,8 @@ include(
     ":data:reissuetoken",
     ":data:home",
     ":data:report",
-    ":data:storedetail"
+    ":data:storedetail",
+    ":data:my"
 )
 
 // domain
