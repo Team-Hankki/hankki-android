@@ -7,15 +7,16 @@ import com.hankki.core.navigation.MainTabRoute
 import com.hankki.feature.storedetail.StoreDetailRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateStoreDetail() {
-    navigate(StoreDetail)
+fun NavController.navigateStoreDetail(storeId: Long) {
+    navigate("storeDetail/$storeId")
 }
 
 fun NavGraphBuilder.storeDetailNavGraph(
     navigateUp: () -> Unit
 ) {
-    composable<StoreDetail> {
-        StoreDetailRoute()
+    composable("storeDetail/{storeId}") { backStackEntry ->
+        val storeId = backStackEntry.arguments?.getString("storeId")?.toLongOrNull() ?: return@composable
+        StoreDetailRoute(storeId)
     }
 }
 
