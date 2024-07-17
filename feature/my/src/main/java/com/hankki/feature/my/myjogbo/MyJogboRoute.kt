@@ -16,8 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
@@ -36,7 +35,6 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.MyJogboEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.AddJogboItem
-import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.component.JogboItem
 import com.hankki.feature.my.myjogbo.model.MyJogboModel
 import com.hankki.feature.my.myjogbo.model.toMyJogboModel
@@ -71,7 +69,9 @@ fun MyJogboRoute(
                 isjogboSelected
             )
         },
-        resetJogboState = myJogboViewMidel::resetJogboState
+        resetJogboState = myJogboViewMidel::resetJogboState,
+        showDialogState = myJogboState.showDialog,
+        updateDialogState = { myJogboViewMidel.updateDialog(myJogboState.showDialog) }
     )
 }
 
@@ -85,17 +85,17 @@ fun MyJogboScreen(
     editMode: Boolean = false,
     updateEditMode: () -> Unit,
     updateJogboSelectedState: (Int, Boolean) -> Unit,
-    resetJogboState: () -> Unit
+    resetJogboState: () -> Unit,
+    showDialogState: Boolean,
+    updateDialogState: () -> Unit
 ) {
-    val showDialog = remember { mutableStateOf(false) }
-    if (showDialog.value) {
-        DialogWithButton(
-            onDismissRequest = { showDialog.value = false },
-            onConfirmation = { showDialog.value = false },
+    if (showDialogState) {
+        DoubleButtonDialog(
             title = stringResource(R.string.ask_delete_jogbo),
-            textButtonTitle = stringResource(id = R.string.close),
-            buttonTitle = stringResource(id = R.string.do_delete)
-        )
+            negativeButtonTitle = stringResource(id = R.string.close),
+            positiveButtonTitle = stringResource(id = R.string.do_delete),
+            onNegativeButtonClicked = { updateDialogState() },
+            onPositiveButtonClicked = { updateDialogState() })
     }
 
     Column(
@@ -132,7 +132,7 @@ fun MyJogboScreen(
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 8.dp)
                         .run {
-                            if (editMode) noRippleClickable { showDialog.value = true }
+                            if (editMode) noRippleClickable { updateDialogState() }
                             else noRippleClickable(updateEditMode)
                         }
                 )
@@ -188,7 +188,9 @@ fun MyJogboScreenPreview() {
             ),
             updateEditMode = {},
             updateJogboSelectedState = { _, _ -> },
-            resetJogboState = {}
+            resetJogboState = {},
+            showDialogState = false,
+            updateDialogState = {}
         )
     }
 }

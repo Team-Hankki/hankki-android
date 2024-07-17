@@ -33,12 +33,16 @@ class MyViewModel @Inject constructor(
         }
     }
 
+    fun updateDialogState(state: DialogState){
+        _myState.value = _myState.value.copy(
+            showDialog = state
+        )
+    }
+
     companion object {
         const val LIKE = "like"
         const val REPORT = "report"
         const val FAQ = "FAQ"
         const val INQUIRY = "inquiry"
-        const val LOGOUT = "logout"
-        const val QUIT = "quit"
     }
 }

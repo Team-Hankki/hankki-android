@@ -6,6 +6,6 @@ import com.hankki.feature.my.mypage.model.MyModel
 
 data class MyState(
     val myModel: MyModel = MyModel(),
-    val showDialog : MutableState<String> = mutableStateOf(""),
-    val showWebView : MutableState<String> = mutableStateOf("")
+    val showDialog: DialogState = DialogState.CLOSED,
+    val showWebView: MutableState<String> = mutableStateOf("")
 )
