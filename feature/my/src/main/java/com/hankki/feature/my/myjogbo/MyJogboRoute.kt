@@ -48,6 +48,7 @@ fun MyJogboRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToJogboDetail: () -> Unit,
+    navigateToNewJogbo: () -> Unit,
     myJogboViewMidel: MyJogboViewModel = hiltViewModel()
 ) {
     val myJogboState by myJogboViewMidel.myJogboState.collectAsStateWithLifecycle()
@@ -60,6 +61,7 @@ fun MyJogboRoute(
         paddingValues = paddingValues,
         navigateUp = navigateUp,
         navigateToJogboDetail = navigateToJogboDetail,
+        navigateToNewJogbo = navigateToNewJogbo,
         jogboItems = myJogboState.myJogboItems,
         editMode = myJogboState.editMode.value,
         updateEditMode = myJogboViewMidel::updateMode,
@@ -78,6 +80,7 @@ fun MyJogboScreen(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToJogboDetail: () -> Unit,
+    navigateToNewJogbo: () -> Unit,
     jogboItems: PersistentList<MyJogboModel>,
     editMode: Boolean = false,
     updateEditMode: () -> Unit,
@@ -145,7 +148,10 @@ fun MyJogboScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                AddJogboItem(isEditMode = editMode)
+                AddJogboItem(
+                    isEditMode = editMode,
+                    onClick = navigateToNewJogbo
+                )
             }
 
             items(jogboItems.size) { index ->
@@ -174,6 +180,7 @@ fun MyJogboScreenPreview() {
         MyJogboScreen(
             navigateUp = {},
             navigateToJogboDetail = {},
+            navigateToNewJogbo = {},
             paddingValues = PaddingValues(),
             jogboItems = persistentListOf(
                 MyJogboEntity(1, "", "성대쪽문\n가성비 맛집\n진짜 추천드림요1").toMyJogboModel(),

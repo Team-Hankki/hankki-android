@@ -137,7 +137,8 @@ internal fun MainScreen(
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToMyJogbo = navigator::navigateToMyJogbo,
                         navigateToMyStore = navigator::navigateToMyStore,
-                        navigateToJogboDetail = navigator::navigateToMyJogboDetail
+                        navigateToJogboDetail = navigator::navigateToMyJogboDetail,
+                        navigateToNewJogbo = navigator::navigateToNewJogbo
                     )
                     loginNavgraph()
                     universitySelectionNavGraph(
