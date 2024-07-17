@@ -45,6 +45,7 @@ include(
     ":data:home",
     ":data:report",
     ":data:storedetail",
+    ":data:my",
     ":data:universityselection"
 )
 
