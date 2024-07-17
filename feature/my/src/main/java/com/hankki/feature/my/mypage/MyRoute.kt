@@ -75,7 +75,9 @@ fun MyRoute(
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.myModel.nickname,
-        userImage = myState.myModel.profileImageUrl
+        userImage = myState.myModel.profileImageUrl,
+        showDialog = myState.showDialog,
+        showWebView = myState.showWebView
     )
 }
 
@@ -85,11 +87,13 @@ fun MyScreen(
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
     userName: String,
-    userImage: String
+    userImage: String,
+    showDialog: MutableState<Boolean>,
+    showWebView: MutableState<String>
 ) {
     val scrollState = rememberScrollState()
-    val showDialog = remember { mutableStateOf(false) }
-    val showWebView: MutableState<String> = remember { mutableStateOf("") }
+    //val showDialog = remember { mutableStateOf(false) }
+    //val showWebView: MutableState<String> = remember { mutableStateOf("") }
 
     if (showDialog.value) {
         DialogWithButton(
@@ -102,9 +106,9 @@ fun MyScreen(
     }
 
     if (showWebView.value == FAQ) {
-        FqaWebView(FAQ)
+        webView(FAQ)
     } else if (showWebView.value == INQUIRY) {
-        FqaWebView(INQUIRY)
+        webView(INQUIRY)
     }
 
     Column(
@@ -236,19 +240,20 @@ fun MyScreenPreview() {
             navigateToMyJogbo = {},
             navigateToMyStore = {},
             userName = "",
-            userImage = ""
+            userImage = "",
+            showDialog = remember { mutableStateOf(false) },
+            showWebView = remember { mutableStateOf("") }
         )
     }
 }
 
 
 @Composable
-fun FqaWebView(type: String) {
-    val intent = Intent(
-        Intent.ACTION_VIEW,
-        if (type == FAQ) Uri.parse("https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4") else Uri.parse(
-            "https://tally.so/r/mO0oJY"
-        )
-    )
-    LocalContext.current.startActivity(intent)
+fun webView(type: String) {
+    Intent(Intent.ACTION_VIEW, if (type == FAQ) Uri.parse("https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4") else Uri.parse(
+            "https://tally.so/r/mO0oJY")
+    ).apply {
+    }.also { intent ->
+        LocalContext.current.startActivity(intent)
+    }
 }
