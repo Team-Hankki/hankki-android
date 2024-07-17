@@ -19,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -27,20 +29,23 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun LoginRoute() {
     val viewModel: LoginViewModel = hiltViewModel()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) {
-        viewModel.loginSideEffects.collectLatest { sideEffect ->
-            when (sideEffect) {
-                is LoginSideEffect.LoginSuccess -> {
-                    //LoginSuccess 필요시 추가 동작
-                }
-
-                is LoginSideEffect.LoginError -> {
-                    //LoginError 필요시 추가 동작
+    LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
+        viewModel.loginSideEffects
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collectLatest { sideEffect ->
+                when (sideEffect) {
+                    is LoginSideEffect.LoginSuccess -> {
+                        //LoginSuccess 필요시 추가 동작
+                    }
+                    is LoginSideEffect.LoginError  -> {
+                        //LoginError 필요시 추가 동작
+                    }
                 }
             }
-        }
     }
+
 
     LoginScreen(
         onLoginClick = { viewModel.startKakaoLogin() }

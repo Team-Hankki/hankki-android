@@ -1,14 +1,7 @@
 package com.hankki.feature.universityselection
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
@@ -22,17 +15,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
-import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray900
-import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.White
+import com.hankki.core.designsystem.theme.*
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import com.hankki.feature.universityselection.component.UniversityItem
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun UniversitySelectionRoute(
@@ -40,12 +32,21 @@ fun UniversitySelectionRoute(
 ) {
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
-    val postSuccess by universitySelectionViewModel.postSuccess.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(postSuccess) {
-        if (postSuccess) {
-            navigateToHome()
-        }
+    LaunchedEffect(universitySelectionViewModel.sideEffects, lifecycleOwner) {
+        universitySelectionViewModel.sideEffects
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collectLatest { sideEffect ->
+                when (sideEffect) {
+                    is UniversitySelectionSideEffect.PostSuccess -> {
+                        navigateToHome()
+                    }
+                    is UniversitySelectionSideEffect.PostError -> {
+                        // Handle error if needed
+                    }
+                }
+            }
     }
 
     UniversitySelectionScreen(

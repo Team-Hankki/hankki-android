@@ -8,7 +8,9 @@ import com.hankki.domain.universityselection.repository.UniversitySelectionRepos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,8 +21,8 @@ class UniversitySelectionViewModel @Inject constructor(
     private val _universitySelectionState = MutableStateFlow(UniversitySelectionState())
     val universitySelectionState: StateFlow<UniversitySelectionState> = _universitySelectionState
 
-    private val _postSuccess = MutableStateFlow(false)
-    val postSuccess: StateFlow<Boolean> = _postSuccess
+    private val _sideEffects = MutableSharedFlow<UniversitySelectionSideEffect>()
+    val sideEffects = _sideEffects.asSharedFlow()
 
     init {
         loadUniversities()
@@ -54,9 +56,9 @@ class UniversitySelectionViewModel @Inject constructor(
                         latitude = selectedUniversity.latitude
                     )
                 ).onSuccess {
-                    _postSuccess.value = true
+                    _sideEffects.emit(UniversitySelectionSideEffect.PostSuccess)
                 }.onFailure {
-                    // Handle error
+                    _sideEffects.emit(UniversitySelectionSideEffect.PostError(it))
                 }
             }
         }
