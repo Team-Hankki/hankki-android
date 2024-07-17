@@ -112,6 +112,7 @@ fun MyScreen(
             .padding(paddingValues)
             .padding(horizontal = 22.dp)
             .fillMaxSize()
+            .background(White)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
