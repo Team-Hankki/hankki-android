@@ -104,7 +104,7 @@ fun MyScreen(
                 .clip(CircleShape),
             model = userImage,
             contentDescription = stringResource(R.string.profile_image),
-            contentScale = ContentScale.None
+            contentScale = ContentScale.Fit
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -126,7 +126,7 @@ fun MyScreen(
                     shape = RoundedCornerShape(12.dp)
                 )
                 .clip(RoundedCornerShape(12.dp))
-                .padding(start = 28.dp, end = 29.dp)
+                .padding(start = 28.dp, end = 17.dp)
                 .noRippleClickable(onClick = navigateToMyJogbo),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -137,7 +137,7 @@ fun MyScreen(
                 color = White,
             )
             Image(
-                painter = painterResource(id = R.drawable.ic_mygraphic),
+                painter = painterResource(id = R.drawable.ic_my_graphic),
                 contentDescription = "jogbo graphic",
             )
         }
@@ -150,7 +150,7 @@ fun MyScreen(
                 stringResource(R.string.description_store_report),
                 Modifier
                     .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore("report") }), // 변경된 부분
+                    .noRippleClickable(onClick = { navigateToMyStore("report") }),
             )
             Spacer(modifier = Modifier.width(18.dp))
             ButtonWithImageAndBorder(
@@ -158,7 +158,7 @@ fun MyScreen(
                 stringResource(R.string.description_store_like),
                 Modifier
                     .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore("like") }), // 변경된 부분
+                    .noRippleClickable(onClick = { navigateToMyStore("like") }),
             )
         }
 
