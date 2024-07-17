@@ -9,7 +9,7 @@ import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
-import com.naver.maps.geometry.LatLng
+import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -36,22 +36,31 @@ class HomeViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
-        getUniversityInfo()
         getStoreItems()
         getMarkerItems()
+    }
+
+    fun getUniversityInformation() {
+        viewModelScope.launch {
+            homeRepository.getMyUniversity()
+                .onSuccess { university ->
+                    _state.value = _state.value.copy(
+                        myUniversityModel = university.toModel()
+                    )
+                    moveMap(
+                        _state.value.myUniversityModel.latitude,
+                        _state.value.myUniversityModel.longitude
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 
     fun moveMap(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             _sideEffect.emit(HomeSideEffect.MoveMap(latitude, longitude))
         }
-    }
-
-    private fun getUniversityInfo() {
-        _state.value = _state.value.copy(
-            universityName = "한끼 대학교",
-            latLng = LatLng(37.3009489417651, 127.03549529577874)
-        )
     }
 
     private fun getStoreItems() {

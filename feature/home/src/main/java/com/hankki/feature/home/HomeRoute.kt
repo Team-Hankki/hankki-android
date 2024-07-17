@@ -106,7 +106,10 @@ import kotlinx.coroutines.launch
 fun HomeRoute(
     paddingValues: PaddingValues,
     onShowSnackBar: (Int) -> Unit,
+    navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: () -> Unit,
+    isNewUniversity: Boolean = false, // splash에서 넘어오는 경우, UniversitySelect에서 넘어오는 경우 true
+    // TODO : UniversitySelect 코드 구현 완료시 연결 예정
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -116,11 +119,18 @@ fun HomeRoute(
     val focusLocationProviderClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
-            state.latLng,
+            LatLng(state.myUniversityModel.latitude, state.myUniversityModel.longitude),
             DEFAULT_ZOOM
         )
+    }
+
+    LaunchedEffect(key1 = true) {
+        if (isNewUniversity) {
+            viewModel.getUniversityInformation()
+        }
     }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
@@ -142,7 +152,7 @@ fun HomeRoute(
     HomeScreen(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
-        universityName = state.universityName ?: "전체",
+        universityName = state.myUniversityModel.name ?: "전체",
         selectedStoreItem = state.selectedStoreItem,
         storeItems = state.storeItems,
         jogboItems = state.jogboItems,
@@ -156,6 +166,7 @@ fun HomeRoute(
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
         navigateStoreDetail = navigateStoreDetail,
+        navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
         clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
@@ -217,6 +228,7 @@ fun HomeScreen(
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
     navigateStoreDetail: () -> Unit = {},
+    navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
     clickMarkerItem: (Int) -> Unit = {},
     clickMap: () -> Unit = {},
@@ -269,9 +281,7 @@ fun HomeScreen(
         HankkiTopBar(
             content = {
                 Row(
-                    modifier = Modifier.noRippleClickable(
-                        // TODO: 학교 선택 Screen 이동
-                    )
+                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
                 ) {
                     Text(
                         text = universityName,

@@ -14,19 +14,17 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.navigation.navigateDummy
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
-import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
 import com.hankki.feature.my.navigation.navigateMyJogboDetail
 import com.hankki.feature.my.navigation.navigateMyStore
+import com.hankki.feature.my.navigation.navigateNewJogbo
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.navigateToReport
 import com.hankki.feature.report.navigation.navigateToReportFinish
 import com.hankki.feature.report.navigation.navigateToSearchStore
 import com.hankki.feature.storedetail.navigation.navigateStoreDetail
-import com.hankki.feature.universityselection.UniversitySelectionRoute
-import com.hankki.feature.universityselection.navigation.UniversitySelection
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -127,6 +125,10 @@ internal class MainNavigator(
 
     fun navigateToMyJogboDetail() {
         navController.navigateMyJogboDetail()
+    }
+
+    fun navigateToNewJogbo() {
+        navController.navigateNewJogbo()
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {

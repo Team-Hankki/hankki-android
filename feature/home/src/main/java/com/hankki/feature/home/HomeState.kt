@@ -6,13 +6,16 @@ import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.StoreItemEntity
-import com.naver.maps.geometry.LatLng
+import com.hankki.feature.home.model.UniversityModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 data class HomeState(
-    val latLng: LatLng = LatLng(37.3009489417651, 127.03549529577874),
-    val universityName: String? = null,
+    val myUniversityModel: UniversityModel = UniversityModel(
+        name = null,
+        latitude = 37.3009489417651,
+        longitude = 127.03549529577874
+    ),
     val categoryChipState: ChipState = ChipState.Unselected(),
     val categoryChipItems: PersistentList<CategoryChipItem> = persistentListOf(),
     val isCategoryChipOpen: Boolean = false,
