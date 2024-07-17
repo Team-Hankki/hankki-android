@@ -6,8 +6,11 @@ import com.hankki.data.report.datasource.ReportDataSource
 import com.hankki.data.report.dto.request.ValidateStoreRequestDto
 import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
+import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
 import com.hankki.data.report.service.ReportService
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class ReportDataSourceImpl @Inject constructor(
@@ -24,4 +27,10 @@ class ReportDataSourceImpl @Inject constructor(
 
     override suspend fun getCategories(): BaseResponse<CategoriesResponseDto> =
         reportService.getCategories()
+
+    override suspend fun postReport(
+        image: MultipartBody.Part?,
+        request: RequestBody,
+    ): BaseResponse<GeneratedStoreResponseDto> =
+        reportService.postReport(image, request)
 }

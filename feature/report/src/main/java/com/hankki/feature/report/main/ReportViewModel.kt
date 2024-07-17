@@ -1,8 +1,10 @@
 package com.hankki.feature.report.main
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.domain.report.entity.request.ReportStoreRequestEntity
 import com.hankki.domain.report.repository.ReportRepository
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
@@ -110,7 +112,7 @@ class ReportViewModel @Inject constructor(
     fun addMenu() {
         _state.value = _state.value.copy(
             menuList = _state.value.menuList.add(
-                MenuModel("", "")
+                MenuModel()
             )
         )
         checkButtonEnabled()
@@ -123,17 +125,35 @@ class ReportViewModel @Inject constructor(
         checkButtonEnabled()
     }
 
-    fun navigateToReportFinish() {
+    fun submitReport() {
         viewModelScope.launch {
-            _sideEffect.emit(
-                with(_state.value) {
+            reportRepository.postReport(
+                image = _state.value.selectedImageUri?.toString(),
+                request = ReportStoreRequestEntity(
+                    name = _state.value.location.location,
+                    category = _state.value.selectedCategory ?: "",
+                    address = _state.value.location.address,
+                    latitude = _state.value.location.latitude.toDouble(),
+                    longitude = _state.value.location.longitude.toDouble(),
+                    universityId = 1,
+                    menus = _state.value.menuList.map {
+                        ReportStoreRequestEntity.MenuEntity(
+                            it.name,
+                            it.price
+                        )
+                    }
+                )
+            ).onSuccess {
+                _sideEffect.emit(
                     ReportSideEffect.NavigateReportFinish(
-                        count = count,
-                        storeName = location.location,
-                        storeId = storeId
+                        _state.value.count,
+                        it.name,
+                        it.id
                     )
-                }
-            )
+                )
+            }.onFailure { error ->
+                Timber.e(error)
+            }
         }
     }
 

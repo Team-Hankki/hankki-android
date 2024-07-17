@@ -5,11 +5,16 @@ import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.report.dto.request.ValidateStoreRequestDto
 import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
+import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ReportService {
@@ -23,9 +28,16 @@ interface ReportService {
 
     @POST("api/v1/stores/validate")
     suspend fun getStoreValidate(
-        @Body body: ValidateStoreRequestDto
+        @Body body: ValidateStoreRequestDto,
     ): CreatedBaseResponse
 
     @GET("api/v1/stores/categories")
     suspend fun getCategories(): BaseResponse<CategoriesResponseDto>
+
+    @Multipart
+    @POST("api/v1/stores")
+    suspend fun postReport(
+        @Part image: MultipartBody.Part?,
+        @Part("request") request: RequestBody,
+    ): BaseResponse<GeneratedStoreResponseDto>
 }

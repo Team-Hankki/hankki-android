@@ -93,7 +93,6 @@ fun ReportRoute(
             }
         }
 
-
     LaunchedEffect(key1 = lifecycleOwner) {
         if (location.location.isNotEmpty()) {
             viewModel.setLocation(location)
@@ -131,7 +130,7 @@ fun ReportRoute(
         addMenu = viewModel::addMenu,
         deleteMenu = viewModel::deleteMenu,
         navigateSearchStore = navigateSearchStore,
-        navigateToReportFinish = viewModel::navigateToReportFinish
+        submitReport = viewModel::submitReport
     )
 }
 
@@ -153,7 +152,7 @@ fun ReportScreen(
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
     navigateSearchStore: () -> Unit = {},
-    navigateToReportFinish: () -> Unit,
+    submitReport: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -301,9 +300,7 @@ fun ReportScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 22.dp),
-                        onClick = {
-                            navigateToReportFinish()
-                        },
+                        onClick = submitReport,
                         enabled = buttonEnabled
                     )
                     Spacer(modifier = Modifier.height(15.dp))
@@ -486,7 +483,7 @@ fun ReportScreenPreview() {
             addMenu = {},
             deleteMenu = {},
             navigateSearchStore = {},
-            navigateToReportFinish = {}
+            submitReport = {}
         )
     }
 }
