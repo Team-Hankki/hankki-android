@@ -1,5 +1,7 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.mypage
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -44,10 +48,12 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.my.R
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
 import com.hankki.feature.my.component.DialogWithButton
-import com.hankki.feature.my.mypage.MyViewModel
+import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ
+import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 
@@ -83,6 +89,8 @@ fun MyScreen(
 ) {
     val scrollState = rememberScrollState()
     val showDialog = remember { mutableStateOf(false) }
+    val showWebView: MutableState<String> = remember { mutableStateOf("") }
+
     if (showDialog.value) {
         DialogWithButton(
             onDismissRequest = { showDialog.value = false },
@@ -91,6 +99,12 @@ fun MyScreen(
             textButtonTitle = stringResource(id = R.string.go_back),
             buttonTitle = stringResource(id = R.string.logout)
         )
+    }
+
+    if (showWebView.value == FAQ) {
+        FqaWebView(FAQ)
+    } else if (showWebView.value == INQUIRY) {
+        FqaWebView(INQUIRY)
     }
 
     Column(
@@ -177,9 +191,9 @@ fun MyScreen(
             )
         }
 
-        ButtonWithArrowIcon(stringResource(R.string.faq), {})
+        ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView.value = FAQ })
 
-        ButtonWithArrowIcon(stringResource(R.string.inquiry), {})
+        ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView.value = INQUIRY })
 
         ButtonWithArrowIcon(stringResource(R.string.logout), { showDialog.value = true })
 
@@ -224,4 +238,16 @@ fun MyScreenPreview() {
             userImage = ""
         )
     }
+}
+
+
+@Composable
+fun FqaWebView(type: String) {
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        if (type == FAQ) Uri.parse("https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4") else Uri.parse(
+            "https://tally.so/r/mO0oJY"
+        )
+    )
+    LocalContext.current.startActivity(intent)
 }
