@@ -24,6 +24,7 @@ import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.theme.*
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import com.hankki.feature.universityselection.component.UniversityItem
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -62,7 +63,7 @@ fun UniversitySelectionRoute(
 
 @Composable
 fun UniversitySelectionScreen(
-    universities: List<UniversitySelectionEntity>,
+    universities: PersistentList<UniversitySelectionEntity>,
     selectedUniversity: UniversitySelectionEntity?,
     onSelectUniversity: (UniversitySelectionEntity) -> Unit,
     onPostSelectedUniversity: () -> Unit,
