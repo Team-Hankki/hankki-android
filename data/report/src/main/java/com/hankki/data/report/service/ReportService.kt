@@ -7,6 +7,7 @@ import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
+import com.hankki.data.report.dto.response.UniversityResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -40,4 +41,7 @@ interface ReportService {
         @Part image: MultipartBody.Part?,
         @Part("request") request: RequestBody,
     ): BaseResponse<GeneratedStoreResponseDto>
+
+    @GET("api/v1/users/me/university")
+    suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto>
 }

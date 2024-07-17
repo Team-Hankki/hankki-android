@@ -12,6 +12,7 @@ import com.hankki.domain.report.entity.LocationEntity
 import com.hankki.domain.report.entity.request.ReportStoreRequestEntity
 import com.hankki.domain.report.entity.request.ValidateStoreRequestEntity
 import com.hankki.domain.report.entity.response.GeneratedStoreResponseEntity
+import com.hankki.domain.report.entity.response.UniversityResponseEntity
 import com.hankki.domain.report.repository.ReportRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.encodeToString
@@ -59,5 +60,9 @@ class ReportRepositoryImpl @Inject constructor(
                 request = contentRequestBody
             ).data.toEntity()
         }
+    }
+
+    override suspend fun getMyUniversity(): Result<UniversityResponseEntity> = runCatching {
+        reportDataSource.getMyUniversity().data.toEntity()
     }
 }

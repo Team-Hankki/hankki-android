@@ -1,7 +1,6 @@
 package com.hankki.feature.report.main
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.report.entity.request.ReportStoreRequestEntity
@@ -33,8 +32,23 @@ class ReportViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
+        setUniversityId()
         getCount()
         getCategories()
+    }
+
+    private fun setUniversityId() {
+        viewModelScope.launch {
+            reportRepository.getMyUniversity()
+                .onSuccess { university ->
+                    _state.value = _state.value.copy(
+                        universityId = university.id
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
+
     }
 
     private fun getCount() {
@@ -135,7 +149,7 @@ class ReportViewModel @Inject constructor(
                     address = _state.value.location.address,
                     latitude = _state.value.location.latitude.toDouble(),
                     longitude = _state.value.location.longitude.toDouble(),
-                    universityId = 1,
+                    universityId = _state.value.universityId,
                     menus = _state.value.menuList.map {
                         ReportStoreRequestEntity.MenuEntity(
                             it.name,

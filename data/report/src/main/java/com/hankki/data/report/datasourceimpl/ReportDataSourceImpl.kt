@@ -8,6 +8,7 @@ import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
+import com.hankki.data.report.dto.response.UniversityResponseDto
 import com.hankki.data.report.service.ReportService
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -33,4 +34,7 @@ class ReportDataSourceImpl @Inject constructor(
         request: RequestBody,
     ): BaseResponse<GeneratedStoreResponseDto> =
         reportService.postReport(image, request)
+
+    override suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto> =
+        reportService.getMyUniversity()
 }

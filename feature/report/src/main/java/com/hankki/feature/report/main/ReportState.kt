@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 data class ReportState(
+    val universityId: Long = 1,
     val count: Long = 0,
     val location: LocationModel = LocationModel(),
     val storeId: Long = 0,
