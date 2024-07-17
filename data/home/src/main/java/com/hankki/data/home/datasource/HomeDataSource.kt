@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.data.home.dto.CategoriesResponse
 import com.hankki.data.home.dto.PriceCategoriesResponse
 import com.hankki.data.home.dto.SortCategoriesResponse
+import com.hankki.data.home.dto.response.StoresResponseDto
 import com.hankki.data.home.dto.response.UniversityResponseDto
 
 interface HomeDataSource {
@@ -11,4 +12,10 @@ interface HomeDataSource {
     suspend fun getCategories(): BaseResponse<CategoriesResponse>
     suspend fun getPriceCategories(): BaseResponse<PriceCategoriesResponse>
     suspend fun getSortCategories(): BaseResponse<SortCategoriesResponse>
+    suspend fun getStores(
+        universityId: Long?,
+        storeCategory: String?,
+        priceCategory: String?,
+        sortOption: String?,
+    ): BaseResponse<StoresResponseDto>
 }

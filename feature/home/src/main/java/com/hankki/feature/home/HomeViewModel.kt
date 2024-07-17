@@ -1,5 +1,6 @@
 package com.hankki.feature.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
@@ -8,7 +9,7 @@ import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
-import com.hankki.feature.home.model.StoreItemEntity
+import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -63,53 +64,27 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getStoreItems() {
-        _state.value = _state.value.copy(
-            storeItems = persistentListOf(
-                StoreItemEntity(
-                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                    category = "한식",
-                    storeName = "한끼네 한정식",
-                    price = 7900,
-                    heartCount = 300
-                ),
-                StoreItemEntity(
-                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                    category = "한식",
-                    storeName = "한끼네 한정식",
-                    price = 7900,
-                    heartCount = 300
-                ),
-                StoreItemEntity(
-                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                    category = "한식",
-                    storeName = "한끼네 한정식",
-                    price = 7900,
-                    heartCount = 300
-                ),
-                StoreItemEntity(
-                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                    category = "한식",
-                    storeName = "한끼네 한정식",
-                    price = 7900,
-                    heartCount = 300
-                ),
-                StoreItemEntity(
-                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                    category = "한식",
-                    storeName = "한끼네 한정식",
-                    price = 7900,
-                    heartCount = 300
-                ),
-                StoreItemEntity(
-                    storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
-                    category = "한식",
-                    storeName = "한끼네 한정식",
-                    price = 7900,
-                    heartCount = 300
+    fun getStoreItems() {
+        viewModelScope.launch {
+            homeRepository.getStores(
+                universityId = _state.value.myUniversityModel.id,
+                storeCategory = if (_state.value.categoryChipState is ChipState.Fixed) {
+                    (_state.value.categoryChipState as ChipState.Fixed).tag
+                } else null,
+                priceCategory = if (_state.value.priceChipState is ChipState.Fixed) {
+                    (_state.value.priceChipState as ChipState.Fixed).tag
+                } else null,
+                sortOption = if (_state.value.sortChipState is ChipState.Fixed) {
+                    (_state.value.sortChipState as ChipState.Fixed).tag
+                } else null
+            ).onSuccess { stores ->
+                _state.value = _state.value.copy(
+                    storeItems = stores.map { it.toModel() }.toPersistentList()
                 )
-            )
-        )
+            }.onFailure { error ->
+                Timber.e(error)
+            }
+        }
     }
 
     fun getJogboItems() {
@@ -155,7 +130,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun getMarkerItems() {
+    fun getMarkerItems() {
         _state.value = _state.value.copy(
             markerItems = persistentListOf(
                 MarkerItem(
@@ -190,11 +165,11 @@ class HomeViewModel @Inject constructor(
         // id를 통해 서버통신하여 Store 정보를 받아올 예정
         _state.value = _state.value.copy(
             isMainBottomSheetOpen = false,
-            selectedStoreItem = StoreItemEntity(
-                storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
+            selectedStoreItem = StoreItemModel(
+                imageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
                 category = "한식",
-                storeName = "한끼네 한정식",
-                price = 7900,
+                name = "한끼네 한정식",
+                lowerPrice = 7900,
                 heartCount = 300
             )
         )
@@ -230,9 +205,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun selectCategoryChipItem(item: String) {
+    fun selectCategoryChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
-            categoryChipState = ChipState.Fixed(item)
+            categoryChipState = ChipState.Fixed(item, tag)
         )
     }
 
@@ -265,9 +240,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun selectPriceChipItem(item: String) {
+    fun selectPriceChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
-            priceChipState = ChipState.Fixed(item)
+            priceChipState = ChipState.Fixed(item, tag)
         )
     }
 
@@ -300,9 +275,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun selectSortChipItem(item: String) {
+    fun selectSortChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
-            sortChipState = ChipState.Fixed(item)
+            sortChipState = ChipState.Fixed(item, tag)
         )
     }
 

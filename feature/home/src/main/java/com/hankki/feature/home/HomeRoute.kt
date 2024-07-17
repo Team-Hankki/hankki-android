@@ -80,7 +80,7 @@ import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.MarkerItem
-import com.hankki.feature.home.model.StoreItemEntity
+import com.hankki.feature.home.model.StoreItemModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -149,6 +149,16 @@ fun HomeRoute(
         }
     }
 
+    LaunchedEffect(key1 = state.categoryChipState, key2 = state.priceChipState, key3 = state.sortChipState) {
+        if (state.categoryChipState !is ChipState.Selected && state.priceChipState !is ChipState.Selected && state.sortChipState !is ChipState.Selected) {
+            with(viewModel) {
+                getStoreItems()
+                getMarkerItems()
+            }
+        }
+    }
+
+
     HomeScreen(
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
@@ -215,8 +225,8 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
-    selectedStoreItem: StoreItemEntity,
-    storeItems: PersistentList<StoreItemEntity>,
+    selectedStoreItem: StoreItemModel,
+    storeItems: PersistentList<StoreItemModel>,
     jogboItems: PersistentList<JogboItemEntity>,
     markerItems: PersistentList<MarkerItem>,
     categoryChipState: ChipState,
@@ -233,13 +243,13 @@ fun HomeScreen(
     clickMarkerItem: (Int) -> Unit = {},
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
-    selectCategoryChipItem: (String) -> Unit = {},
+    selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
     dismissCategoryChip: () -> Unit = {},
     clickPriceChip: () -> Unit = {},
-    selectPriceChipItem: (String) -> Unit = {},
+    selectPriceChipItem: (String, String) -> Unit = { _, _ -> },
     dismissPriceChip: () -> Unit = {},
     clickSortChip: () -> Unit = {},
-    selectSortChipItem: (String) -> Unit = {},
+    selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     dismissSortChip: () -> Unit = {},
     getJogboItems: () -> Unit = {},
     reposition: () -> Unit = {},
@@ -260,6 +270,7 @@ fun HomeScreen(
 
     LaunchedEffect(
         key1 = bottomSheetState.currentValue,
+        key2 = storeItems,
         LocalLifecycleOwner.current
     ) {
         if (bottomSheetState.isCollapsed) {
@@ -442,12 +453,15 @@ fun HomeScreen(
                                         .background(White),
                                     state = listState
                                 ) {
-                                    items(storeItems) { item ->
+                                    items(
+                                        items = storeItems,
+                                        key = { item -> item.id }
+                                    ) { item ->
                                         StoreItem(
-                                            storeImageUrl = item.storeImageUrl,
+                                            storeImageUrl = item.imageUrl,
                                             category = item.category,
-                                            storeName = item.storeName,
-                                            price = item.price,
+                                            storeName = item.name,
+                                            price = item.lowerPrice,
                                             heartCount = item.heartCount
                                         ) {
                                             controlMyJogboBottomSheet()
@@ -498,10 +512,10 @@ fun HomeScreen(
                                 }
 
                                 StoreItem(
-                                    storeImageUrl = selectedStoreItem.storeImageUrl,
+                                    storeImageUrl = selectedStoreItem.imageUrl,
                                     category = selectedStoreItem.category,
-                                    storeName = selectedStoreItem.storeName,
-                                    price = selectedStoreItem.price,
+                                    storeName = selectedStoreItem.name,
+                                    price = selectedStoreItem.lowerPrice,
                                     heartCount = selectedStoreItem.heartCount,
                                     modifier = Modifier.padding(22.dp)
                                 ) {
