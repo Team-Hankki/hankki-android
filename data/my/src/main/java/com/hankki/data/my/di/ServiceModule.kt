@@ -14,6 +14,6 @@ import javax.inject.Singleton
 object ServiceModule {
     @Provides
     @Singleton
-    fun providesMyDataSource(@JWT retrofit: Retrofit): MyService =
+    fun providesMyService(@JWT retrofit: Retrofit): MyService =
         retrofit.create(MyService::class.java)
 }
