@@ -1,5 +1,6 @@
 package com.hankki.feature.report.main
 
+import android.net.Uri
 import com.hankki.domain.report.entity.CategoryEntity
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.MenuModel
@@ -12,6 +13,7 @@ data class ReportState(
     val storeId: Long = 0,
     val buttonEnabled: Boolean = false,
     val selectedCategory: String? = null,
+    val selectedImageUri: Uri? = null,
     val categoryList: PersistentList<CategoryEntity> = persistentListOf(),
     val menuList: PersistentList<MenuModel> = persistentListOf(MenuModel("", "")),
 )

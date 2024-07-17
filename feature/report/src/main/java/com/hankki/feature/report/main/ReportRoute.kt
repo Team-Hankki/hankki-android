@@ -1,5 +1,8 @@
 package com.hankki.feature.report.main
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -81,6 +84,14 @@ fun ReportRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                viewModel.selectImageUri(uri)
+            }
+        }
+
+
     LaunchedEffect(key1 = lifecycleOwner) {
         if (location.location.isNotEmpty()) {
             viewModel.setLocation(location)
@@ -110,6 +121,9 @@ fun ReportRoute(
         menuList = state.menuList,
         changeMenuName = viewModel::changeMenuName,
         changePrice = viewModel::changePrice,
+        addPicture = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
         addMenu = viewModel::addMenu,
         deleteMenu = viewModel::deleteMenu,
         navigateSearchStore = navigateSearchStore,
@@ -129,6 +143,7 @@ fun ReportScreen(
     menuList: PersistentList<MenuModel>,
     changeMenuName: (Int, String) -> Unit,
     changePrice: (Int, String) -> Unit,
+    addPicture: () -> Unit,
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
     navigateSearchStore: () -> Unit = {},
@@ -217,7 +232,7 @@ fun ReportScreen(
 
                         Spacer(modifier = Modifier.height(32.dp))
                         AddPhotoButton(modifier = Modifier.fillMaxWidth()) {
-                            // TODO: 사진 업로드
+                            addPicture()
                         }
                         Spacer(modifier = Modifier.height(32.dp))
 
@@ -447,6 +462,7 @@ fun ReportScreenPreview() {
             ),
             changeMenuName = { _, _ -> },
             changePrice = { _, _ -> },
+            addPicture = {},
             addMenu = {},
             deleteMenu = {},
             navigateSearchStore = {},

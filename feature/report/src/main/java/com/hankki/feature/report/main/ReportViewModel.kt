@@ -1,5 +1,6 @@
 package com.hankki.feature.report.main
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.report.repository.ReportRepository
@@ -64,6 +65,11 @@ class ReportViewModel @Inject constructor(
         )
     }
 
+    fun selectImageUri(uri: Uri) {
+        _state.value = _state.value.copy(
+            selectedImageUri = uri
+        )
+    }
 
     fun selectCategory(category: String) {
         _state.value = _state.value.copy(
@@ -131,7 +137,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun checkButtonEnabled() {
+    private fun checkButtonEnabled() {
         with(_state.value) {
             _state.value = _state.value.copy(
                 buttonEnabled = menuList.isNotEmpty()
