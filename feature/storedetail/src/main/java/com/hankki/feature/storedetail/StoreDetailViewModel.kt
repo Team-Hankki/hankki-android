@@ -63,7 +63,7 @@ class StoreDetailViewModel @Inject constructor(
 
             result.onSuccess { response ->
                 updateHeartStatus(response)
-            }.onFailure { exception ->
+            }.onFailure {
                 // 에러 처리 로직 추가
             }
         }
