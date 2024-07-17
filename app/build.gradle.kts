@@ -57,6 +57,7 @@ dependencies {
     implementation(projects.data.report)
     implementation(projects.data.storedetail)
     implementation(projects.data.my)
+    implementation(projects.data.universityselection)
 
     // core
     implementation(projects.core.network)
