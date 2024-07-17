@@ -104,7 +104,7 @@ fun MyScreen(
                 .clip(CircleShape),
             model = userImage,
             contentDescription = stringResource(R.string.profile_image),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.height(10.dp))
