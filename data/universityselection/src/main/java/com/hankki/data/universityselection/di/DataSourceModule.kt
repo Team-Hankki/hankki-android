@@ -13,7 +13,7 @@ import javax.inject.Singleton
 internal abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindUniversitySelectionDataSource(
+    abstract fun bindsUniversitySelectionDataSource(
         universirySelectionDataSourceImpl: UniversirySelectionDataSourceImpl
     ): UniversitySelectionDataSource
 }

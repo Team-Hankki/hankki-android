@@ -13,7 +13,7 @@ import javax.inject.Singleton
 internal abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindUniversitySelectionRepository(
+    abstract fun bindsUniversitySelectionRepository(
         universitySelectionRepositoryImpl: UniversitySelectionRepositoryImpl
     ) : UniversitySelectionRepository
 }

@@ -15,6 +15,6 @@ import javax.inject.Singleton
 object ServiceModule {
     @Provides
     @Singleton
-    fun provideUniversitySelectionService(@JWT retrofit: Retrofit): UniversitySelectionService =
+    fun providesUniversitySelectionService(@JWT retrofit: Retrofit): UniversitySelectionService =
         retrofit.create(UniversitySelectionService::class.java)
 }
