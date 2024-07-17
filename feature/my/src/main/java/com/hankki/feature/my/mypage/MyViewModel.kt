@@ -44,5 +44,7 @@ class MyViewModel @Inject constructor(
         const val REPORT = "report"
         const val FAQ = "FAQ"
         const val INQUIRY = "inquiry"
+        const val TO_FAQ = "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4"
+        const val TO_LOGOUT = "https://tally.so/r/mO0oJY"
     }
 }

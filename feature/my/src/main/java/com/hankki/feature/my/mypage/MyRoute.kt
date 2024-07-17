@@ -56,6 +56,8 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TO_FAQ
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TO_LOGOUT
 
 @Composable
 fun MyRoute(
@@ -91,15 +93,19 @@ fun MyScreen(
     userImage: String,
     showDialog: DialogState,
     showWebView: MutableState<String>,
-    updateDialog : (DialogState) -> Unit,
+    updateDialog: (DialogState) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
     if (showDialog != DialogState.CLOSED) {
         DoubleButtonDialog(
-            title = if(showDialog==DialogState.LOGOUT)stringResource(R.string.ask_logout)else stringResource(R.string.disappear_jogbo),
+            title = if (showDialog == DialogState.LOGOUT) stringResource(R.string.ask_logout) else stringResource(
+                R.string.disappear_jogbo
+            ),
             negativeButtonTitle = stringResource(id = R.string.go_back),
-            positiveButtonTitle = if(showDialog==DialogState.LOGOUT)stringResource(id = R.string.logout)else stringResource(R.string.quit),
+            positiveButtonTitle = if (showDialog == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
+                R.string.quit
+            ),
             onNegativeButtonClicked = { updateDialog(DialogState.CLOSED) },
             onPositiveButtonClicked = {} //TODO: 로그아웃 api
         )
@@ -213,7 +219,7 @@ fun MyScreen(
             Text(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
-                    .noRippleClickable(onClick = {updateDialog(DialogState.QUIT)})
+                    .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
                     .padding(top = 13.dp, bottom = 14.dp)
                     .weight(1f),
                 textAlign = TextAlign.End,
@@ -253,9 +259,7 @@ fun MyScreenPreview() {
 fun webView(type: String) {
     Intent(
         Intent.ACTION_VIEW,
-        if (type == FAQ) Uri.parse("https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4") else Uri.parse(
-            "https://tally.so/r/mO0oJY"
-        )
+        if (type == FAQ) Uri.parse(TO_FAQ) else Uri.parse(TO_LOGOUT)
     ).apply {
     }.also { intent ->
         LocalContext.current.startActivity(intent)
