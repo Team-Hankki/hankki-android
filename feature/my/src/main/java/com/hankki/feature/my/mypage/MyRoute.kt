@@ -92,8 +92,6 @@ fun MyScreen(
     showWebView: MutableState<String>
 ) {
     val scrollState = rememberScrollState()
-    //val showDialog = remember { mutableStateOf(false) }
-    //val showWebView: MutableState<String> = remember { mutableStateOf("") }
 
     if (showDialog.value) {
         DialogWithButton(
