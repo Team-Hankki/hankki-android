@@ -61,6 +61,10 @@ class SearchStoreViewModel @Inject constructor(
         _state.value = _state.value.copy(selectedLocation = location)
     }
 
+    fun setDialogState(isOpen: Boolean) {
+        _state.value = _state.value.copy(isOpenDialog = isOpen)
+    }
+
     private fun getStores(search: String) {
         viewModelScope.launch {
             reportRepository.getStoreLocation(search)
@@ -103,7 +107,7 @@ class SearchStoreViewModel @Inject constructor(
                     )
                 }
             }.onFailure { error ->
-                Timber.e(error) // TODO: SnackBar 머지시 409 -> openDialog, else Snackbar 설정
+                Timber.e(error)
                 _sideEffect.emit(SearchStoreSideEffect.OpenDialog)
             }
         }

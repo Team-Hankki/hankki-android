@@ -34,6 +34,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.HankkiButton
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiSearchTextField
@@ -67,7 +68,7 @@ fun SearchStoreRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
                 SearchStoreSideEffect.OpenDialog -> {
-                    // TODO: Dialog 열기
+                    viewModel.setDialogState(true)
                 }
 
                 is SearchStoreSideEffect.ValidateUniversitySuccess -> {
@@ -85,11 +86,13 @@ fun SearchStoreRoute(
     SearchStoreScreen(
         value = value,
         selectedLocation = state.selectedLocation,
+        isOpenDialog = state.isOpenDialog,
         state = state.uiState,
         onValueChange = viewModel::setValue,
         onClickLocation = viewModel::setLocation,
         navigateUp = navigateUp,
-        reportButtonClicked = viewModel::reportButtonClicked
+        reportButtonClicked = viewModel::reportButtonClicked,
+        onDismissDialog = { viewModel.setDialogState(false) }
     )
 }
 
@@ -97,13 +100,23 @@ fun SearchStoreRoute(
 fun SearchStoreScreen(
     value: String,
     selectedLocation: LocationModel,
+    isOpenDialog: Boolean,
     state: EmptyUiState<PersistentList<LocationModel>>,
     onValueChange: (String) -> Unit,
     onClickLocation: (LocationModel) -> Unit,
     navigateUp: () -> Unit,
     reportButtonClicked: () -> Unit,
+    onDismissDialog: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+
+    if (isOpenDialog) {
+        SingleButtonDialog(
+            title = "이미 등록된 식당이에요\n다른 식당을 제보해보세요 ",
+            buttonTitle = "확인",
+            onConfirmation = onDismissDialog
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -252,11 +265,13 @@ private fun BookmarkCardPreview(
         SearchStoreScreen(
             "고동밥집",
             selectedLocation = LocationModel(),
+            isOpenDialog = false,
             state = state,
             onValueChange = {},
             onClickLocation = { },
             navigateUp = {},
-            reportButtonClicked = {}
+            reportButtonClicked = {},
+            onDismissDialog = {}
         )
     }
 }
