@@ -38,7 +38,10 @@ fun StoreNameSearchButton(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
-            .bounceClick(onClick = onClick)
+            .bounceClick(
+                scaleDown = 0.94f,
+                onClick = onClick
+            )
             .background(Gray100)
             .padding(vertical = 12.dp)
             .padding(start = 10.dp, end = 14.dp),
