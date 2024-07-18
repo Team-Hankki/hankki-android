@@ -11,9 +11,11 @@ android {
 dependencies {
     //domain
     implementation(projects.domain.my)
+    implementation(projects.domain.token)
 
     //other
     implementation(libs.coil.compose)
+    implementation(libs.jakewharton.process.phoenix)
 }
 
 
