@@ -2,6 +2,8 @@ package com.hankki.feature.my.mypage
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,13 +60,14 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 import com.hankki.feature.my.mypage.model.MySideEffect
+import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable
 fun MyRoute(
     paddingValues: PaddingValues,
     navigateToJogbo: () -> Unit,
     navigateToStore: (String) -> Unit,
-    myViewModel: MyViewModel = hiltViewModel()
+    myViewModel: MyViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val myState by myViewModel.myState.collectAsStateWithLifecycle()
@@ -85,6 +88,18 @@ fun MyRoute(
                     }
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
+
+                is MySideEffect.ShowLogoutSuccess -> {
+                    Handler(Looper.getMainLooper()).post {
+                        ProcessPhoenix.triggerRebirth(context)
+                    }
+                }
+
+                is MySideEffect.ShowDeleteWithdrawSuccess -> {
+                    Handler(Looper.getMainLooper()).post {
+                        ProcessPhoenix.triggerRebirth(context)
+                    }
+                }
             }
         }
     }
@@ -97,7 +112,9 @@ fun MyRoute(
         userImage = myState.myModel.profileImageUrl,
         showDialog = myState.showDialog,
         showWebView = myViewModel::showWebView,
-        updateDialog = myViewModel::updateDialogState
+        updateDialog = myViewModel::updateDialogState,
+        onLogout = myViewModel::logout,
+        onDeleteWithdraw = myViewModel::deleteWithdraw
     )
 }
 
@@ -111,6 +128,8 @@ fun MyScreen(
     showDialog: DialogState,
     showWebView: (String) -> Unit,
     updateDialog: (DialogState) -> Unit,
+    onLogout: () -> Unit,
+    onDeleteWithdraw: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -124,14 +143,20 @@ fun MyScreen(
                 R.string.quit
             ),
             onNegativeButtonClicked = { updateDialog(DialogState.CLOSED) },
-            onPositiveButtonClicked = {} //TODO: 로그아웃 api
+            onPositiveButtonClicked = {
+                if (showDialog == DialogState.LOGOUT) {
+                    onLogout()
+                } else if (showDialog == DialogState.QUIT) {
+                    onDeleteWithdraw()
+                }
+                updateDialog(DialogState.CLOSED)
+            }
         )
     }
 
     Column(
         modifier = Modifier
             .padding(paddingValues)
-            .padding(horizontal = 22.dp)
             .fillMaxSize()
             .background(White)
             .verticalScroll(scrollState),
@@ -169,80 +194,84 @@ fun MyScreen(
 
         Spacer(modifier = Modifier.height(19.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Red,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .clip(RoundedCornerShape(12.dp))
-                .padding(start = 28.dp, end = 17.dp)
-                .noRippleClickable(onClick = navigateToMyJogbo),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = stringResource(R.string.my_jogbo),
-                style = HankkiTheme.typography.sub1,
-                color = White,
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_my_graphic),
-                contentDescription = "jogbo graphic",
-            )
-        }
-
-        Spacer(modifier = Modifier.height(19.dp))
-
-        Row {
-            ButtonWithImageAndBorder(
-                R.drawable.ic_report,
-                stringResource(R.string.description_store_report),
-                Modifier
-                    .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
-            )
-            Spacer(modifier = Modifier.width(18.dp))
-            ButtonWithImageAndBorder(
-                R.drawable.ic_good,
-                stringResource(R.string.description_store_like),
-                Modifier
-                    .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
-            )
-        }
-
-        ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView(FAQ) })
-
-        ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
-
-        ButtonWithArrowIcon(stringResource(R.string.logout), { updateDialog(DialogState.LOGOUT) })
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
-                .noRippleClickable(onClick = {}),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            Text(
-                text = stringResource(R.string.quit),
+        Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+            Row(
                 modifier = Modifier
-                    .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
-                    .padding(top = 13.dp, bottom = 14.dp)
-                    .weight(1f),
-                textAlign = TextAlign.End,
-                style = HankkiTheme.typography.body4,
-                color = Gray400,
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_quit),
-                contentDescription = stringResource(id = R.string.quit),
-                tint = Gray400,
-                modifier = Modifier.size(16.dp)
-            )
+                    .fillMaxWidth()
+                    .background(
+                        Red,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .clip(RoundedCornerShape(12.dp))
+                    .padding(start = 28.dp, end = 17.dp)
+                    .noRippleClickable(onClick = navigateToMyJogbo),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(R.string.my_jogbo),
+                    style = HankkiTheme.typography.sub1,
+                    color = White,
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_my_graphic),
+                    contentDescription = "jogbo graphic",
+                )
+            }
+
+            Spacer(modifier = Modifier.height(19.dp))
+
+            Row {
+                ButtonWithImageAndBorder(
+                    R.drawable.ic_report,
+                    stringResource(R.string.description_store_report),
+                    Modifier
+                        .weight(1f)
+                        .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
+                )
+                Spacer(modifier = Modifier.width(18.dp))
+                ButtonWithImageAndBorder(
+                    R.drawable.ic_good,
+                    stringResource(R.string.description_store_like),
+                    Modifier
+                        .weight(1f)
+                        .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
+                )
+            }
+
+            ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView(FAQ) })
+
+            ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
+
+            ButtonWithArrowIcon(
+                stringResource(R.string.logout),
+                { updateDialog(DialogState.LOGOUT) })
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp)
+                    .noRippleClickable(onClick = {}),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = stringResource(R.string.quit),
+                    modifier = Modifier
+                        .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
+                        .padding(top = 13.dp, bottom = 14.dp)
+                        .weight(1f),
+                    textAlign = TextAlign.End,
+                    style = HankkiTheme.typography.body4,
+                    color = Gray400,
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_quit),
+                    contentDescription = stringResource(id = R.string.quit),
+                    tint = Gray400,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
     }
 }
@@ -260,7 +289,9 @@ fun MyScreenPreview() {
             userImage = "",
             showDialog = DialogState.CLOSED,
             updateDialog = {},
-            showWebView = {_->}
+            showWebView = { _ -> },
+            onLogout = {},
+            onDeleteWithdraw = {}
         )
     }
 }

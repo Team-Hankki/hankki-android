@@ -45,7 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun MyJogboRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    navigateToJogboDetail: () -> Unit,
+    navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     myJogboViewModel: MyJogboViewModel = hiltViewModel()
 ) {
@@ -74,7 +74,7 @@ fun MyJogboRoute(
 fun MyJogboScreen(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    navigateToJogboDetail: () -> Unit,
+    navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     jogboItems: PersistentList<MyJogboModel>,
     editMode: Boolean = false,
@@ -153,16 +153,13 @@ fun MyJogboScreen(
             items(jogboItems.size) { index ->
                 val jogbo = jogboItems[index]
                 JogboItem(
-                    modifier = if (editMode)
-                        Modifier.noRippleClickable(onClick = {})
-                    else
-                        Modifier.noRippleClickable(onClick = navigateToJogboDetail),
+                    id = jogbo.jogboId,
                     title = jogbo.jogboName,
                     image = jogbo.jogboImage,
                     isEditMode = editMode,
                     isSelected = jogbo.jogboSelected,
                     editJogbo = { updateJogboSelectedState(index, !jogbo.jogboSelected) },
-                    navigateToJogboDetail = navigateToJogboDetail
+                    navigateToJogboDetail = { navigateToJogboDetail(jogbo.jogboId) }
                 )
             }
         }

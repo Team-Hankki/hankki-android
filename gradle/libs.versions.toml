@@ -1,4 +1,5 @@
 [versions]
+accompanistSystemuicontroller = "0.17.0"
 compileSdk = "35"
 minSdk = "28"
 targetSdk = "35"
@@ -78,7 +79,13 @@ phoenix = "3.0.0"
 monitor = "1.7.1"
 junitKtx = "1.2.1"
 
+##lottie
+lottie = "6.0.0"
+toolsCore = "1.0.0-alpha09"
+accompanist = "0.24.2-alpha"
+
 [libraries]
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -151,7 +158,9 @@ kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
 jakewharton-process-phoenix= {group = "com.jakewharton", name = "process-phoenix", version.ref="phoenix"}
 androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
-
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref= "lottie" }
+androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
+accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist"}
 
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]

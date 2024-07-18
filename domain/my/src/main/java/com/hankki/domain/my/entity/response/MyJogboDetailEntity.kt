@@ -7,7 +7,7 @@ data class MyJogboDetailEntity(
 )
 
 data class Store(
-    val id: Int,
+    val id: Long,
     val name: String,
     val imageUrl: String,
     val category: String,

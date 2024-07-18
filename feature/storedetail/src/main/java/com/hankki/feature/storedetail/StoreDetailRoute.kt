@@ -33,6 +33,8 @@ import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
+import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailButton
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -48,7 +50,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun StoreDetailRoute(
     storeId: Long,
     navigateUp: () -> Unit,
-    viewModel: StoreDetailViewModel = hiltViewModel()
+    viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
 
@@ -73,7 +75,14 @@ fun StoreDetailRoute(
                 buttonLabels = storeState.buttonLabels,
                 onNavigateUp = navigateUp,
                 onLikeClicked = { viewModel.toggleLike(storeId) },
-                onSelectIndex = viewModel::updateSelectedIndex
+                onSelectIndex = viewModel::updateSelectedIndex,
+                isOpenBottomSheet = storeState.isOpenBottomSheet,
+                openBottomSheet = viewModel::controlMyJogboBottomSheet,
+                jogboItems = storeState.jogboItems,
+                onDismissBottomSheetRequest = viewModel::controlMyJogboBottomSheet,
+                addStoreAtJogbo = { jogboId ->
+                    viewModel.addStoreAtJogbo(jogboId, storeId)
+                }
             )
         }
 
@@ -93,8 +102,23 @@ fun StoreDetailScreen(
     buttonLabels: PersistentList<String>,
     onNavigateUp: () -> Unit,
     onLikeClicked: () -> Unit,
-    onSelectIndex: (Int) -> Unit
+    onSelectIndex: (Int) -> Unit,
+    isOpenBottomSheet: Boolean,
+    openBottomSheet: () -> Unit,
+    jogboItems: PersistentList<JogboResponseModel>,
+    onDismissBottomSheetRequest: () -> Unit,
+    addStoreAtJogbo: (Long) -> Unit
 ) {
+    if (isOpenBottomSheet) {
+        HankkiStoreJogboBottomSheet(
+            jogboItems = jogboItems,
+            onDismissRequest = onDismissBottomSheetRequest,
+            onAddJogbo = { jogboId ->
+                addStoreAtJogbo(jogboId)
+            }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -181,7 +205,7 @@ fun StoreDetailScreen(
                                 style = HankkiTheme.typography.sub3
                             )
                         },
-                        onClick = { /*TODO: navigate add jogbo */ }
+                        onClick = openBottomSheet
                     )
                 }
             )

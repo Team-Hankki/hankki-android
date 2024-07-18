@@ -13,8 +13,10 @@ import androidx.navigation.navOptions
 import com.hankki.core.navigation.Route
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
+import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.main.splash.navigation.Splash
+import com.hankki.feature.login.navigation.navigateOnboarding
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
 import com.hankki.feature.my.navigation.navigateMyJogboDetail
@@ -61,12 +63,16 @@ internal class MainNavigator(
         navController.navigateLogin()
     }
 
+    fun navigateToOnboarding() {
+        navController.navigateOnboarding()
+    }
+
     private fun navigateUp() {
         navController.navigateUp()
     }
 
-    fun navigateToStoreDetail(storeId: Long = 16L) {
-        navController.navigateStoreDetail(storeId)
+    fun navigateToStoreDetail(storeId: Long, navOptions: NavOptions? = null) {
+        navController.navigateStoreDetail(storeId, navOptions)
     }
 
     fun navigateUpIfNotHome() {
@@ -122,8 +128,8 @@ internal class MainNavigator(
         navController.navigateMyStore(type)
     }
 
-    fun navigateToMyJogboDetail() {
-        navController.navigateMyJogboDetail()
+    fun navigateToMyJogboDetail(favoriteId:Long) {
+        navController.navigateMyJogboDetail(favoriteId = favoriteId)
     }
 
     fun navigateToNewJogbo() {

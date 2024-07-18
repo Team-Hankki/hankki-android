@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -32,11 +33,11 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun ImageDoubleButtonDialog(
     title: String,
-    description: String,
     negativeButtonTitle: String,
     positiveButtonTitle: String,
     onNegativeButtonClicked: () -> Unit,
     onPositiveButtonClicked: () -> Unit,
+    description: String? = null,
 ) {
     Dialog(onDismissRequest = onNegativeButtonClicked) {
         Card(
@@ -60,16 +61,19 @@ fun ImageDoubleButtonDialog(
                 Text(
                     text = title,
                     style = HankkiTheme.typography.sub1,
-                    color = Gray900
+                    color = Gray900,
+                    textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                if (description != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = description,
-                    style = HankkiTheme.typography.body4,
-                    color = Gray500
-                )
+                    Text(
+                        text = description,
+                        style = HankkiTheme.typography.body4,
+                        color = Gray500
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(26.dp))
 
