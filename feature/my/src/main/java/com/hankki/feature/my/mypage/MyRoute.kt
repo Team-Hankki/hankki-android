@@ -67,7 +67,7 @@ fun MyRoute(
     paddingValues: PaddingValues,
     navigateToJogbo: () -> Unit,
     navigateToStore: (String) -> Unit,
-    myViewModel: MyViewModel = hiltViewModel()
+    myViewModel: MyViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val myState by myViewModel.myState.collectAsStateWithLifecycle()
@@ -157,7 +157,6 @@ fun MyScreen(
     Column(
         modifier = Modifier
             .padding(paddingValues)
-            .padding(horizontal = 22.dp)
             .fillMaxSize()
             .background(White)
             .verticalScroll(scrollState),
@@ -195,80 +194,84 @@ fun MyScreen(
 
         Spacer(modifier = Modifier.height(19.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Red,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .clip(RoundedCornerShape(12.dp))
-                .padding(start = 28.dp, end = 17.dp)
-                .noRippleClickable(onClick = navigateToMyJogbo),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = stringResource(R.string.my_jogbo),
-                style = HankkiTheme.typography.sub1,
-                color = White,
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_my_graphic),
-                contentDescription = "jogbo graphic",
-            )
-        }
-
-        Spacer(modifier = Modifier.height(19.dp))
-
-        Row {
-            ButtonWithImageAndBorder(
-                R.drawable.ic_report,
-                stringResource(R.string.description_store_report),
-                Modifier
-                    .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
-            )
-            Spacer(modifier = Modifier.width(18.dp))
-            ButtonWithImageAndBorder(
-                R.drawable.ic_good,
-                stringResource(R.string.description_store_like),
-                Modifier
-                    .weight(1f)
-                    .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
-            )
-        }
-
-        ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView(FAQ) })
-
-        ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
-
-        ButtonWithArrowIcon(stringResource(R.string.logout), { updateDialog(DialogState.LOGOUT) })
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
-                .noRippleClickable(onClick = {}),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            Text(
-                text = stringResource(R.string.quit),
+        Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+            Row(
                 modifier = Modifier
-                    .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
-                    .padding(top = 13.dp, bottom = 14.dp)
-                    .weight(1f),
-                textAlign = TextAlign.End,
-                style = HankkiTheme.typography.body4,
-                color = Gray400,
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_quit),
-                contentDescription = stringResource(id = R.string.quit),
-                tint = Gray400,
-                modifier = Modifier.size(16.dp)
-            )
+                    .fillMaxWidth()
+                    .background(
+                        Red,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .clip(RoundedCornerShape(12.dp))
+                    .padding(start = 28.dp, end = 17.dp)
+                    .noRippleClickable(onClick = navigateToMyJogbo),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(R.string.my_jogbo),
+                    style = HankkiTheme.typography.sub1,
+                    color = White,
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_my_graphic),
+                    contentDescription = "jogbo graphic",
+                )
+            }
+
+            Spacer(modifier = Modifier.height(19.dp))
+
+            Row {
+                ButtonWithImageAndBorder(
+                    R.drawable.ic_report,
+                    stringResource(R.string.description_store_report),
+                    Modifier
+                        .weight(1f)
+                        .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
+                )
+                Spacer(modifier = Modifier.width(18.dp))
+                ButtonWithImageAndBorder(
+                    R.drawable.ic_good,
+                    stringResource(R.string.description_store_like),
+                    Modifier
+                        .weight(1f)
+                        .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
+                )
+            }
+
+            ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView(FAQ) })
+
+            ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
+
+            ButtonWithArrowIcon(
+                stringResource(R.string.logout),
+                { updateDialog(DialogState.LOGOUT) })
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp)
+                    .noRippleClickable(onClick = {}),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = stringResource(R.string.quit),
+                    modifier = Modifier
+                        .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
+                        .padding(top = 13.dp, bottom = 14.dp)
+                        .weight(1f),
+                    textAlign = TextAlign.End,
+                    style = HankkiTheme.typography.body4,
+                    color = Gray400,
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_quit),
+                    contentDescription = stringResource(id = R.string.quit),
+                    tint = Gray400,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
     }
 }

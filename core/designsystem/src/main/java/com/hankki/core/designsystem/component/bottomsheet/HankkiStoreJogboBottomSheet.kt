@@ -162,9 +162,9 @@ fun AddNewJogboButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_add_square_btn),
+            painter = painterResource(id = R.drawable.ic_food_my_plus),
             contentDescription = "button",
-            tint = Gray300
+            tint = Color.Unspecified
         )
         Spacer(modifier = Modifier.width(18.dp))
         Text(

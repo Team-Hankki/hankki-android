@@ -276,4 +276,10 @@ class HomeViewModel @Inject constructor(
                 }
         }
     }
+
+    fun setDialog(isOpen: Boolean) {
+        _state.value = _state.value.copy(
+            isOpenDialog = isOpen
+        )
+    }
 }

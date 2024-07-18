@@ -64,6 +64,9 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
+import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -164,6 +167,7 @@ fun HomeRoute(
 
 
     HomeScreen(
+        isOpenDialog = state.isOpenDialog,
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
         universityName = state.myUniversityModel.name ?: "전체",
@@ -180,6 +184,15 @@ fun HomeRoute(
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
         navigateStoreDetail = navigateStoreDetail,
+        dialogNegativeClicked = {viewModel.setDialog(false)},
+        dialogPositiveClicked = {
+            viewModel.setDialog(false)
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.fromParts("package", "com.hankki.hankkijogbo", null)
+                context.startActivity(this)
+            }
+        },
         selectStoreItem = viewModel::selectStoreItem,
         navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
@@ -205,14 +218,7 @@ fun HomeRoute(
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: 추후 디자인 시스템 생성시 추가 예정
-            // open Dialog
-            // "설정하기" 누르면 아래처럼 이동할 예정
-            Intent().apply {
-                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                data = Uri.fromParts("package", "com.hankki.hankkijogbo", null)
-                context.startActivity(this)
-            }
+            viewModel.setDialog(true)
         } else {
             focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                 viewModel.moveMap(location.latitude, location.longitude)
@@ -228,6 +234,7 @@ fun HomeRoute(
 )
 @Composable
 fun HomeScreen(
+    isOpenDialog: Boolean,
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
@@ -243,6 +250,8 @@ fun HomeScreen(
     sortChipItems: PersistentList<ChipItem>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
+    dialogNegativeClicked: () -> Unit = {},
+    dialogPositiveClicked: () -> Unit = {},
     selectStoreItem: (StoreItemModel) -> Unit = {},
     navigateStoreDetail: (Long) -> Unit = {},
     navigateToUniversitySelection: () -> Unit = {},
@@ -284,6 +293,18 @@ fun HomeScreen(
         if (bottomSheetState.isCollapsed) {
             listState.animateScrollToItem(0)
         }
+    }
+    
+    if (isOpenDialog) {
+        DoubleCenterButtonDialog(
+            title = "설정 > 개인정보보호 >\n" +
+                    "위치서비스와 설정 > 한끼족보에서\n" +
+                    "위치 정보 접근을 모두 허용해 주세요.",
+            negativeButtonTitle = "닫기",
+            positiveButtonTitle = "설정하기",
+            onNegativeButtonClicked = dialogNegativeClicked,
+            onPositiveButtonClicked = dialogPositiveClicked,
+        )
     }
 
     if (isMyJogboBottomSheetOpen) {

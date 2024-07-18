@@ -125,8 +125,12 @@ internal fun MainScreen(
                             }
                             navigator.navigateToHome(navOptions)
                         },
-                        navigateToStoreDetail = {
-                            // TODO: StoreDetail 구현시 적용 예정
+                        navigateToStoreDetail = { storeId ->
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToStoreDetail(storeId, navOptions)
                         }
                     )
                     myNavGraph(
