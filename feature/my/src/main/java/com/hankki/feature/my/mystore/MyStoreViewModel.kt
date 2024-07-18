@@ -1,61 +1,56 @@
 package com.hankki.feature.my.mystore
 
 import androidx.lifecycle.ViewModel
-import com.hankki.domain.my.entity.response.StoreEntity
+import androidx.lifecycle.viewModelScope
+import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.mystore.model.toMyStoreModel
-import kotlinx.collections.immutable.persistentListOf
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
+@HiltViewModel
 class MyStoreViewModel @Inject constructor(
+    private val myRepository: MyRepository
 ) : ViewModel() {
     private val _myStoreState = MutableStateFlow(MyStoreState())
     val myStoreState: StateFlow<MyStoreState>
         get() = _myStoreState.asStateFlow()
 
-    fun getMockStoreList() {
-        _myStoreState.value = _myStoreState.value.copy(
-            myStoreItems = persistentListOf(
-                StoreEntity(
-                    "한식1",
-                    100,
-                    1,
-                    "",
-                    true,
-                    0,
-                    "가성비 맛집"
-                ).toMyStoreModel(),
-                StoreEntity(
-                    "한식",
-                    1,
-                    1,
-                    "",
-                    true,
-                    0,
-                    "가성비 맛집",
-                ).toMyStoreModel(),
-                StoreEntity(
-                    "한식3",
-                    1,
-                    1,
-                    "",
-                    true,
-                    0,
-                    "가성비 맛집",
-                ).toMyStoreModel(),
-                StoreEntity(
-                    "한식4",
-                    1,
-                    1,
-                    "",
-                    true,
-                    0,
-                    "가성비 맛집",
-                ).toMyStoreModel()
-            )
-        )
+    fun getLikedStoreList() {
+        viewModelScope.launch {
+            myRepository.getLikedStore()
+                .onSuccess { storeList ->
+                    _myStoreState.value = _myStoreState.value.copy(
+                        myStoreItems = storeList.map {
+                            it.toMyStoreModel()
+                        }.toPersistentList()
+                    )
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                }
+        }
+    }
+
+    fun getReportedStoreList() {
+        viewModelScope.launch {
+            myRepository.getReportedStore()
+                .onSuccess { storeList ->
+                    _myStoreState.value = _myStoreState.value.copy(
+                        myStoreItems = storeList.map {
+                            it.toMyStoreModel()
+                        }.toPersistentList()
+                    )
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 
     fun updateStoreSelected(index: Int, isStoreSelected: Boolean) {

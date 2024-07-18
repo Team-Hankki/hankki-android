@@ -5,7 +5,7 @@ import com.hankki.domain.my.entity.response.StoreEntity
 data class MyStoreModel(
     val category: String = "",
     val heartCount: Int = 0,
-    val id: Int = 0,
+    val id: Long = 0,
     val imageURL: String = "",
     val isLiked: Boolean? = null,
     val lowestPrice: Int = 0,
