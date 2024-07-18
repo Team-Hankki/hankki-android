@@ -14,7 +14,9 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.dummy.navigation.navigateDummy
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
+import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateLogin
+import com.hankki.feature.login.navigation.navigateOnboarding
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
 import com.hankki.feature.my.navigation.navigateMyJogboDetail
@@ -34,7 +36,7 @@ internal class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Home
+    val startDestination = Login
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
@@ -63,6 +65,10 @@ internal class MainNavigator(
 
     fun navigateToLogin() {
         navController.navigateLogin()
+    }
+
+    fun navigateToOnboarding() {
+        navController.navigateOnboarding()
     }
 
     private fun navigateUp() {
