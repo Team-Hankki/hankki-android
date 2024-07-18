@@ -147,7 +147,9 @@ internal fun MainScreen(
                     onboardingNavgraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToHome(navOptions)
