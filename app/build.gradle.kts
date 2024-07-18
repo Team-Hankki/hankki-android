@@ -49,7 +49,6 @@ dependencies {
     implementation(projects.feature.main)
 
     // data
-    implementation(projects.data.dummy)
     implementation(projects.data.token)
     implementation(projects.data.login)
     implementation(projects.data.reissuetoken)

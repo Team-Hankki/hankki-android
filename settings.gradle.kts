@@ -62,7 +62,6 @@ include(
 
 // feature
 include(
-    ":feature:dummy",
     ":feature:main",
     ":feature:home",
     ":feature:report",
