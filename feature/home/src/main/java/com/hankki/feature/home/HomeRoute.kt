@@ -520,7 +520,8 @@ fun HomeScreen(
                                     storeName = selectedStoreItem.name,
                                     price = selectedStoreItem.lowestPrice,
                                     heartCount = selectedStoreItem.heartCount,
-                                    modifier = Modifier.padding(22.dp)
+                                    modifier = Modifier.padding(22.dp),
+                                    onClickItem = navigateStoreDetail
                                 ) {
                                     controlMyJogboBottomSheet()
                                     getJogboItems(selectedStoreItem.id)
