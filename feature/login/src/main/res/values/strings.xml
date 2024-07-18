@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="done_worry">밥값 고민 끝,\n다함께 한끼족보를 만들어봐요</string>
+    <string name="skip">건너뛰기</string>
+    <string name="rice_burden">밥값으로\n부담된 적 없으신가요?</string>
+    <string name="under_8000">이제 우리학교 주변\n8000원 이하 식당을 찾아봐요</string>
+    <string name="report">식당을 제보하고 다함께\n한끼족보를 만들어가요</string>
 </resources>
