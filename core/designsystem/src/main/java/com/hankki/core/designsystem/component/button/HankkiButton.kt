@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.SemiRed
@@ -74,6 +75,33 @@ fun HankkiTextButton(
             text = text,
             style = textStyle,
             color = Red
+        )
+    }
+}
+
+@Composable
+fun HankkiBlackButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    textStyle: TextStyle = TextStyle.Default,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .run {
+                if (enabled) bounceClick(onClick = onClick)
+                else this
+            }
+            .clip(RoundedCornerShape(16.dp))
+            .background(Gray800)
+            .padding(vertical = 15.dp, horizontal = 22.dp)
+    ) {
+        Text(
+            text = text,
+            style = textStyle,
+            color = White
         )
     }
 }

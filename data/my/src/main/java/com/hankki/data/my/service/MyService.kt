@@ -3,12 +3,15 @@ package com.hankki.data.my.service
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.my.dto.request.NewJogboDto
+import com.hankki.data.my.dto.response.JogboDetailDto
+import com.hankki.data.my.dto.response.StoreDto
 import com.hankki.data.my.dto.response.MyJogboDto
 import com.hankki.data.my.dto.response.UserInformationDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface MyService {
     @GET("/api/v1/users/me")
@@ -19,6 +22,14 @@ interface MyService {
     suspend fun postNewJogbo(
         @Body body : NewJogboDto
     ) : CreatedBaseResponse
+    @GET("/api/v1/favorites/{favoriteId}")
+    suspend fun getJogboDetail(
+        @Path("favoriteId") favoriteId: Long
+    ) : BaseResponse<JogboDetailDto>
+    @GET("/api/v1/users/me/stores/hearts")
+    suspend fun getLikedStore() : BaseResponse<StoreDto>
+    @GET("/api/v1/users/me/stores/reports")
+    suspend fun getReportedStore() : BaseResponse<StoreDto>
     @PATCH("/api/v1/auth/logout")
     suspend fun patchLogout(): CreatedBaseResponse
 }
