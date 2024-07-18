@@ -153,10 +153,6 @@ fun MyJogboScreen(
             items(jogboItems.size) { index ->
                 val jogbo = jogboItems[index]
                 JogboItem(
-                    modifier = if (editMode)
-                        Modifier.noRippleClickable(onClick = {})
-                    else
-                        Modifier.noRippleClickable(onClick = navigateToJogboDetail),
                     title = jogbo.jogboName,
                     image = jogbo.jogboImage,
                     isEditMode = editMode,
