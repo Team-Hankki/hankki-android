@@ -54,6 +54,7 @@ import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun MyJogboDetailRoute(
+    favoriteId : Long,
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
@@ -61,7 +62,7 @@ fun MyJogboDetailRoute(
     val myJogboDetailState by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myJogboDetailViewModel.getMockStoreList()
+        myJogboDetailViewModel.getJogboDetail(favoriteId)
     }
 
     MyJogboDetailScreen(
