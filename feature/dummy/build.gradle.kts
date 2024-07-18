@@ -9,7 +9,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.domain.dummy)
-
     implementation(libs.coil.compose)
 }
