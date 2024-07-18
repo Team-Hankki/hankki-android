@@ -15,4 +15,5 @@ interface MyDataSource {
     suspend fun getJogboDetail(favoriteId:Long): BaseResponse<JogboDetailDto>
     suspend fun getLikedStore(): BaseResponse<StoreDto>
     suspend fun getReportedStore(): BaseResponse<StoreDto>
+    suspend fun patchLogout(): CreatedBaseResponse
 }

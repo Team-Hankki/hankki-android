@@ -24,13 +24,21 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun createNewJogbo(body: NewJogboEntity): Result<Unit> = runCatching {
         myDataSource.postNewJogbo(body.toDto())
     }
-    override suspend fun getJogboDetail(favoriteId:Long) :Result<MyJogboDetailEntity> = runCatching {
-        myDataSource.getJogboDetail(favoriteId).data.toEntity()
 
-        override suspend fun getLikedStore(): Result<List<StoreEntity>> = runCatching {
+    override suspend fun getJogboDetail(favoriteId: Long): Result<MyJogboDetailEntity> =
+        runCatching {
+            myDataSource.getJogboDetail(favoriteId).data.toEntity()
+        }
+
+    override suspend fun getLikedStore(): Result<List<StoreEntity>> = runCatching {
         myDataSource.getLikedStore().data.toEntity()
     }
+
     override suspend fun getReportedStore(): Result<List<StoreEntity>> = runCatching {
         myDataSource.getReportedStore().data.toEntity()
+    }
+
+    override suspend fun patchLogout(): Result<Unit> = kotlin.runCatching {
+        myDataSource.patchLogout()
     }
 }

@@ -13,4 +13,5 @@ interface MyRepository {
     suspend fun getJogboDetail(favoriteId:Long): Result<MyJogboDetailEntity>
     suspend fun getLikedStore() : Result<List<StoreEntity>>
     suspend fun getReportedStore() : Result<List<StoreEntity>>
+    suspend fun patchLogout(): Result<Unit>
 }
