@@ -9,5 +9,5 @@ import com.hankki.data.my.dto.response.UserInformationDto
 interface MyDataSource {
     suspend fun getUserInformation(): BaseResponse<UserInformationDto>
     suspend fun getMyJogboList(): BaseResponse<MyJogboDto>
-    suspend fun createNewJogbo(body: NewJogboDto): CreatedBaseResponse
+    suspend fun postNewJogbo(body: NewJogboDto): CreatedBaseResponse
 }

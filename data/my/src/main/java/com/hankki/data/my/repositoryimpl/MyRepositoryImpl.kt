@@ -18,6 +18,6 @@ class MyRepositoryImpl @Inject constructor(
         myDataSource.getMyJogboList().data.toEntity()
     }
     override suspend fun createNewJogbo(body: NewJogboEntity): Result<Unit> = runCatching {
-        myDataSource.createNewJogbo(body.toDto())
+        myDataSource.postNewJogbo(body.toDto())
     }
 }

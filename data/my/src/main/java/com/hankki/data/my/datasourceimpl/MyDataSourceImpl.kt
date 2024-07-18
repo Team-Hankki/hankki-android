@@ -16,6 +16,6 @@ class MyDataSourceImpl @Inject constructor(
         myService.getUserInformation()
     override suspend fun getMyJogboList(): BaseResponse<MyJogboDto> =
         myService.getMyJogboInformation()
-    override suspend fun createNewJogbo(body: NewJogboDto): CreatedBaseResponse =
+    override suspend fun postNewJogbo(body: NewJogboDto): CreatedBaseResponse =
         myService.postNewJogbo(body)
 }
