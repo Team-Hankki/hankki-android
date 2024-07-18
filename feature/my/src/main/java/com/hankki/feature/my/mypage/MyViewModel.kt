@@ -3,6 +3,7 @@ package com.hankki.feature.my.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.repository.MyRepository
+import com.hankki.domain.token.repository.TokenRepository
 import com.hankki.feature.my.mypage.model.MySideEffect
 import com.hankki.feature.my.mypage.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyViewModel @Inject constructor(
-    private val myRepository: MyRepository
+    private val myRepository: MyRepository,
+    private val tokenRepository: TokenRepository
 ) : ViewModel() {
     private val _myState = MutableStateFlow(MyState())
     val myState: StateFlow<MyState>
@@ -51,6 +53,32 @@ class MyViewModel @Inject constructor(
         _myState.value = _myState.value.copy(
             showDialog = state
         )
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            runCatching {
+                myRepository.patchLogout()
+            }.onSuccess {
+                tokenRepository.clearInfo()
+                _mySideEffect.emit(MySideEffect.ShowLogoutSuccess)
+            }.onFailure {
+                // Handle the error snackbar
+            }
+        }
+    }
+
+    fun deleteWithdraw() {
+        viewModelScope.launch {
+            runCatching {
+                myRepository.deleteWithdraw()
+            }.onSuccess {
+                tokenRepository.clearInfo()
+                _mySideEffect.emit(MySideEffect.ShowDeleteWithdrawSuccess)
+            }.onFailure {
+                // Handle the error snackbar
+            }
+        }
     }
 
     companion object {

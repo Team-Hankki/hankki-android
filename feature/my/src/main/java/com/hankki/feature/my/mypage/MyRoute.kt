@@ -2,6 +2,8 @@ package com.hankki.feature.my.mypage
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +60,7 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 import com.hankki.feature.my.mypage.model.MySideEffect
+import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable
 fun MyRoute(
@@ -85,6 +88,18 @@ fun MyRoute(
                     }
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
+
+                is MySideEffect.ShowLogoutSuccess -> {
+                    Handler(Looper.getMainLooper()).post {
+                        ProcessPhoenix.triggerRebirth(context)
+                    }
+                }
+
+                is MySideEffect.ShowDeleteWithdrawSuccess -> {
+                    Handler(Looper.getMainLooper()).post {
+                        ProcessPhoenix.triggerRebirth(context)
+                    }
+                }
             }
         }
     }
@@ -97,7 +112,9 @@ fun MyRoute(
         userImage = myState.myModel.profileImageUrl,
         showDialog = myState.showDialog,
         showWebView = myViewModel::showWebView,
-        updateDialog = myViewModel::updateDialogState
+        updateDialog = myViewModel::updateDialogState,
+        onLogout = myViewModel::logout,
+        onDeleteWithdraw = myViewModel::deleteWithdraw
     )
 }
 
@@ -111,6 +128,8 @@ fun MyScreen(
     showDialog: DialogState,
     showWebView: (String) -> Unit,
     updateDialog: (DialogState) -> Unit,
+    onLogout: () -> Unit,
+    onDeleteWithdraw: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -124,7 +143,14 @@ fun MyScreen(
                 R.string.quit
             ),
             onNegativeButtonClicked = { updateDialog(DialogState.CLOSED) },
-            onPositiveButtonClicked = {} //TODO: 로그아웃 api
+            onPositiveButtonClicked = {
+                if (showDialog == DialogState.LOGOUT) {
+                    onLogout()
+                } else if (showDialog == DialogState.QUIT) {
+                    onDeleteWithdraw()
+                }
+                updateDialog(DialogState.CLOSED)
+            }
         )
     }
 
@@ -263,7 +289,9 @@ fun MyScreenPreview() {
             userImage = "",
             showDialog = DialogState.CLOSED,
             updateDialog = {},
-            showWebView = { _ -> }
+            showWebView = { _ -> },
+            onLogout = {},
+            onDeleteWithdraw = {}
         )
     }
 }
