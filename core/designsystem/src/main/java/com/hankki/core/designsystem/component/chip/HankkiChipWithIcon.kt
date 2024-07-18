@@ -38,11 +38,12 @@ fun HankkiChipWithIcon(
 ) {
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(100.dp))
             .bounceClick(
                 scaleDown = 0.88f,
+                radius = 100f,
                 onClick = onClick
             )
+            .clip(RoundedCornerShape(100.dp))
             .border(1.dp, if (isSelected) YellowDark else Gray200, RoundedCornerShape(100.dp))
             .background(if (isSelected) YellowLighten else White)
             .padding(vertical = 4.dp)

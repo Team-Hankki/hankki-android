@@ -194,12 +194,6 @@ fun SearchStoreScreen(
                     ),
                     onClick = {
                         reportButtonClicked()
-//                        navigateReport(
-//                            selectedLocation.latitude,
-//                            selectedLocation.longitude,
-//                            selectedLocation.location,
-//                            selectedLocation.address
-//                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()

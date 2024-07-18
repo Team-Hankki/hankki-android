@@ -51,11 +51,10 @@ fun Modifier.bounceClick(
     radius: Float = 10f,
     onClick: () -> Unit,
 ): Modifier = composed {
-    Log.e("TAG", "bounceClick: ${1-scaleDown}", )
-    val cornerRadius = (1 - scaleDown) * 100 * 0.6f * radius
-    Log.e("TAG", "bounceClick: $cornerRadius", )
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+
+    val cornerRadius = (1 - scaleDown) * 100 * 0.6f * radius
 
     val scale by animateFloatAsState(
         if (isPressed) scaleDown else 1f, label = ""
