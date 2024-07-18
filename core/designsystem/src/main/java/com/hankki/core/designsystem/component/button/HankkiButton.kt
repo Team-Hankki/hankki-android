@@ -57,6 +57,7 @@ fun HankkiTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    backgroundColor: Color? = null,
     textStyle: TextStyle = TextStyle.Default,
 ) {
     Box(
@@ -67,7 +68,7 @@ fun HankkiTextButton(
                 else this
             }
             .clip(RoundedCornerShape(16.dp))
-            .background(Color.Transparent)
+            .background(backgroundColor ?: Color.Transparent)
             .padding(vertical = 15.dp, horizontal = 22.dp)
     ) {
         Text(
