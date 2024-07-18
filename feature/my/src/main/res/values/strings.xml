@@ -29,4 +29,6 @@
     <string name="jogbo_tags">#든든한 #한끼해장</string>
     <string name="make_jogbo">족보 만들기</string>
     <string name="new_store_jogbo">새로운 식당 족보</string>
+    <string name="ask_logout">정말 로그아웃 하실 건가요?</string>
+    <string name="disappear_jogbo">소중한 족보가 사라져요</string>
 </resources>

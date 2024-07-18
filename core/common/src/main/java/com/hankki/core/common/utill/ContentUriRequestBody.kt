@@ -82,7 +82,7 @@ class ContentUriRequestBody(
                 val compressRate = ((3 / imageSizeMb) * 100).toInt()
                 originalBitmap.compress(
                     Bitmap.CompressFormat.JPEG,
-                    if (imageSizeMb >= 3) compressRate else 100,
+                    if (imageSizeMb >= 1) compressRate else 100,
                     it,
                 )
             }

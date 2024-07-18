@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
 import com.hankki.core.navigation.Route
-import com.hankki.feature.my.MyRoute
+import com.hankki.feature.my.mypage.MyRoute
 import com.hankki.feature.my.myjogbo.MyJogboRoute
 import com.hankki.feature.my.myjogbodetail.MyJogboDetailRoute
 import com.hankki.feature.my.mystore.MyStoreRoute

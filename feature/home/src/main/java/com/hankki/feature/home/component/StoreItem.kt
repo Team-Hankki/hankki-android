@@ -109,7 +109,7 @@ fun StoreItem(
         Icon(
             painter = painterResource(id = R.drawable.ic_plus_btn_filled),
             contentDescription = "plus button",
-            modifier = Modifier.noRippleClickable(onClick = onClick),
+            modifier = Modifier.noRippleClickable(onClick = onPlusClick),
             tint = Color.Unspecified
         )
     }

@@ -9,6 +9,9 @@ android {
 }
 
 dependencies {
-    //domain
+    // domain
     implementation(projects.domain.report)
+
+    // coil
+    implementation(libs.coil.compose)
 }

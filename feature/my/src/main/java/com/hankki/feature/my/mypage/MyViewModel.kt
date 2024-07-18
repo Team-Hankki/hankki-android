@@ -2,7 +2,7 @@ package com.hankki.feature.my.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.my.entity.MyRepository
+import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.mypage.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,8 +33,18 @@ class MyViewModel @Inject constructor(
         }
     }
 
+    fun updateDialogState(state: DialogState){
+        _myState.value = _myState.value.copy(
+            showDialog = state
+        )
+    }
+
     companion object {
         const val LIKE = "like"
         const val REPORT = "report"
+        const val FAQ = "FAQ"
+        const val INQUIRY = "inquiry"
+        const val TO_FAQ = "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4"
+        const val TO_LOGOUT = "https://tally.so/r/mO0oJY"
     }
 }

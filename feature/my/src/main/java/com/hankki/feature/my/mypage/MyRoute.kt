@@ -1,5 +1,7 @@
-package com.hankki.feature.my
+package com.hankki.feature.my.mypage
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,11 +23,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
@@ -42,11 +49,15 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.my.R
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
-import com.hankki.feature.my.mypage.MyViewModel
+import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ
+import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TO_FAQ
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TO_LOGOUT
 
 @Composable
 fun MyRoute(
@@ -66,7 +77,10 @@ fun MyRoute(
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.myModel.nickname,
-        userImage = myState.myModel.profileImageUrl
+        userImage = myState.myModel.profileImageUrl,
+        showDialog = myState.showDialog,
+        showWebView = myState.showWebView,
+        updateDialog = myViewModel::updateDialogState,
     )
 }
 
@@ -76,14 +90,39 @@ fun MyScreen(
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
     userName: String,
-    userImage: String
+    userImage: String,
+    showDialog: DialogState,
+    showWebView: MutableState<String>,
+    updateDialog: (DialogState) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+
+    if (showDialog != DialogState.CLOSED) {
+        DoubleButtonDialog(
+            title = if (showDialog == DialogState.LOGOUT) stringResource(R.string.ask_logout) else stringResource(
+                R.string.disappear_jogbo
+            ),
+            negativeButtonTitle = stringResource(id = R.string.go_back),
+            positiveButtonTitle = if (showDialog == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
+                R.string.quit
+            ),
+            onNegativeButtonClicked = { updateDialog(DialogState.CLOSED) },
+            onPositiveButtonClicked = {} //TODO: 로그아웃 api
+        )
+    }
+
+    if (showWebView.value == FAQ) {
+        webView(FAQ)
+    } else if (showWebView.value == INQUIRY) {
+        webView(INQUIRY)
+    }
+
     Column(
         modifier = Modifier
             .padding(paddingValues)
             .padding(horizontal = 22.dp)
             .fillMaxSize()
+            .background(White)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -163,11 +202,11 @@ fun MyScreen(
             )
         }
 
-        ButtonWithArrowIcon(stringResource(R.string.faq), {})
+        ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView.value = FAQ })
 
-        ButtonWithArrowIcon(stringResource(R.string.inquiry), {})
+        ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView.value = INQUIRY })
 
-        ButtonWithArrowIcon(stringResource(R.string.logout), {})
+        ButtonWithArrowIcon(stringResource(R.string.logout), { updateDialog(DialogState.LOGOUT) })
 
         Row(
             modifier = Modifier
@@ -180,7 +219,7 @@ fun MyScreen(
             Text(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
-                    .noRippleClickable(onClick = {})
+                    .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
                     .padding(top = 13.dp, bottom = 14.dp)
                     .weight(1f),
                 textAlign = TextAlign.End,
@@ -207,7 +246,28 @@ fun MyScreenPreview() {
             navigateToMyJogbo = {},
             navigateToMyStore = {},
             userName = "",
-            userImage = ""
+            userImage = "",
+            showDialog = DialogState.CLOSED,
+            showWebView = remember { mutableStateOf("") },
+            updateDialog = {}
         )
     }
+}
+
+
+@Composable
+fun webView(type: String) {
+    Intent(
+        Intent.ACTION_VIEW,
+        if (type == FAQ) Uri.parse(TO_FAQ) else Uri.parse(TO_LOGOUT)
+    ).apply {
+    }.also { intent ->
+        LocalContext.current.startActivity(intent)
+    }
+}
+
+enum class DialogState {
+    CLOSED,
+    LOGOUT,
+    QUIT
 }

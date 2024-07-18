@@ -3,10 +3,10 @@ package com.hankki.data.home.repositoryImpl
 import com.hankki.data.home.datasource.HomeDataSource
 import com.hankki.data.home.dto.toEntity
 import com.hankki.domain.home.entity.response.CategoriesEntity
-import com.hankki.domain.home.entity.response.CategoryEntity
 import com.hankki.domain.home.entity.response.JogboResponseEntity
 import com.hankki.domain.home.entity.response.StoreEntity
 import com.hankki.domain.home.entity.response.StorePinEntity
+import com.hankki.domain.home.entity.response.CategoryResponseEntity
 import com.hankki.domain.home.repository.HomeRepository
 import javax.inject.Inject
 
@@ -16,8 +16,7 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun getMyUniversity() = runCatching {
         homeDataSource.getMyUniversity().data.toEntity()
     }
-
-    override suspend fun getCategories(): Result<List<CategoryEntity>> = runCatching {
+    override suspend fun getCategories(): Result<List<CategoryResponseEntity>> = runCatching {
         homeDataSource.getCategories().data.toEntity()
     }
 

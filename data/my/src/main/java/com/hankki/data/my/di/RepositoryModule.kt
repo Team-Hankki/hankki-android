@@ -1,7 +1,7 @@
 package com.hankki.data.my.di
 
 import com.hankki.data.my.repositoryimpl.MyRepositoryImpl
-import com.hankki.domain.my.entity.MyRepository
+import com.hankki.domain.my.repository.MyRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -30,7 +30,7 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun DoubleButtonDialog(
     title: String,
-    description: String,
+    description: String? = null,
     negativeButtonTitle: String,
     positiveButtonTitle: String,
     onNegativeButtonClicked: () -> Unit,
@@ -56,15 +56,17 @@ fun DoubleButtonDialog(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                if (description != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = description,
-                    style = HankkiTheme.typography.body4,
-                    color = Gray500,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                    Text(
+                        text = description,
+                        style = HankkiTheme.typography.body4,
+                        color = Gray500,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
