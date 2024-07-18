@@ -2,6 +2,7 @@ package com.hankki.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem

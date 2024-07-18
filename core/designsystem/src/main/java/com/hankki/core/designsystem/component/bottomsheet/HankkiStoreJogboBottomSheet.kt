@@ -64,8 +64,15 @@ data class JogboResponseModel(
     val title: String,
     val imageType: String,
     val details: List<String>,
-    val isAdded: Boolean
+    val isAdded: Boolean,
 )
+
+private fun transformImage(imageType: String): Int = when (imageType) {
+    "TYPE_ONE" -> R.drawable.ic_jogbo_type_one
+    "TYPE_TWO" -> R.drawable.ic_jogbo_type_two
+    "TYPE_THREE" -> R.drawable.ic_jogbo_type_three
+    else -> R.drawable.ic_jogbo_type_four
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,7 +127,7 @@ fun HankkiStoreJogboBottomSheet(
 
             items(jogboItems) { item ->
                 JogboItem(
-                    imageUrl = R.drawable.ic_empty_jogbo, // item.imageUrl,
+                    imageUrl = transformImage(item.imageType),
                     title = item.title,
                     tags = item.details.toPersistentList(),
                     isReported = item.isAdded,
@@ -176,7 +183,7 @@ fun JogboItem(
     isReported: Boolean,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     var icon by remember {
         mutableIntStateOf(R.drawable.ic_plus_btn_empty)
@@ -260,7 +267,7 @@ fun JogboItem(
 fun HankkiStoreJogboItemPreview() {
     HankkijogboTheme {
         JogboItem(
-            imageUrl = R.drawable.ic_empty_jogbo,
+            imageUrl = R.drawable.ic_jogbo_type_one,
             title = "title",
             tags = persistentListOf("tag1", "tag2", "tag3"),
             isReported = false
