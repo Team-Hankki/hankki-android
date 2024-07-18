@@ -52,7 +52,7 @@ fun MyJogboRoute(
     val myJogboState by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myJogboViewModel.getMockJogboList()
+        myJogboViewModel.getMyJogboList()
     }
 
     MyJogboScreen(
