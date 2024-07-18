@@ -264,7 +264,7 @@ fun JogboItem(
                 Spacer(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
-                        .size(56.dp)
+                        .size(24.dp)
                         .background(Color(0xFFFFFFFF).copy(alpha = 0.53f))
                 )
             }
@@ -280,7 +280,7 @@ fun HankkiStoreJogboItemPreview() {
             imageUrl = R.drawable.ic_jogbo_type_one,
             title = "title",
             tags = persistentListOf("tag1", "tag2", "tag3"),
-            isReported = false
+            isReported = true
         )
     }
 }
