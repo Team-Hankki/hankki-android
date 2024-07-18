@@ -1,6 +1,5 @@
 package com.hankki.feature.login
 
-import android.app.Activity
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
@@ -11,17 +10,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,29 +34,19 @@ import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun OnboardingRoute(
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        DisposableEffect(Unit) {
-            val window = (view.context as Activity).window
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            window.statusBarColor = Color.Transparent.toArgb()
-            window.navigationBarColor = Color.Transparent.toArgb()
-
-            onDispose {
-                WindowCompat.setDecorFitsSystemWindows(window, true)
-                window.statusBarColor = Color.White.toArgb()
-                window.navigationBarColor = Color.White.toArgb()
-            }
-        }
-    }
-
     val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = "onboarding1",
-        enterTransition = { slideInHorizontally(initialOffsetX = { it }) + fadeIn(animationSpec = tween(300)) },
+        enterTransition = {
+            slideInHorizontally(initialOffsetX = { it }) + fadeIn(
+                animationSpec = tween(
+                    300
+                )
+            )
+        },
     ) {
         composable("onboarding1") { OnboardingScreen1(navController) }
         composable("onboarding2") { OnboardingScreen2(navController) }
@@ -218,7 +202,7 @@ fun OnboardingScreen3(navController: NavHostController) {
 
 @Composable
 fun OnboardingScreen4(
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(R.raw.step4)
@@ -228,7 +212,7 @@ fun OnboardingScreen4(
     ) {
         LottieAnimation(
             composition = composition,
-            iterations = LottieConstants.IterateForever,
+            iterations = 1,
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.BottomCenter),

@@ -16,4 +16,5 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.androidx.tools.core)
     implementation(libs.accompanist.navigation.animation)
+    implementation(libs.accompanist.systemuicontroller)
 }
