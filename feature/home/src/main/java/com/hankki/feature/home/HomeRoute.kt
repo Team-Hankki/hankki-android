@@ -63,7 +63,7 @@ import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
-import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -79,8 +79,8 @@ import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
-import com.hankki.feature.home.model.MarkerItem
-import com.hankki.feature.home.model.StoreItemEntity
+import com.hankki.feature.home.model.PinModel
+import com.hankki.feature.home.model.StoreItemModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -107,7 +107,7 @@ fun HomeRoute(
     paddingValues: PaddingValues,
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
-    navigateStoreDetail: () -> Unit,
+    navigateStoreDetail: (Long) -> Unit,
     isNewUniversity: Boolean = false, // splash에서 넘어오는 경우, UniversitySelect에서 넘어오는 경우 true
     // TODO : UniversitySelect 코드 구현 완료시 연결 예정
     viewModel: HomeViewModel = hiltViewModel(),
@@ -148,6 +148,16 @@ fun HomeRoute(
             }
         }
     }
+
+    LaunchedEffect(key1 = state.categoryChipState, key2 = state.priceChipState, key3 = state.sortChipState) {
+        if (state.categoryChipState !is ChipState.Selected && state.priceChipState !is ChipState.Selected && state.sortChipState !is ChipState.Selected) {
+            with(viewModel) {
+                getStoreItems()
+                getMarkerItems()
+            }
+        }
+    }
+
 
     HomeScreen(
         paddingValues = paddingValues,
@@ -215,10 +225,10 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
-    selectedStoreItem: StoreItemEntity,
-    storeItems: PersistentList<StoreItemEntity>,
-    jogboItems: PersistentList<JogboItemEntity>,
-    markerItems: PersistentList<MarkerItem>,
+    selectedStoreItem: StoreItemModel,
+    storeItems: PersistentList<StoreItemModel>,
+    jogboItems: PersistentList<JogboResponseModel>,
+    markerItems: PersistentList<PinModel>,
     categoryChipState: ChipState,
     categoryChipItems: PersistentList<CategoryChipItem>,
     priceChipState: ChipState,
@@ -227,21 +237,21 @@ fun HomeScreen(
     sortChipItems: PersistentList<ChipItem>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
-    navigateStoreDetail: () -> Unit = {},
+    navigateStoreDetail: (Long) -> Unit = {},
     navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
-    clickMarkerItem: (Int) -> Unit = {},
+    clickMarkerItem: (Long) -> Unit = {},
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
-    selectCategoryChipItem: (String) -> Unit = {},
+    selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
     dismissCategoryChip: () -> Unit = {},
     clickPriceChip: () -> Unit = {},
-    selectPriceChipItem: (String) -> Unit = {},
+    selectPriceChipItem: (String, String) -> Unit = { _, _ -> },
     dismissPriceChip: () -> Unit = {},
     clickSortChip: () -> Unit = {},
-    selectSortChipItem: (String) -> Unit = {},
+    selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     dismissSortChip: () -> Unit = {},
-    getJogboItems: () -> Unit = {},
+    getJogboItems: (Long) -> Unit = {},
     reposition: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -260,6 +270,7 @@ fun HomeScreen(
 
     LaunchedEffect(
         key1 = bottomSheetState.currentValue,
+        key2 = storeItems,
         LocalLifecycleOwner.current
     ) {
         if (bottomSheetState.isCollapsed) {
@@ -328,12 +339,12 @@ fun HomeScreen(
                     Marker(
                         state = MarkerState(
                             position = LatLng(
-                                marker.x,
-                                marker.y
+                                marker.latitude,
+                                marker.longitude
                             )
                         ),
                         icon = OverlayImage.fromResource(R.drawable.ic_marker),
-                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.title else "",
+                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
                         onClick = {
                             clickMarkerItem(marker.id)
                             true
@@ -444,17 +455,21 @@ fun HomeScreen(
                                         .background(White),
                                     state = listState
                                 ) {
-                                    items(storeItems) { item ->
+                                    items(
+                                        items = storeItems,
+                                        key = { item -> item.id }
+                                    ) { item ->
                                         StoreItem(
-                                            storeImageUrl = item.storeImageUrl,
+                                            storeId = item.id,
+                                            storeImageUrl = item.imageUrl,
                                             category = item.category,
-                                            storeName = item.storeName,
-                                            price = item.price,
+                                            storeName = item.name,
+                                            price = item.lowestPrice,
                                             heartCount = item.heartCount,
-                                            onItemClick = navigateStoreDetail
+                                            onClickItem = navigateStoreDetail
                                         ) {
                                             controlMyJogboBottomSheet()
-                                            getJogboItems()
+                                            getJogboItems(item.id)
                                         }
 
                                         if (item == storeItems.last()) {
@@ -501,15 +516,17 @@ fun HomeScreen(
                                 }
 
                                 StoreItem(
-                                    storeImageUrl = selectedStoreItem.storeImageUrl,
+                                    storeId = selectedStoreItem.id,
+                                    storeImageUrl = selectedStoreItem.imageUrl,
                                     category = selectedStoreItem.category,
-                                    storeName = selectedStoreItem.storeName,
-                                    price = selectedStoreItem.price,
+                                    storeName = selectedStoreItem.name,
+                                    price = selectedStoreItem.lowestPrice,
                                     heartCount = selectedStoreItem.heartCount,
-                                    modifier = Modifier.padding(22.dp)
+                                    modifier = Modifier.padding(22.dp),
+                                    onClickItem = navigateStoreDetail
                                 ) {
                                     controlMyJogboBottomSheet()
-                                    getJogboItems()
+                                    getJogboItems(selectedStoreItem.id)
                                 }
                                 Spacer(modifier = Modifier.height(22.dp))
                             }
@@ -533,5 +550,5 @@ private fun closeBottomSheet(
 
 private object MapConstants {
     const val DEFAULT_ZOOM = 16.0
-    const val CAN_SEE_TITLE_ZOOM = 18.0
+    const val CAN_SEE_TITLE_ZOOM = 16.0
 }

@@ -49,7 +49,6 @@ fun HankkiFilterChip(
     defaultTitle: String,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
-    onClickMenu: (String) -> Unit = {},
     onClickChip: () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
@@ -79,7 +78,7 @@ fun DropdownFilterChip(
     modifier: Modifier = Modifier,
     menus: PersistentList<ChipItem> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
-    onClickMenu: (String) -> Unit = {},
+    onClickMenu: (String, String) -> Unit = { _, _ -> },
     onClickChip: () -> Unit = {},
 ) {
     HankkiFilterChip(
@@ -87,7 +86,6 @@ fun DropdownFilterChip(
         chipState = chipState,
         defaultTitle = defaultTitle,
         onDismissRequest = onDismissRequest,
-        onClickMenu = onClickMenu,
         onClickChip = onClickChip
     ) {
         Column(
@@ -103,7 +101,7 @@ fun DropdownFilterChip(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .noRippleClickable(onClick = { onClickMenu(item.name) }),
+                        .noRippleClickable(onClick = { onClickMenu(item.name, item.tag) }),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -131,7 +129,7 @@ fun RowFilterChip(
     modifier: Modifier = Modifier,
     menus: PersistentList<CategoryChipItem> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
-    onClickMenu: (String) -> Unit = {},
+    onClickMenu: (String, String) -> Unit = { _, _ -> },
     onClickChip: () -> Unit = {},
 ) {
     HankkiFilterChip(
@@ -139,7 +137,6 @@ fun RowFilterChip(
         chipState = chipState,
         defaultTitle = defaultTitle,
         onDismissRequest = onDismissRequest,
-        onClickMenu = onClickMenu,
         onClickChip = onClickChip
     ) {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -153,7 +150,7 @@ fun RowFilterChip(
                         .size(100.dp)
                         .bounceClick(
                             scaleDown = 0.88f,
-                            onClick = { onClickMenu(menu.name) }
+                            onClick = { onClickMenu(menu.name, menu.tag) }
                         )
                         .background(White)
                         .padding(12.dp),

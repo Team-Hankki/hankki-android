@@ -10,17 +10,18 @@ import com.hankki.core.designsystem.theme.YellowLight
 
 sealed class ChipState {
     abstract val title: String
+    abstract val tag: String
     abstract val style: ChipStyle
 
-    data class Selected(override val title: String = "") : ChipState() {
+    data class Selected(override val title: String = "", override val tag: String = "") : ChipState() {
         override val style: ChipStyle = ChipStyle.SELECTED
     }
 
-    data class Unselected(override val title: String = "") : ChipState() {
+    data class Unselected(override val title: String = "", override val tag: String = "") : ChipState() {
         override val style: ChipStyle = ChipStyle.UNSELECTED
     }
 
-    data class Fixed(override val title: String) : ChipState() {
+    data class Fixed(override val title: String, override val tag: String) : ChipState() {
         override val style: ChipStyle = ChipStyle.FIXED
     }
 }
