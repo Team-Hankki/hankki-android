@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -66,13 +65,7 @@ fun OnboardingRoute(
     NavHost(
         navController = navController,
         startDestination = "onboarding1",
-        enterTransition = {
-            slideInHorizontally(initialOffsetX = { it }) + fadeIn(
-                animationSpec = tween(
-                    300
-                )
-            )
-        },
+        enterTransition = { slideInHorizontally(initialOffsetX = { it }) + fadeIn(animationSpec = tween(300)) },
     ) {
         composable("onboarding1") { OnboardingScreen1(navController) }
         composable("onboarding2") { OnboardingScreen2(navController) }
