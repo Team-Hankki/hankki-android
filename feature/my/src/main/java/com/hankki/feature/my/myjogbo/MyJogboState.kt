@@ -8,8 +8,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class MyJogboState(
     val editMode: MutableState<Boolean> = mutableStateOf(false),
-    val myJogboItems: PersistentList<MyJogboModel> = persistentListOf(
-        MyJogboModel(0, "","", false)
-    ),
+    val myJogboItems: PersistentList<MyJogboModel> = persistentListOf(MyJogboModel()),
     var showDialog: Boolean = false
 )

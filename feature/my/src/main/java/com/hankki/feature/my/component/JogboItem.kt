@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,9 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,12 +26,11 @@ import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
-import com.hankki.feature.my.R
 
 @Composable
 fun JogboItem(
     title: String,
-    image: String,
+    image: Int,
     modifier: Modifier = Modifier,
     isEditMode: Boolean = false,
     isSelected: Boolean = false,
@@ -61,11 +59,6 @@ fun JogboItem(
                         text = "\n\n",
                         color = Color.Transparent
                     )
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_add_jogbo_disable),
-                        contentDescription = "add jogbo",
-                        modifier = Modifier.alpha(0f)
-                    )
                 }
                 JogboItemText(
                     text = title,
@@ -75,7 +68,8 @@ fun JogboItem(
             AsyncImage(
                 model = image,
                 contentDescription = "jogbo image",
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier.wrapContentSize(),
+                contentScale = ContentScale.Crop
             )
         }
         if (isSelected) {
@@ -112,7 +106,7 @@ fun ItemPreview() {
     HankkijogboTheme {
         JogboItem(
             title = "새로운 족보 리스트 추가하기",
-            image = "",
+            image = 0,
             isSelected = isSelected.value,
             editJogbo = {},
             navigateToJogboDetail = {}
