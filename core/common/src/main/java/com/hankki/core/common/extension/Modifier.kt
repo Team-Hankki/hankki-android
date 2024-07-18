@@ -46,11 +46,14 @@ fun Modifier.addFocusCleaner(focusManager: FocusManager): Modifier {
 @Composable
 fun Modifier.bounceClick(
     scaleDown: Float = 0.96f,
-    blackAlpha: Float = 0.16f,
+    blackAlpha: Float = 0.08f,
+    radius: Float = 10f,
     onClick: () -> Unit,
 ): Modifier = composed {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+
+    val cornerRadius = (1 - scaleDown) * 100 * 0.6f * radius
 
     val scale by animateFloatAsState(
         if (isPressed) scaleDown else 1f, label = ""
@@ -74,7 +77,7 @@ fun Modifier.bounceClick(
             drawContent()
             if (isPressed) {
                 drawRoundRect(
-                    cornerRadius = CornerRadius(size.maxDimension / 20),
+                    cornerRadius = CornerRadius(cornerRadius),
                     color = color,
                     size = size,
                     blendMode = BlendMode.SrcAtop

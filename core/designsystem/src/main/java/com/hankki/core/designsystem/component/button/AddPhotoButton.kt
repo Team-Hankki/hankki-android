@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.dashedBorder
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
@@ -33,6 +34,7 @@ fun AddPhotoButton(
 ) {
     Row(
         modifier = modifier
+            .bounceClick(onClick = onClick)
             .clip(RoundedCornerShape(10.dp))
             .background(Gray100)
             .dashedBorder(
@@ -40,8 +42,7 @@ fun AddPhotoButton(
                 color = Gray200,
                 cornerRadiusDp = 10.dp
             )
-            .padding(14.dp)
-            .noRippleClickable(onClick = onClick),
+            .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {

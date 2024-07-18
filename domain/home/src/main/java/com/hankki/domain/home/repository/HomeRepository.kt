@@ -26,4 +26,5 @@ interface HomeRepository {
     ): Result<List<StorePinEntity>>
     suspend fun getStoreThumbnail(storeId: Long): Result<StoreEntity>
     suspend fun getFavorites(storeId: Long): Result<List<JogboResponseEntity>>
+    suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): Result<Unit>
 }

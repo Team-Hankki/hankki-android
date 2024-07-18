@@ -81,7 +81,7 @@ fun HankkiStoreJogboBottomSheet(
     modifier: Modifier = Modifier,
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
-    onClick: (Long) -> Unit = {},
+    onAddJogbo: (Long) -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -138,10 +138,10 @@ fun HankkiStoreJogboBottomSheet(
                         }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
                                 onDismissRequest()
+                                onAddJogbo(item.id)
                             }
                         }
-                    },
-                    onClick = { onClick(item.id) }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -213,7 +213,7 @@ fun JogboItem(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .size(56.dp)
-                        .background(Color(0xFFFFFFFF).copy(alpha = 0.53f))
+                        .background(White.copy(alpha = 0.53f))
                 )
             }
         }
@@ -245,20 +245,30 @@ fun JogboItem(
         }
         Spacer(modifier = Modifier.width(8.dp))
 
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = "more",
-            tint = color,
-            modifier = Modifier
-                .size(24.dp)
-                .noRippleClickable {
-                    if (!isReported) {
-                        icon = R.drawable.ic_check_btn
-                        color = Color.Unspecified
-                        onDismissRequest()
+        Box {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = "more",
+                tint = color,
+                modifier = Modifier
+                    .size(24.dp)
+                    .noRippleClickable {
+                        if (!isReported) {
+                            icon = R.drawable.ic_check_btn
+                            color = Color.Unspecified
+                            onDismissRequest()
+                        }
                     }
-                }
-        )
+            )
+            if (isReported) {
+                Spacer(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .size(24.dp)
+                        .background(White.copy(alpha = 0.53f))
+                )
+            }
+        }
     }
 }
 
@@ -270,7 +280,7 @@ fun HankkiStoreJogboItemPreview() {
             imageUrl = R.drawable.ic_jogbo_type_one,
             title = "title",
             tags = persistentListOf("tag1", "tag2", "tag3"),
-            isReported = false
+            isReported = true
         )
     }
 }

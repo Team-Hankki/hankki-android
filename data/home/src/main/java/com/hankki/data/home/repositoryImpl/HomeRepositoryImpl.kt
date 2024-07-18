@@ -64,4 +64,8 @@ class HomeRepositoryImpl @Inject constructor(
         runCatching {
             homeDataSource.getMyJogbo(storeId).data.toEntity()
         }
+
+    override suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): Result<Unit> = runCatching {
+        homeDataSource.addStoreAtJogbo(favoriteId, storeId)
+    }
 }

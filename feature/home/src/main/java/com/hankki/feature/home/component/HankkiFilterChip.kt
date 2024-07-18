@@ -146,12 +146,12 @@ fun RowFilterChip(
             items(menus) { menu ->
                 Column(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
                         .size(100.dp)
                         .bounceClick(
-                            scaleDown = 0.88f,
+                            scaleDown = 0.94f,
                             onClick = { onClickMenu(menu.name, menu.tag) }
                         )
+                        .clip(RoundedCornerShape(16.dp))
                         .background(White)
                         .padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,

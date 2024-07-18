@@ -1,6 +1,7 @@
 package com.hankki.data.home.datasource
 
 import com.hankki.core.network.BaseResponse
+import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.home.dto.CategoriesResponse
 import com.hankki.data.home.dto.PriceCategoriesResponse
 import com.hankki.data.home.dto.SortCategoriesResponse
@@ -29,4 +30,5 @@ interface HomeDataSource {
     ): BaseResponse<StoresPinsDto>
     suspend fun getStoreThumbnail(storeId: Long): BaseResponse<StoreThumbnailResponseDto>
     suspend fun getMyJogbo(storeId: Long): BaseResponse<FavoritesResponseDto>
+    suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): CreatedBaseResponse
 }
