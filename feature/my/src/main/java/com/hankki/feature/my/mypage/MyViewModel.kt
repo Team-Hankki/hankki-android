@@ -68,6 +68,19 @@ class MyViewModel @Inject constructor(
         }
     }
 
+    fun deleteWithdraw() {
+        viewModelScope.launch {
+            runCatching {
+                myRepository.deleteWithdraw()
+            }.onSuccess {
+                tokenRepository.clearInfo()
+                _mySideEffect.emit(MySideEffect.ShowDeleteWithdrawSuccess)
+            }.onFailure {
+                // Handle the error snackbar
+            }
+        }
+    }
+
     companion object {
         const val LIKE = "like"
         const val REPORT = "report"
