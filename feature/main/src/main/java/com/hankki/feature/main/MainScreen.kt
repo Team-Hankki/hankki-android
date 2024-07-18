@@ -68,27 +68,6 @@ internal fun MainScreen(
     val snackBarHostStateTextButton = remember { SnackbarHostState() }
     val localContextResource = LocalContext.current.resources
 
-    val onShowWhiteSnackBar: (Int) -> Unit = { errorMessage ->
-        coroutineScope.launch {
-            snackBarHostStateWhite.currentSnackbarData?.dismiss()
-            snackBarHostStateWhite.showSnackbar(localContextResource.getString(errorMessage))
-        }
-    }
-    val onShowTextSnackBar: (Int) -> Unit = { errorMessage ->
-        coroutineScope.launch {
-            snackBarHostStateText.currentSnackbarData?.dismiss()
-            snackBarHostStateText.showSnackbar(localContextResource.getString(errorMessage))
-        }
-    }
-
-    val onShowTextButtonSnackBar: (Int) -> Unit = { errorMessage ->
-        coroutineScope.launch {
-            snackBarHostStateTextButton.currentSnackbarData?.dismiss()
-            snackBarHostStateTextButton.showSnackbar(localContextResource.getString(errorMessage))
-        }
-    }
-
-
     Scaffold(
         content = { paddingValue ->
             Box(
@@ -120,7 +99,7 @@ internal fun MainScreen(
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
-                        onShowSnackBar = onShowTextSnackBar,
+                        onShowSnackBar = {},
                         navigateStoreDetail = navigator::navigateToStoreDetail,
                         navigateToUniversitySelection = navigator::navigateToUniversity
                     )
@@ -194,25 +173,7 @@ internal fun MainScreen(
                 onTabSelected = navigator::navigate
             )
         },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackBarHostStateWhite,
-            ) {
-                HankkiTextSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
-            }
-
-            SnackbarHost(
-                hostState = snackBarHostStateWhite,
-            ) {
-                HankkiWhiteSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
-            }
-
-            SnackbarHost(
-                hostState = snackBarHostStateWhite,
-            ) { data ->
-                HankkiTextSnackBar(message = data.visuals.message)
-            }
-        },
+        snackbarHost = { },
     )
 }
 
