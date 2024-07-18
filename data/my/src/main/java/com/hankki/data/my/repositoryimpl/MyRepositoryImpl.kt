@@ -20,4 +20,8 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun createNewJogbo(body: NewJogboEntity): Result<Unit> = runCatching {
         myDataSource.postNewJogbo(body.toDto())
     }
+
+    override suspend fun patchLogout(): Result<Unit> = runCatching {
+        myDataSource.patchLogout()
+    }
 }
