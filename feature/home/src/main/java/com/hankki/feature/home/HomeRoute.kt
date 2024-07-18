@@ -292,9 +292,6 @@ fun HomeScreen(
             onDismissRequest = controlMyJogboBottomSheet,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
-            },
-            onClick = {
-                // TODO: 족보 추가 api 호출
             }
         )
     }

@@ -82,7 +82,6 @@ fun HankkiStoreJogboBottomSheet(
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
     onAddJogbo: (Long) -> Unit = {},
-    onClick: (Long) -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -142,8 +141,7 @@ fun HankkiStoreJogboBottomSheet(
                                 onAddJogbo(item.id)
                             }
                         }
-                    },
-                    onClick = { onClick(item.id) }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -247,20 +245,30 @@ fun JogboItem(
         }
         Spacer(modifier = Modifier.width(8.dp))
 
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = "more",
-            tint = color,
-            modifier = Modifier
-                .size(24.dp)
-                .noRippleClickable {
-                    if (!isReported) {
-                        icon = R.drawable.ic_check_btn
-                        color = Color.Unspecified
-                        onDismissRequest()
+        Box {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = "more",
+                tint = color,
+                modifier = Modifier
+                    .size(24.dp)
+                    .noRippleClickable {
+                        if (!isReported) {
+                            icon = R.drawable.ic_check_btn
+                            color = Color.Unspecified
+                            onDismissRequest()
+                        }
                     }
-                }
-        )
+            )
+            if (isReported) {
+                Spacer(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .size(56.dp)
+                        .background(Color(0xFFFFFFFF).copy(alpha = 0.53f))
+                )
+            }
+        }
     }
 }
 
