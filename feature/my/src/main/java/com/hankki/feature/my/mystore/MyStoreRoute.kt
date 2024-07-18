@@ -47,7 +47,6 @@ fun MyStoreRoute(
     val myStoreState by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
     LaunchedEffect(type) {
-        Log.e("type","$type")
         if (type == "like") {
             myStoreViewModel.getLikedStoreList()
         } else {
@@ -110,7 +109,7 @@ fun MyStoreScreen(
             modifier = Modifier
                 .padding(start = 22.dp, end = 11.dp)
         ) {
-            itemsIndexed(storeItems) { index, store -> //기존 코드
+            itemsIndexed(storeItems) { index, store ->
                 StoreItem(
                     imageUrl = store.imageURL,
                     category = store.category,
