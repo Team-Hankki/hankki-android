@@ -16,11 +16,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = lightColorScheme(
-    primary = White
+    primary = White.copy(alpha = 0.99f),
+    background = White,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = White
+    primary = White.copy(alpha = 0.99f),
+    background = White,
 )
 
 private val LocalHankkiTypography = staticCompositionLocalOf<HankkiTypography> {
