@@ -78,6 +78,10 @@ phoenix = "3.0.0"
 monitor = "1.7.1"
 junitKtx = "1.2.1"
 
+##lottie
+lottie = "6.0.0"
+toolsCore = "1.0.0-alpha09"
+
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -151,7 +155,8 @@ kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
 jakewharton-process-phoenix= {group = "com.jakewharton", name = "process-phoenix", version.ref="phoenix"}
 androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
-
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref= "lottie" }
+androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
 
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]
