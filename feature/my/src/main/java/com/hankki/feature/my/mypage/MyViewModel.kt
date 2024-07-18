@@ -2,7 +2,7 @@ package com.hankki.feature.my.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.my.entity.MyRepository
+import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.mypage.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

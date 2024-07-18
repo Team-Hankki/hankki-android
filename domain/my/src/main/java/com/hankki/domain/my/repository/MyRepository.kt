@@ -1,4 +1,4 @@
-package com.hankki.domain.my.entity
+package com.hankki.domain.my.repository
 
 import com.hankki.domain.my.entity.response.UserInformationEntity
 
