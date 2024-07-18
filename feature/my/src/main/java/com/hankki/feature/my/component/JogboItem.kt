@@ -29,20 +29,21 @@ import com.hankki.core.designsystem.theme.Red
 
 @Composable
 fun JogboItem(
+    id :Long,
     title: String,
     image: Int,
     modifier: Modifier = Modifier,
     isEditMode: Boolean = false,
     isSelected: Boolean = false,
     editJogbo: () -> Unit,
-    navigateToJogboDetail: () -> Unit
+    navigateToJogboDetail: (Long) -> Unit
 ) {
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .background(Gray100)
             .run {
-                if (!isEditMode) noRippleClickable(onClick = navigateToJogboDetail)
+                if (!isEditMode) noRippleClickable(onClick = {navigateToJogboDetail(id)})
                 else noRippleClickable(onClick = editJogbo)
             }
     ) {
@@ -105,6 +106,7 @@ fun ItemPreview() {
 
     HankkijogboTheme {
         JogboItem(
+            id = 0,
             title = "새로운 족보 리스트 추가하기",
             image = 0,
             isSelected = isSelected.value,
