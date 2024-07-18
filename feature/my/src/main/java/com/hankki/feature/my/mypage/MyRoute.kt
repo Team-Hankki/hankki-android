@@ -94,6 +94,12 @@ fun MyRoute(
                         ProcessPhoenix.triggerRebirth(context)
                     }
                 }
+
+                is MySideEffect.ShowDeleteWithdrawSuccess -> {
+                    Handler(Looper.getMainLooper()).post {
+                        ProcessPhoenix.triggerRebirth(context)
+                    }
+                }
             }
         }
     }
@@ -107,7 +113,8 @@ fun MyRoute(
         showDialog = myState.showDialog,
         showWebView = myViewModel::showWebView,
         updateDialog = myViewModel::updateDialogState,
-        onLogout = myViewModel::logout
+        onLogout = myViewModel::logout,
+        onDeleteWithdraw = myViewModel::deleteWithdraw
     )
 }
 
@@ -121,7 +128,8 @@ fun MyScreen(
     showDialog: DialogState,
     showWebView: (String) -> Unit,
     updateDialog: (DialogState) -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onDeleteWithdraw: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -138,6 +146,8 @@ fun MyScreen(
             onPositiveButtonClicked = {
                 if (showDialog == DialogState.LOGOUT) {
                     onLogout()
+                } else if (showDialog == DialogState.QUIT) {
+                    onDeleteWithdraw()
                 }
                 updateDialog(DialogState.CLOSED)
             }
@@ -277,7 +287,8 @@ fun MyScreenPreview() {
             showDialog = DialogState.CLOSED,
             updateDialog = {},
             showWebView = { _ -> },
-            onLogout = {}
+            onLogout = {},
+            onDeleteWithdraw = {}
         )
     }
 }
