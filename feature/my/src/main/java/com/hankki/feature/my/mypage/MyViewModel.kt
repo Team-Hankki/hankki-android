@@ -61,6 +61,5 @@ class MyViewModel @Inject constructor(
         const val FAQ_PAGE =
             "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4"
         const val INQUIRY_PAGE = "https://tally.so/r/mO0oJY"
-        const val NONE = ""
     }
 }

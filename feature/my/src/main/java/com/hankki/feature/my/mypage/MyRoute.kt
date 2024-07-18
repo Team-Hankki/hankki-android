@@ -56,7 +56,6 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
-import com.hankki.feature.my.mypage.MyViewModel.Companion.NONE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 import com.hankki.feature.my.mypage.model.MySideEffect
 
@@ -82,7 +81,7 @@ fun MyRoute(
                     val url = when (sideEffect.type) {
                         FAQ -> FAQ_PAGE
                         INQUIRY -> INQUIRY_PAGE
-                        else -> NONE
+                        else -> return@collect
                     }
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
