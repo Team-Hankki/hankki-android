@@ -3,7 +3,7 @@ package com.hankki.feature.my.myjogbo
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.my.entity.MyRepository
+import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.myjogbo.model.toMyJogboModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -65,7 +65,7 @@ class MyJogboViewModel @Inject constructor(
         updateMode()
     }
 
-    fun updateToDialogState(state:Boolean){
+    fun updateToDialogState(state: Boolean) {
         _myJogboState.value = _myJogboState.value.copy(
             showDialog = state
         )

@@ -42,7 +42,7 @@ fun StoreItem(
     heartCount: Int,
     modifier: Modifier = Modifier,
     onClickItem: (Long) -> Unit = {},
-    onClick: () -> Unit = {},
+    onPlusClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
