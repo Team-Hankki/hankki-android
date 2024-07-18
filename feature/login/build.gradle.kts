@@ -13,4 +13,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(projects.domain.login)
     implementation(projects.domain.token)
+    implementation(libs.lottie.compose)
+    implementation(libs.androidx.tools.core)
 }
