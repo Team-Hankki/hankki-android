@@ -47,7 +47,7 @@ fun NewJogboRoute(
     LaunchedEffect(newJogboViewModel.newJogboSideEffect, lifecycleOwner) {
         newJogboViewModel.newJogboSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is NewJogboSideEffect.navigateToNewJogbo -> navigateUp()
+                is NewJogboSideEffect.NavigateToNewJogbo -> navigateUp()
             }
         }
     }

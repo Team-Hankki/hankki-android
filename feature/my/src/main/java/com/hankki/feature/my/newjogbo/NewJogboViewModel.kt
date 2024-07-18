@@ -58,7 +58,7 @@ class NewJogboViewModel @Inject constructor(
                     details = _newJogboState.value.tags.split("#").filter { it.isNotBlank() }.map { "#$it" }
                 )
             ).onSuccess {
-                _newJogboSideEffect.emit(NewJogboSideEffect.navigateToNewJogbo)
+                _newJogboSideEffect.emit(NewJogboSideEffect.NavigateToNewJogbo)
             }.onFailure { error ->
                 Timber.e(error)
             }
