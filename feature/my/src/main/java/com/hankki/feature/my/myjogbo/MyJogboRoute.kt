@@ -54,7 +54,7 @@ fun MyJogboRoute(
     val myJogboState by myJogboViewMidel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myJogboViewMidel.getMockJogboList()
+        myJogboViewMidel.getMyJogboList()
     }
 
     MyJogboScreen(
@@ -183,8 +183,8 @@ fun MyJogboScreenPreview() {
             navigateToNewJogbo = {},
             paddingValues = PaddingValues(),
             jogboItems = persistentListOf(
-                MyJogboEntity(1, "", "성대쪽문\n가성비 맛집\n진짜 추천드림요1").toMyJogboModel(),
-                MyJogboEntity(2, "", "성대쪽문\n가성비 맛집\n진짜 추천드림요2").toMyJogboModel()
+                MyJogboEntity(1, "TYPE_ONE", "성대쪽문\n가성비 맛집\n진짜 추천드림요1").toMyJogboModel(),
+                MyJogboEntity(2, "TYPE_TWO", "성대쪽문\n가성비 맛집\n진짜 추천드림요2").toMyJogboModel()
             ),
             updateEditMode = {},
             updateJogboSelectedState = { _, _ -> },
