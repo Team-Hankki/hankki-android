@@ -2,14 +2,13 @@ package com.hankki.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
 import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,47 +83,25 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getJogboItems() {
-        _state.value = _state.value.copy(
-            jogboItems = persistentListOf(
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천 학교 5년째 다니는 화석의 추천",
-                    tags = persistentListOf("#미친가성비", "#꼭가보세요"),
-                    isReported = true
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = persistentListOf("#미친가성비", "#꼭가보세요"),
-                    isReported = false
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = persistentListOf("#미친가성비", "#꼭가보세요"),
-                    isReported = true
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = persistentListOf("#미친가성비", "#꼭가보세요"),
-                    isReported = false
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = persistentListOf("#미친가성비", "#꼭가보세요"),
-                    isReported = true
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "학교 5년째 다니는 화석의 추천",
-                    tags = persistentListOf("#미친가성비", "#꼭가보세요"),
-                    isReported = false
-                )
-            )
-        )
+    fun getJogboItems(storeId: Long) {
+        viewModelScope.launch {
+            homeRepository.getFavorites(storeId)
+                .onSuccess { jogboItems ->
+                    _state.value = _state.value.copy(
+                        jogboItems = jogboItems.map {
+                            JogboResponseModel(
+                                id = it.id,
+                                title = it.title,
+                                imageType = it.imageType,
+                                details = it.details,
+                                isAdded = it.isAdded
+                            )
+                        }.toPersistentList()
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 
     fun getMarkerItems() {

@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.data.home.dto.CategoriesResponse
 import com.hankki.data.home.dto.PriceCategoriesResponse
 import com.hankki.data.home.dto.SortCategoriesResponse
+import com.hankki.data.home.dto.response.FavoritesResponseDto
 import com.hankki.data.home.dto.response.StoreThumbnailResponseDto
 import com.hankki.data.home.dto.response.StoresPinsDto
 import com.hankki.data.home.dto.response.StoresResponseDto
@@ -27,4 +28,5 @@ interface HomeDataSource {
         sortOption: String?,
     ): BaseResponse<StoresPinsDto>
     suspend fun getStoreThumbnail(storeId: Long): BaseResponse<StoreThumbnailResponseDto>
+    suspend fun getMyJogbo(storeId: Long): BaseResponse<FavoritesResponseDto>
 }

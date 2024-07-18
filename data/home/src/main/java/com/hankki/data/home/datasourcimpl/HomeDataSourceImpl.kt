@@ -5,6 +5,7 @@ import com.hankki.data.home.datasource.HomeDataSource
 import com.hankki.data.home.dto.CategoriesResponse
 import com.hankki.data.home.dto.PriceCategoriesResponse
 import com.hankki.data.home.dto.SortCategoriesResponse
+import com.hankki.data.home.dto.response.FavoritesResponseDto
 import com.hankki.data.home.dto.response.StoreThumbnailResponseDto
 import com.hankki.data.home.dto.response.StoresPinsDto
 import com.hankki.data.home.dto.response.StoresResponseDto
@@ -45,4 +46,7 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getStoreThumbnail(storeId: Long): BaseResponse<StoreThumbnailResponseDto> =
         homeService.getStoreThumbnail(storeId)
+
+    override suspend fun getMyJogbo(storeId: Long): BaseResponse<FavoritesResponseDto> =
+        homeService.getMyJogbo(storeId)
 }

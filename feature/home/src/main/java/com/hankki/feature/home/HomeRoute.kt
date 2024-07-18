@@ -63,7 +63,7 @@ import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
-import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -227,7 +227,7 @@ fun HomeScreen(
     universityName: String,
     selectedStoreItem: StoreItemModel,
     storeItems: PersistentList<StoreItemModel>,
-    jogboItems: PersistentList<JogboItemEntity>,
+    jogboItems: PersistentList<JogboResponseModel>,
     markerItems: PersistentList<PinModel>,
     categoryChipState: ChipState,
     categoryChipItems: PersistentList<CategoryChipItem>,
@@ -251,7 +251,7 @@ fun HomeScreen(
     clickSortChip: () -> Unit = {},
     selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     dismissSortChip: () -> Unit = {},
-    getJogboItems: () -> Unit = {},
+    getJogboItems: (Long) -> Unit = {},
     reposition: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -465,7 +465,7 @@ fun HomeScreen(
                                             heartCount = item.heartCount
                                         ) {
                                             controlMyJogboBottomSheet()
-                                            getJogboItems()
+                                            getJogboItems(item.id)
                                         }
 
                                         if (item == storeItems.last()) {
@@ -520,7 +520,7 @@ fun HomeScreen(
                                     modifier = Modifier.padding(22.dp)
                                 ) {
                                     controlMyJogboBottomSheet()
-                                    getJogboItems()
+                                    getJogboItems(selectedStoreItem.id)
                                 }
                                 Spacer(modifier = Modifier.height(22.dp))
                             }

@@ -1,10 +1,9 @@
 package com.hankki.feature.home
 
-import com.hankki.core.designsystem.component.bottomsheet.JogboItemEntity
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
-import com.hankki.feature.home.model.MarkerItem
 import com.hankki.feature.home.model.PinModel
 import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.UniversityModel
@@ -31,5 +30,5 @@ data class HomeState(
     val selectedStoreItem: StoreItemModel = StoreItemModel(),
     val markerItems: PersistentList<PinModel> = persistentListOf(),
     val storeItems: PersistentList<StoreItemModel> = persistentListOf(),
-    val jogboItems: PersistentList<JogboItemEntity> = persistentListOf(),
+    val jogboItems: PersistentList<JogboResponseModel> = persistentListOf(),
 )

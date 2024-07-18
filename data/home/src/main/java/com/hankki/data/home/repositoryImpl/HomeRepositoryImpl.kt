@@ -4,6 +4,7 @@ import com.hankki.data.home.datasource.HomeDataSource
 import com.hankki.data.home.dto.toEntity
 import com.hankki.domain.home.entity.response.CategoriesEntity
 import com.hankki.domain.home.entity.response.CategoryEntity
+import com.hankki.domain.home.entity.response.JogboResponseEntity
 import com.hankki.domain.home.entity.response.StoreEntity
 import com.hankki.domain.home.entity.response.StorePinEntity
 import com.hankki.domain.home.repository.HomeRepository
@@ -59,4 +60,9 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun getStoreThumbnail(storeId: Long): Result<StoreEntity> = runCatching {
         homeDataSource.getStoreThumbnail(storeId).data.toEntity()
     }
+
+    override suspend fun getFavorites(storeId: Long): Result<List<JogboResponseEntity>> =
+        runCatching {
+            homeDataSource.getMyJogbo(storeId).data.toEntity()
+        }
 }
