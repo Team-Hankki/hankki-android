@@ -27,8 +27,8 @@ fun NavController.navigateMyStore(type: String) {
     navigate(MyStore(type))
 }
 
-fun NavController.navigateMyJogboDetail() {
-    navigate(MyJogboDetail)
+fun NavController.navigateMyJogboDetail(favoriteId : Long) {
+    navigate(MyJogboDetail(favoriteId = favoriteId))
 }
 
 fun NavController.navigateNewJogbo() {
@@ -40,7 +40,7 @@ fun NavGraphBuilder.myNavGraph(
     navigateUp: () -> Unit,
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
-    navigateToJogboDetail: () -> Unit,
+    navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit
 ) {
     composable<My> {
@@ -53,8 +53,9 @@ fun NavGraphBuilder.myNavGraph(
         val type = backStackEntry.toRoute<MyStore>()
         MyStoreRoute(paddingValues, navigateUp, type.type)
     }
-    composable<MyJogboDetail> {
-        MyJogboDetailRoute(paddingValues, navigateUp)
+    composable<MyJogboDetail> {backStackEntry ->
+        val jogbo = backStackEntry.toRoute<MyJogboDetail>()
+        MyJogboDetailRoute(jogbo.favoriteId ,paddingValues, navigateUp)
     }
     composable<NewJogbo> {
         NewJogboRoute(paddingValues,navigateUp)
@@ -73,7 +74,9 @@ data class MyStore(
 ) : Route
 
 @Serializable
-data object MyJogboDetail : Route
+data class MyJogboDetail(
+    val favoriteId: Long
+) : Route
 
 @Serializable
 data object NewJogbo : Route
