@@ -1,6 +1,7 @@
 package com.hankki.data.home.datasourcimpl
 
 import com.hankki.core.network.BaseResponse
+import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.home.datasource.HomeDataSource
 import com.hankki.data.home.dto.CategoriesResponse
 import com.hankki.data.home.dto.PriceCategoriesResponse
@@ -49,4 +50,7 @@ class HomeDataSourceImpl @Inject constructor(
 
     override suspend fun getMyJogbo(storeId: Long): BaseResponse<FavoritesResponseDto> =
         homeService.getMyJogbo(storeId)
+
+    override suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): CreatedBaseResponse =
+        homeService.addStoreAtJogbo(favoriteId, storeId)
 }

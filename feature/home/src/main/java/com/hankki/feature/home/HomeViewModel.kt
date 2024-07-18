@@ -2,12 +2,12 @@ package com.hankki.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -134,12 +134,18 @@ class HomeViewModel @Inject constructor(
                 .onSuccess { store ->
                     _state.value = _state.value.copy(
                         isMainBottomSheetOpen = false,
-                        selectedStoreItem = store.toModel()
                     )
+                    selectStoreItem(store.toModel())
                 }.onFailure { error ->
                     Timber.e(error)
                 }
         }
+    }
+
+    fun selectStoreItem(storeItem: StoreItemModel) {
+        _state.value = _state.value.copy(
+            selectedStoreItem = storeItem
+        )
     }
 
     fun clickMap() {
@@ -258,5 +264,16 @@ class HomeViewModel @Inject constructor(
         _state.value = _state.value.copy(
             isMyJogboBottomSheetOpen = !_state.value.isMyJogboBottomSheetOpen
         )
+    }
+
+    fun addStoreAtJogbo(favoriteId: Long, storeId: Long) {
+        viewModelScope.launch {
+            homeRepository.addStoreAtJogbo(favoriteId, storeId)
+                .onSuccess {
+
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 }

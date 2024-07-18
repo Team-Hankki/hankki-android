@@ -81,6 +81,7 @@ fun HankkiStoreJogboBottomSheet(
     modifier: Modifier = Modifier,
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
+    onAddJogbo: (Long) -> Unit = {},
     onClick: (Long) -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -138,6 +139,7 @@ fun HankkiStoreJogboBottomSheet(
                         }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
                                 onDismissRequest()
+                                onAddJogbo(item.id)
                             }
                         }
                     },

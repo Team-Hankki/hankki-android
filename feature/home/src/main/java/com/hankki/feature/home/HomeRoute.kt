@@ -149,7 +149,11 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(key1 = state.categoryChipState, key2 = state.priceChipState, key3 = state.sortChipState) {
+    LaunchedEffect(
+        key1 = state.categoryChipState,
+        key2 = state.priceChipState,
+        key3 = state.sortChipState
+    ) {
         if (state.categoryChipState !is ChipState.Selected && state.priceChipState !is ChipState.Selected && state.sortChipState !is ChipState.Selected) {
             with(viewModel) {
                 getStoreItems()
@@ -176,6 +180,7 @@ fun HomeRoute(
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
         navigateStoreDetail = navigateStoreDetail,
+        selectStoreItem = viewModel::selectStoreItem,
         navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
         clickMarkerItem = viewModel::clickMarkerItem,
@@ -190,6 +195,7 @@ fun HomeRoute(
         selectSortChipItem = viewModel::selectSortChipItem,
         dismissSortChip = viewModel::dismissSortChip,
         getJogboItems = viewModel::getJogboItems,
+        addStoreAtJogbo = viewModel::addStoreAtJogbo,
     ) {
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -237,6 +243,7 @@ fun HomeScreen(
     sortChipItems: PersistentList<ChipItem>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
+    selectStoreItem: (StoreItemModel) -> Unit = {},
     navigateStoreDetail: (Long) -> Unit = {},
     navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
@@ -252,6 +259,7 @@ fun HomeScreen(
     selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     dismissSortChip: () -> Unit = {},
     getJogboItems: (Long) -> Unit = {},
+    addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
     reposition: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -282,6 +290,9 @@ fun HomeScreen(
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
+            onAddJogbo = { jogboId ->
+                addStoreAtJogbo(jogboId, selectedStoreItem.id)
+            },
             onClick = {
                 // TODO: 족보 추가 api 호출
             }
@@ -470,6 +481,7 @@ fun HomeScreen(
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems(item.id)
+                                            selectStoreItem(item)
                                         }
 
                                         if (item == storeItems.last()) {
