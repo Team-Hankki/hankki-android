@@ -4,6 +4,7 @@ import com.hankki.data.my.datasource.MyDataSource
 import com.hankki.data.my.dto.response.toEntity
 import com.hankki.domain.my.entity.MyRepository
 import com.hankki.domain.my.entity.response.MyJogboEntity
+import com.hankki.domain.my.repository.MyRepository
 import javax.inject.Inject
 
 class MyRepositoryImpl @Inject constructor(

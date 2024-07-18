@@ -32,7 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.dialog.DialogWithDescription
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
@@ -45,7 +46,6 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
 import kotlinx.collections.immutable.PersistentList
@@ -73,8 +73,8 @@ fun MyJogboDetailRoute(
         deleteDialogState = myJogboDetailState.showDeleteDialog,
         shareDialogState = myJogboDetailState.showShareDialog,
         userInformation = myJogboDetailState.userInformation,
-        updateShareDialog = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
-        updateDeleteDialog = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) }
+        updateShareDialogState = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
+        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) }
     )
 }
 
@@ -89,27 +89,24 @@ fun MyJogboDetailScreen(
     deleteDialogState: Boolean,
     shareDialogState: Boolean,
     userInformation: UserInformationEntity,
-    updateShareDialog: () -> Unit,
-    updateDeleteDialog: () -> Unit
+    updateShareDialogState: () -> Unit,
+    updateDeleteDialogState: () -> Unit
 ) {
-
-
     if (shareDialogState) {
-        DialogWithDescription(
-            title = stringResource(R.string.go_to_register_store),
+        SingleButtonDialog(title = stringResource(R.string.go_to_register_store),
             description = stringResource(R.string.preparing_share_jogbo),
             buttonTitle = stringResource(R.string.check),
-            onConfirmation = updateShareDialog
+            onConfirmation = updateShareDialogState
         )
     }
 
     if (deleteDialogState) {
-        DialogWithButton(
-            onDismissRequest = updateDeleteDialog,
-            onConfirmation = updateDeleteDialog,
+        DoubleButtonDialog(
             title = stringResource(R.string.delete_store),
-            textButtonTitle = stringResource(R.string.go_back),
-            buttonTitle = stringResource(id = R.string.delete)
+            negativeButtonTitle = stringResource(R.string.go_back),
+            positiveButtonTitle = stringResource(id = R.string.delete),
+            onNegativeButtonClicked = updateDeleteDialogState,
+            onPositiveButtonClicked = updateDeleteDialogState
         )
     }
 
@@ -152,7 +149,7 @@ fun MyJogboDetailScreen(
             chips = jogboChips,
             userName = userInformation.nickname,
             userProfileImage = userInformation.profileImageUrl,
-            shareJogbo = updateShareDialog
+            shareJogbo = updateShareDialogState
         )
 
         LazyColumn(
@@ -177,7 +174,7 @@ fun MyJogboDetailScreen(
                     isIconSelected = false,
                     modifier = Modifier.combinedClickable(
                         onClick = {},
-                        onLongClick = updateDeleteDialog
+                        onLongClick = updateDeleteDialogState
                     )
                 )
                 if (storeItems.indexOf(store) != storeItems.lastIndex) {

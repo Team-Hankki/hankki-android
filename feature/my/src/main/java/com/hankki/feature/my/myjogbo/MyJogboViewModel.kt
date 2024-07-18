@@ -64,4 +64,10 @@ class MyJogboViewModel @Inject constructor(
             }.toPersistentList())
         updateMode()
     }
+
+    fun updateToDialogState(state:Boolean){
+        _myJogboState.value = _myJogboState.value.copy(
+            showDialog = state
+        )
+    }
 }
