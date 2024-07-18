@@ -124,8 +124,8 @@ internal class MainNavigator(
         navController.navigateMyStore(type)
     }
 
-    fun navigateToMyJogboDetail() {
-        navController.navigateMyJogboDetail()
+    fun navigateToMyJogboDetail(favoriteId:Long) {
+        navController.navigateMyJogboDetail(favoriteId = favoriteId)
     }
 
     fun navigateToNewJogbo() {
