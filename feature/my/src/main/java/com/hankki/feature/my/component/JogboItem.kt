@@ -32,7 +32,7 @@ import com.hankki.feature.my.R
 @Composable
 fun JogboItem(
     title: String,
-    image: String,
+    image: Int,
     modifier: Modifier = Modifier,
     isEditMode: Boolean = false,
     isSelected: Boolean = false,
@@ -112,7 +112,7 @@ fun ItemPreview() {
     HankkijogboTheme {
         JogboItem(
             title = "새로운 족보 리스트 추가하기",
-            image = "",
+            image = 0,
             isSelected = isSelected.value,
             editJogbo = {},
             navigateToJogboDetail = {}
