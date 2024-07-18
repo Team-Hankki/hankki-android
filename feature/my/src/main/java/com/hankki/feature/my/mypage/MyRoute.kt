@@ -38,7 +38,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -53,9 +55,13 @@ import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
 import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ
+import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
+import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
+import com.hankki.feature.my.mypage.MyViewModel.Companion.NONE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
+import com.hankki.feature.my.mypage.model.MySideEffect
 
 @Composable
 fun MyRoute(
@@ -64,10 +70,27 @@ fun MyRoute(
     navigateToStore: (String) -> Unit,
     myViewModel: MyViewModel = hiltViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val myState by myViewModel.myState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(true) {
         myViewModel.getUserInformation()
+    }
+
+    LaunchedEffect(myViewModel.mySideEffect, lifecycleOwner) {
+        myViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is MySideEffect.ShowWebView -> {
+                    val url = when (sideEffect.type) {
+                        FAQ -> FAQ_PAGE
+                        INQUIRY -> INQUIRY_PAGE
+                        else -> NONE
+                    }
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                }
+            }
+        }
     }
 
     MyScreen(
@@ -77,7 +100,7 @@ fun MyRoute(
         userName = myState.myModel.nickname,
         userImage = myState.myModel.profileImageUrl,
         showDialog = myState.showDialog,
-        showWebView = myState.showWebView
+        showWebView = myViewModel::showWebView
     )
 }
 
@@ -89,11 +112,9 @@ fun MyScreen(
     userName: String,
     userImage: String,
     showDialog: MutableState<Boolean>,
-    showWebView: MutableState<String>
+    showWebView: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
-    //val showDialog = remember { mutableStateOf(false) }
-    //val showWebView: MutableState<String> = remember { mutableStateOf("") }
 
     if (showDialog.value) {
         DialogWithButton(
@@ -103,12 +124,6 @@ fun MyScreen(
             textButtonTitle = stringResource(id = R.string.go_back),
             buttonTitle = stringResource(id = R.string.logout)
         )
-    }
-
-    if (showWebView.value == FAQ) {
-        webView(FAQ)
-    } else if (showWebView.value == INQUIRY) {
-        webView(INQUIRY)
     }
 
     Column(
@@ -196,9 +211,9 @@ fun MyScreen(
             )
         }
 
-        ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView.value = FAQ })
+        ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView(FAQ) })
 
-        ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView.value = INQUIRY })
+        ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
 
         ButtonWithArrowIcon(stringResource(R.string.logout), { showDialog.value = true })
 
@@ -242,18 +257,7 @@ fun MyScreenPreview() {
             userName = "",
             userImage = "",
             showDialog = remember { mutableStateOf(false) },
-            showWebView = remember { mutableStateOf("") }
+            showWebView = { }
         )
-    }
-}
-
-
-@Composable
-fun webView(type: String) {
-    Intent(Intent.ACTION_VIEW, if (type == FAQ) Uri.parse("https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4") else Uri.parse(
-            "https://tally.so/r/mO0oJY")
-    ).apply {
-    }.also { intent ->
-        LocalContext.current.startActivity(intent)
     }
 }
