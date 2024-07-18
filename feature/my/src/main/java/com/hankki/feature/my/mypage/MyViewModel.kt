@@ -2,7 +2,7 @@ package com.hankki.feature.my.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hankki.domain.my.entity.MyRepository
+import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.mypage.model.MySideEffect
 import com.hankki.feature.my.mypage.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,13 +41,13 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    fun showWebView(type : String){
+    fun showWebView(type: String) {
         viewModelScope.launch {
             _mySideEffect.emit(MySideEffect.ShowWebView(type))
         }
     }
 
-    fun updateDialogState(state: DialogState){
+    fun updateDialogState(state: DialogState) {
         _myState.value = _myState.value.copy(
             showDialog = state
         )
@@ -58,8 +58,9 @@ class MyViewModel @Inject constructor(
         const val REPORT = "report"
         const val FAQ = "FAQ"
         const val INQUIRY = "inquiry"
-        const val FAQ_PAGE = "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4"
-        const val INQUIRY_PAGE ="https://tally.so/r/mO0oJY"
-        const val NONE =""
+        const val FAQ_PAGE =
+            "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4"
+        const val INQUIRY_PAGE = "https://tally.so/r/mO0oJY"
+        const val NONE = ""
     }
 }
