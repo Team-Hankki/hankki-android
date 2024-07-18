@@ -47,12 +47,12 @@ fun MyJogboRoute(
     navigateUp: () -> Unit,
     navigateToJogboDetail: () -> Unit,
     navigateToNewJogbo: () -> Unit,
-    myJogboViewMidel: MyJogboViewModel = hiltViewModel()
+    myJogboViewModel: MyJogboViewModel = hiltViewModel()
 ) {
-    val myJogboState by myJogboViewMidel.myJogboState.collectAsStateWithLifecycle()
+    val myJogboState by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myJogboViewMidel.getMockJogboList()
+        myJogboViewModel.getMockJogboList()
     }
 
     MyJogboScreen(
@@ -62,16 +62,16 @@ fun MyJogboRoute(
         navigateToNewJogbo = navigateToNewJogbo,
         jogboItems = myJogboState.myJogboItems,
         editMode = myJogboState.editMode.value,
-        updateEditMode = myJogboViewMidel::updateMode,
+        updateEditMode = myJogboViewModel::updateMode,
         updateJogboSelectedState = { index, isjogboSelected ->
-            myJogboViewMidel.updateJogboSeleted(
+            myJogboViewModel.updateJogboSeleted(
                 index,
                 isjogboSelected
             )
         },
-        resetJogboState = myJogboViewMidel::resetJogboState,
-        showDialogState = myJogboState.showDialog,
-        updateDialogState = { myJogboViewMidel.updateDialog(myJogboState.showDialog) }
+        resetJogboState = myJogboViewModel::resetJogboState,
+        dialogState = myJogboState.showDialog,
+        updateToDialogState = myJogboViewModel::updateToDialogState
     )
 }
 
@@ -86,16 +86,16 @@ fun MyJogboScreen(
     updateEditMode: () -> Unit,
     updateJogboSelectedState: (Int, Boolean) -> Unit,
     resetJogboState: () -> Unit,
-    showDialogState: Boolean,
-    updateDialogState: () -> Unit
+    dialogState: Boolean,
+    updateToDialogState: (Boolean) -> Unit
 ) {
-    if (showDialogState) {
+    if (dialogState) {
         DoubleButtonDialog(
             title = stringResource(R.string.ask_delete_jogbo),
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
-            onNegativeButtonClicked = updateDialogState,
-            onPositiveButtonClicked = updateDialogState
+            onNegativeButtonClicked = { updateToDialogState(false) },
+            onPositiveButtonClicked = { /*TODO*/ }
         )
     }
 
@@ -133,7 +133,7 @@ fun MyJogboScreen(
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 8.dp)
                         .run {
-                            if (editMode) noRippleClickable { updateDialogState() }
+                            if (editMode) noRippleClickable { updateToDialogState(true) }
                             else noRippleClickable(updateEditMode)
                         }
                 )
@@ -190,8 +190,8 @@ fun MyJogboScreenPreview() {
             updateEditMode = {},
             updateJogboSelectedState = { _, _ -> },
             resetJogboState = {},
-            showDialogState = false,
-            updateDialogState = {}
+            dialogState = false,
+            updateToDialogState = {}
         )
     }
 }

@@ -69,9 +69,9 @@ class MyJogboViewModel @Inject constructor(
         updateMode()
     }
 
-    fun updateDialog(state:Boolean){
+    fun updateToDialogState(state:Boolean){
         _myJogboState.value = _myJogboState.value.copy(
-            showDialog = !state
+            showDialog = state
         )
     }
 }
