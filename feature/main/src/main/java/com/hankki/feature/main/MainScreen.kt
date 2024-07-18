@@ -44,7 +44,8 @@ import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.navigation.homeNavGraph
-import com.hankki.feature.login.navigation.loginNavgraph
+import com.hankki.feature.login.navigation.loginNavGraph
+import com.hankki.feature.login.navigation.onboardingNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
@@ -140,7 +141,20 @@ internal fun MainScreen(
                         navigateToJogboDetail = navigator::navigateToMyJogboDetail,
                         navigateToNewJogbo = navigator::navigateToNewJogbo
                     )
-                    loginNavgraph()
+                    loginNavGraph(
+                        navigateToOnboarding = navigator::navigateToOnboarding
+                    )
+                    onboardingNavgraph(
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        }
+                    )
                     universitySelectionNavGraph(
                         navigateToHome = {
                             val navOptions = navOptions {
