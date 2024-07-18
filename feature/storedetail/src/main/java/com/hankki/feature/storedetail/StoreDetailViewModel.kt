@@ -3,20 +3,23 @@ package com.hankki.feature.storedetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.UiState
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.storedetail.entity.StoreDetailHeartsResponseEntity
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
 import com.hankki.domain.storedetail.repository.StoreDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class StoreDetailViewModel @Inject constructor(
-    private val storeDetailRepository: StoreDetailRepository
+    private val storeDetailRepository: StoreDetailRepository,
 ) : ViewModel() {
     private val _storeState = MutableStateFlow(
         StoreState(
@@ -31,7 +34,10 @@ class StoreDetailViewModel @Inject constructor(
 
     fun fetchStoreDetail(storeId: Long) {
         viewModelScope.launch {
-            _storeState.value = _storeState.value.copy(storeDetail = UiState.Loading)
+            _storeState.value = _storeState.value.copy(
+                storeId = storeId,
+                storeDetail = UiState.Loading
+            )
             storeDetailRepository.getStoreDetail(storeId).onSuccess {
                 setStoreDetail(it)
             }.onFailure {
@@ -77,4 +83,46 @@ class StoreDetailViewModel @Inject constructor(
     fun updateSelectedIndex(index: Int) {
         _storeState.value = _storeState.value.copy(selectedIndex = index)
     }
+
+    fun controlMyJogboBottomSheet() {
+        _storeState.value = _storeState.value.copy(
+            isOpenBottomSheet = !_storeState.value.isOpenBottomSheet
+        )
+        if (_storeState.value.isOpenBottomSheet) {
+            getJogboItems(_storeState.value.storeId)
+        }
+    }
+
+    fun getJogboItems(storeId: Long) {
+        viewModelScope.launch {
+            storeDetailRepository.getFavorites(storeId)
+                .onSuccess { jogboItems ->
+                    _storeState.value = _storeState.value.copy(
+                        jogboItems = jogboItems.map {
+                            JogboResponseModel(
+                                id = it.id,
+                                title = it.title,
+                                imageType = it.imageType,
+                                details = it.details,
+                                isAdded = it.isAdded
+                            )
+                        }.toPersistentList()
+                    )
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
+    }
+
+    fun addStoreAtJogbo(favoriteId: Long, storeId: Long) {
+        viewModelScope.launch {
+            storeDetailRepository.addStoreAtJogbo(favoriteId, storeId)
+                .onSuccess {
+
+                }.onFailure { error ->
+                    Timber.e(error)
+                }
+        }
+    }
+
 }

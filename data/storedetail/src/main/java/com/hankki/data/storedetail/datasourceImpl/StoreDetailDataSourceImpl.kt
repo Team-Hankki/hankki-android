@@ -1,7 +1,9 @@
 package com.hankki.data.storedetail.datasourceImpl
 
 import com.hankki.core.network.BaseResponse
+import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.storedetail.datasource.StoreDetailDataSource
+import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
 import com.hankki.data.storedetail.response.StoreDetailResponseDto
 import com.hankki.data.storedetail.service.StoreDetailService
@@ -24,4 +26,10 @@ class StoreDetailDataSourceImpl @Inject constructor (
         id: Long
     ): BaseResponse<StoreDetailHeartResponseDto> =
         storeDetailService.deleteStoreDetailHearts(id)
+
+    override suspend fun getMyJogbo(storeId: Long): BaseResponse<FavoritesResponseDto> =
+        storeDetailService.getMyJogbo(storeId)
+
+    override suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): CreatedBaseResponse =
+        storeDetailService.addStoreAtJogbo(favoriteId, storeId)
 }
