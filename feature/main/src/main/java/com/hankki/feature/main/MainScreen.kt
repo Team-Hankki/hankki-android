@@ -40,16 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
-import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
-import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.navigation.homeNavGraph
-import com.hankki.feature.login.navigation.loginNavgraph
-import com.hankki.feature.main.splash.navigation.splashNavGraph
+import com.hankki.feature.login.navigation.loginNavGraph
 import com.hankki.feature.login.navigation.onboardingNavgraph
+import com.hankki.feature.main.splash.navigation.splashNavGraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
@@ -64,10 +61,14 @@ internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val snackBarHostStateWhite = remember { SnackbarHostState() }
-    val snackBarHostStateText = remember { SnackbarHostState() }
-    val snackBarHostStateTextButton = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
     val localContextResource = LocalContext.current.resources
+    val onShowSnackBar: (Int) -> Unit = { errorMessage ->
+        coroutineScope.launch {
+            snackBarHostState.currentSnackbarData?.dismiss()
+            snackBarHostState.showSnackbar(localContextResource.getString(errorMessage))
+        }
+    }
 
     Scaffold(
         content = { paddingValue ->
@@ -191,7 +192,7 @@ internal fun MainScreen(
                 onTabSelected = navigator::navigate
             )
         },
-        snackbarHost = { },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     )
 }
 
