@@ -1,5 +1,7 @@
 package com.hankki.feature.login
 
+import android.app.Activity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,28 +10,41 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.common.utill.SystemBarColorChanger
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun LoginRoute() {
+fun LoginRoute(
+    navigateToOnboarding: () -> Unit
+) {
     val viewModel: LoginViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+
+    WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
     LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
         viewModel.loginSideEffects
@@ -37,15 +52,21 @@ fun LoginRoute() {
             .collectLatest { sideEffect ->
                 when (sideEffect) {
                     is LoginSideEffect.LoginSuccess -> {
-                        //LoginSuccess 필요시 추가 동작
+                        navigateToOnboarding()
                     }
-                    is LoginSideEffect.LoginError  -> {
+
+                    is LoginSideEffect.LoginError -> {
                         //LoginError 필요시 추가 동작
                     }
                 }
             }
     }
 
+    SystemBarColorChanger(
+        view = LocalView.current,
+        color = Color.Transparent,
+        shouldRollBack = false
+    )
 
     LoginScreen(
         onLoginClick = { viewModel.startKakaoLogin() }
@@ -57,29 +78,28 @@ fun LoginScreen(
     onLoginClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 22.dp)
-            .navigationBarsPadding()
-            .statusBarsPadding()
+        modifier = Modifier.fillMaxSize()
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.login),
+            contentDescription = "Background",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
         Column(
             modifier = Modifier.align(Alignment.TopStart)
         ) {
             Spacer(modifier = Modifier.height(77.dp))
             Text(
                 text = stringResource(R.string.done_worry),
-                color = Gray900,
+                color = White,
                 style = HankkiTheme.typography.suitH1,
-                modifier = Modifier.align(Alignment.Start)
+                modifier = Modifier
+                    .padding(start = 22.dp, top = 54.dp)
+                    .align(Alignment.Start)
             )
             Spacer(modifier = Modifier.height(41.dp))
-            Image(
-                painter = painterResource(id = R.drawable.ic_android_black_24dp),
-                contentDescription = "lottie",
-                modifier = Modifier
-                    .size(height = 315.dp, width = 411.dp)
-            )
         }
 
         Image(
@@ -89,6 +109,7 @@ fun LoginScreen(
                 .noRippleClickable(onClick = onLoginClick)
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp)
+                .navigationBarsPadding()
         )
     }
 }
