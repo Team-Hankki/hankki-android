@@ -81,6 +81,7 @@ junitKtx = "1.2.1"
 ##lottie
 lottie = "6.0.0"
 toolsCore = "1.0.0-alpha09"
+accompanist = "0.24.2-alpha"
 
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -157,6 +158,7 @@ androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "m
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref= "lottie" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
+accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist"}
 
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]

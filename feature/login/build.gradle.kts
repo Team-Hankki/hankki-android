@@ -15,4 +15,5 @@ dependencies {
     implementation(projects.domain.token)
     implementation(libs.lottie.compose)
     implementation(libs.androidx.tools.core)
+    implementation(libs.accompanist.navigation.animation)
 }
