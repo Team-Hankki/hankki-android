@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.my.datasource.MyDataSource
 import com.hankki.data.my.dto.request.NewJogboDto
+import com.hankki.data.my.dto.response.JogboDetailDto
 import com.hankki.data.my.dto.response.MyJogboDto
 import com.hankki.data.my.dto.response.UserInformationDto
 import com.hankki.data.my.service.MyService
@@ -18,4 +19,6 @@ class MyDataSourceImpl @Inject constructor(
         myService.getMyJogboInformation()
     override suspend fun postNewJogbo(body: NewJogboDto): CreatedBaseResponse =
         myService.postNewJogbo(body)
+    override suspend fun getJogboDetail(favoriteId:Long): BaseResponse<JogboDetailDto> =
+        myService.getJogboDetail(favoriteId)
 }
