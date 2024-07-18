@@ -63,12 +63,7 @@ fun MyJogboRoute(
         jogboItems = myJogboState.myJogboItems,
         editMode = myJogboState.editMode.value,
         updateEditMode = myJogboViewModel::updateMode,
-        updateJogboSelectedState = { index, isjogboSelected ->
-            myJogboViewModel.updateJogboSeleted(
-                index,
-                isjogboSelected
-            )
-        },
+        updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
         resetJogboState = myJogboViewModel::resetJogboState,
         dialogState = myJogboState.showDialog,
         updateToDialogState = myJogboViewModel::updateToDialogState
