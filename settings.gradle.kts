@@ -38,7 +38,6 @@ include(
 
 // data
 include(
-    ":data:dummy",
     ":data:token",
     ":data:login",
     ":data:reissuetoken",
@@ -51,7 +50,6 @@ include(
 
 // domain
 include(
-    ":domain:dummy",
     ":domain:my",
     ":domain:universityselection",
     ":domain:report",
@@ -64,7 +62,6 @@ include(
 
 // feature
 include(
-    ":feature:dummy",
     ":feature:main",
     ":feature:home",
     ":feature:report",

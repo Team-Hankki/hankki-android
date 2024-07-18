@@ -43,7 +43,6 @@ import androidx.navigation.navOptions
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.feature.dummy.navigation.dummyNavGraph
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
@@ -83,9 +82,6 @@ internal fun MainScreen(
                     popEnterTransition = { EnterTransition.None },
                     popExitTransition = { ExitTransition.None }
                 ) {
-                    dummyNavGraph(
-                        onShowErrorSnackBar = {} // onShowSnackBar
-                    )
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = onShowSnackBar,
