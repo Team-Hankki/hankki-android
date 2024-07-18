@@ -1,5 +1,6 @@
 package com.hankki.core.designsystem.component.bottomsheet
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,17 +55,33 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+data class JogboResponseModel(
+    val id: Long,
+    val title: String,
+    val imageType: String,
+    val details: List<String>,
+    val isAdded: Boolean,
+)
+
+private fun transformImage(imageType: String): Int = when (imageType) {
+    "TYPE_ONE" -> R.drawable.ic_jogbo_type_one
+    "TYPE_TWO" -> R.drawable.ic_jogbo_type_two
+    "TYPE_THREE" -> R.drawable.ic_jogbo_type_three
+    else -> R.drawable.ic_jogbo_type_four
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HankkiStoreJogboBottomSheet(
-    jogboItems: PersistentList<JogboItemEntity>,
+    jogboItems: PersistentList<JogboResponseModel>,
     modifier: Modifier = Modifier,
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
-    onClick: () -> Unit = {},
+    onClick: (Long) -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -110,10 +127,10 @@ fun HankkiStoreJogboBottomSheet(
 
             items(jogboItems) { item ->
                 JogboItem(
-                    imageUrl = item.imageUrl,
+                    imageUrl = transformImage(item.imageType),
                     title = item.title,
-                    tags = item.tags,
-                    isReported = item.isReported,
+                    tags = item.details.toPersistentList(),
+                    isReported = item.isAdded,
                     onDismissRequest = {
                         scope.launch {
                             delay(200)
@@ -124,7 +141,7 @@ fun HankkiStoreJogboBottomSheet(
                             }
                         }
                     },
-                    onClick = onClick
+                    onClick = { onClick(item.id) }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -160,13 +177,13 @@ fun AddNewJogboButton(
 
 @Composable
 fun JogboItem(
-    imageUrl: String,
+    @DrawableRes imageUrl: Int,
     title: String,
     tags: PersistentList<String>,
     isReported: Boolean,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     var icon by remember {
         mutableIntStateOf(R.drawable.ic_plus_btn_empty)
@@ -245,48 +262,12 @@ fun JogboItem(
     }
 }
 
-data class JogboItemEntity(
-    val imageUrl: String,
-    val title: String,
-    val tags: PersistentList<String>,
-    val isReported: Boolean,
-)
-
-@Preview
-@Composable
-fun HankkiStoreJogboBottomSheetPreview() {
-    HankkijogboTheme {
-        HankkiStoreJogboBottomSheet(
-            jogboItems = persistentListOf(
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "title",
-                    tags = persistentListOf("tag1", "tag2", "tag3"),
-                    isReported = true
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "title",
-                    tags = persistentListOf("tag1", "tag2", "tag3"),
-                    isReported = false
-                ),
-                JogboItemEntity(
-                    imageUrl = "https://picsum.photos/200/300",
-                    title = "title",
-                    tags = persistentListOf("tag1", "tag2", "tag3"),
-                    isReported = true
-                ),
-            )
-        )
-    }
-}
-
 @Preview
 @Composable
 fun HankkiStoreJogboItemPreview() {
     HankkijogboTheme {
         JogboItem(
-            imageUrl = "https://picsum.photos/200/300",
+            imageUrl = R.drawable.ic_jogbo_type_one,
             title = "title",
             tags = persistentListOf("tag1", "tag2", "tag3"),
             isReported = false

@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
@@ -53,7 +54,6 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
-import com.hankki.feature.my.component.DialogWithButton
 import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ
 import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
@@ -62,6 +62,8 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.NONE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 import com.hankki.feature.my.mypage.model.MySideEffect
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TO_FAQ
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TO_LOGOUT
 
 @Composable
 fun MyRoute(
@@ -101,6 +103,7 @@ fun MyRoute(
         userImage = myState.myModel.profileImageUrl,
         showDialog = myState.showDialog,
         showWebView = myViewModel::showWebView
+        updateDialog = myViewModel::updateDialogState,
     )
 }
 
@@ -111,18 +114,23 @@ fun MyScreen(
     navigateToMyStore: (String) -> Unit,
     userName: String,
     userImage: String,
-    showDialog: MutableState<Boolean>,
-    showWebView: (String) -> Unit
+    showDialog: DialogState,
+    showWebView: (String) -> Unit,
+    updateDialog: (DialogState) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
-    if (showDialog.value) {
-        DialogWithButton(
-            onDismissRequest = { showDialog.value = false },
-            onConfirmation = { showDialog.value = false },
-            title = stringResource(R.string.ask_logout),
-            textButtonTitle = stringResource(id = R.string.go_back),
-            buttonTitle = stringResource(id = R.string.logout)
+    if (showDialog != DialogState.CLOSED) {
+        DoubleButtonDialog(
+            title = if (showDialog == DialogState.LOGOUT) stringResource(R.string.ask_logout) else stringResource(
+                R.string.disappear_jogbo
+            ),
+            negativeButtonTitle = stringResource(id = R.string.go_back),
+            positiveButtonTitle = if (showDialog == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
+                R.string.quit
+            ),
+            onNegativeButtonClicked = { updateDialog(DialogState.CLOSED) },
+            onPositiveButtonClicked = {} //TODO: 로그아웃 api
         )
     }
 
@@ -215,7 +223,7 @@ fun MyScreen(
 
         ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
 
-        ButtonWithArrowIcon(stringResource(R.string.logout), { showDialog.value = true })
+        ButtonWithArrowIcon(stringResource(R.string.logout), { updateDialog(DialogState.LOGOUT) })
 
         Row(
             modifier = Modifier
@@ -228,7 +236,7 @@ fun MyScreen(
             Text(
                 text = stringResource(R.string.quit),
                 modifier = Modifier
-                    .noRippleClickable(onClick = {})
+                    .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
                     .padding(top = 13.dp, bottom = 14.dp)
                     .weight(1f),
                 textAlign = TextAlign.End,
@@ -256,8 +264,19 @@ fun MyScreenPreview() {
             navigateToMyStore = {},
             userName = "",
             userImage = "",
+            showDialog = DialogState.CLOSED,
+            showWebView = remember { mutableStateOf("") },
+            updateDialog = {}
             showDialog = remember { mutableStateOf(false) },
             showWebView = { }
         )
     }
 }
+
+
+enum class DialogState {
+    CLOSED,
+    LOGOUT,
+    QUIT
+}
+
