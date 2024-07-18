@@ -213,7 +213,7 @@ fun JogboItem(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .size(56.dp)
-                        .background(Color(0xFFFFFFFF).copy(alpha = 0.53f))
+                        .background(White.copy(alpha = 0.53f))
                 )
             }
         }
@@ -265,7 +265,7 @@ fun JogboItem(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .size(24.dp)
-                        .background(Color(0xFFFFFFFF).copy(alpha = 0.53f))
+                        .background(White.copy(alpha = 0.53f))
                 )
             }
         }
