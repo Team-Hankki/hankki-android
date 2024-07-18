@@ -10,4 +10,5 @@ interface MyDataSource {
     suspend fun getUserInformation(): BaseResponse<UserInformationDto>
     suspend fun getMyJogboList(): BaseResponse<MyJogboDto>
     suspend fun postNewJogbo(body: NewJogboDto): CreatedBaseResponse
+    suspend fun patchLogout(): CreatedBaseResponse
 }
