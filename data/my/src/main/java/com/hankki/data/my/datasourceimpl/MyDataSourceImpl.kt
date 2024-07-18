@@ -19,4 +19,5 @@ class MyDataSourceImpl @Inject constructor(
     override suspend fun postNewJogbo(body: NewJogboDto): CreatedBaseResponse =
         myService.postNewJogbo(body)
     override suspend fun patchLogout(): CreatedBaseResponse = myService.patchLogout()
+    override suspend fun deleteWithdraw(): CreatedBaseResponse = myService.deleteWithdraw()
 }
