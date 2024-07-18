@@ -1,8 +1,10 @@
 package com.hankki.feature.my.mystore
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,8 +46,13 @@ fun MyStoreRoute(
 ) {
     val myStoreState by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(true) {
-        myStoreViewModel.getMockStoreList()
+    LaunchedEffect(type) {
+        Log.e("type","$type")
+        if (type == "like") {
+            myStoreViewModel.getLikedStoreList()
+        } else {
+            myStoreViewModel.getReportedStoreList()
+        }
     }
 
     MyStoreScreen(
@@ -75,6 +82,7 @@ fun MyStoreScreen(
         modifier = modifier
             .padding((paddingValues))
             .background(White)
+            .fillMaxSize()
     ) {
         HankkiTopBar(
             modifier = Modifier.background(White),
@@ -102,7 +110,7 @@ fun MyStoreScreen(
             modifier = Modifier
                 .padding(start = 22.dp, end = 11.dp)
         ) {
-            itemsIndexed(storeItems) { index, store ->
+            itemsIndexed(storeItems) { index, store -> //기존 코드
                 StoreItem(
                     imageUrl = store.imageURL,
                     category = store.category,
