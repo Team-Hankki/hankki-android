@@ -33,7 +33,10 @@ fun HankkiButton(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .run {
-                if (enabled) bounceClick(onClick = onClick)
+                if (enabled) bounceClick(
+                    radius = 16f,
+                    onClick = onClick
+                )
                 else this
             }
             .clip(RoundedCornerShape(16.dp))

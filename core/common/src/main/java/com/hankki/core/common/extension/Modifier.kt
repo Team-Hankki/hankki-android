@@ -1,5 +1,6 @@
 package com.hankki.core.common.extension
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
@@ -46,9 +47,13 @@ fun Modifier.addFocusCleaner(focusManager: FocusManager): Modifier {
 @Composable
 fun Modifier.bounceClick(
     scaleDown: Float = 0.96f,
-    blackAlpha: Float = 0.16f,
+    blackAlpha: Float = 0.08f,
+    radius: Float = 10f,
     onClick: () -> Unit,
 ): Modifier = composed {
+    Log.e("TAG", "bounceClick: ${1-scaleDown}", )
+    val cornerRadius = (1 - scaleDown) * 100 * 0.6f * radius
+    Log.e("TAG", "bounceClick: $cornerRadius", )
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
@@ -74,7 +79,7 @@ fun Modifier.bounceClick(
             drawContent()
             if (isPressed) {
                 drawRoundRect(
-                    cornerRadius = CornerRadius(size.maxDimension / 20),
+                    cornerRadius = CornerRadius(cornerRadius),
                     color = color,
                     size = size,
                     blendMode = BlendMode.SrcAtop

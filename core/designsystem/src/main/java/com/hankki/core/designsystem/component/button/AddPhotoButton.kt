@@ -34,8 +34,8 @@ fun AddPhotoButton(
 ) {
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
             .bounceClick(onClick = onClick)
+            .clip(RoundedCornerShape(10.dp))
             .background(Gray100)
             .dashedBorder(
                 strokeWidth = 2.dp,
