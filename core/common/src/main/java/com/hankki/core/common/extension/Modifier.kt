@@ -1,6 +1,5 @@
 package com.hankki.core.common.extension
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
