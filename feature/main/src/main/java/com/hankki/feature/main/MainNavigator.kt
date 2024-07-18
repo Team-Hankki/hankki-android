@@ -69,8 +69,8 @@ internal class MainNavigator(
         navController.navigateUp()
     }
 
-    fun navigateToStoreDetail() {
-        navController.navigateStoreDetail(16L)
+    fun navigateToStoreDetail(storeId: Long = 16L) {
+        navController.navigateStoreDetail(storeId)
     }
 
     fun navigateUpIfNotHome() {

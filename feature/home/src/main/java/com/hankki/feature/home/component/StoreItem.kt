@@ -34,12 +34,14 @@ import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun StoreItem(
+    storeId: Long,
     storeImageUrl: String,
     category: String,
     storeName: String,
     price: Int,
     heartCount: Int,
     modifier: Modifier = Modifier,
+    onClickItem: (Long) -> Unit = {},
     onClick: () -> Unit = {},
 ) {
     Row(
@@ -48,7 +50,8 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(horizontal = 22.dp, vertical = 16.dp),
+            .padding(horizontal = 22.dp, vertical = 16.dp)
+            .noRippleClickable { onClickItem(storeId) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -117,6 +120,7 @@ fun StoreItem(
 fun StoreItemPreview() {
     HankkijogboTheme {
         StoreItem(
+            storeId = 1,
             storeImageUrl = "https://github.com/Team-Hankki/hankki-android/assets/52882799/e9b059f3-f283-487c-ae92-29eb160ccb14",
             category = "한식",
             storeName = "한끼네 한정식",

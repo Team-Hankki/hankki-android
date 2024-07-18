@@ -81,7 +81,7 @@ fun HankkiStoreJogboBottomSheet(
     modifier: Modifier = Modifier,
     addNewJogbo: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
-    onClick: () -> Unit = {},
+    onClick: (Long) -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -141,7 +141,7 @@ fun HankkiStoreJogboBottomSheet(
                             }
                         }
                     },
-                    onClick = onClick
+                    onClick = { onClick(item.id) }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))

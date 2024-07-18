@@ -107,7 +107,7 @@ fun HomeRoute(
     paddingValues: PaddingValues,
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
-    navigateStoreDetail: () -> Unit,
+    navigateStoreDetail: (Long) -> Unit,
     isNewUniversity: Boolean = false, // splash에서 넘어오는 경우, UniversitySelect에서 넘어오는 경우 true
     // TODO : UniversitySelect 코드 구현 완료시 연결 예정
     viewModel: HomeViewModel = hiltViewModel(),
@@ -237,7 +237,7 @@ fun HomeScreen(
     sortChipItems: PersistentList<ChipItem>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
-    navigateStoreDetail: () -> Unit = {},
+    navigateStoreDetail: (Long) -> Unit = {},
     navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
     clickMarkerItem: (Long) -> Unit = {},
@@ -458,11 +458,13 @@ fun HomeScreen(
                                         key = { item -> item.id }
                                     ) { item ->
                                         StoreItem(
+                                            storeId = item.id,
                                             storeImageUrl = item.imageUrl,
                                             category = item.category,
                                             storeName = item.name,
                                             price = item.lowestPrice,
-                                            heartCount = item.heartCount
+                                            heartCount = item.heartCount,
+                                            onClickItem = navigateStoreDetail
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems(item.id)
@@ -512,6 +514,7 @@ fun HomeScreen(
                                 }
 
                                 StoreItem(
+                                    storeId = selectedStoreItem.id,
                                     storeImageUrl = selectedStoreItem.imageUrl,
                                     category = selectedStoreItem.category,
                                     storeName = selectedStoreItem.name,
