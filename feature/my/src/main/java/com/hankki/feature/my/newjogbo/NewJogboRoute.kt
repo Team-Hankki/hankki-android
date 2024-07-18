@@ -75,8 +75,8 @@ fun NewJogboScreen(
     onTagsChange: (String) -> Unit,
     editTagsLength: (String) -> Int,
     buttonEnabled: Boolean,
-    modifier: Modifier = Modifier,
-    createNewJogbo : () -> Unit
+    createNewJogbo : () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
 
