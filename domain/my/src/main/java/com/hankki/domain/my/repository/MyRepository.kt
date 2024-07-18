@@ -8,4 +8,5 @@ interface MyRepository {
     suspend fun getUserInformation() : Result<UserInformationEntity>
     suspend fun getMyJogboList() : Result<List<MyJogboEntity>>
     suspend fun createNewJogbo(body: NewJogboEntity): Result<Unit>
+    suspend fun patchLogout(): Result<Unit>
 }
