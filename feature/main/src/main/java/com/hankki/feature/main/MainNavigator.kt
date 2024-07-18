@@ -15,6 +15,7 @@ import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateLogin
+import com.hankki.feature.main.splash.navigation.Splash
 import com.hankki.feature.login.navigation.navigateOnboarding
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
@@ -35,7 +36,7 @@ internal class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Login
+    val startDestination = Splash
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
@@ -52,7 +53,7 @@ internal class MainNavigator(
         }
 
         when (tab) {
-            MainTab.HOME -> navController.navigateHome(navOptions)
+            MainTab.HOME -> navController.navigateHome(navOptions = navOptions)
             MainTab.REPORT -> navController.navigateToReport()
             MainTab.MY -> navController.navigateMy(navOptions)
         }
@@ -80,8 +81,11 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateToHome(navOptions: NavOptions) {
-        navController.navigate(Home, navOptions)
+    fun navigateToHome(
+        navOptions: NavOptions,
+        isNewUniversity: Boolean = false,
+    ) {
+        navController.navigate(Home(isNewUniversity), navOptions)
     }
 
     fun navigateToReport(location: LocationModel, navOptions: NavOptions) {

@@ -46,6 +46,7 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavGraph
 import com.hankki.feature.login.navigation.onboardingNavgraph
+import com.hankki.feature.main.splash.navigation.splashNavGraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
@@ -83,9 +84,24 @@ internal fun MainScreen(
                     popEnterTransition = { EnterTransition.None },
                     popExitTransition = { ExitTransition.None }
                 ) {
+                    splashNavGraph(
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(
+                                navOptions = navOptions,
+                                isNewUniversity = true
+                            )
+                        },
+                        navigateToLogIn = navigator::navigateToLogin
+                    )
                     homeNavGraph(
                         paddingValues = paddingValue,
-                        onShowSnackBar = onShowSnackBar,
+                        onShowSnackBar = {},
                         navigateStoreDetail = navigator::navigateToStoreDetail,
                         navigateToUniversitySelection = navigator::navigateToUniversity
                     )
@@ -161,7 +177,7 @@ internal fun MainScreen(
                                 popUpTo(navigator.navController.graph.findStartDestination().id)
                                 launchSingleTop = true
                             }
-                            navigator.navigateToHome(navOptions)
+                            navigator.navigateToHome(navOptions, true)
                         }
                     )
                     storeDetailNavGraph(navigateUp = navigator::navigateUpIfNotHome)

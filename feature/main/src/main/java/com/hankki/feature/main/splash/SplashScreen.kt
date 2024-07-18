@@ -7,17 +7,41 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.main.R
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    navigateToHome: (Boolean) -> Unit = {},
+    navigateToLogIn: () -> Unit = {},
+    viewModel: SplashViewModel = hiltViewModel(),
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        viewModel.showSplash()
+    }
+
+    LaunchedEffect(viewModel.sideEffects, lifecycleOwner) {
+        viewModel.sideEffects.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is SplashSideEffect.NavigateToHome -> navigateToHome(true)
+                    is SplashSideEffect.NavigateLogin -> navigateToLogIn()
+                }
+            }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
