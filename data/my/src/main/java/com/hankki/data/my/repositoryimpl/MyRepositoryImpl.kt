@@ -41,4 +41,8 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun patchLogout(): Result<Unit> = kotlin.runCatching {
         myDataSource.patchLogout()
     }
+
+    override suspend fun deleteWithdraw(): Result<Unit> = runCatching {
+        myDataSource.deleteWithdraw()
+    }
 }

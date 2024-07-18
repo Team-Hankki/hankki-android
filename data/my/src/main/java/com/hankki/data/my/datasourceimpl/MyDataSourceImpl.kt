@@ -27,4 +27,5 @@ class MyDataSourceImpl @Inject constructor(
     override suspend fun getReportedStore(): BaseResponse<StoreDto> =
         myService.getReportedStore()
     override suspend fun patchLogout(): CreatedBaseResponse = myService.patchLogout()
+    override suspend fun deleteWithdraw(): CreatedBaseResponse = myService.deleteWithdraw()
 }

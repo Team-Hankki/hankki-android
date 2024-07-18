@@ -16,4 +16,5 @@ interface MyDataSource {
     suspend fun getLikedStore(): BaseResponse<StoreDto>
     suspend fun getReportedStore(): BaseResponse<StoreDto>
     suspend fun patchLogout(): CreatedBaseResponse
+    suspend fun deleteWithdraw(): CreatedBaseResponse
 }

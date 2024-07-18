@@ -14,4 +14,5 @@ interface MyRepository {
     suspend fun getLikedStore() : Result<List<StoreEntity>>
     suspend fun getReportedStore() : Result<List<StoreEntity>>
     suspend fun patchLogout(): Result<Unit>
+    suspend fun deleteWithdraw(): Result<Unit>
 }
