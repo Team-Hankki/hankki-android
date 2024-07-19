@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.HankkiTextButton
 import com.hankki.core.designsystem.theme.Gray50
@@ -37,6 +39,8 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.feature.report.R
 import com.hankki.feature.report.finish.component.ReportFinishCard
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ReportFinishRoute(
@@ -74,9 +78,13 @@ fun ReportFinishRoute(
         count = state.count,
         name = state.name,
         storeName = state.storeName,
-        addMyJogbo = viewModel::addMyJogbo,
+        storeId = state.storeId,
+        showBottomSheet = state.showBottomSheet,
+        jogboItems = state.jogboItems,
+        bottomSheetControl = viewModel::controlBottomSheetState,
         moveToStoreDetail = viewModel::navigateToStoreDetail,
-        moveToHome = viewModel::navigateToHome
+        moveToHome = viewModel::navigateToHome,
+        addStoreAtJogbo = viewModel::addStoreAtJogbo,
     )
 }
 
@@ -85,10 +93,24 @@ fun ReportFinishScreen(
     count: Long,
     name: String,
     storeName: String,
-    addMyJogbo: () -> Unit = { },
+    storeId: Long,
+    showBottomSheet: Boolean,
+    jogboItems: PersistentList<JogboResponseModel>,
+    bottomSheetControl: (Boolean) -> Unit = { },
     moveToStoreDetail: () -> Unit = { },
     moveToHome: () -> Unit = { },
+    addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
 ) {
+    if (showBottomSheet) {
+        HankkiStoreJogboBottomSheet(
+            jogboItems = jogboItems,
+            onDismissRequest = { bottomSheetControl(false) },
+            onAddJogbo = { jogboId ->
+                addStoreAtJogbo(jogboId, storeId)
+            }
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -148,7 +170,7 @@ fun ReportFinishScreen(
 
             ReportFinishCard(
                 storeName = storeName,
-                onClick = { /*TODO*/ },
+                onClick = { bottomSheetControl(true) },
                 modifier = Modifier
                     .fillMaxWidth()
 
@@ -182,6 +204,13 @@ fun ReportFinishScreen(
 @Composable
 fun PreviewReportFinishScreen() {
     HankkijogboTheme {
-        ReportFinishScreen(count = 51, name = "정욱", storeName = "한끼네 한정식")
+        ReportFinishScreen(
+            count = 51,
+            name = "정욱",
+            storeName = "한끼네 한정식",
+            storeId = 1,
+            showBottomSheet = false,
+            jogboItems = persistentListOf()
+        )
     }
 }

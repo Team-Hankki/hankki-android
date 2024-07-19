@@ -12,6 +12,7 @@ import com.hankki.domain.report.entity.LocationEntity
 import com.hankki.domain.report.entity.request.ReportStoreRequestEntity
 import com.hankki.domain.report.entity.request.ValidateStoreRequestEntity
 import com.hankki.domain.report.entity.response.GeneratedStoreResponseEntity
+import com.hankki.domain.report.entity.response.JogboResponseEntity
 import com.hankki.domain.report.entity.response.UniversityResponseEntity
 import com.hankki.domain.report.entity.response.UserInfoResponseEntity
 import com.hankki.domain.report.repository.ReportRepository
@@ -70,4 +71,14 @@ class ReportRepositoryImpl @Inject constructor(
     override suspend fun getUserInfo(): Result<UserInfoResponseEntity> = runCatching {
         reportDataSource.getUserInfo().data.toEntity()
     }
+
+    override suspend fun getFavorites(storeId: Long): Result<List<JogboResponseEntity>> =
+        runCatching {
+            reportDataSource.getMyJogbo(storeId).data.toEntity()
+        }
+
+    override suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): Result<Unit> =
+        runCatching {
+            reportDataSource.addStoreAtJogbo(favoriteId, storeId)
+        }
 }

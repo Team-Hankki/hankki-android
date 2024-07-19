@@ -2,8 +2,10 @@ package com.hankki.feature.report.finish
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.report.repository.ReportRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -11,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,8 +54,29 @@ class ReportFinishViewModel @Inject constructor(
         }
     }
 
-    fun addMyJogbo() {
-        // TODO: api 연결
+    fun controlBottomSheetState(showBottomSheet: Boolean) {
+        _state.value = _state.value.copy(showBottomSheet = showBottomSheet)
+
+        if (showBottomSheet) {
+            viewModelScope.launch {
+                reportRepository.getFavorites(_state.value.storeId)
+                    .onSuccess { jogboItems ->
+                        _state.value = _state.value.copy(
+                            jogboItems = jogboItems.map {
+                                JogboResponseModel(
+                                    id = it.id,
+                                    title = it.title,
+                                    imageType = it.imageType,
+                                    details = it.details,
+                                    isAdded = it.isAdded
+                                )
+                            }.toPersistentList()
+                        )
+                    }.onFailure { error ->
+                        Timber.e(error)
+                    }
+            }
+        }
     }
 
     fun navigateToStoreDetail() {
@@ -64,6 +88,15 @@ class ReportFinishViewModel @Inject constructor(
     fun navigateToHome() {
         viewModelScope.launch {
             _sideEffect.emit(ReportFinishSideEffect.navigateToHome)
+        }
+    }
+
+    fun addStoreAtJogbo(favoriteId: Long, storeId: Long) {
+        viewModelScope.launch {
+            reportRepository.addStoreAtJogbo(favoriteId = favoriteId, storeId = storeId)
+                .onSuccess {
+                }.onFailure {
+                }
         }
     }
 }

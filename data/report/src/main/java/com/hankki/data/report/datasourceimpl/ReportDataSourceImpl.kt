@@ -6,6 +6,7 @@ import com.hankki.data.report.datasource.ReportDataSource
 import com.hankki.data.report.dto.request.ValidateStoreRequestDto
 import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
+import com.hankki.data.report.dto.response.FavoritesResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
 import com.hankki.data.report.dto.response.UniversityResponseDto
@@ -42,4 +43,10 @@ class ReportDataSourceImpl @Inject constructor(
 
     override suspend fun getUserInfo(): BaseResponse<UserInfoResponseDto> =
         reportService.getUserInfo()
+
+    override suspend fun getMyJogbo(storeId: Long): BaseResponse<FavoritesResponseDto> =
+        reportService.getMyJogbo(storeId)
+
+    override suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): CreatedBaseResponse =
+        reportService.addStoreAtJogbo(favoriteId, storeId)
 }
