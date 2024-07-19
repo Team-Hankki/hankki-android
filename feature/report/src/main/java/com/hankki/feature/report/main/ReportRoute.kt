@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -396,10 +394,13 @@ fun MenuWithPriceInputComponent(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().height(IntrinsicSize.Min),
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        // +버튼 정렬 하기
-        Row(modifier = Modifier.weight(1f)) {
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             HankkiMenuTextField(
                 value = name,
                 onTextChanged = onMenuChange,
@@ -417,25 +418,24 @@ fun MenuWithPriceInputComponent(
         }
         Spacer(modifier = Modifier.width(3.dp))
 
-        Column(modifier = Modifier.fillMaxHeight()) {
+        Column {
             Text(
                 text = "",
                 style = HankkiTheme.typography.body5,
+                color = Color.Transparent
             )
 
             Spacer(modifier = Modifier.height(3.dp))
 
-            Box(modifier = Modifier.fillMaxHeight()) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_circle_x),
-                    contentDescription = "delete",
-                    tint = Gray300,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .noRippleClickable(onClick = deleteMenu)
-                        .align(Alignment.Center)
-                )
-            }
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_circle_x),
+                contentDescription = "delete",
+                tint = Gray300,
+                modifier = Modifier
+                    .size(32.dp)
+                    .noRippleClickable(onClick = deleteMenu)
+            )
         }
     }
 }
