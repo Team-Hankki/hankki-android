@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -394,7 +396,7 @@ fun MenuWithPriceInputComponent(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().height(IntrinsicSize.Min),
     ) {
         // +버튼 정렬 하기
         Row(modifier = Modifier.weight(1f)) {
@@ -415,7 +417,7 @@ fun MenuWithPriceInputComponent(
         }
         Spacer(modifier = Modifier.width(3.dp))
 
-        Column {
+        Column(modifier = Modifier.fillMaxHeight()) {
             Text(
                 text = "",
                 style = HankkiTheme.typography.body5,
@@ -423,7 +425,7 @@ fun MenuWithPriceInputComponent(
 
             Spacer(modifier = Modifier.height(3.dp))
 
-            Box(modifier = Modifier) {
+            Box(modifier = Modifier.fillMaxHeight()) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_circle_x),
                     contentDescription = "delete",
@@ -431,6 +433,7 @@ fun MenuWithPriceInputComponent(
                     modifier = Modifier
                         .size(32.dp)
                         .noRippleClickable(onClick = deleteMenu)
+                        .align(Alignment.Center)
                 )
             }
         }
