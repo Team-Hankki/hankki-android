@@ -51,7 +51,6 @@ import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
-import com.hankki.feature.my.mystore.MyStoreSideEffect
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -69,14 +68,16 @@ fun MyJogboDetailRoute(
 
     LaunchedEffect(true) {
         myJogboDetailViewModel.getJogboDetail(favoriteId)
+        myJogboDetailViewModel.getUserName()
     }
 
     LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
-        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
-            when (sideEffect) {
-                is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+                }
             }
-        }
     }
 
     MyJogboDetailScreen(
@@ -98,7 +99,8 @@ fun MyJogboDetailRoute(
         },
         selectedStoreId = myJogboDetailState.selectedStoreId,
         updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
-        onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) }
+        onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) },
+        userName = myJogboDetailState.userInformation.nickname
     )
 }
 
@@ -118,7 +120,8 @@ fun MyJogboDetailScreen(
     deleteJogboStore: (Long) -> Unit,
     selectedStoreId: Long,
     updateSelectedStoreId: (Long) -> Unit,
-    onClickStoreItem: (Long) -> Unit
+    onClickStoreItem: (Long) -> Unit,
+    userName: String
 ) {
     if (shareDialogState) {
         SingleButtonDialog(
@@ -180,7 +183,6 @@ fun MyJogboDetailScreen(
             title = jogboTitle,
             chips = jogboChips,
             userName = userInformation.nickname,
-            userProfileImage = userInformation.profileImageUrl,
             shareJogbo = updateShareDialogState
         )
 
@@ -278,7 +280,8 @@ fun MyJogboDetailScreenPreview() {
             {},
             0,
             {},
-            { _ -> }
+            { _ -> },
+            ""
         )
     }
 }
