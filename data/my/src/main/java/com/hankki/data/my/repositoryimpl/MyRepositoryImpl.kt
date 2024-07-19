@@ -4,6 +4,7 @@ import com.hankki.data.my.datasource.MyDataSource
 import com.hankki.data.my.dto.request.toDto
 import com.hankki.data.my.dto.response.toEntity
 import com.hankki.domain.my.entity.request.NewJogboEntity
+import com.hankki.domain.my.entity.response.LikedStoreResponseEntity
 import com.hankki.domain.my.entity.response.MyJogboDetailEntity
 import com.hankki.domain.my.entity.response.MyJogboEntity
 import com.hankki.domain.my.entity.response.StoreEntity
@@ -46,11 +47,17 @@ class MyRepositoryImpl @Inject constructor(
         myDataSource.deleteWithdraw()
     }
 
-    override suspend fun deleteJogboStore(favoriteId: Long, storeId: Long): Result<Unit> = runCatching {
-        myDataSource.deleteJogboStore(favoriteId, storeId)
-    }
+    override suspend fun deleteJogboStore(favoriteId: Long, storeId: Long): Result<Unit> =
+        runCatching {
+            myDataSource.deleteJogboStore(favoriteId, storeId)
+        }
 
     override suspend fun deleteJogboStores(body: List<Long>): Result<Unit> = runCatching {
         myDataSource.deleteJogboStores(body.toDto())
     }
+
+    override suspend fun unLikeStore(storeId: Long): Result<LikedStoreResponseEntity> =
+        runCatching {
+            myDataSource.unLikeStore(storeId).data.toEntity()
+        }
 }

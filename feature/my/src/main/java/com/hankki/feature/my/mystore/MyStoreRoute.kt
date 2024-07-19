@@ -1,6 +1,5 @@
 package com.hankki.feature.my.mystore
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,7 +41,7 @@ fun MyStoreRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     type: String,
-    myStoreViewModel: MyStoreViewModel = hiltViewModel()
+    myStoreViewModel: MyStoreViewModel = hiltViewModel(),
 ) {
     val myStoreState by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
@@ -59,12 +58,7 @@ fun MyStoreRoute(
         navigateUp = navigateUp,
         type = type,
         storeItems = myStoreState.myStoreItems,
-        updateStoreSelected = { index, isJogboSelected ->
-            myStoreViewModel.updateStoreSelected(
-                index,
-                isJogboSelected
-            )
-        }
+        updateStoreSelected = myStoreViewModel::updateStoreSelected
     )
 }
 
@@ -75,7 +69,7 @@ fun MyStoreScreen(
     type: String,
     storeItems: PersistentList<MyStoreModel>,
     modifier: Modifier = Modifier,
-    updateStoreSelected: (Int, Boolean) -> Unit
+    updateStoreSelected: (Long, Boolean) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -119,10 +113,7 @@ fun MyStoreScreen(
                     isIconUsed = (type == "like"),
                     isIconSelected = store.isLiked ?: false,
                     editSelected = {
-                        updateStoreSelected(
-                            index,
-                            store.isLiked == true
-                        )
+                        updateStoreSelected(store.id, store.isLiked == true)
                     }
                 )
                 if (index != storeItems.lastIndex) {

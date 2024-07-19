@@ -5,9 +5,11 @@ import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
 import com.hankki.data.my.dto.response.JogboDetailDto
+import com.hankki.data.my.dto.response.LikedStoreResponseDto
 import com.hankki.data.my.dto.response.StoreDto
 import com.hankki.data.my.dto.response.MyJogboDto
 import com.hankki.data.my.dto.response.UserInformationDto
+import com.hankki.domain.my.entity.response.LikedStoreResponseEntity
 
 interface MyDataSource {
     suspend fun getUserInformation(): BaseResponse<UserInformationDto>
@@ -20,4 +22,5 @@ interface MyDataSource {
     suspend fun deleteWithdraw(): CreatedBaseResponse
     suspend fun deleteJogboStore(favoriteId:Long,storeId:Long)
     suspend fun deleteJogboStores(body: JogbosRequestDto)
+    suspend fun unLikeStore(storeId:Long): BaseResponse<LikedStoreResponseDto>
 }

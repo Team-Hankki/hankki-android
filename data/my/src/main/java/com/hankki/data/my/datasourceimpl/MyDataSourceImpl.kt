@@ -6,10 +6,12 @@ import com.hankki.data.my.datasource.MyDataSource
 import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
 import com.hankki.data.my.dto.response.JogboDetailDto
+import com.hankki.data.my.dto.response.LikedStoreResponseDto
 import com.hankki.data.my.dto.response.StoreDto
 import com.hankki.data.my.dto.response.MyJogboDto
 import com.hankki.data.my.dto.response.UserInformationDto
 import com.hankki.data.my.service.MyService
+import com.hankki.domain.my.entity.response.LikedStoreResponseEntity
 import javax.inject.Inject
 
 class MyDataSourceImpl @Inject constructor(
@@ -34,4 +36,7 @@ class MyDataSourceImpl @Inject constructor(
 
     override suspend fun deleteJogboStores(body: JogbosRequestDto) =
         myService.deleteJogboStores(body)
+
+    override suspend fun unLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto> =
+        myService.unLikeStore(storeId)
 }

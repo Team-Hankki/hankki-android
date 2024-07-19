@@ -5,9 +5,11 @@ import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
 import com.hankki.data.my.dto.response.JogboDetailDto
+import com.hankki.data.my.dto.response.LikedStoreResponseDto
 import com.hankki.data.my.dto.response.StoreDto
 import com.hankki.data.my.dto.response.MyJogboDto
 import com.hankki.data.my.dto.response.UserInformationDto
+import com.hankki.domain.my.entity.response.LikedStoreResponseEntity
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -45,4 +47,8 @@ interface MyService {
     suspend fun deleteJogboStores(
         @Body body: JogbosRequestDto
     )
+    @DELETE("/api/v1/stores/{id}/hearts")
+    suspend fun unLikeStore(
+        @Path("id") storeId: Long
+    ) : BaseResponse<LikedStoreResponseDto>
 }

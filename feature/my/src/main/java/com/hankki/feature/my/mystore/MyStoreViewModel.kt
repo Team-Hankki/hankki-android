@@ -53,15 +53,30 @@ class MyStoreViewModel @Inject constructor(
         }
     }
 
-    fun updateStoreSelected(index: Int, isStoreSelected: Boolean) {
-        if (_myStoreState.value.myStoreItems.size <= index) return
-        if (_myStoreState.value.myStoreItems.isEmpty()) return
-
-        _myStoreState.value = _myStoreState.value.copy(
-            myStoreItems = _myStoreState.value.myStoreItems.set(
-                index,
-                _myStoreState.value.myStoreItems[index].copy(isLiked = !isStoreSelected)
-            )
-        )
+    fun updateStoreSelected(id: Long, isLiked: Boolean) {
+        viewModelScope.launch {
+            if (isLiked) {
+                // 좋아요 취소
+                myRepository.unLikeStore(id).onSuccess {
+                    _myStoreState.value = _myStoreState.value.copy(
+                        myStoreItems = _myStoreState.value.myStoreItems.map {
+                            if (it.id == id) {
+                                it.copy(isLiked = false)
+                            } else {
+                                it
+                            }
+                        }.toPersistentList()
+                    )
+                }
+            } else {
+                // 좋아요
+            }
+        }
+//        _myStoreState.value = _myStoreState.value.copy(
+//            myStoreItems = _myStoreState.value.myStoreItems.set(
+//                index,
+//                _myStoreState.value.myStoreItems[index].copy(isLiked = !isStoreSelected)
+//            )
+//        )
     }
 }
