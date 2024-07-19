@@ -73,7 +73,7 @@ fun SelectedImageController(
                 .padding(vertical = 8.dp, horizontal = 10.dp)
         ) {
             Text(
-                text = "변경하기",
+                text = "바꾸기",
                 style = HankkiTheme.typography.body3,
                 color = Gray700
             )
