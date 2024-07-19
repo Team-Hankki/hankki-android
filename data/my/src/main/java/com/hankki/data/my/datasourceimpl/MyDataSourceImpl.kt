@@ -37,6 +37,9 @@ class MyDataSourceImpl @Inject constructor(
     override suspend fun deleteJogboStores(body: JogbosRequestDto) =
         myService.deleteJogboStores(body)
 
+    override suspend fun likeStore(storeId: Long): BaseResponse<LikedStoreResponseDto> =
+        myService.likeStore(storeId)
+
     override suspend fun unLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto> =
         myService.unLikeStore(storeId)
 }

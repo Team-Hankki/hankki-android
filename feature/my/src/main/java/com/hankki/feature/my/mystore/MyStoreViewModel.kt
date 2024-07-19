@@ -69,14 +69,18 @@ class MyStoreViewModel @Inject constructor(
                     )
                 }
             } else {
-                // 좋아요
+                myRepository.likeStore(id).onSuccess {
+                    _myStoreState.value = _myStoreState.value.copy(
+                        myStoreItems = _myStoreState.value.myStoreItems.map {
+                            if (it.id == id) {
+                                it.copy(isLiked = true)
+                            } else {
+                                it
+                            }
+                        }.toPersistentList()
+                    )
+                }
             }
         }
-//        _myStoreState.value = _myStoreState.value.copy(
-//            myStoreItems = _myStoreState.value.myStoreItems.set(
-//                index,
-//                _myStoreState.value.myStoreItems[index].copy(isLiked = !isStoreSelected)
-//            )
-//        )
     }
 }

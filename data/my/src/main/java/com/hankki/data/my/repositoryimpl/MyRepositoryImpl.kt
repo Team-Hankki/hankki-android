@@ -56,6 +56,10 @@ class MyRepositoryImpl @Inject constructor(
         myDataSource.deleteJogboStores(body.toDto())
     }
 
+    override suspend fun likeStore(storeId: Long): Result<LikedStoreResponseEntity> = runCatching {
+        myDataSource.likeStore(storeId).data.toEntity()
+    }
+
     override suspend fun unLikeStore(storeId: Long): Result<LikedStoreResponseEntity> =
         runCatching {
             myDataSource.unLikeStore(storeId).data.toEntity()

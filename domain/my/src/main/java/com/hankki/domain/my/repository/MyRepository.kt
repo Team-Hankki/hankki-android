@@ -18,5 +18,6 @@ interface MyRepository {
     suspend fun deleteWithdraw(): Result<Unit>
     suspend fun deleteJogboStore(favoriteId: Long, storeId: Long): Result<Unit>
     suspend fun deleteJogboStores(body: List<Long>): Result<Unit>
+    suspend fun likeStore(storeId: Long): Result<LikedStoreResponseEntity>
     suspend fun unLikeStore(storeId: Long): Result<LikedStoreResponseEntity>
 }
