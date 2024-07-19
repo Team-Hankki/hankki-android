@@ -121,8 +121,8 @@ internal class MainNavigator(
         )
     }
 
-    fun navigateToSearchStore() {
-        navController.navigateToSearchStore()
+    fun navigateToSearchStore(navOptions: NavOptions? = null) {
+        navController.navigateToSearchStore(navOptions)
     }
 
     fun navigateToUniversity() {

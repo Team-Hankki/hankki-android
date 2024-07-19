@@ -109,7 +109,9 @@ internal fun MainScreen(
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToReport(
@@ -121,11 +123,15 @@ internal fun MainScreen(
                                 ), navOptions
                             )
                         },
-                        navigateToSearchStore = navigator::navigateToSearchStore,
+                        navigateToSearchStore = {
+                            navigator.navigateToSearchStore()
+                        },
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToReportFinish = { count, storeName, storeId ->
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToReportFinish(
@@ -136,7 +142,7 @@ internal fun MainScreen(
                             )
                         },
                         navigateToHome = {
-                            val navOptions = navOptions{
+                            val navOptions = navOptions {
                                 popUpTo<Home> {
                                     inclusive = false
                                 }
@@ -165,7 +171,7 @@ internal fun MainScreen(
                     )
                     onboardingNavgraph(
                         navigateToHome = {
-                            val navOptions = navOptions{
+                            val navOptions = navOptions {
                                 popUpTo<Home> {
                                     inclusive = false
                                 }
@@ -176,7 +182,7 @@ internal fun MainScreen(
                     )
                     universitySelectionNavGraph(
                         navigateToHome = {
-                            val navOptions = navOptions{
+                            val navOptions = navOptions {
                                 popUpTo<Home> {
                                     inclusive = false
                                 }
