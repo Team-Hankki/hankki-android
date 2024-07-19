@@ -18,5 +18,6 @@ data class MyJogboDetailState(
         )
     ),
     var showDeleteDialog: Boolean = false,
-    var showShareDialog: Boolean = false
+    var showShareDialog: Boolean = false,
+    var selectedStoreId : Long = 0
 )
