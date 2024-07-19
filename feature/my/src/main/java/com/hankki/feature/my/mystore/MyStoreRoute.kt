@@ -20,7 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
@@ -39,10 +41,12 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun MyStoreRoute(
     paddingValues: PaddingValues,
-    navigateUp: () -> Unit,
     type: String,
+    navigateUp: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
     myStoreViewModel: MyStoreViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val myStoreState by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
     LaunchedEffect(type) {
@@ -53,12 +57,21 @@ fun MyStoreRoute(
         }
     }
 
+    LaunchedEffect(myStoreViewModel.mySideEffect, lifecycleOwner) {
+        myStoreViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is MyStoreSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+            }
+        }
+    }
+
     MyStoreScreen(
         paddingValues = paddingValues,
         navigateUp = navigateUp,
         type = type,
         storeItems = myStoreState.myStoreItems,
-        updateStoreSelected = myStoreViewModel::updateStoreSelected
+        updateStoreSelected = myStoreViewModel::updateStoreSelected,
+        onClickItem = myStoreViewModel::onClickItem
     )
 }
 
@@ -70,6 +83,7 @@ fun MyStoreScreen(
     storeItems: PersistentList<MyStoreModel>,
     modifier: Modifier = Modifier,
     updateStoreSelected: (Long, Boolean) -> Unit,
+    onClickItem: (Long) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -114,6 +128,9 @@ fun MyStoreScreen(
                     isIconSelected = store.isLiked ?: false,
                     editSelected = {
                         updateStoreSelected(store.id, store.isLiked == true)
+                    },
+                    onClickItem = {
+                        onClickItem(store.id)
                     }
                 )
                 if (index != storeItems.lastIndex) {

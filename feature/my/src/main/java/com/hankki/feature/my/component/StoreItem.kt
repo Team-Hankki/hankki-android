@@ -45,7 +45,8 @@ fun StoreItem(
     isIconUsed: Boolean,
     isIconSelected: Boolean,
     modifier: Modifier = Modifier,
-    editSelected: () -> Unit = {}
+    editSelected: () -> Unit = {},
+    onClickItem: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -53,7 +54,8 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(vertical = 16.dp),
+            .padding(vertical = 16.dp)
+            .noRippleClickable(onClickItem),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
