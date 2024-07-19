@@ -17,4 +17,5 @@ interface MyDataSource {
     suspend fun getReportedStore(): BaseResponse<StoreDto>
     suspend fun patchLogout(): CreatedBaseResponse
     suspend fun deleteWithdraw(): CreatedBaseResponse
+    suspend fun deleteJogboStore(favoriteId:Long,storeId:Long)
 }
