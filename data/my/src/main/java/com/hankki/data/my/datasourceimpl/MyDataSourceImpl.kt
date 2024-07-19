@@ -28,4 +28,6 @@ class MyDataSourceImpl @Inject constructor(
         myService.getReportedStore()
     override suspend fun patchLogout(): CreatedBaseResponse = myService.patchLogout()
     override suspend fun deleteWithdraw(): CreatedBaseResponse = myService.deleteWithdraw()
+    override suspend fun deleteJogboStore(favoriteId:Long,storeId:Long) =
+        myService.deleteJogboStore(favoriteId,storeId)
 }
