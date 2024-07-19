@@ -240,7 +240,7 @@ private fun MainBottomBar(
                     .fillMaxWidth()
                     .height(75.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 tabs.forEach { tab ->
                     MainBottomBarItem(
@@ -263,7 +263,6 @@ private fun RowScope.MainBottomBarItem(
 ) {
     Box(
         modifier = Modifier
-            .weight(1f)
             .fillMaxHeight()
             .selectable(
                 selected = selected,
