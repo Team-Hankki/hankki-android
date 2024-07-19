@@ -75,7 +75,8 @@ fun StoreItem(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_food),
                     contentDescription = "icon",
-                    tint = Gray300
+                    tint = Gray300,
+                    modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 Text(
@@ -93,7 +94,8 @@ fun StoreItem(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_like),
                     contentDescription = "icon",
-                    tint = Gray300
+                    tint = Gray300,
+                    modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
