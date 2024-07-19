@@ -172,7 +172,7 @@ fun MyJogboScreenPreview() {
     HankkijogboTheme {
         MyJogboScreen(
             navigateUp = {},
-            navigateToJogboDetail = {},
+            navigateToJogboDetail = {_->},
             navigateToNewJogbo = {},
             paddingValues = PaddingValues(),
             jogboItems = persistentListOf(
