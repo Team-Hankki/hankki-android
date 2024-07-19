@@ -35,4 +35,9 @@ interface MyService {
     suspend fun patchLogout(): CreatedBaseResponse
     @DELETE("/api/v1/auth/withdraw")
     suspend fun deleteWithdraw(): CreatedBaseResponse
+    @DELETE("/api/v1/favorites/{favoriteId}/stores/{storeId}")
+    suspend fun deleteJogboStore(
+        @Path("favoriteId") favoriteId: Long,
+        @Path("storeId") storeId: Long
+    )
 }
