@@ -45,7 +45,7 @@ fun StoreDetailMenuBox(
             .shadow(1.dp, RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(28.dp)
+            .padding(horizontal = 28.dp, vertical = 32.dp)
             .wrapContentSize()
     ) {
         Row(
@@ -59,7 +59,7 @@ fun StoreDetailMenuBox(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = Gray900,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f, false)
             )
             Spacer(modifier = Modifier.width(8.dp))
             HankkiCategoryChip(text = tag)

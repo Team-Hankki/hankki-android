@@ -82,7 +82,13 @@ fun OnboardingScreen1(navController: NavHostController) {
                 .statusBarsPadding()
                 .padding(top = 25.dp, end = 22.dp)
                 .align(Alignment.TopEnd)
-                .noRippleClickable { navController.navigate("onboarding4") }
+                .noRippleClickable {
+                    navController.navigate("onboarding4") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                }
         )
 
         Text(
@@ -97,7 +103,13 @@ fun OnboardingScreen1(navController: NavHostController) {
         HankkiButton(
             text = "다음으로",
             textStyle = HankkiTheme.typography.sub3,
-            onClick = { navController.navigate("onboarding2") },
+            onClick = {
+                navController.navigate("onboarding2") {
+                    popUpTo("onboarding1") {
+                        inclusive = true
+                    }
+                }
+            },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 22.dp)
@@ -132,7 +144,13 @@ fun OnboardingScreen2(navController: NavHostController) {
             modifier = Modifier
                 .padding(top = 25.dp, end = 22.dp)
                 .align(Alignment.TopEnd)
-                .clickable { navController.navigate("onboarding4") }
+                .noRippleClickable {
+                    navController.navigate("onboarding4") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                }
         )
 
         Text(
@@ -147,7 +165,13 @@ fun OnboardingScreen2(navController: NavHostController) {
         HankkiButton(
             text = "다음으로",
             textStyle = HankkiTheme.typography.sub3,
-            onClick = { navController.navigate("onboarding3") },
+            onClick = {
+                navController.navigate("onboarding3") {
+                    popUpTo("onboarding2") {
+                        inclusive = true
+                    }
+                }
+            },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 22.dp)
@@ -181,7 +205,13 @@ fun OnboardingScreen3(navController: NavHostController) {
             modifier = Modifier
                 .padding(top = 25.dp, end = 22.dp)
                 .align(Alignment.TopEnd)
-                .clickable { navController.navigate("onboarding4") }
+                .clickable {
+                    navController.navigate("onboarding4") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                }
         )
 
         Text(
@@ -196,7 +226,13 @@ fun OnboardingScreen3(navController: NavHostController) {
         HankkiButton(
             text = "다음으로",
             textStyle = HankkiTheme.typography.sub3,
-            onClick = { navController.navigate("onboarding4") },
+            onClick = {
+                navController.navigate("onboarding4") {
+                    popUpTo("onboarding3") {
+                        inclusive = true
+                    }
+                }
+            },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 22.dp)
@@ -219,7 +255,6 @@ fun OnboardingScreen4(
             composition = composition,
             iterations = 1,
             modifier = Modifier
-                .statusBarsPadding()
                 .fillMaxSize()
                 .align(Alignment.BottomCenter),
             contentScale = ContentScale.FillWidth
