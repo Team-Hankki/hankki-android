@@ -7,10 +7,10 @@ import com.hankki.data.reissuetoken.service.ReissueTokenService
 import javax.inject.Inject
 
 class ReissueTokenDataSourceImpl @Inject constructor(
-    private val reissueTokenSercive: ReissueTokenService
+    private val reissueTokenService: ReissueTokenService
 ) : ReissueTokenDataSource {
     override suspend fun postReissueToken(
-        authorization: String
+        refreshtoken: String
     ): BaseResponse<ReissueTokenResponseDto> =
-        reissueTokenSercive.postReissueToken(authorization)
+        reissueTokenService.postReissueToken(refreshtoken)
 }

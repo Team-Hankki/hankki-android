@@ -1,12 +1,10 @@
 package com.hankki.core.network
 
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import com.hankki.core.datastore.TokenDataStore
 import com.hankki.domain.reissuetoken.repository.ReissueTokenRepository
-import com.hankki.feature.main.MainActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
@@ -28,7 +26,9 @@ class OauthInterceptor @Inject constructor(
 
         val response = chain.proceed(authRequest)
         return if (response.code == TOKEN_EXPIRED) {
-            handleTokenExpiration(chain, authRequest, response)
+            runBlocking {
+                handleTokenExpiration(chain, authRequest, response)
+            }
         } else {
             response
         }
@@ -45,38 +45,42 @@ class OauthInterceptor @Inject constructor(
     private fun Request.Builder.addAuthorizationHeader() =
         this.addHeader(AUTHORIZATION, "$BEARER ${dataStore.accessToken}")
 
-    private fun handleTokenExpiration(
+    private suspend fun handleTokenExpiration(
         chain: Interceptor.Chain,
         authRequest: Request,
         response: Response
     ): Response {
         response.close()
         return if (tryReissueToken()) {
-            val newRequest = authRequest.newBuilder().addAuthorizationHeader().build()
+            val newRequest =
+                authRequest.newBuilder().addAuthorizationHeader().build()
             chain.proceed(newRequest)
         } else {
             clearUserInfoAndRestart()
-            response
+            chain.proceed(authRequest.newBuilder().build())
         }
     }
 
-    private fun tryReissueToken(): Boolean {
+    private suspend fun tryReissueToken(): Boolean {
         return try {
-            runBlocking {
-                reissueTokenRepository.postReissueToken(dataStore.refreshToken).onSuccess { data ->
-                    updateTokens(data.accessToken, data.refreshToken)
-                }
+            val result =
+                reissueTokenRepository.postReissueToken("$BEARER ${dataStore.refreshToken}")
+            result.onSuccess { data ->
+                Timber.d("Successfully reissued token: ${data.refreshToken}")
+                updateTokens(data.accessToken, data.refreshToken)
+            }.onFailure { error ->
+                Timber.e("Failed to reissue token: $error")
             }
-            true
+            result.isSuccess
         } catch (t: Throwable) {
-            Timber.d(t.message)
+            Timber.e(t, "Exception occurred while reissuing token")
             false
         }
     }
 
     private fun updateTokens(newAccessToken: String, newRefreshToken: String) {
-        Timber.d("NEW ACCESS TOKEN : $newAccessToken")
-        Timber.d("NEW REFRESH TOKEN : $newRefreshToken")
+        Timber.e("NEW ACCESS TOKEN : $newAccessToken")
+        Timber.e("NEW REFRESH TOKEN : $newRefreshToken")
         dataStore.apply {
             accessToken = newAccessToken
             refreshToken = newRefreshToken
@@ -86,7 +90,7 @@ class OauthInterceptor @Inject constructor(
     private fun clearUserInfoAndRestart() {
         dataStore.clearInfo()
         Handler(Looper.getMainLooper()).post {
-            ProcessPhoenix.triggerRebirth(context, Intent(context, MainActivity::class.java))
+            ProcessPhoenix.triggerRebirth(context)
         }
     }
 

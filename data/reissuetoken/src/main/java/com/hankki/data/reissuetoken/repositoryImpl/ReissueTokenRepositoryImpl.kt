@@ -9,11 +9,12 @@ class ReissueTokenRepositoryImpl @Inject constructor(
     private val reissueTokenDataSource: ReissueTokenDataSource
 ) : ReissueTokenRepository {
     override suspend fun postReissueToken(
-        authorization: String,
+        refreshToken: String,
     ): Result<ReissueTokenResponseEntity> =
         runCatching {
             reissueTokenDataSource.postReissueToken(
-                authorization,
+                refreshToken,
             ).data.toReissueTokenResponseEntity()
         }
 }
+

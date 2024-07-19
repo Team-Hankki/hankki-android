@@ -4,6 +4,6 @@ import com.hankki.domain.reissuetoken.entity.ReissueTokenResponseEntity
 
 interface ReissueTokenRepository {
     suspend fun postReissueToken(
-        authorization: String,
+        refreshToken: String,
     ): Result<ReissueTokenResponseEntity>
 }
