@@ -140,6 +140,9 @@ class ReportViewModel @Inject constructor(
     }
 
     fun submitReport() {
+        _state.value = _state.value.copy(
+            canReported = false
+        )
         viewModelScope.launch {
             reportRepository.postReport(
                 image = _state.value.selectedImageUri?.toString(),
@@ -166,6 +169,9 @@ class ReportViewModel @Inject constructor(
                     )
                 )
             }.onFailure { error ->
+                _state.value = _state.value.copy(
+                    canReported = true
+                )
                 Timber.e(error)
             }
         }
@@ -179,7 +185,7 @@ class ReportViewModel @Inject constructor(
                         && menuList.none { it.name.isEmpty() }
                         && menuList.none { it.price.isEmpty() }
                         && selectedCategory != null
-                        && location.location.isNotEmpty()
+                        && location.location.isNotEmpty() && canReported
             )
         }
     }
