@@ -3,6 +3,7 @@ package com.hankki.data.my.datasourceimpl
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.my.datasource.MyDataSource
+import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
 import com.hankki.data.my.dto.response.JogboDetailDto
 import com.hankki.data.my.dto.response.StoreDto
@@ -30,4 +31,7 @@ class MyDataSourceImpl @Inject constructor(
     override suspend fun deleteWithdraw(): CreatedBaseResponse = myService.deleteWithdraw()
     override suspend fun deleteJogboStore(favoriteId:Long,storeId:Long) =
         myService.deleteJogboStore(favoriteId,storeId)
+
+    override suspend fun deleteJogboStores(body: JogbosRequestDto) =
+        myService.deleteJogboStores(body)
 }

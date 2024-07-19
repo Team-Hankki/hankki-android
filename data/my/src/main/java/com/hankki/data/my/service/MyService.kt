@@ -2,6 +2,7 @@ package com.hankki.data.my.service
 
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
+import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
 import com.hankki.data.my.dto.response.JogboDetailDto
 import com.hankki.data.my.dto.response.StoreDto
@@ -39,5 +40,9 @@ interface MyService {
     suspend fun deleteJogboStore(
         @Path("favoriteId") favoriteId: Long,
         @Path("storeId") storeId: Long
+    )
+    @POST("api/v1/favorites/batch-delete")
+    suspend fun deleteJogboStores(
+        @Body body: JogbosRequestDto
     )
 }

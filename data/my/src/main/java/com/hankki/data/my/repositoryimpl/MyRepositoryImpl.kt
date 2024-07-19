@@ -11,7 +11,7 @@ import com.hankki.domain.my.repository.MyRepository
 import javax.inject.Inject
 
 class MyRepositoryImpl @Inject constructor(
-    private val myDataSource: MyDataSource
+    private val myDataSource: MyDataSource,
 ) : MyRepository {
     override suspend fun getUserInformation() = runCatching {
         myDataSource.getUserInformation().data.toEntity()
@@ -46,7 +46,11 @@ class MyRepositoryImpl @Inject constructor(
         myDataSource.deleteWithdraw()
     }
 
-    override suspend fun deleteJogboStore(favoriteId:Long,storeId:Long): Result<Unit> = runCatching {
-        myDataSource.deleteJogboStore(favoriteId,storeId)
+    override suspend fun deleteJogboStore(favoriteId: Long, storeId: Long): Result<Unit> = runCatching {
+        myDataSource.deleteJogboStore(favoriteId, storeId)
+    }
+
+    override suspend fun deleteJogboStores(body: List<Long>): Result<Unit> = runCatching {
+        myDataSource.deleteJogboStores(body.toDto())
     }
 }
