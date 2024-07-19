@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
+import com.hankki.data.storedetail.response.StoreDetailNicknameResponseDto
 import com.hankki.data.storedetail.response.StoreDetailResponseDto
 
 interface StoreDetailDataSource {
@@ -20,5 +21,8 @@ interface StoreDetailDataSource {
     ): BaseResponse<StoreDetailHeartResponseDto>
 
     suspend fun getMyJogbo(storeId: Long): BaseResponse<FavoritesResponseDto>
+
     suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): CreatedBaseResponse
+
+    suspend fun getStoreDetailNickname(): BaseResponse<StoreDetailNicknameResponseDto>
 }

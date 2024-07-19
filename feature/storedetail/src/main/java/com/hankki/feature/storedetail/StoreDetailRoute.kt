@@ -88,7 +88,10 @@ fun StoreDetailRoute(
                     viewModel.addStoreAtJogbo(jogboId, storeId)
                 },
                 onAddMenuClicked = { viewModel.updateDialogState(StoreDetailDialogState.MENU_EDIT) },
-                onReportClicked = { viewModel.updateDialogState(StoreDetailDialogState.REPORT_CONFIRMATION) }
+                onReportClicked = {
+                    viewModel.fetchNickname()
+                    viewModel.updateDialogState(StoreDetailDialogState.REPORT_CONFIRMATION)
+                }
             )
         }
 
@@ -107,7 +110,7 @@ fun StoreDetailRoute(
 
         StoreDetailDialogState.REPORT_CONFIRMATION -> {
             ImageDoubleButtonDialog(
-                name="한끼귀욤",
+                name = storeState.nickname,
                 title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
                 negativeButtonTitle = "취소",
                 positiveButtonTitle = "확인",

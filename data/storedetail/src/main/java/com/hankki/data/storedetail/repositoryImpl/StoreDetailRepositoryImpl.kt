@@ -3,6 +3,7 @@ package com.hankki.data.storedetail.repositoryImpl
 import com.hankki.data.storedetail.datasource.StoreDetailDataSource
 import com.hankki.domain.storedetail.entity.JogboResponseEntity
 import com.hankki.domain.storedetail.entity.StoreDetailHeartsResponseEntity
+import com.hankki.domain.storedetail.entity.StoreDetailNicknameEntity
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
 import com.hankki.domain.storedetail.repository.StoreDetailRepository
 import javax.inject.Inject
@@ -45,5 +46,10 @@ class StoreDetailRepositoryImpl @Inject constructor(
     override suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): Result<Unit> =
         kotlin.runCatching {
             storeDetailDataSource.addStoreAtJogbo(favoriteId, storeId)
+        }
+
+    override suspend fun getStoreDetailNickname(): Result<StoreDetailNicknameEntity> =
+        kotlin.runCatching {
+            storeDetailDataSource.getStoreDetailNickname().data.toStoreDetailNicknameEntity()
         }
 }
