@@ -25,12 +25,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
@@ -48,6 +51,7 @@ import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
+import com.hankki.feature.my.mystore.MyStoreSideEffect
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -57,12 +61,22 @@ fun MyJogboDetailRoute(
     favoriteId: Long,
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val myJogboDetailState by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         myJogboDetailViewModel.getJogboDetail(favoriteId)
+    }
+
+    LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
+        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+            }
+        }
     }
 
     MyJogboDetailScreen(
@@ -83,7 +97,8 @@ fun MyJogboDetailRoute(
             )
         },
         selectedStoreId = myJogboDetailState.selectedStoreId,
-        updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) }
+        updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
+        onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) }
     )
 }
 
@@ -102,7 +117,8 @@ fun MyJogboDetailScreen(
     updateDeleteDialogState: () -> Unit,
     deleteJogboStore: (Long) -> Unit,
     selectedStoreId: Long,
-    updateSelectedStoreId: (Long) -> Unit
+    updateSelectedStoreId: (Long) -> Unit,
+    onClickStoreItem: (Long) -> Unit
 ) {
     if (shareDialogState) {
         SingleButtonDialog(
@@ -141,7 +157,8 @@ fun MyJogboDetailScreen(
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable(onClick = navigateUp)
+                        .noRippleClickable(onClick = navigateUp),
+                    tint = Color.Unspecified
                 )
             },
             content = {
@@ -188,7 +205,7 @@ fun MyJogboDetailScreen(
                     isIconUsed = false,
                     isIconSelected = false,
                     modifier = Modifier.combinedClickable(
-                        onClick = {},
+                        onClick = { onClickStoreItem(store.id) },
                         onLongClick = {
                             updateSelectedStoreId(store.id)
                             updateDeleteDialogState()
@@ -213,7 +230,8 @@ fun MyJogboDetailScreen(
                         .clip(RoundedCornerShape(14.dp))
                         .wrapContentSize()
                         .background(Gray100)
-                        .padding(10.dp),
+                        .padding(12.dp)
+                        .padding(end = 3.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -226,7 +244,7 @@ fun MyJogboDetailScreen(
                     Text(
                         text = stringResource(R.string.go_to_store),
                         color = Gray500,
-                        style = HankkiTheme.typography.body6
+                        style = HankkiTheme.typography.body6,
                     )
                 }
             }
@@ -259,6 +277,7 @@ fun MyJogboDetailScreenPreview() {
             {},
             {},
             0,
+            {},
             { _ -> }
         )
     }

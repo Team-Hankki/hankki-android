@@ -3,9 +3,13 @@ package com.hankki.feature.my.myjogbodetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.repository.MyRepository
+import com.hankki.feature.my.mystore.MyStoreSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -18,6 +22,10 @@ class MyJogboDetailViewModel @Inject constructor(
     private val _myJogboDetailState = MutableStateFlow(MyJogboDetailState())
     val myJogboDetailState: StateFlow<MyJogboDetailState>
         get() = _myJogboDetailState.asStateFlow()
+
+    private val _mySideEffect: MutableSharedFlow<MyJogboSideEffect> = MutableSharedFlow()
+    val mySideEffect: SharedFlow<MyJogboSideEffect>
+        get() = _mySideEffect.asSharedFlow()
 
     fun getJogboDetail(favoriteId : Long) {
         viewModelScope.launch {
@@ -62,5 +70,11 @@ class MyJogboDetailViewModel @Inject constructor(
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
             selectedStoreId = storeId
         )
+    }
+
+    fun onClickStoreItem(storeId : Long){
+        viewModelScope.launch {
+
+        }
     }
 }
