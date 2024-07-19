@@ -21,6 +21,13 @@ import javax.inject.Inject
 class StoreDetailViewModel @Inject constructor(
     private val storeDetailRepository: StoreDetailRepository,
 ) : ViewModel() {
+    private val _dialogState = MutableStateFlow(StoreDetailDialogState.CLOSED)
+    val dialogState: StateFlow<StoreDetailDialogState> = _dialogState
+
+    fun updateDialogState(newState: StoreDetailDialogState) {
+        _dialogState.value = newState
+    }
+
     private val _storeState = MutableStateFlow(
         StoreState(
             buttonLabels = persistentListOf(

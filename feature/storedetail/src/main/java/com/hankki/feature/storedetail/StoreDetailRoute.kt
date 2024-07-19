@@ -1,6 +1,5 @@
 package com.hankki.feature.storedetail
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +37,8 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailButton
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
@@ -55,6 +56,7 @@ fun StoreDetailRoute(
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     LaunchedEffect(storeId) {
         viewModel.fetchStoreDetail(storeId)
@@ -84,11 +86,21 @@ fun StoreDetailRoute(
                 onDismissBottomSheetRequest = viewModel::controlMyJogboBottomSheet,
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
-                }
+                },
+                onAddMenuClicked = { viewModel.updateDialogState(StoreDetailDialogState.MENU_EDIT) }
             )
         }
 
         is UiState.Failure -> {}
+    }
+
+    if (dialogState == StoreDetailDialogState.MENU_EDIT) {
+        SingleButtonDialog(
+            title = "조금만 기다려주세요!",
+            description = "메뉴를 편집할 수 있도록\n준비하고 있어요",
+            buttonTitle = "확인",
+            onConfirmation = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) }
+        )
     }
 }
 
@@ -109,7 +121,8 @@ fun StoreDetailScreen(
     openBottomSheet: () -> Unit,
     jogboItems: PersistentList<JogboResponseModel>,
     onDismissBottomSheetRequest: () -> Unit,
-    addStoreAtJogbo: (Long) -> Unit
+    addStoreAtJogbo: (Long) -> Unit,
+    onAddMenuClicked: () -> Unit
 ) {
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
@@ -211,7 +224,8 @@ fun StoreDetailScreen(
                         },
                         onClick = openBottomSheet
                     )
-                }
+                },
+                onMenuEditClick = onAddMenuClicked
             )
 
             Spacer(modifier = Modifier.height(50.dp))

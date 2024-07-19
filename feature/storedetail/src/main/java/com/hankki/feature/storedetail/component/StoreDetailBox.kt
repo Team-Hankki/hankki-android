@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
@@ -34,7 +35,8 @@ fun StoreDetailMenuBox(
     tag: String,
     menuItems: PersistentList<MenuItem>,
     likeButton: @Composable () -> Unit,
-    addMyJogboButton: @Composable () -> Unit
+    addMyJogboButton: @Composable () -> Unit,
+    onMenuEditClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,7 +74,8 @@ fun StoreDetailMenuBox(
             text = "메뉴 추가/지우기",
             style = HankkiTheme.typography.sub3,
             color = Gray400,
-            textDecoration = TextDecoration.Underline
+            textDecoration = TextDecoration.Underline,
+            modifier = Modifier.noRippleClickable(onClick = onMenuEditClick)
         )
 
         Spacer(modifier = Modifier.height(38.dp))
