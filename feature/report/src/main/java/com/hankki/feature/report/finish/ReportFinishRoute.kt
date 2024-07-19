@@ -49,6 +49,7 @@ fun ReportFinishRoute(
     count: Long,
     navigateToHome: () -> Unit,
     navigateToStoreDetail: (storeId: Long) -> Unit,
+    navigateToAddNewJogbo: () -> Unit,
     viewModel: ReportFinishViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -81,6 +82,7 @@ fun ReportFinishRoute(
         storeId = state.storeId,
         showBottomSheet = state.showBottomSheet,
         jogboItems = state.jogboItems,
+        addNewJogbo = navigateToAddNewJogbo,
         bottomSheetControl = viewModel::controlBottomSheetState,
         moveToStoreDetail = viewModel::navigateToStoreDetail,
         moveToHome = viewModel::navigateToHome,
@@ -96,6 +98,7 @@ fun ReportFinishScreen(
     storeId: Long,
     showBottomSheet: Boolean,
     jogboItems: PersistentList<JogboResponseModel>,
+    addNewJogbo: () -> Unit = {},
     bottomSheetControl: (Boolean) -> Unit = { },
     moveToStoreDetail: () -> Unit = { },
     moveToHome: () -> Unit = { },
@@ -104,6 +107,7 @@ fun ReportFinishScreen(
     if (showBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
+            addNewJogbo = addNewJogbo,
             onDismissRequest = { bottomSheetControl(false) },
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, storeId)

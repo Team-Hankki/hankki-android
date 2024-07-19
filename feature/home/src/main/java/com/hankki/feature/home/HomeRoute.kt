@@ -111,7 +111,8 @@ fun HomeRoute(
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: (Long) -> Unit,
-    isNewUniversity: Boolean,
+    isNewUniversity: Boolean, // TODO: 앱잼 종료 후 적용예정....
+    navigateToAddNewJogbo: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -130,11 +131,7 @@ fun HomeRoute(
     }
 
     LaunchedEffect(key1 = true) {
-        // if (isNewUniversity) {
-            viewModel.getUniversityInformation()
-//        }else {
-//            viewModel.fetchData()
-//        }
+        viewModel.getUniversityInformation()
     }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
@@ -208,6 +205,7 @@ fun HomeRoute(
         clickSortChip = viewModel::clickSortChip,
         selectSortChipItem = viewModel::selectSortChipItem,
         dismissSortChip = viewModel::dismissSortChip,
+        addNewJogbo = navigateToAddNewJogbo,
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
     ) {
@@ -269,6 +267,7 @@ fun HomeScreen(
     selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     dismissSortChip: () -> Unit = {},
     getJogboItems: (Long) -> Unit = {},
+    addNewJogbo: () -> Unit = {},
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
     reposition: () -> Unit = {},
 ) {
@@ -312,6 +311,7 @@ fun HomeScreen(
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
+            addNewJogbo = addNewJogbo, // navigate
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
             }
