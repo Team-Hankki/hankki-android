@@ -452,10 +452,10 @@ fun AddMenuButton(onClick: () -> Unit) {
             tint = Color.Unspecified,
             modifier = Modifier.size(32.dp)
         )
-        Spacer(modifier = Modifier.width(6.dp))
+        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(id = com.hankki.feature.report.R.string.add_menu),
-            style = HankkiTheme.typography.sub3,
+            style = HankkiTheme.typography.body6,
             color = Gray400
         )
     }
