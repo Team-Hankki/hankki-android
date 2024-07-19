@@ -58,26 +58,6 @@ fun LoginRoute(
                 }
             }
     }
-    SystemBarColorChanger(
-        view = LocalView.current,
-        color = Color.Transparent,
-        shouldRollBack = false
-    )
-
-    val systemUiController = rememberSystemUiController()
-
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Color.Transparent,
-            darkIcons = true,
-            transformColorForLightContent = { Gray900 }
-        )
-        systemUiController.setNavigationBarColor(
-            color = Color.Transparent,
-            darkIcons = true,
-            navigationBarContrastEnforced = false
-        )
-    }
 
     LoginScreen(
         onLoginClick = { viewModel.startKakaoLogin() }

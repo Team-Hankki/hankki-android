@@ -48,8 +48,7 @@ fun AddJogboItem(
             if (isEditMode) painterResource(id = R.drawable.ic_add_jogbo_disable)
             else painterResource(id = R.drawable.ic_add_jogbo),
             contentDescription = stringResource(id = R.string.add_new_jogbo_list),
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.wrapContentSize()
         )
     }
 }

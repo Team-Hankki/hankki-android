@@ -31,4 +31,7 @@
     <string name="new_store_jogbo">새로운 식당 족보</string>
     <string name="ask_logout">정말 로그아웃 하실 건가요?</string>
     <string name="disappear_jogbo">소중한 족보가 사라져요</string>
+    <string name="please_wait">조금만 기다려주세요</string>
+    <string name="no_liked_store">아직 좋아요 누른 식당이 없어요</string>
+    <string name="no_reported_store">아직 제보한 식당이 없어요</string>
 </resources>

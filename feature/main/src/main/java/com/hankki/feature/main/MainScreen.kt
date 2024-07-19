@@ -180,7 +180,16 @@ internal fun MainScreen(
                         navigateToMyStore = navigator::navigateToMyStore,
                         navigateToJogboDetail = navigator::navigateToMyJogboDetail,
                         navigateToNewJogbo = navigator::navigateToNewJogbo,
-                        navigateToStoreDetail = navigator::navigateToStoreDetail
+                        navigateToStoreDetail = navigator::navigateToStoreDetail,
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        }
                     )
                     loginNavGraph(
                         navigateToHome = {
