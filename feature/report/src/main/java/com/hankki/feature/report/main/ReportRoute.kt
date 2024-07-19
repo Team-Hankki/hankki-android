@@ -395,9 +395,12 @@ fun MenuWithPriceInputComponent(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        // +버튼 정렬 하기
-        Row(modifier = Modifier.weight(1f)) {
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             HankkiMenuTextField(
                 value = name,
                 onTextChanged = onMenuChange,
@@ -419,20 +422,20 @@ fun MenuWithPriceInputComponent(
             Text(
                 text = "",
                 style = HankkiTheme.typography.body5,
+                color = Color.Transparent
             )
 
             Spacer(modifier = Modifier.height(3.dp))
 
-            Box(modifier = Modifier) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_circle_x),
-                    contentDescription = "delete",
-                    tint = Gray300,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .noRippleClickable(onClick = deleteMenu)
-                )
-            }
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_circle_x),
+                contentDescription = "delete",
+                tint = Gray300,
+                modifier = Modifier
+                    .size(32.dp)
+                    .noRippleClickable(onClick = deleteMenu)
+            )
         }
     }
 }

@@ -43,6 +43,7 @@ import androidx.navigation.navOptions
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavGraph
 import com.hankki.feature.login.navigation.onboardingNavgraph
@@ -108,7 +109,9 @@ internal fun MainScreen(
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToReport(
@@ -120,11 +123,15 @@ internal fun MainScreen(
                                 ), navOptions
                             )
                         },
-                        navigateToSearchStore = navigator::navigateToSearchStore,
+                        navigateToSearchStore = {
+                            navigator.navigateToSearchStore()
+                        },
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToReportFinish = { count, storeName, storeId ->
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToReportFinish(
@@ -136,7 +143,9 @@ internal fun MainScreen(
                         },
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToHome(navOptions)
@@ -171,8 +180,8 @@ internal fun MainScreen(
                     onboardingNavgraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id) {
-                                    inclusive = true
+                                popUpTo<Home> {
+                                    inclusive = false
                                 }
                                 launchSingleTop = true
                             }
@@ -182,7 +191,9 @@ internal fun MainScreen(
                     universitySelectionNavGraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToHome(navOptions, true)
@@ -228,7 +239,8 @@ private fun MainBottomBar(
                     .navigationBarsPadding()
                     .fillMaxWidth()
                     .height(75.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 tabs.forEach { tab ->
                     MainBottomBarItem(

@@ -44,18 +44,27 @@ internal class MainNavigator(
         }
 
     fun navigate(tab: MainTab) {
-        val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
-
         when (tab) {
-            MainTab.HOME -> navController.navigateHome(navOptions = navOptions)
+            MainTab.HOME -> navController.navigateHome(navOptions =
+            navOptions{
+                popUpTo<Home> {
+                    inclusive = false
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            })
             MainTab.REPORT -> navController.navigateToReport()
-            MainTab.MY -> navController.navigateMy(navOptions)
+            MainTab.MY -> navController.navigateMy(
+                navOptions{
+                    popUpTo<Home> {
+                        inclusive = false
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            )
         }
     }
 
@@ -112,8 +121,8 @@ internal class MainNavigator(
         )
     }
 
-    fun navigateToSearchStore() {
-        navController.navigateToSearchStore()
+    fun navigateToSearchStore(navOptions: NavOptions? = null) {
+        navController.navigateToSearchStore(navOptions)
     }
 
     fun navigateToUniversity() {

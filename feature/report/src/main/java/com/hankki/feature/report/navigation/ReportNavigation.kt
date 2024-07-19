@@ -30,8 +30,8 @@ fun NavController.navigateToReport(
     )
 }
 
-fun NavController.navigateToSearchStore() {
-    navigate(SearchStore)
+fun NavController.navigateToSearchStore(navOptions: NavOptions?,) {
+    navigate(SearchStore, navOptions)
 }
 
 fun NavController.navigateToReportFinish(
