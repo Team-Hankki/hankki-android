@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
@@ -45,6 +47,7 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
 import kotlinx.collections.immutable.PersistentList
@@ -54,6 +57,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun StoreDetailRoute(
     storeId: Long,
     navigateUp: () -> Unit,
+    navigateToAddNewJogbo: () -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
@@ -61,6 +65,29 @@ fun StoreDetailRoute(
 
     LaunchedEffect(storeId) {
         viewModel.fetchStoreDetail(storeId)
+    }
+
+    val systemUiController = rememberSystemUiController()
+    val customColor = White
+
+    DisposableEffect(systemUiController) {
+        systemUiController.setNavigationBarColor(
+            color = customColor,
+            darkIcons = true
+        )
+
+        onDispose {
+            systemUiController.setStatusBarColor(
+                color = Color.Transparent,
+                darkIcons = true,
+                transformColorForLightContent = { Gray900 }
+            )
+            systemUiController.setNavigationBarColor(
+                color = Color.Transparent,
+                darkIcons = true,
+                navigationBarContrastEnforced = false
+            )
+        }
     }
 
     when (val state = storeState.storeDetail) {
@@ -84,6 +111,10 @@ fun StoreDetailRoute(
                 isOpenBottomSheet = storeState.isOpenBottomSheet,
                 openBottomSheet = viewModel::controlMyJogboBottomSheet,
                 jogboItems = storeState.jogboItems,
+                addNewJogbo = {
+                    navigateToAddNewJogbo()
+                    viewModel.controlMyJogboBottomSheet()
+                },
                 onDismissBottomSheetRequest = viewModel::controlMyJogboBottomSheet,
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
@@ -142,14 +173,16 @@ fun StoreDetailScreen(
     isOpenBottomSheet: Boolean,
     openBottomSheet: () -> Unit,
     jogboItems: PersistentList<JogboResponseModel>,
+    addNewJogbo: () -> Unit,
     onDismissBottomSheetRequest: () -> Unit,
     addStoreAtJogbo: (Long) -> Unit,
     onAddMenuClicked: () -> Unit,
-    onReportClicked: () -> Unit
+    onReportClicked: () -> Unit,
 ) {
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
+            addNewJogbo = addNewJogbo,
             onDismissRequest = onDismissBottomSheetRequest,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId)

@@ -140,6 +140,9 @@ class ReportViewModel @Inject constructor(
     }
 
     fun submitReport() {
+        _state.value = _state.value.copy(
+            buttonEnabled = false
+        )
         viewModelScope.launch {
             reportRepository.postReport(
                 image = _state.value.selectedImageUri?.toString(),
@@ -166,6 +169,9 @@ class ReportViewModel @Inject constructor(
                     )
                 )
             }.onFailure { error ->
+                _state.value = _state.value.copy(
+                    buttonEnabled = true
+                )
                 Timber.e(error)
             }
         }

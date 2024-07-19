@@ -66,6 +66,7 @@ fun NavGraphBuilder.reportNavGraph(
     ) -> Unit,
     navigateToStoreDetail: (storeId: Long) -> Unit,
     navigateToHome: () -> Unit,
+    navigateToAddNewJogbo: () -> Unit
 ) {
     composable<Report> { backStackEntry ->
         val items = backStackEntry.toRoute<Report>()
@@ -96,7 +97,8 @@ fun NavGraphBuilder.reportNavGraph(
             storeName = items.storeName,
             storeId = items.storeId,
             navigateToHome = navigateToHome,
-            navigateToStoreDetail = navigateToStoreDetail
+            navigateToStoreDetail = navigateToStoreDetail,
+            navigateToAddNewJogbo = navigateToAddNewJogbo
         )
     }
 }

@@ -91,7 +91,7 @@ fun StoreItem(
                 )
                 Spacer(modifier = Modifier.width(2.dp))
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_heart),
+                    painter = painterResource(id = R.drawable.ic_like),
                     contentDescription = "icon",
                     tint = Gray300
                 )

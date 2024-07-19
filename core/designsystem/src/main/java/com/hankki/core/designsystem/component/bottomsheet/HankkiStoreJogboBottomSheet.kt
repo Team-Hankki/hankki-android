@@ -95,6 +95,22 @@ fun HankkiStoreJogboBottomSheet(
         onDismissRequest = {
             onDismissRequest()
         },
+        dragHandle = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_drag_handle),
+                    contentDescription = "drag handle",
+                    tint = Gray200,
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        },
         sheetState = sheetState
     ) {
         Text(

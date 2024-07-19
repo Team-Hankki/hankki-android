@@ -104,7 +104,8 @@ internal fun MainScreen(
                         paddingValues = paddingValue,
                         onShowSnackBar = {},
                         navigateStoreDetail = navigator::navigateToStoreDetail,
-                        navigateToUniversitySelection = navigator::navigateToUniversity
+                        navigateToUniversitySelection = navigator::navigateToUniversity,
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
                     )
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
@@ -156,7 +157,8 @@ internal fun MainScreen(
                                 launchSingleTop = true
                             }
                             navigator.navigateToStoreDetail(storeId, navOptions)
-                        }
+                        },
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
@@ -199,7 +201,10 @@ internal fun MainScreen(
                             navigator.navigateToHome(navOptions, true)
                         }
                     )
-                    storeDetailNavGraph(navigateUp = navigator::navigateUpIfNotHome)
+                    storeDetailNavGraph(
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
+                    )
                 }
             }
         },
@@ -240,7 +245,7 @@ private fun MainBottomBar(
                     .fillMaxWidth()
                     .height(75.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 tabs.forEach { tab ->
                     MainBottomBarItem(
@@ -263,7 +268,6 @@ private fun RowScope.MainBottomBarItem(
 ) {
     Box(
         modifier = Modifier
-            .weight(1f)
             .fillMaxHeight()
             .selectable(
                 selected = selected,
