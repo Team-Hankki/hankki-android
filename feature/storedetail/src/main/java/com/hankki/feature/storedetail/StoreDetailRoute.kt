@@ -180,7 +180,7 @@ fun StoreDetailScreen(
             )
 
             Image(
-                painter = painterResource(id = R.drawable.img_black_gradient_top),
+                painter = painterResource(id = R.drawable.img_black_gradation_top),
                 contentDescription = "black gradient",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
