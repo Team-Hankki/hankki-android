@@ -3,6 +3,7 @@ package com.hankki.feature.my.myjogbodetail
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
+import com.hankki.core.designsystem.component.layout.CircleLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
@@ -197,7 +199,14 @@ fun MyJogboDetailScreen(
         )
 
         when (storeItems) {
-            is EmptyUiState.Loading -> {}
+            is EmptyUiState.Loading -> {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(White)
+                ){
+                    CircleLoadingScreen()
+                }
+            }
 
             is EmptyUiState.Success -> {
                 LazyColumn(
