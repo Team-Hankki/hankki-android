@@ -6,22 +6,21 @@ import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
 import com.hankki.data.my.dto.response.JogboDetailDto
 import com.hankki.data.my.dto.response.LikedStoreResponseDto
-import com.hankki.data.my.dto.response.StoreDto
 import com.hankki.data.my.dto.response.MyJogboDto
+import com.hankki.data.my.dto.response.StoreDto
 import com.hankki.data.my.dto.response.UserInformationDto
-import com.hankki.domain.my.entity.response.LikedStoreResponseEntity
 
 interface MyDataSource {
     suspend fun getUserInformation(): BaseResponse<UserInformationDto>
     suspend fun getMyJogboList(): BaseResponse<MyJogboDto>
     suspend fun postNewJogbo(body: NewJogboDto): CreatedBaseResponse
-    suspend fun getJogboDetail(favoriteId:Long): BaseResponse<JogboDetailDto>
+    suspend fun getJogboDetail(favoriteId: Long): BaseResponse<JogboDetailDto>
     suspend fun getLikedStore(): BaseResponse<StoreDto>
     suspend fun getReportedStore(): BaseResponse<StoreDto>
     suspend fun patchLogout(): CreatedBaseResponse
     suspend fun deleteWithdraw(): CreatedBaseResponse
-    suspend fun deleteJogboStore(favoriteId:Long,storeId:Long)
+    suspend fun deleteJogboStore(favoriteId: Long, storeId: Long)
     suspend fun deleteJogboStores(body: JogbosRequestDto)
-    suspend fun likeStore(storeId:Long): BaseResponse<LikedStoreResponseDto>
-    suspend fun unLikeStore(storeId:Long): BaseResponse<LikedStoreResponseDto>
+    suspend fun likeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
+    suspend fun unLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
 }

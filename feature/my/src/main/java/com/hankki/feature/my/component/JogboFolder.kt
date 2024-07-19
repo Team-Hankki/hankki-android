@@ -37,7 +37,7 @@ fun JogboFolder(
     chips: PersistentList<String>,
     userName: String,
     userProfileImage: String,
-    shareJogbo: () -> Unit
+    shareJogbo: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -50,7 +50,7 @@ fun JogboFolder(
                 contentScale = ContentScale.FillWidth
             )
     ) {
-        Column(modifier = Modifier.padding(horizontal = 0.dp)) {
+        Column {
             Icon(
                 painter = painterResource(id = R.drawable.ic_my_store),
                 contentDescription = "store image",

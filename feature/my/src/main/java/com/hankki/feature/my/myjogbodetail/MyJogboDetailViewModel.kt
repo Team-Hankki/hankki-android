@@ -3,7 +3,6 @@ package com.hankki.feature.my.myjogbodetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.repository.MyRepository
-import com.hankki.feature.my.mystore.MyStoreSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyJogboDetailViewModel @Inject constructor(
-    private val myRepository: MyRepository
+    private val myRepository: MyRepository,
 ) : ViewModel() {
     private val _myJogboDetailState = MutableStateFlow(MyJogboDetailState())
     val myJogboDetailState: StateFlow<MyJogboDetailState>
@@ -27,7 +26,7 @@ class MyJogboDetailViewModel @Inject constructor(
     val mySideEffect: SharedFlow<MyJogboSideEffect>
         get() = _mySideEffect.asSharedFlow()
 
-    fun getJogboDetail(favoriteId : Long) {
+    fun getJogboDetail(favoriteId: Long) {
         viewModelScope.launch {
             myRepository.getJogboDetail(favoriteId)
                 .onSuccess { jogbo ->
@@ -53,9 +52,9 @@ class MyJogboDetailViewModel @Inject constructor(
         )
     }
 
-    fun deleteJogboStore(favoriteId:Long,storeId:Long){
+    fun deleteJogboStore(favoriteId: Long, storeId: Long) {
         viewModelScope.launch {
-            myRepository.deleteJogboStore(favoriteId,storeId)
+            myRepository.deleteJogboStore(favoriteId, storeId)
                 .onSuccess { jogbo ->
                     updateDeleteDialog(true)
                     getJogboDetail(favoriteId)
@@ -66,13 +65,13 @@ class MyJogboDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedStoreId(storeId : Long){
+    fun updateSelectedStoreId(storeId: Long) {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
             selectedStoreId = storeId
         )
     }
 
-    fun onClickStoreItem(storeId : Long){
+    fun onClickStoreItem(storeId: Long) {
         viewModelScope.launch {
 
         }

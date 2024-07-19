@@ -64,7 +64,6 @@ class MyStoreViewModel @Inject constructor(
     fun updateStoreSelected(id: Long, isLiked: Boolean) {
         viewModelScope.launch {
             if (isLiked) {
-                // 좋아요 취소
                 myRepository.unLikeStore(id).onSuccess {
                     _myStoreState.value = _myStoreState.value.copy(
                         myStoreItems = _myStoreState.value.myStoreItems.map {
