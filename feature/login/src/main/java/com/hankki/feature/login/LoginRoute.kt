@@ -81,7 +81,6 @@ fun LoginScreen(
         Column(
             modifier = Modifier.align(Alignment.TopStart)
         ) {
-            Spacer(modifier = Modifier.height(77.dp))
             Text(
                 text = stringResource(R.string.done_worry),
                 color = White,
