@@ -125,7 +125,7 @@ fun MyJogboDetailScreen(
 ) {
     if (shareDialogState) {
         SingleButtonDialog(
-            title = stringResource(R.string.go_to_register_store),
+            title = stringResource(R.string.please_wait),
             description = stringResource(R.string.preparing_share_jogbo),
             buttonTitle = stringResource(R.string.check),
             onConfirmation = updateShareDialogState
