@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -14,7 +13,6 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.Login
-import com.hankki.feature.login.navigation.navigateLogin
 import com.hankki.feature.main.splash.navigation.Splash
 import com.hankki.feature.login.navigation.navigateOnboarding
 import com.hankki.feature.my.navigation.navigateMy
@@ -46,7 +44,7 @@ internal class MainNavigator(
     fun navigate(tab: MainTab) {
         when (tab) {
             MainTab.HOME -> navController.navigateHome(navOptions =
-            navOptions{
+            navOptions {
                 popUpTo<Home> {
                     inclusive = false
                     saveState = true
@@ -54,9 +52,10 @@ internal class MainNavigator(
                 launchSingleTop = true
                 restoreState = true
             })
+
             MainTab.REPORT -> navController.navigateToReport()
             MainTab.MY -> navController.navigateMy(
-                navOptions{
+                navOptions {
                     popUpTo<Home> {
                         inclusive = false
                         saveState = true
@@ -68,12 +67,18 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateToLogin() {
-        navController.navigateLogin()
+    fun navigateToLogin(navOptions: NavOptions? = null) {
+        val options = navOptions ?: navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = false
+            }
+            launchSingleTop = true
+        }
+        navController.navigate(Login, options)
     }
 
-    fun navigateToOnboarding() {
-        navController.navigateOnboarding()
+    fun navigateToOnboarding(navOptions: NavOptions) {
+        navController.navigateOnboarding(navOptions)
     }
 
     private fun navigateUp() {
@@ -125,8 +130,8 @@ internal class MainNavigator(
         navController.navigateToSearchStore(navOptions)
     }
 
-    fun navigateToUniversity() {
-        navController.navigateToUniversitySelection()
+    fun navigateToUniversity(navOptions: NavOptions? = null) {
+        navController.navigateToUniversitySelection(navOptions)
     }
 
     fun navigateToMyJogbo() {
@@ -137,7 +142,7 @@ internal class MainNavigator(
         navController.navigateMyStore(type)
     }
 
-    fun navigateToMyJogboDetail(favoriteId:Long) {
+    fun navigateToMyJogboDetail(favoriteId: Long) {
         navController.navigateMyJogboDetail(favoriteId = favoriteId)
     }
 
