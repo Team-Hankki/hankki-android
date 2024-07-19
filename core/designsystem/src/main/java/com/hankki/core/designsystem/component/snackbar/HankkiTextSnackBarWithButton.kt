@@ -19,6 +19,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 
+
 @Composable
 fun HankkiTextSnackBarWithButton(onClick: () -> Unit) {
     val message = "나의 족보에 추가되었습니다."
