@@ -262,10 +262,10 @@ fun MyJogboDetailScreenPreview() {
         MyJogboDetailScreen(
             PaddingValues(),
             {},
-            "",
-            persistentListOf("", "", ""),
+            "asd",
+            persistentListOf("asadasdasdaadd", "asd", "asd"),
             persistentListOf(
-                Store(0, "", "", "", 0, 0),
+                Store(0, "asd", "", "asd", 0, 0),
                 Store(0, "", "", "", 0, 0),
                 Store(0, "", "", "", 0, 0)
             ),
