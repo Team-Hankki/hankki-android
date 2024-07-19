@@ -28,6 +28,7 @@ import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
+import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
@@ -69,7 +70,8 @@ fun StoreItem(
             Row(modifier = Modifier.padding(top = 11.5.dp)) {
                 Text(
                     text = name,
-                    style = HankkiTheme.typography.suitSub1
+                    style = HankkiTheme.typography.suitSub1,
+                    color = Gray900
                 )
 
                 Spacer(modifier = Modifier.width(5.dp))
