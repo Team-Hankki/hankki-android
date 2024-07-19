@@ -45,13 +45,16 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.homeNavGraph
+import com.hankki.feature.login.navigation.Login
+import com.hankki.feature.login.navigation.Onboarding
 import com.hankki.feature.login.navigation.loginNavGraph
-import com.hankki.feature.login.navigation.onboardingNavgraph
+import com.hankki.feature.login.navigation.onboardingNavGraph
 import com.hankki.feature.main.splash.navigation.splashNavGraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
 import com.hankki.feature.storedetail.navigation.storeDetailNavGraph
+import com.hankki.feature.universityselection.navigation.UniversitySelection
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -98,7 +101,17 @@ internal fun MainScreen(
                                 isNewUniversity = true
                             )
                         },
-                        navigateToLogIn = navigator::navigateToLogin
+                        navigateToLogIn = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToLogin(
+                                navOptions = navOptions
+                            )
+                        },
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
@@ -172,29 +185,40 @@ internal fun MainScreen(
                     loginNavGraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions)
-                        },
-                        navigateToOnboarding = navigator::navigateToOnboarding
-                    )
-                    onboardingNavgraph(
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    inclusive = true
                                 }
                                 launchSingleTop = true
                             }
                             navigator.navigateToHome(navOptions)
+                        },
+                        navigateToOnboarding = {
+                            val navOptions = navOptions {
+                                popUpTo<Login> {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToOnboarding(navOptions)
+                        }
+                    )
+
+                    onboardingNavGraph(
+                        navigateToUniversity = {
+                            val navOptions = navOptions {
+                                popUpTo<Onboarding> {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToUniversity(navOptions)
                         }
                     )
                     universitySelectionNavGraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
+                                popUpTo<UniversitySelection> {
+                                    inclusive = true
                                 }
                                 launchSingleTop = true
                             }

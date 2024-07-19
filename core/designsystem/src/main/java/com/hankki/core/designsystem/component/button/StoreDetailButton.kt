@@ -13,12 +13,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.graphics.Color
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun StoreDetailButton(
@@ -26,18 +28,20 @@ fun StoreDetailButton(
     content: @Composable () -> Unit,
     onClick: () -> Unit,
     tailingIcon: @Composable () -> Unit = {},
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
+    backgroundColor: Color = White,
+    borderColor: Color = if (isSelected) Red else Gray200
 ) {
-    val borderColor = if (isSelected) Red else Gray200
 
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
-            .background(color = Color.Transparent)
+            .background(color = White)
             .noRippleClickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = 20.dp, vertical = 15.5.dp)
     ) {
+        Spacer(modifier = Modifier.height(11.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,

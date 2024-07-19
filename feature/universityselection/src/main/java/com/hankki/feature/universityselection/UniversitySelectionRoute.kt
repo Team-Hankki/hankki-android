@@ -87,7 +87,7 @@ fun UniversitySelectionScreen(
         Column(modifier = Modifier.padding(horizontal = 22.dp)) {
             Text(
                 text = stringResource(id = R.string.select_university),
-                style = HankkiTheme.typography.h1,
+                style = HankkiTheme.typography.suitH1,
                 color = Gray900
             )
 
@@ -134,7 +134,7 @@ fun UniversitySelectionScreen(
             ) {
                 HankkiButton(
                     text = stringResource(id = R.string.select),
-                    textStyle = HankkiTheme.typography.sub2,
+                    textStyle = HankkiTheme.typography.sub3,
                     onClick = onPostSelectedUniversity,
                     modifier = Modifier
                         .fillMaxWidth(),
