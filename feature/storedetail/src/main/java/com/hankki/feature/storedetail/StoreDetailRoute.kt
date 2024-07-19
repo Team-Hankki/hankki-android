@@ -1,6 +1,7 @@
 package com.hankki.feature.storedetail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,7 +42,9 @@ import com.hankki.core.designsystem.component.button.StoreDetailButton
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -113,11 +116,12 @@ fun StoreDetailRoute(
             ImageDoubleButtonDialog(
                 name = storeState.nickname,
                 title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
-                negativeButtonTitle = "취소",
-                positiveButtonTitle = "확인",
-                onNegativeButtonClicked = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) },
+                negativeButtonTitle = "",
+                positiveButtonTitle = "돌아가기",
+                onNegativeButtonClicked = { },
                 onPositiveButtonClicked = {
                     viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                    viewModel.resetSelectedIndex()
                 }
             )
         }
@@ -161,16 +165,16 @@ fun StoreDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .navigationBarsPadding()
+            .background(Gray50)
     ) {
         Box {
             AsyncImage(
                 model = imageUrl,
                 contentDescription = "식당 사진",
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .aspectRatio(1.5f),
-                contentScale = ContentScale.FillWidth,
+                contentScale = ContentScale.FillBounds,
                 placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
                 error = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail)
             )
@@ -178,8 +182,8 @@ fun StoreDetailScreen(
             Image(
                 painter = painterResource(id = R.drawable.img_black_gradient_top),
                 contentDescription = "black gradient",
-                modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds
             )
 
             Column {
@@ -221,20 +225,22 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = heartCount.toString(),
-                                style = HankkiTheme.typography.sub3,
+                                style = HankkiTheme.typography.body4,
                                 color = Gray500
                             )
                         },
                         onClick = {
                             onLikeClicked()
-                        }
+                        },
+                        borderColor = Gray100,
+                        backgroundColor = Color.White
                     )
                 },
                 addMyJogboButton = {
                     StoreDetailButton(
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_add_circle_dark_plus),
+                                painter = painterResource(id = R.drawable.ic_btn_add_my_jogbo),
                                 contentDescription = "추가 아이콘",
                                 tint = Color.Unspecified
                             )
@@ -242,11 +248,13 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
-                                style = HankkiTheme.typography.sub3,
+                                style = HankkiTheme.typography.body4,
                                 color = Gray500
                             )
                         },
-                        onClick = openBottomSheet
+                        onClick = openBottomSheet,
+                        borderColor = Gray100,
+                        backgroundColor = Color.White
                     )
                 },
                 onMenuEditClick = onAddMenuClicked
@@ -283,7 +291,7 @@ fun StoreDetailScreen(
                         },
                         tailingIcon = {
                             Icon(
-                                painter = painterResource(id = if (isSelected) R.drawable.ic_check_btn else R.drawable.ic_uncheck_btn),
+                                painter = painterResource(id = if (isSelected) R.drawable.ic_btn_radio_check else R.drawable.ic_btn_radio_uncheck),
                                 contentDescription = "체크박스 아이콘",
                                 modifier = Modifier.size(24.dp),
                                 tint = Color.Unspecified
@@ -291,16 +299,16 @@ fun StoreDetailScreen(
                         },
                         isSelected = isSelected
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.padding(top = 11.dp))
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
+                Spacer(modifier = Modifier.height(8.dp))
                 HankkiButton(
                     text = "제보하기",
                     onClick = onReportClicked,
                     modifier = Modifier
-                        .fillMaxWidth(0.4f),
+                        .fillMaxWidth(0.4f)
+                        .navigationBarsPadding(),
                     textStyle = HankkiTheme.typography.sub3,
                     enabled = selectedIndex != -1
                 )

@@ -142,4 +142,8 @@ class StoreDetailViewModel @Inject constructor(
                 }
         }
     }
+
+    fun resetSelectedIndex() {
+        _storeState.value = _storeState.value.copy(selectedIndex = -1)
+    }
 }
