@@ -46,9 +46,9 @@ fun SelectedImageController(
                 contentDescription = "selected image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(84.dp)
-                    .clip(RoundedCornerShape(10.dp))
                     .padding(top = 12.dp, end = 12.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .size(84.dp)
                     .align(Alignment.BottomStart)
             )
             Icon(
