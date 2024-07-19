@@ -54,7 +54,7 @@ import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun MyJogboDetailRoute(
-    favoriteId : Long,
+    favoriteId: Long,
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
@@ -75,7 +75,15 @@ fun MyJogboDetailRoute(
         shareDialogState = myJogboDetailState.showShareDialog,
         userInformation = myJogboDetailState.userInformation,
         updateShareDialogState = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
-        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) }
+        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) },
+        deleteJogboStore = { storeId ->
+            myJogboDetailViewModel.deleteJogboStore(
+                favoriteId,
+                storeId
+            )
+        },
+        selectedStoreId = myJogboDetailState.selectedStoreId,
+        updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) }
     )
 }
 
@@ -91,10 +99,14 @@ fun MyJogboDetailScreen(
     shareDialogState: Boolean,
     userInformation: UserInformationEntity,
     updateShareDialogState: () -> Unit,
-    updateDeleteDialogState: () -> Unit
+    updateDeleteDialogState: () -> Unit,
+    deleteJogboStore: (Long) -> Unit,
+    selectedStoreId: Long,
+    updateSelectedStoreId: (Long) -> Unit
 ) {
     if (shareDialogState) {
-        SingleButtonDialog(title = stringResource(R.string.go_to_register_store),
+        SingleButtonDialog(
+            title = stringResource(R.string.go_to_register_store),
             description = stringResource(R.string.preparing_share_jogbo),
             buttonTitle = stringResource(R.string.check),
             onConfirmation = updateShareDialogState
@@ -107,7 +119,9 @@ fun MyJogboDetailScreen(
             negativeButtonTitle = stringResource(R.string.go_back),
             positiveButtonTitle = stringResource(id = R.string.delete),
             onNegativeButtonClicked = updateDeleteDialogState,
-            onPositiveButtonClicked = updateDeleteDialogState
+            onPositiveButtonClicked = {
+                deleteJogboStore(selectedStoreId)
+            }
         )
     }
 
@@ -175,7 +189,10 @@ fun MyJogboDetailScreen(
                     isIconSelected = false,
                     modifier = Modifier.combinedClickable(
                         onClick = {},
-                        onLongClick = updateDeleteDialogState
+                        onLongClick = {
+                            updateSelectedStoreId(store.id)
+                            updateDeleteDialogState()
+                        }
                     )
                 )
                 if (storeItems.indexOf(store) != storeItems.lastIndex) {
@@ -239,7 +256,10 @@ fun MyJogboDetailScreenPreview() {
                 profileImageUrl = ""
             ),
             {},
-            {}
+            {},
+            {},
+            0,
+            { _ -> }
         )
     }
 }
