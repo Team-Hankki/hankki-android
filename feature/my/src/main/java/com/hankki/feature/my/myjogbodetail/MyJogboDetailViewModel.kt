@@ -2,9 +2,11 @@ package com.hankki.feature.my.myjogbodetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.domain.my.repository.MyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,11 +30,15 @@ class MyJogboDetailViewModel @Inject constructor(
         get() = _mySideEffect.asSharedFlow()
 
     fun getJogboDetail(favoriteId: Long) {
+        _myJogboDetailState.value = _myJogboDetailState.value.copy(
+            storesUiState = EmptyUiState.Loading
+        )
         viewModelScope.launch {
             myRepository.getJogboDetail(favoriteId)
                 .onSuccess { jogbo ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
-                        myStoreItems = jogbo
+                        myStoreItems = jogbo,
+                        storesUiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(jogbo.stores.toPersistentList())
                     )
                 }
                 .onFailure { error ->
