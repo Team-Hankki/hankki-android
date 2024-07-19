@@ -2,6 +2,7 @@ package com.hankki.feature.my.myjogbodetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.domain.my.repository.MyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -74,6 +75,23 @@ class MyJogboDetailViewModel @Inject constructor(
     fun onClickStoreItem(storeId: Long) {
         viewModelScope.launch {
 
+        }
+    }
+
+    fun getUserName() {
+        viewModelScope.launch {
+            myRepository.getUserInformation()
+                .onSuccess { userInformation ->
+                    _myJogboDetailState.value = _myJogboDetailState.value.copy(
+                        userInformation = UserInformationEntity(
+                            nickname = userInformation.nickname,
+                            profileImageUrl = ""
+                        )
+                    )
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                }
         }
     }
 }

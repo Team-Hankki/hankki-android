@@ -1,5 +1,6 @@
 package com.hankki.feature.my.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +24,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -36,7 +36,6 @@ fun JogboFolder(
     title: String,
     chips: PersistentList<String>,
     userName: String,
-    userProfileImage: String,
     shareJogbo: () -> Unit,
 ) {
     Box(
@@ -90,9 +89,9 @@ fun JogboFolder(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    AsyncImage(
-                        model = userProfileImage,
-                        contentDescription = "user profile image",
+                    Image(
+                        painter = painterResource(id = R.drawable.user_image),
+                        contentDescription = "user image",
                         modifier = Modifier.size(26.dp)
                     )
                     Text(
