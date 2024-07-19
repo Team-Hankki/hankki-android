@@ -55,3 +55,37 @@ fun StoreDetailButton(
         }
     }
 }
+
+@Composable
+fun StoreDetailButton2(
+    leadingIcon: @Composable () -> Unit = {},
+    content: @Composable () -> Unit,
+    onClick: () -> Unit,
+    tailingIcon: @Composable () -> Unit = {},
+    isSelected: Boolean = false,
+    backgroundColor: Color = White,
+    borderColor: Color = if (isSelected) Red else Gray200
+) {
+
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
+            .background(color = White)
+            .noRippleClickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 9.dp)
+    ) {
+        Spacer(modifier = Modifier.height(11.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.wrapContentWidth()
+        ) {
+            leadingIcon()
+            Spacer(modifier = Modifier.width(8.dp))
+            content()
+            Spacer(modifier = Modifier.width(8.dp))
+            tailingIcon()
+        }
+    }
+}
