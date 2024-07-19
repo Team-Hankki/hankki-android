@@ -1,6 +1,7 @@
 package com.hankki.feature.report.finish
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.HankkiTextButton
+import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -90,6 +92,7 @@ fun ReportFinishScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Gray50)
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
