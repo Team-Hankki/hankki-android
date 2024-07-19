@@ -1,18 +1,7 @@
 package com.hankki.feature.storedetail
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -37,7 +26,7 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailButton
-import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
@@ -73,7 +62,7 @@ fun StoreDetailRoute(
                 menuItems = storeDetail.menus.toPersistentList(),
                 isLiked = storeState.isLiked,
                 heartCount = storeState.heartCount,
-                imageUrl = storeDetail.imageUrls.firstOrNull() // 좀만 생각해보자
+                imageUrl = storeDetail.imageUrls.firstOrNull()
                     ?: (com.hankki.feature.storedetail.R.drawable.img_default_store_detail).toString(),
                 selectedIndex = storeState.selectedIndex,
                 buttonLabels = storeState.buttonLabels,
@@ -87,20 +76,38 @@ fun StoreDetailRoute(
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
                 },
-                onAddMenuClicked = { viewModel.updateDialogState(StoreDetailDialogState.MENU_EDIT) }
+                onAddMenuClicked = { viewModel.updateDialogState(StoreDetailDialogState.MENU_EDIT) },
+                onReportClicked = { viewModel.updateDialogState(StoreDetailDialogState.REPORT_CONFIRMATION) }
             )
         }
 
         is UiState.Failure -> {}
     }
 
-    if (dialogState == StoreDetailDialogState.MENU_EDIT) {
-        SingleButtonDialog(
-            title = "조금만 기다려주세요!",
-            description = "메뉴를 편집할 수 있도록\n준비하고 있어요",
-            buttonTitle = "확인",
-            onConfirmation = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) }
-        )
+    when (dialogState) {
+        StoreDetailDialogState.MENU_EDIT -> {
+            SingleButtonDialog(
+                title = "조금만 기다려주세요!",
+                description = "메뉴를 편집할 수 있도록\n준비하고 있어요",
+                buttonTitle = "확인",
+                onConfirmation = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) }
+            )
+        }
+
+        StoreDetailDialogState.REPORT_CONFIRMATION -> {
+            ImageDoubleButtonDialog(
+                name="한끼귀욤",
+                title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
+                negativeButtonTitle = "취소",
+                positiveButtonTitle = "확인",
+                onNegativeButtonClicked = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) },
+                onPositiveButtonClicked = {
+                    viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                }
+            )
+        }
+
+        else -> {}
     }
 }
 
@@ -122,7 +129,8 @@ fun StoreDetailScreen(
     jogboItems: PersistentList<JogboResponseModel>,
     onDismissBottomSheetRequest: () -> Unit,
     addStoreAtJogbo: (Long) -> Unit,
-    onAddMenuClicked: () -> Unit
+    onAddMenuClicked: () -> Unit,
+    onReportClicked: () -> Unit
 ) {
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
@@ -274,7 +282,7 @@ fun StoreDetailScreen(
 
                 HankkiButton(
                     text = "제보하기",
-                    onClick = { /* TODO: handle submit */ },
+                    onClick = onReportClicked,
                     modifier = Modifier
                         .fillMaxWidth(0.4f),
                     textStyle = HankkiTheme.typography.sub3,
