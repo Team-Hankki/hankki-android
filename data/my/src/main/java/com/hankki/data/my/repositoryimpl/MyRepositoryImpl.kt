@@ -45,6 +45,7 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun deleteWithdraw(): Result<Unit> = runCatching {
         myDataSource.deleteWithdraw()
     }
+
     override suspend fun deleteJogboStore(favoriteId:Long,storeId:Long): Result<Unit> = runCatching {
         myDataSource.deleteJogboStore(favoriteId,storeId)
     }
