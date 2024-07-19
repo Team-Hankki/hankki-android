@@ -15,4 +15,5 @@ interface MyRepository {
     suspend fun getReportedStore() : Result<List<StoreEntity>>
     suspend fun patchLogout(): Result<Unit>
     suspend fun deleteWithdraw(): Result<Unit>
+    suspend fun deleteJogboStore(favoriteId: Long,storeId:Long) : Result<Unit>
 }
