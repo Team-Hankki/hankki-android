@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -146,11 +147,12 @@ fun MyJogboDetailScreen(
 
     Column(
         modifier = Modifier
-            .padding(paddingValues)
+            .padding(bottom = paddingValues.calculateBottomPadding())
             .fillMaxSize()
             .background(Red),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.statusBarsPadding().background(Red))
         HankkiTopBar(
             modifier = Modifier.background(Red),
             leadingIcon = {
@@ -207,7 +209,7 @@ fun MyJogboDetailScreen(
                     isIconUsed = false,
                     isIconSelected = false,
                     modifier = Modifier.combinedClickable(
-                        onClick = { onClickStoreItem(store.id) },
+                        onClick = {},
                         onLongClick = {
                             updateSelectedStoreId(store.id)
                             updateDeleteDialogState()
