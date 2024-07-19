@@ -9,7 +9,9 @@ import com.hankki.data.report.dto.response.CountResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
 import com.hankki.data.report.dto.response.UniversityResponseDto
+import com.hankki.data.report.dto.response.UserInfoResponseDto
 import com.hankki.data.report.service.ReportService
+import com.hankki.domain.report.entity.response.UserInfoResponseEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -37,4 +39,7 @@ class ReportDataSourceImpl @Inject constructor(
 
     override suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto> =
         reportService.getMyUniversity()
+
+    override suspend fun getUserInfo(): BaseResponse<UserInfoResponseDto> =
+        reportService.getUserInfo()
 }

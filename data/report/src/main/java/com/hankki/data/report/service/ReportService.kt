@@ -8,6 +8,8 @@ import com.hankki.data.report.dto.response.CountResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
 import com.hankki.data.report.dto.response.UniversityResponseDto
+import com.hankki.data.report.dto.response.UserInfoResponseDto
+import com.hankki.domain.report.entity.response.UserInfoResponseEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -44,4 +46,7 @@ interface ReportService {
 
     @GET("api/v1/users/me/university")
     suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto>
+
+    @GET("/api/v1/users/me")
+    suspend fun getUserInfo() : BaseResponse<UserInfoResponseDto>
 }

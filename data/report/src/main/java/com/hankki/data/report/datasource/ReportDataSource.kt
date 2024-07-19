@@ -8,6 +8,8 @@ import com.hankki.data.report.dto.response.CountResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
 import com.hankki.data.report.dto.response.UniversityResponseDto
+import com.hankki.data.report.dto.response.UserInfoResponseDto
+import com.hankki.domain.report.entity.response.UserInfoResponseEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -18,4 +20,5 @@ interface ReportDataSource {
     suspend fun getCategories(): BaseResponse<CategoriesResponseDto>
     suspend fun postReport(image: MultipartBody.Part?, request: RequestBody): BaseResponse<GeneratedStoreResponseDto>
     suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto>
+    suspend fun getUserInfo(): BaseResponse<UserInfoResponseDto>
 }

@@ -2,6 +2,7 @@ package com.hankki.feature.report.finish
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.domain.report.repository.ReportRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReportFinishViewModel @Inject constructor(
+    private val reportRepository: ReportRepository,
 ) : ViewModel() {
     private val _state: MutableStateFlow<ReportFinishState> = MutableStateFlow(ReportFinishState())
     val state: StateFlow<ReportFinishState>
@@ -40,8 +42,13 @@ class ReportFinishViewModel @Inject constructor(
         )
     }
 
-    fun getUserName() {
-        _state.value = _state.value.copy(name = "동민")
+    private fun getUserName() {
+        viewModelScope.launch {
+            reportRepository.getUserInfo().onSuccess {
+                _state.value = _state.value.copy(name = it.nickname)
+            }.onFailure {
+            }
+        }
     }
 
     fun addMyJogbo() {
