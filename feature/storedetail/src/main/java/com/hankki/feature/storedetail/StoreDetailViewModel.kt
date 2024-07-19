@@ -57,10 +57,9 @@ class StoreDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = storeDetailRepository.getStoreDetailNickname()
             result.onSuccess {
-                Timber.d("Fetched nickname: ${it.nickname}")
                 _storeState.value = _storeState.value.copy(nickname = it.nickname)
             }.onFailure {
-                Timber.e("Failed to fetch nickname: ${it.message}")
+                //fail
             }
         }
     }

@@ -44,12 +44,12 @@ class StoreDetailRepositoryImpl @Inject constructor(
         }
 
     override suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): Result<Unit> =
-        kotlin.runCatching {
+        runCatching {
             storeDetailDataSource.addStoreAtJogbo(favoriteId, storeId)
         }
 
     override suspend fun getStoreDetailNickname(): Result<StoreDetailNicknameEntity> =
-        kotlin.runCatching {
+        runCatching {
             storeDetailDataSource.getStoreDetailNickname().data.toStoreDetailNicknameEntity()
         }
 }
