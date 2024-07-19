@@ -11,10 +11,10 @@ fun NavController.navigateOnboarding() {
     navigate(Onboarding)
 }
 
-fun NavGraphBuilder.onboardingNavgraph(navigateToHome: () -> Unit) {
+fun NavGraphBuilder.onboardingNavGraph(navigateToUniversity: () -> Unit) {
     composable<Onboarding> {
         OnboardingRoute(
-            navigateToHome = navigateToHome
+            navigateToUniversity = navigateToUniversity
         )
     }
 }

@@ -46,12 +46,13 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavGraph
-import com.hankki.feature.login.navigation.onboardingNavgraph
+import com.hankki.feature.login.navigation.onboardingNavGraph
 import com.hankki.feature.main.splash.navigation.splashNavGraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
 import com.hankki.feature.storedetail.navigation.storeDetailNavGraph
+import com.hankki.feature.universityselection.navigation.UniversitySelection
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -170,22 +171,18 @@ internal fun MainScreen(
                     loginNavGraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions)
-                        },
-                        navigateToOnboarding = navigator::navigateToOnboarding
-                    )
-                    onboardingNavgraph(
-                        navigateToHome = {
-                            val navOptions = navOptions {
                                 popUpTo<Home> {
                                     inclusive = false
                                 }
                                 launchSingleTop = true
                             }
                             navigator.navigateToHome(navOptions)
+                        },
+                        navigateToOnboarding = navigator::navigateToOnboarding
+                    )
+                    onboardingNavGraph(
+                        navigateToUniversity = {
+                            navigator.navigateToUniversity()
                         }
                     )
                     universitySelectionNavGraph(
