@@ -14,8 +14,8 @@ data class HomeState(
     val isOpenDialog: Boolean = false,
     val myUniversityModel: UniversityModel = UniversityModel(
         name = null,
-        latitude = 37.3009489417651,
-        longitude = 127.03549529577874
+        latitude = 37.583639,
+        longitude = 127.0588564
     ),
     val categoryChipState: ChipState = ChipState.Unselected(),
     val categoryChipItems: PersistentList<CategoryChipItem> = persistentListOf(),
