@@ -5,6 +5,6 @@ import com.hankki.data.reissuetoken.response.ReissueTokenResponseDto
 
 interface ReissueTokenDataSource {
     suspend fun postReissueToken(
-        authorization: String
+        refreshtoken: String
     ): BaseResponse<ReissueTokenResponseDto>
 }
