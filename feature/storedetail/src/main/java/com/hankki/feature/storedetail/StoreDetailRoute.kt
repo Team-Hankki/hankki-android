@@ -1,5 +1,6 @@
 package com.hankki.feature.storedetail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailButton
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.domain.storedetail.entity.MenuItem
@@ -182,7 +184,8 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = heartCount.toString(),
-                                style = HankkiTheme.typography.sub3
+                                style = HankkiTheme.typography.sub3,
+                                color = Gray500
                             )
                         },
                         onClick = {
@@ -202,7 +205,8 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
-                                style = HankkiTheme.typography.sub3
+                                style = HankkiTheme.typography.sub3,
+                                color = Gray500
                             )
                         },
                         onClick = openBottomSheet

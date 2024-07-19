@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.storedetail.entity.MenuItem
@@ -54,7 +55,8 @@ fun StoreDetailMenuBox(
                 text = title,
                 style = HankkiTheme.typography.suitH1,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = Gray900
             )
             Spacer(modifier = Modifier.width(8.dp))
             HankkiCategoryChip(text = tag)

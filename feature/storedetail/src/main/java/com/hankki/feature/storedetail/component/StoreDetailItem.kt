@@ -20,6 +20,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.HankkiTheme
 
 @Composable
@@ -35,7 +37,8 @@ fun StoreDetailItem(name: String, price: String) {
             style = HankkiTheme.typography.body1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            color =  Gray700,
         )
 
         DottedLine(
@@ -50,7 +53,8 @@ fun StoreDetailItem(name: String, price: String) {
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f),
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
+            color = Gray400
         )
     }
 }
