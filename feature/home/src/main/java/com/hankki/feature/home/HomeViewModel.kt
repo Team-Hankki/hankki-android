@@ -32,11 +32,6 @@ class HomeViewModel @Inject constructor(
     private val _sideEffect: MutableSharedFlow<HomeSideEffect> = MutableSharedFlow()
     val sideEffect: SharedFlow<HomeSideEffect>
         get() = _sideEffect.asSharedFlow()
-//
-//    init {
-//        getStoreItems()
-//        getMarkerItems()
-//    }
 
     fun getUniversityInformation() {
         viewModelScope.launch {
@@ -51,12 +46,13 @@ class HomeViewModel @Inject constructor(
                     )
                     fetchData()
                 }.onFailure { error ->
+                    fetchData()
                     Timber.e(error)
                 }
         }
     }
 
-    fun fetchData() {
+    private fun fetchData() {
         getStoreItems()
         getMarkerItems()
     }

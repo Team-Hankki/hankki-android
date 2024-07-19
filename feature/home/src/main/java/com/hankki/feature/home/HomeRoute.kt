@@ -311,7 +311,7 @@ fun HomeScreen(
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
-            addNewJogbo = addNewJogbo, // navigate
+            addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
             }
