@@ -42,7 +42,7 @@ fun StoreDetailMenuBox(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(5.dp, RoundedCornerShape(10.dp))
+            .shadow(1.dp, RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
             .background(White)
             .padding(28.dp)
@@ -64,15 +64,25 @@ fun StoreDetailMenuBox(
             HankkiCategoryChip(text = tag)
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
-        menuItems.forEach { item ->
-            StoreDetailItem(name = item.name, price = item.price.toString())
+        Spacer(modifier = Modifier.padding(top = 30.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp)
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
+            menuItems.forEach { item ->
+                StoreDetailItem(name = item.name, price = item.price.toString())
+            }
+
         }
 
         Spacer(modifier = Modifier.height(23.dp))
         Text(
-            text = "메뉴 추가/지우기",
-            style = HankkiTheme.typography.sub3,
+            text = "메뉴 추가/수정하기",
+            style = HankkiTheme.typography.caption1,
             color = Gray400,
             textDecoration = TextDecoration.Underline,
             modifier = Modifier.noRippleClickable(onClick = onMenuEditClick)
@@ -80,11 +90,13 @@ fun StoreDetailMenuBox(
 
         Spacer(modifier = Modifier.height(38.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.Center
         ) {
             likeButton()
+            Spacer(modifier = Modifier.width(13.dp))
             addMyJogboButton()
         }
     }
