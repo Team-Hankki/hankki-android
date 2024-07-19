@@ -62,6 +62,7 @@ fun MyJogboDetailRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
+    navigateToHome: () -> Unit,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -101,7 +102,8 @@ fun MyJogboDetailRoute(
         selectedStoreId = myJogboDetailState.selectedStoreId,
         updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
         onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) },
-        userName = myJogboDetailState.userInformation.nickname
+        userName = myJogboDetailState.userInformation.nickname,
+        navigateToHome = navigateToHome
     )
 }
 
@@ -122,7 +124,8 @@ fun MyJogboDetailScreen(
     selectedStoreId: Long,
     updateSelectedStoreId: (Long) -> Unit,
     onClickStoreItem: (Long) -> Unit,
-    userName: String
+    userName: String,
+    navigateToHome : () -> Unit
 ) {
     if (shareDialogState) {
         SingleButtonDialog(
@@ -249,6 +252,7 @@ fun MyJogboDetailScreen(
                         text = stringResource(R.string.go_to_store),
                         color = Gray500,
                         style = HankkiTheme.typography.body6,
+                        modifier = Modifier.noRippleClickable(navigateToHome)
                     )
                 }
             }
@@ -283,7 +287,8 @@ fun MyJogboDetailScreenPreview() {
             0,
             {},
             { _ -> },
-            ""
+            "",
+            {}
         )
     }
 }

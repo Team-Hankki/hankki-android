@@ -43,6 +43,7 @@ fun NavGraphBuilder.myNavGraph(
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
+    navigateToHome : () -> Unit
 ) {
     composable<My> {
         MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
@@ -65,7 +66,8 @@ fun NavGraphBuilder.myNavGraph(
             jogbo.favoriteId,
             paddingValues,
             navigateToDetail = navigateToStoreDetail,
-            navigateUp = navigateUp
+            navigateUp = navigateUp,
+            navigateToHome = navigateToHome
         )
     }
     composable<NewJogbo> {
