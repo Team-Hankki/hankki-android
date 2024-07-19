@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
+import com.hankki.data.storedetail.response.StoreDetailNicknameResponseDto
 import com.hankki.data.storedetail.response.StoreDetailResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -38,4 +39,7 @@ interface StoreDetailService {
         @Path("favoriteId") favoriteId: Long,
         @Path("storeId") storeId: Long
     ): CreatedBaseResponse
+
+    @GET("/api/v1/users/me")
+    suspend fun getStoreDetailNickname() : BaseResponse<StoreDetailNicknameResponseDto>
 }

@@ -69,13 +69,14 @@ class LoginViewModel @Inject constructor(
             loginRepository.postLogin(accessToken, LoginRequestEntity(platform))
                 .onSuccess { response ->
                     tokenRepository.setTokens(response.accessToken, response.refreshToken)
-                    _loginSideEffects.emit(LoginSideEffect.LoginSuccess(response.accessToken))
+                    _loginSideEffects.emit(LoginSideEffect.LoginSuccess(response.accessToken, response.isRegistered))
                 }.onFailure { throwable ->
                     val errorMessage = throwable.localizedMessage ?: "Unknown error"
                     handleLoginError(errorMessage)
                 }
         }
     }
+
 
     fun clearToken() {
         tokenRepository.clearInfo()

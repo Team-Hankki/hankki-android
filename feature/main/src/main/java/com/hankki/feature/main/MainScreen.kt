@@ -159,6 +159,13 @@ internal fun MainScreen(
                         navigateToStoreDetail = navigator::navigateToStoreDetail
                     )
                     loginNavGraph(
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        },
                         navigateToOnboarding = navigator::navigateToOnboarding
                     )
                     onboardingNavgraph(

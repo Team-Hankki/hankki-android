@@ -38,8 +38,11 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailButton
+import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.domain.storedetail.entity.MenuItem
@@ -54,6 +57,7 @@ fun StoreDetailRoute(
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     LaunchedEffect(storeId) {
         viewModel.fetchStoreDetail(storeId)
@@ -70,7 +74,7 @@ fun StoreDetailRoute(
                 menuItems = storeDetail.menus.toPersistentList(),
                 isLiked = storeState.isLiked,
                 heartCount = storeState.heartCount,
-                imageUrl = storeDetail.imageUrls.firstOrNull() // 좀만 생각해보자
+                imageUrl = storeDetail.imageUrls.firstOrNull()
                     ?: (com.hankki.feature.storedetail.R.drawable.img_default_store_detail).toString(),
                 selectedIndex = storeState.selectedIndex,
                 buttonLabels = storeState.buttonLabels,
@@ -83,11 +87,42 @@ fun StoreDetailRoute(
                 onDismissBottomSheetRequest = viewModel::controlMyJogboBottomSheet,
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
+                },
+                onAddMenuClicked = { viewModel.updateDialogState(StoreDetailDialogState.MENU_EDIT) },
+                onReportClicked = {
+                    viewModel.fetchNickname()
+                    viewModel.updateDialogState(StoreDetailDialogState.REPORT_CONFIRMATION)
                 }
             )
         }
 
         is UiState.Failure -> {}
+    }
+
+    when (dialogState) {
+        StoreDetailDialogState.MENU_EDIT -> {
+            SingleButtonDialog(
+                title = "조금만 기다려주세요!",
+                description = "메뉴를 편집할 수 있도록\n준비하고 있어요",
+                buttonTitle = "확인",
+                onConfirmation = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) }
+            )
+        }
+
+        StoreDetailDialogState.REPORT_CONFIRMATION -> {
+            ImageDoubleButtonDialog(
+                name = storeState.nickname,
+                title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
+                negativeButtonTitle = "취소",
+                positiveButtonTitle = "확인",
+                onNegativeButtonClicked = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) },
+                onPositiveButtonClicked = {
+                    viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                }
+            )
+        }
+
+        else -> {}
     }
 }
 
@@ -108,7 +143,9 @@ fun StoreDetailScreen(
     openBottomSheet: () -> Unit,
     jogboItems: PersistentList<JogboResponseModel>,
     onDismissBottomSheetRequest: () -> Unit,
-    addStoreAtJogbo: (Long) -> Unit
+    addStoreAtJogbo: (Long) -> Unit,
+    onAddMenuClicked: () -> Unit,
+    onReportClicked: () -> Unit
 ) {
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
@@ -184,7 +221,8 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = heartCount.toString(),
-                                style = HankkiTheme.typography.sub3
+                                style = HankkiTheme.typography.sub3,
+                                color = Gray500
                             )
                         },
                         onClick = {
@@ -204,12 +242,14 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
-                                style = HankkiTheme.typography.sub3
+                                style = HankkiTheme.typography.sub3,
+                                color = Gray500
                             )
                         },
                         onClick = openBottomSheet
                     )
-                }
+                },
+                onMenuEditClick = onAddMenuClicked
             )
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -258,7 +298,7 @@ fun StoreDetailScreen(
 
                 HankkiButton(
                     text = "제보하기",
-                    onClick = { /* TODO: handle submit */ },
+                    onClick = onReportClicked,
                     modifier = Modifier
                         .fillMaxWidth(0.4f),
                     textStyle = HankkiTheme.typography.sub3,

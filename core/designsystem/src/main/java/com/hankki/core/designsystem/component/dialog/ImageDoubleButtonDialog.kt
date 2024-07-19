@@ -17,6 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,10 +31,12 @@ import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun ImageDoubleButtonDialog(
+    name: String,
     title: String,
     negativeButtonTitle: String,
     positiveButtonTitle: String,
@@ -57,6 +62,18 @@ fun ImageDoubleButtonDialog(
                 )
 
                 Spacer(modifier = Modifier.height(26.dp))
+
+                val nameText = buildAnnotatedString {
+                    append(AnnotatedString(name, SpanStyle(color = Red)))
+                    append(AnnotatedString("님,", SpanStyle(color = Gray900)))
+                }
+
+                Text(
+                    text = nameText,
+                    style = HankkiTheme.typography.sub1,
+                    color = Red,
+                    textAlign = TextAlign.Center
+                )
 
                 Text(
                     text = title,
@@ -102,6 +119,7 @@ fun ImageDoubleButtonDialog(
 fun ImageDoubleButtonDialogPreview() {
     HankkijogboTheme {
         ImageDoubleButtonDialog(
+            name = "한끼귀욤",
             title = "변동사항을 알려주셔서 감사합니다 :)\n" +
                     "오늘도 저렴하고 든든한 식사하세요!",
             description = "정말 로그아웃 하실 건가요?",

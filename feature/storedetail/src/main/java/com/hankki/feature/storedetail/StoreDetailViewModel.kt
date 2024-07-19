@@ -21,6 +21,9 @@ import javax.inject.Inject
 class StoreDetailViewModel @Inject constructor(
     private val storeDetailRepository: StoreDetailRepository,
 ) : ViewModel() {
+    private val _dialogState = MutableStateFlow(StoreDetailDialogState.CLOSED)
+    val dialogState: StateFlow<StoreDetailDialogState> = _dialogState
+
     private val _storeState = MutableStateFlow(
         StoreState(
             buttonLabels = persistentListOf(
@@ -32,6 +35,10 @@ class StoreDetailViewModel @Inject constructor(
     )
     val storeState: StateFlow<StoreState> get() = _storeState.asStateFlow()
 
+    fun updateDialogState(newState: StoreDetailDialogState) {
+        _dialogState.value = newState
+    }
+
     fun fetchStoreDetail(storeId: Long) {
         viewModelScope.launch {
             _storeState.value = _storeState.value.copy(
@@ -42,6 +49,17 @@ class StoreDetailViewModel @Inject constructor(
                 setStoreDetail(it)
             }.onFailure {
                 _storeState.value = _storeState.value.copy(storeDetail = UiState.Failure)
+            }
+        }
+    }
+
+    fun fetchNickname() {
+        viewModelScope.launch {
+            val result = storeDetailRepository.getStoreDetailNickname()
+            result.onSuccess {
+                _storeState.value = _storeState.value.copy(nickname = it.nickname)
+            }.onFailure {
+                //fail
             }
         }
     }
@@ -68,7 +86,7 @@ class StoreDetailViewModel @Inject constructor(
             result.onSuccess { response ->
                 updateHeartStatus(response)
             }.onFailure {
-                // 에러 처리 로직 추가
+                Timber.e("Failed to update heart status: ${it.message}")
             }
         }
     }
@@ -109,7 +127,7 @@ class StoreDetailViewModel @Inject constructor(
                         }.toPersistentList()
                     )
                 }.onFailure { error ->
-                    Timber.e(error)
+                    Timber.e("Failed to fetch Jogbo items: ${error.message}")
                 }
         }
     }
@@ -118,11 +136,10 @@ class StoreDetailViewModel @Inject constructor(
         viewModelScope.launch {
             storeDetailRepository.addStoreAtJogbo(favoriteId, storeId)
                 .onSuccess {
-
+                    Timber.d("Store added to Jogbo successfully")
                 }.onFailure { error ->
-                    Timber.e(error)
+                    Timber.e("Failed to add store to Jogbo: ${error.message}")
                 }
         }
     }
-
 }

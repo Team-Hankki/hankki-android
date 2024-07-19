@@ -15,4 +15,5 @@ data class StoreState(
     val buttonLabels: PersistentList<String> = persistentListOf(),
     val isOpenBottomSheet: Boolean = false,
     val jogboItems: PersistentList<JogboResponseModel> = persistentListOf(),
+    val nickname: String = ""
 )

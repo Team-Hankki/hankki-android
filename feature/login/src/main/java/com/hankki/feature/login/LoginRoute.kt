@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginRoute(
+    navigateToHome: () -> Unit,
     navigateToOnboarding: () -> Unit,
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
@@ -44,7 +45,11 @@ fun LoginRoute(
             .collectLatest { sideEffect ->
                 when (sideEffect) {
                     is LoginSideEffect.LoginSuccess -> {
-                        navigateToOnboarding()
+                        if (sideEffect.isRegistered) {
+                            navigateToHome()
+                        } else {
+                            navigateToOnboarding()
+                        }
                     }
 
                     is LoginSideEffect.LoginError -> {
