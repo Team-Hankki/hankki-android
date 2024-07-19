@@ -5,7 +5,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -127,6 +130,7 @@ fun OnboardingScreen2(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
     ) {
+
         LottieAnimation(
             composition = composition,
             iterations = LottieConstants.IterateForever,
@@ -137,21 +141,24 @@ fun OnboardingScreen2(navController: NavHostController) {
             contentScale = ContentScale.FillWidth
         )
 
-        Text(
-            text = stringResource(R.string.skip),
-            color = Gray400,
-            style = HankkiTheme.typography.body3,
-            modifier = Modifier
-                .padding(top = 25.dp, end = 22.dp)
-                .align(Alignment.TopEnd)
-                .noRippleClickable {
-                    navController.navigate("onboarding4") {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
+        Column(modifier = Modifier.align(Alignment.TopEnd)) {
+            Spacer(modifier = Modifier.statusBarsPadding())
+
+            Text(
+                text = stringResource(R.string.skip),
+                color = Gray400,
+                style = HankkiTheme.typography.body3,
+                modifier = Modifier
+                    .padding(top = 25.dp, end = 22.dp)
+                    .noRippleClickable {
+                        navController.navigate("onboarding4") {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
                         }
                     }
-                }
-        )
+            )
+        }
 
         Text(
             stringResource(R.string.under_8000),
@@ -198,21 +205,24 @@ fun OnboardingScreen3(navController: NavHostController) {
             contentScale = ContentScale.FillWidth
         )
 
-        Text(
-            text = stringResource(R.string.skip),
-            color = Gray100,
-            style = HankkiTheme.typography.body3,
-            modifier = Modifier
-                .padding(top = 25.dp, end = 22.dp)
-                .align(Alignment.TopEnd)
-                .clickable {
-                    navController.navigate("onboarding4") {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
+        Column(modifier = Modifier.align(Alignment.TopEnd)) {
+            Spacer(modifier = Modifier.statusBarsPadding())
+
+            Text(
+                text = stringResource(R.string.skip),
+                color = Gray400,
+                style = HankkiTheme.typography.body3,
+                modifier = Modifier
+                    .padding(top = 25.dp, end = 22.dp)
+                    .clickable {
+                        navController.navigate("onboarding4") {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
                         }
                     }
-                }
-        )
+            )
+        }
 
         Text(
             stringResource(R.string.report),
