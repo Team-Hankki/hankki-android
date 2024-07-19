@@ -36,6 +36,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,6 +70,7 @@ import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
+import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -131,7 +135,7 @@ fun HomeRoute(
 
     LaunchedEffect(key1 = true) {
         // if (isNewUniversity) {
-            viewModel.getUniversityInformation()
+        viewModel.getUniversityInformation()
 //        }else {
 //            viewModel.fetchData()
 //        }
@@ -185,7 +189,7 @@ fun HomeRoute(
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
         navigateStoreDetail = navigateStoreDetail,
-        dialogNegativeClicked = {viewModel.setDialog(false)},
+        dialogNegativeClicked = { viewModel.setDialog(false) },
         dialogPositiveClicked = {
             viewModel.setDialog(false)
             Intent().apply {
@@ -272,12 +276,14 @@ fun HomeScreen(
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
     reposition: () -> Unit = {},
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState =
         rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = bottomSheetState
+
     )
 
     val listState = rememberLazyListState()
@@ -295,7 +301,7 @@ fun HomeScreen(
             listState.animateScrollToItem(0)
         }
     }
-    
+
     if (isOpenDialog) {
         DoubleCenterButtonDialog(
             title = "설정 > 개인정보보호 >\n" +
@@ -314,259 +320,276 @@ fun HomeScreen(
             onDismissRequest = controlMyJogboBottomSheet,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar("나의 족보에 추가되었습니다.")
+                }
             }
         )
     }
 
-    Column(
-        modifier = Modifier.padding(paddingValues)
-    ) {
-        HankkiTopBar(
-            content = {
-                Row(
-                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
-                ) {
-                    Text(
-                        text = universityName,
-                        style = HankkiTheme.typography.suitH2,
-                        color = Gray900
-                    )
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_dropdown_btn),
-                        contentDescription = "button",
-                        tint = Gray300
-                    )
-                }
-            },
-            modifier = Modifier.background(White)
-        )
-
-        Box {
-            NaverMap(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(
-                        animateFloatAsState(
-                            targetValue = if (isMainBottomSheetOpen) 0.7f else 1f,
-                            label = "Map"
-                        ).value
-                    ),
-                cameraPositionState = cameraPositionState,
-                locationSource = rememberFusedLocationSource(),
-                properties = MapProperties(
-                    mapType = MapType.Basic,
-                    locationTrackingMode = LocationTrackingMode.NoFollow
-                ),
-                uiSettings = MapUiSettings(
-                    isZoomControlEnabled = false,
-                    isScaleBarEnabled = false
-                ),
-                onMapClick = { _, _ ->
-                    clickMap()
-                }
-            ) {
-                markerItems.forEach { marker ->
-                    Marker(
-                        state = MarkerState(
-                            position = LatLng(
-                                marker.latitude,
-                                marker.longitude
-                            )
-                        ),
-                        icon = OverlayImage.fromResource(R.drawable.ic_marker),
-                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
-                        onClick = {
-                            clickMarkerItem(marker.id)
-                            true
-                        }
-                    )
-                }
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+                HankkiTextSnackBar("스낵바")
             }
-
-            Column {
-                FlowRow(
-                    modifier = Modifier.padding(
-                        start = 12.dp,
-                        end = 12.dp,
-                        top = 12.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    RowFilterChip(
-                        chipState = categoryChipState,
-                        defaultTitle = "종류",
-                        menus = categoryChipItems,
-                        onDismissRequest = dismissCategoryChip,
-                        onClickMenu = selectCategoryChipItem,
-                        onClickChip = {
-                            clickCategoryChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
-
-                    DropdownFilterChip(
-                        chipState = priceChipState,
-                        defaultTitle = "가격대",
-                        menus = priceChipItems,
-                        onDismissRequest = dismissPriceChip,
-                        onClickMenu = selectPriceChipItem,
-                        onClickChip = {
-                            clickPriceChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
-
-                    DropdownFilterChip(
-                        chipState = sortChipState,
-                        defaultTitle = "정렬",
-                        menus = sortChipItems,
-                        onDismissRequest = dismissSortChip,
-                        onClickMenu = selectSortChipItem,
-                        onClickChip = {
-                            clickSortChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
-                }
-
-                BottomSheetScaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = 30.dp,
-                                topEnd = 30.dp
-                            )
-                        )
-                        .ignoreNextModifiers(),
-                    sheetBackgroundColor = Color.Transparent,
-                    backgroundColor = Color.Transparent,
-                    sheetGesturesEnabled = true,
-                    sheetContent = {
-                        AnimatedVisibility(
-                            visible = isMainBottomSheetOpen,
-                            enter = EnterTransition.None,
-                            exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+        },
+        content = { contentPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(contentPadding)
+            ) {
+                HankkiTopBar(
+                    content = {
+                        Row(
+                            modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .clip(
-                                        RoundedCornerShape(
-                                            topStart = 30.dp,
-                                            topEnd = 30.dp
-                                        )
+                            Text(
+                                text = universityName,
+                                style = HankkiTheme.typography.suitH2,
+                                color = Gray900
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_dropdown_btn),
+                                contentDescription = "button",
+                                tint = Gray300
+                            )
+                        }
+                    },
+                    modifier = Modifier.background(White)
+                )
+
+                Box {
+                    NaverMap(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(
+                                animateFloatAsState(
+                                    targetValue = if (isMainBottomSheetOpen) 0.7f else 1f,
+                                    label = "Map"
+                                ).value
+                            ),
+                        cameraPositionState = cameraPositionState,
+                        locationSource = rememberFusedLocationSource(),
+                        properties = MapProperties(
+                            mapType = MapType.Basic,
+                            locationTrackingMode = LocationTrackingMode.NoFollow
+                        ),
+                        uiSettings = MapUiSettings(
+                            isZoomControlEnabled = false,
+                            isScaleBarEnabled = false
+                        ),
+                        onMapClick = { _, _ ->
+                            clickMap()
+                        }
+                    ) {
+                        markerItems.forEach { marker ->
+                            Marker(
+                                state = MarkerState(
+                                    position = LatLng(
+                                        marker.latitude,
+                                        marker.longitude
                                     )
-                                    .fillMaxSize()
-                                    .background(White)
-                            ) {
-                                Spacer(
-                                    modifier = Modifier.height(8.dp)
-                                )
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_drag_handle),
-                                    contentDescription = "drag handle",
-                                    tint = Gray200,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                                Spacer(modifier = Modifier.height(20.dp))
+                                ),
+                                icon = OverlayImage.fromResource(R.drawable.ic_marker),
+                                captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
+                                onClick = {
+                                    clickMarkerItem(marker.id)
+                                    true
+                                }
+                            )
+                        }
+                    }
 
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(White),
-                                    state = listState
+                    Column {
+                        FlowRow(
+                            modifier = Modifier.padding(
+                                start = 12.dp,
+                                end = 12.dp,
+                                top = 12.dp
+                            ),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            RowFilterChip(
+                                chipState = categoryChipState,
+                                defaultTitle = "종류",
+                                menus = categoryChipItems,
+                                onDismissRequest = dismissCategoryChip,
+                                onClickMenu = selectCategoryChipItem,
+                                onClickChip = {
+                                    clickCategoryChip()
+                                    closeBottomSheet(
+                                        coroutineScope,
+                                        bottomSheetScaffoldState
+                                    )
+                                }
+                            )
+
+                            DropdownFilterChip(
+                                chipState = priceChipState,
+                                defaultTitle = "가격대",
+                                menus = priceChipItems,
+                                onDismissRequest = dismissPriceChip,
+                                onClickMenu = selectPriceChipItem,
+                                onClickChip = {
+                                    clickPriceChip()
+                                    closeBottomSheet(
+                                        coroutineScope,
+                                        bottomSheetScaffoldState
+                                    )
+                                }
+                            )
+
+                            DropdownFilterChip(
+                                chipState = sortChipState,
+                                defaultTitle = "정렬",
+                                menus = sortChipItems,
+                                onDismissRequest = dismissSortChip,
+                                onClickMenu = selectSortChipItem,
+                                onClickChip = {
+                                    clickSortChip()
+                                    closeBottomSheet(
+                                        coroutineScope,
+                                        bottomSheetScaffoldState
+                                    )
+                                }
+                            )
+                        }
+
+                        BottomSheetScaffold(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(
+                                    RoundedCornerShape(
+                                        topStart = 30.dp,
+                                        topEnd = 30.dp
+                                    )
+                                )
+                                .ignoreNextModifiers(),
+                            sheetBackgroundColor = Color.Transparent,
+                            backgroundColor = Color.Transparent,
+                            sheetGesturesEnabled = true,
+                            sheetContent = {
+                                AnimatedVisibility(
+                                    visible = isMainBottomSheetOpen,
+                                    enter = EnterTransition.None,
+                                    exit = fadeOut() + slideOut { IntOffset(0, it.height) }
                                 ) {
-                                    items(
-                                        items = storeItems,
-                                        key = { item -> item.id }
-                                    ) { item ->
-                                        StoreItem(
-                                            storeId = item.id,
-                                            storeImageUrl = item.imageUrl,
-                                            category = item.category,
-                                            storeName = item.name,
-                                            price = item.lowestPrice,
-                                            heartCount = item.heartCount,
-                                            onClickItem = navigateStoreDetail
-                                        ) {
-                                            controlMyJogboBottomSheet()
-                                            getJogboItems(item.id)
-                                            selectStoreItem(item)
-                                        }
+                                    Column(
+                                        modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(
+                                                    topStart = 30.dp,
+                                                    topEnd = 30.dp
+                                                )
+                                            )
+                                            .fillMaxSize()
+                                            .background(White)
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier.height(8.dp)
+                                        )
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_drag_handle),
+                                            contentDescription = "drag handle",
+                                            tint = Gray200,
+                                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                                        )
+                                        Spacer(modifier = Modifier.height(20.dp))
 
-                                        if (item == storeItems.last()) {
-                                            Spacer(modifier = Modifier.height(12.dp))
+                                        LazyColumn(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .background(White),
+                                            state = listState
+                                        ) {
+                                            items(
+                                                items = storeItems,
+                                                key = { item -> item.id }
+                                            ) { item ->
+                                                StoreItem(
+                                                    storeId = item.id,
+                                                    storeImageUrl = item.imageUrl,
+                                                    category = item.category,
+                                                    storeName = item.name,
+                                                    price = item.lowestPrice,
+                                                    heartCount = item.heartCount,
+                                                    onClickItem = navigateStoreDetail
+                                                ) {
+                                                    controlMyJogboBottomSheet()
+                                                    getJogboItems(item.id)
+                                                    selectStoreItem(item)
+                                                }
+
+                                                if (item == storeItems.last()) {
+                                                    Spacer(modifier = Modifier.height(12.dp))
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        }
-                    },
-                    scaffoldState = bottomSheetScaffoldState,
-                    sheetPeekHeight = animateDpAsState(
-                        targetValue = if (isMainBottomSheetOpen) height.dp else 0.dp,
-                        label = ""
-                    ).value,
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        if (isMainBottomSheetOpen) {
+                            },
+                            scaffoldState = bottomSheetScaffoldState,
+                            sheetPeekHeight = animateDpAsState(
+                                targetValue = if (isMainBottomSheetOpen) height.dp else 0.dp,
+                                label = ""
+                            ).value,
+                        ) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.BottomEnd
                             ) {
-                                RepositionButton(
-                                    height = height.dp,
-                                    modifier = Modifier.padding(bottom = 19.dp, end = 19.dp),
-                                    onClick = reposition
-                                )
-                            }
-                        } else {
-                            Column(
-                                modifier = Modifier.align(Alignment.BottomCenter)
-                            ) {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    contentAlignment = Alignment.BottomEnd
-                                ) {
-                                    RepositionButton(
-                                        height = 0.dp,
-                                        modifier = Modifier.padding(end = 19.dp),
-                                        onClick = reposition
-                                    )
-                                }
+                                if (isMainBottomSheetOpen) {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.BottomEnd
+                                    ) {
+                                        RepositionButton(
+                                            height = height.dp,
+                                            modifier = Modifier.padding(
+                                                bottom = 19.dp,
+                                                end = 19.dp
+                                            ),
+                                            onClick = reposition
+                                        )
+                                    }
+                                } else {
+                                    Column(
+                                        modifier = Modifier.align(Alignment.BottomCenter)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            contentAlignment = Alignment.BottomEnd
+                                        ) {
+                                            RepositionButton(
+                                                height = 0.dp,
+                                                modifier = Modifier.padding(end = 19.dp),
+                                                onClick = reposition
+                                            )
+                                        }
 
-                                StoreItem(
-                                    storeId = selectedStoreItem.id,
-                                    storeImageUrl = selectedStoreItem.imageUrl,
-                                    category = selectedStoreItem.category,
-                                    storeName = selectedStoreItem.name,
-                                    price = selectedStoreItem.lowestPrice,
-                                    heartCount = selectedStoreItem.heartCount,
-                                    modifier = Modifier.padding(22.dp),
-                                    onClickItem = navigateStoreDetail
-                                ) {
-                                    controlMyJogboBottomSheet()
-                                    getJogboItems(selectedStoreItem.id)
+                                        StoreItem(
+                                            storeId = selectedStoreItem.id,
+                                            storeImageUrl = selectedStoreItem.imageUrl,
+                                            category = selectedStoreItem.category,
+                                            storeName = selectedStoreItem.name,
+                                            price = selectedStoreItem.lowestPrice,
+                                            heartCount = selectedStoreItem.heartCount,
+                                            modifier = Modifier.padding(22.dp),
+                                            onClickItem = navigateStoreDetail
+                                        ) {
+                                            controlMyJogboBottomSheet()
+                                            getJogboItems(selectedStoreItem.id)
+                                        }
+                                        Spacer(modifier = Modifier.height(22.dp))
+                                    }
                                 }
-                                Spacer(modifier = Modifier.height(22.dp))
                             }
                         }
                     }
                 }
             }
         }
-    }
+    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
