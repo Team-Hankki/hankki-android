@@ -44,4 +44,23 @@ class MyJogboDetailViewModel @Inject constructor(
             showShareDialog = !state
         )
     }
+
+    fun deleteJogboStore(favoriteId:Long,storeId:Long){
+        viewModelScope.launch {
+            myRepository.deleteJogboStore(favoriteId,storeId)
+                .onSuccess { jogbo ->
+                    updateDeleteDialog(true)
+                    getJogboDetail(favoriteId)
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                }
+        }
+    }
+
+    fun updateSelectedStoreId(storeId : Long){
+        _myJogboDetailState.value = _myJogboDetailState.value.copy(
+            selectedStoreId = storeId
+        )
+    }
 }
