@@ -1,6 +1,7 @@
 package com.hankki.feature.my.mystore
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,19 +26,18 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.domain.my.entity.response.StoreEntity
 import com.hankki.feature.my.R
+import com.hankki.feature.my.component.EmptyStoreView
 import com.hankki.feature.my.component.StoreItem
 import com.hankki.feature.my.mystore.model.MyStoreModel
-import com.hankki.feature.my.mystore.model.toMyStoreModel
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun MyStoreRoute(
@@ -59,18 +59,19 @@ fun MyStoreRoute(
     }
 
     LaunchedEffect(myStoreViewModel.mySideEffect, lifecycleOwner) {
-        myStoreViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
-            when (sideEffect) {
-                is MyStoreSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+        myStoreViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is MyStoreSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+                }
             }
-        }
     }
 
     MyStoreScreen(
         paddingValues = paddingValues,
         navigateUp = navigateUp,
         type = type,
-        storeItems = myStoreState.myStoreItems,
+        state = myStoreState.uiState,
         updateStoreSelected = myStoreViewModel::updateStoreSelected,
         onClickItem = myStoreViewModel::onClickItem
     )
@@ -81,7 +82,7 @@ fun MyStoreScreen(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     type: String,
-    storeItems: PersistentList<MyStoreModel>,
+    state: EmptyUiState<PersistentList<MyStoreModel>>,
     modifier: Modifier = Modifier,
     updateStoreSelected: (Long, Boolean) -> Unit,
     onClickItem: (Long) -> Unit = {}
@@ -115,38 +116,55 @@ fun MyStoreScreen(
                 )
             }
         )
-        LazyColumn(
-            modifier = Modifier
-                .padding(start = 22.dp, end = 11.dp)
-        ) {
-            itemsIndexed(storeItems) { index, store ->
-                StoreItem(
-                    imageUrl = store.imageURL,
-                    category = store.category,
-                    name = store.name,
-                    price = store.lowestPrice,
-                    heartCount = store.heartCount,
-                    isIconUsed = (type == "like"),
-                    isIconSelected = store.isLiked ?: false,
-                    editSelected = {
-                        updateStoreSelected(store.id, store.isLiked == true)
-                    },
-                    onClickItem = {
-                        onClickItem(store.id)
-                    }
-                )
-                if (index != storeItems.lastIndex) {
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 1.dp),
-                        thickness = 1.dp,
-                        color = Gray200
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (state) {
+                EmptyUiState.Empty -> {
+                    EmptyStoreView(
+                        text = if (type == "like") stringResource(R.string.no_liked_store) else stringResource(
+                            R.string.no_reported_store
+                        )
                     )
+                }
+
+                EmptyUiState.Failure -> {}
+
+                EmptyUiState.Loading -> {}
+
+                is EmptyUiState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(start = 22.dp, end = 11.dp)
+                    ) {
+                        itemsIndexed(state.data) { index, store ->
+                            StoreItem(
+                                imageUrl = store.imageURL,
+                                category = store.category,
+                                name = store.name,
+                                price = store.lowestPrice,
+                                heartCount = store.heartCount,
+                                isIconUsed = (type == "like"),
+                                isIconSelected = store.isLiked ?: false,
+                                editSelected = {
+                                    updateStoreSelected(store.id, store.isLiked == true)
+                                },
+                                onClickItem = {
+                                    onClickItem(store.id)
+                                }
+                            )
+                            if (index != state.data.lastIndex) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = 1.dp),
+                                    thickness = 1.dp,
+                                    color = Gray200
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
-
 
 @Preview
 @Composable
@@ -156,7 +174,7 @@ fun MyStoreScreenPreview() {
             paddingValues = PaddingValues(),
             navigateUp = {},
             type = "like",
-            storeItems = persistentListOf(StoreEntity("", 0, 0, "", true, 0, "").toMyStoreModel()),
+            state = EmptyUiState.Empty,
             updateStoreSelected = { _, _ -> }
         )
     }
