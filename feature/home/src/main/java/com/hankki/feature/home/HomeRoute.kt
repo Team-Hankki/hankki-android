@@ -111,8 +111,7 @@ fun HomeRoute(
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: (Long) -> Unit,
-    isNewUniversity: Boolean = false, // splash에서 넘어오는 경우, UniversitySelect에서 넘어오는 경우 true
-    // TODO : UniversitySelect 코드 구현 완료시 연결 예정
+    isNewUniversity: Boolean,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -131,9 +130,11 @@ fun HomeRoute(
     }
 
     LaunchedEffect(key1 = true) {
-        if (isNewUniversity) {
+        // if (isNewUniversity) {
             viewModel.getUniversityInformation()
-        }
+//        }else {
+//            viewModel.fetchData()
+//        }
     }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
