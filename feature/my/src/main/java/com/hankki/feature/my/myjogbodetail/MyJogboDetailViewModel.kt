@@ -53,9 +53,9 @@ class MyJogboDetailViewModel @Inject constructor(
         )
     }
 
-    fun deleteJogboStore(favoriteId: Long, storeId: Long) {
+    fun deleteJogboStore(favoriteId:Long,storeId:Long){
         viewModelScope.launch {
-            myRepository.deleteJogboStore(favoriteId, storeId)
+            myRepository.deleteJogboStore(favoriteId,storeId)
                 .onSuccess { jogbo ->
                     updateDeleteDialog(true)
                     getJogboDetail(favoriteId)
