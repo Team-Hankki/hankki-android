@@ -58,7 +58,8 @@ fun StoreDetailMenuBox(
                 style = HankkiTheme.typography.suitH1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = Gray900
+                color = Gray900,
+                modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(8.dp))
             HankkiCategoryChip(text = tag)
