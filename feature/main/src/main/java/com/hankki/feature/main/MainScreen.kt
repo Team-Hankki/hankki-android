@@ -47,7 +47,6 @@ import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.loginNavGraph
 import com.hankki.feature.login.navigation.onboardingNavgraph
 import com.hankki.feature.my.navigation.myNavGraph
-import com.hankki.feature.report.finish.ReportFinishSideEffect
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
 import com.hankki.feature.storedetail.navigation.storeDetailNavGraph
