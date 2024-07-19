@@ -111,7 +111,10 @@ fun StoreDetailRoute(
                 isOpenBottomSheet = storeState.isOpenBottomSheet,
                 openBottomSheet = viewModel::controlMyJogboBottomSheet,
                 jogboItems = storeState.jogboItems,
-                addNewJogbo = navigateToAddNewJogbo,
+                addNewJogbo = {
+                    navigateToAddNewJogbo()
+                    viewModel.controlMyJogboBottomSheet()
+                },
                 onDismissBottomSheetRequest = viewModel::controlMyJogboBottomSheet,
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
@@ -174,7 +177,7 @@ fun StoreDetailScreen(
     onDismissBottomSheetRequest: () -> Unit,
     addStoreAtJogbo: (Long) -> Unit,
     onAddMenuClicked: () -> Unit,
-    onReportClicked: () -> Unit
+    onReportClicked: () -> Unit,
 ) {
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(

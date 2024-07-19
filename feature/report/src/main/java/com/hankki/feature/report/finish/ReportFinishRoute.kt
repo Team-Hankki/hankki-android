@@ -82,7 +82,10 @@ fun ReportFinishRoute(
         storeId = state.storeId,
         showBottomSheet = state.showBottomSheet,
         jogboItems = state.jogboItems,
-        addNewJogbo = navigateToAddNewJogbo,
+        addNewJogbo = {
+            navigateToAddNewJogbo()
+            viewModel.controlBottomSheetState(false)
+        },
         bottomSheetControl = viewModel::controlBottomSheetState,
         moveToStoreDetail = viewModel::navigateToStoreDetail,
         moveToHome = viewModel::navigateToHome,

@@ -64,9 +64,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
-import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
-import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -182,7 +180,7 @@ fun HomeRoute(
         isMainBottomSheetOpen = state.isMainBottomSheetOpen,
         isMyJogboBottomSheetOpen = state.isMyJogboBottomSheetOpen,
         navigateStoreDetail = navigateStoreDetail,
-        dialogNegativeClicked = {viewModel.setDialog(false)},
+        dialogNegativeClicked = { viewModel.setDialog(false) },
         dialogPositiveClicked = {
             viewModel.setDialog(false)
             Intent().apply {
@@ -205,7 +203,10 @@ fun HomeRoute(
         clickSortChip = viewModel::clickSortChip,
         selectSortChipItem = viewModel::selectSortChipItem,
         dismissSortChip = viewModel::dismissSortChip,
-        addNewJogbo = navigateToAddNewJogbo,
+        addNewJogbo = {
+            navigateToAddNewJogbo()
+            viewModel.controlMyJogboBottomSheet()
+        },
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
     ) {
@@ -294,7 +295,7 @@ fun HomeScreen(
             listState.animateScrollToItem(0)
         }
     }
-    
+
     if (isOpenDialog) {
         DoubleCenterButtonDialog(
             title = "설정 > 개인정보보호 >\n" +
