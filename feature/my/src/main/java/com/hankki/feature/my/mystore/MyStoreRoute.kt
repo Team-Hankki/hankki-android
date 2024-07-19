@@ -1,6 +1,5 @@
 package com.hankki.feature.my.mystore
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,12 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
@@ -40,10 +42,12 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun MyStoreRoute(
     paddingValues: PaddingValues,
-    navigateUp: () -> Unit,
     type: String,
-    myStoreViewModel: MyStoreViewModel = hiltViewModel()
+    navigateUp: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
+    myStoreViewModel: MyStoreViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val myStoreState by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
     LaunchedEffect(type) {
@@ -54,17 +58,21 @@ fun MyStoreRoute(
         }
     }
 
+    LaunchedEffect(myStoreViewModel.mySideEffect, lifecycleOwner) {
+        myStoreViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is MyStoreSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+            }
+        }
+    }
+
     MyStoreScreen(
         paddingValues = paddingValues,
         navigateUp = navigateUp,
         type = type,
         storeItems = myStoreState.myStoreItems,
-        updateStoreSelected = { index, isJogboSelected ->
-            myStoreViewModel.updateStoreSelected(
-                index,
-                isJogboSelected
-            )
-        }
+        updateStoreSelected = myStoreViewModel::updateStoreSelected,
+        onClickItem = myStoreViewModel::onClickItem
     )
 }
 
@@ -75,7 +83,8 @@ fun MyStoreScreen(
     type: String,
     storeItems: PersistentList<MyStoreModel>,
     modifier: Modifier = Modifier,
-    updateStoreSelected: (Int, Boolean) -> Unit
+    updateStoreSelected: (Long, Boolean) -> Unit,
+    onClickItem: (Long) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -92,7 +101,8 @@ fun MyStoreScreen(
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable(onClick = navigateUp)
+                        .noRippleClickable(onClick = navigateUp),
+                    tint = Color.Unspecified
                 )
             },
             content = {
@@ -119,10 +129,10 @@ fun MyStoreScreen(
                     isIconUsed = (type == "like"),
                     isIconSelected = store.isLiked ?: false,
                     editSelected = {
-                        updateStoreSelected(
-                            index,
-                            store.isLiked == true
-                        )
+                        updateStoreSelected(store.id, store.isLiked == true)
+                    },
+                    onClickItem = {
+                        onClickItem(store.id)
                     }
                 )
                 if (index != storeItems.lastIndex) {

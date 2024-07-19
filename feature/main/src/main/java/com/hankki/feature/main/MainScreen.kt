@@ -155,7 +155,8 @@ internal fun MainScreen(
                         navigateToMyJogbo = navigator::navigateToMyJogbo,
                         navigateToMyStore = navigator::navigateToMyStore,
                         navigateToJogboDetail = navigator::navigateToMyJogboDetail,
-                        navigateToNewJogbo = navigator::navigateToNewJogbo
+                        navigateToNewJogbo = navigator::navigateToNewJogbo,
+                        navigateToStoreDetail = navigator::navigateToStoreDetail
                     )
                     loginNavGraph(
                         navigateToOnboarding = navigator::navigateToOnboarding

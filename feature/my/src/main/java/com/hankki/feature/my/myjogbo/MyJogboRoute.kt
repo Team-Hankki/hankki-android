@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +48,7 @@ fun MyJogboRoute(
     navigateUp: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
-    myJogboViewModel: MyJogboViewModel = hiltViewModel()
+    myJogboViewModel: MyJogboViewModel = hiltViewModel(),
 ) {
     val myJogboState by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
@@ -61,12 +62,13 @@ fun MyJogboRoute(
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
         jogboItems = myJogboState.myJogboItems,
-        editMode = myJogboState.editMode.value,
+        editMode = myJogboState.editMode,
         updateEditMode = myJogboViewModel::updateMode,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
         resetJogboState = myJogboViewModel::resetJogboState,
         dialogState = myJogboState.showDialog,
-        updateToDialogState = myJogboViewModel::updateToDialogState
+        updateToDialogState = myJogboViewModel::updateToDialogState,
+        deleteJogboItems = myJogboViewModel::deleteJogboStore
     )
 }
 
@@ -82,7 +84,8 @@ fun MyJogboScreen(
     updateJogboSelectedState: (Int, Boolean) -> Unit,
     resetJogboState: () -> Unit,
     dialogState: Boolean,
-    updateToDialogState: (Boolean) -> Unit
+    updateToDialogState: (Boolean) -> Unit,
+    deleteJogboItems: () -> Unit,
 ) {
     if (dialogState) {
         DoubleButtonDialog(
@@ -90,7 +93,7 @@ fun MyJogboScreen(
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = { updateToDialogState(false) },
-            onPositiveButtonClicked = { /*TODO*/ }
+            onPositiveButtonClicked = deleteJogboItems
         )
     }
 
@@ -109,7 +112,8 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable(if (editMode) resetJogboState else navigateUp)
+                        .noRippleClickable(if (editMode) resetJogboState else navigateUp),
+                    tint = Color.Unspecified
                 )
             },
             content = {
@@ -172,7 +176,7 @@ fun MyJogboScreenPreview() {
     HankkijogboTheme {
         MyJogboScreen(
             navigateUp = {},
-            navigateToJogboDetail = {},
+            navigateToJogboDetail = { _ -> },
             navigateToNewJogbo = {},
             paddingValues = PaddingValues(),
             jogboItems = persistentListOf(
@@ -183,7 +187,8 @@ fun MyJogboScreenPreview() {
             updateJogboSelectedState = { _, _ -> },
             resetJogboState = {},
             dialogState = false,
-            updateToDialogState = {}
+            updateToDialogState = {},
+            deleteJogboItems = {}
         )
     }
 }

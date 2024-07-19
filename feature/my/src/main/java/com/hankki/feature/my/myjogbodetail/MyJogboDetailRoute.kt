@@ -25,12 +25,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
@@ -48,21 +51,32 @@ import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.StoreItem
+import com.hankki.feature.my.mystore.MyStoreSideEffect
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun MyJogboDetailRoute(
-    favoriteId : Long,
+    favoriteId: Long,
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val myJogboDetailState by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         myJogboDetailViewModel.getJogboDetail(favoriteId)
+    }
+
+    LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
+        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
+            when (sideEffect) {
+                is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+            }
+        }
     }
 
     MyJogboDetailScreen(
@@ -75,7 +89,16 @@ fun MyJogboDetailRoute(
         shareDialogState = myJogboDetailState.showShareDialog,
         userInformation = myJogboDetailState.userInformation,
         updateShareDialogState = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
-        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) }
+        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) },
+        deleteJogboStore = { storeId ->
+            myJogboDetailViewModel.deleteJogboStore(
+                favoriteId,
+                storeId
+            )
+        },
+        selectedStoreId = myJogboDetailState.selectedStoreId,
+        updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
+        onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) }
     )
 }
 
@@ -91,10 +114,15 @@ fun MyJogboDetailScreen(
     shareDialogState: Boolean,
     userInformation: UserInformationEntity,
     updateShareDialogState: () -> Unit,
-    updateDeleteDialogState: () -> Unit
+    updateDeleteDialogState: () -> Unit,
+    deleteJogboStore: (Long) -> Unit,
+    selectedStoreId: Long,
+    updateSelectedStoreId: (Long) -> Unit,
+    onClickStoreItem: (Long) -> Unit
 ) {
     if (shareDialogState) {
-        SingleButtonDialog(title = stringResource(R.string.go_to_register_store),
+        SingleButtonDialog(
+            title = stringResource(R.string.go_to_register_store),
             description = stringResource(R.string.preparing_share_jogbo),
             buttonTitle = stringResource(R.string.check),
             onConfirmation = updateShareDialogState
@@ -107,7 +135,9 @@ fun MyJogboDetailScreen(
             negativeButtonTitle = stringResource(R.string.go_back),
             positiveButtonTitle = stringResource(id = R.string.delete),
             onNegativeButtonClicked = updateDeleteDialogState,
-            onPositiveButtonClicked = updateDeleteDialogState
+            onPositiveButtonClicked = {
+                deleteJogboStore(selectedStoreId)
+            }
         )
     }
 
@@ -127,7 +157,8 @@ fun MyJogboDetailScreen(
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable(onClick = navigateUp)
+                        .noRippleClickable(onClick = navigateUp),
+                    tint = Color.Unspecified
                 )
             },
             content = {
@@ -174,8 +205,11 @@ fun MyJogboDetailScreen(
                     isIconUsed = false,
                     isIconSelected = false,
                     modifier = Modifier.combinedClickable(
-                        onClick = {},
-                        onLongClick = updateDeleteDialogState
+                        onClick = { onClickStoreItem(store.id) },
+                        onLongClick = {
+                            updateSelectedStoreId(store.id)
+                            updateDeleteDialogState()
+                        }
                     )
                 )
                 if (storeItems.indexOf(store) != storeItems.lastIndex) {
@@ -196,7 +230,8 @@ fun MyJogboDetailScreen(
                         .clip(RoundedCornerShape(14.dp))
                         .wrapContentSize()
                         .background(Gray100)
-                        .padding(10.dp),
+                        .padding(12.dp)
+                        .padding(end = 3.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -209,7 +244,7 @@ fun MyJogboDetailScreen(
                     Text(
                         text = stringResource(R.string.go_to_store),
                         color = Gray500,
-                        style = HankkiTheme.typography.body6
+                        style = HankkiTheme.typography.body6,
                     )
                 }
             }
@@ -239,7 +274,11 @@ fun MyJogboDetailScreenPreview() {
                 profileImageUrl = ""
             ),
             {},
-            {}
+            {},
+            {},
+            0,
+            {},
+            { _ -> }
         )
     }
 }

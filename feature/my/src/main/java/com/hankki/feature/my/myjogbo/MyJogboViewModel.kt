@@ -1,6 +1,5 @@
 package com.hankki.feature.my.myjogbo
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.repository.MyRepository
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyJogboViewModel @Inject constructor(
-    private val myRepository: MyRepository
+    private val myRepository: MyRepository,
 ) : ViewModel() {
     private val _myJogboState = MutableStateFlow(MyJogboState())
     val myJogboState: StateFlow<MyJogboState>
@@ -39,9 +38,7 @@ class MyJogboViewModel @Inject constructor(
 
     fun updateMode() {
         _myJogboState.value = _myJogboState.value.copy(
-            editMode = mutableStateOf(
-                !_myJogboState.value.editMode.value
-            )
+            editMode = !_myJogboState.value.editMode
         )
     }
 
@@ -69,5 +66,26 @@ class MyJogboViewModel @Inject constructor(
         _myJogboState.value = _myJogboState.value.copy(
             showDialog = state
         )
+    }
+
+    fun deleteJogboStore() {
+        val deleteList = _myJogboState.value.myJogboItems.filter {
+            it.jogboSelected
+        }.map {
+            it.jogboId
+        }
+        viewModelScope.launch {
+            myRepository.deleteJogboStores(deleteList)
+                .onSuccess {
+                    _myJogboState.value = _myJogboState.value.copy(
+                        showDialog = false,
+                        editMode = false
+                    )
+                    getMyJogboList()
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                }
+        }
     }
 }

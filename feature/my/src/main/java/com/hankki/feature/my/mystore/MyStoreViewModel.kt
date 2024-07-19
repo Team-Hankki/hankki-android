@@ -4,10 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.mystore.model.toMyStoreModel
+import com.hankki.feature.my.navigation.MyStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -20,6 +24,10 @@ class MyStoreViewModel @Inject constructor(
     private val _myStoreState = MutableStateFlow(MyStoreState())
     val myStoreState: StateFlow<MyStoreState>
         get() = _myStoreState.asStateFlow()
+
+    private val _mySideEffect: MutableSharedFlow<MyStoreSideEffect> = MutableSharedFlow()
+    val mySideEffect: SharedFlow<MyStoreSideEffect>
+        get() = _mySideEffect.asSharedFlow()
 
     fun getLikedStoreList() {
         viewModelScope.launch {
@@ -53,15 +61,39 @@ class MyStoreViewModel @Inject constructor(
         }
     }
 
-    fun updateStoreSelected(index: Int, isStoreSelected: Boolean) {
-        if (_myStoreState.value.myStoreItems.size <= index) return
-        if (_myStoreState.value.myStoreItems.isEmpty()) return
+    fun updateStoreSelected(id: Long, isLiked: Boolean) {
+        viewModelScope.launch {
+            if (isLiked) {
+                myRepository.unLikeStore(id).onSuccess {
+                    _myStoreState.value = _myStoreState.value.copy(
+                        myStoreItems = _myStoreState.value.myStoreItems.map {
+                            if (it.id == id) {
+                                it.copy(isLiked = false)
+                            } else {
+                                it
+                            }
+                        }.toPersistentList()
+                    )
+                }
+            } else {
+                myRepository.likeStore(id).onSuccess {
+                    _myStoreState.value = _myStoreState.value.copy(
+                        myStoreItems = _myStoreState.value.myStoreItems.map {
+                            if (it.id == id) {
+                                it.copy(isLiked = true)
+                            } else {
+                                it
+                            }
+                        }.toPersistentList()
+                    )
+                }
+            }
+        }
+    }
 
-        _myStoreState.value = _myStoreState.value.copy(
-            myStoreItems = _myStoreState.value.myStoreItems.set(
-                index,
-                _myStoreState.value.myStoreItems[index].copy(isLiked = !isStoreSelected)
-            )
-        )
+    fun onClickItem(id: Long) {
+        viewModelScope.launch {
+            _mySideEffect.emit(MyStoreSideEffect.NavigateToDetail(id))
+        }
     }
 }

@@ -37,19 +37,20 @@ fun JogboFolder(
     chips: PersistentList<String>,
     userName: String,
     userProfileImage: String,
-    shareJogbo: () -> Unit
+    shareJogbo: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Red)
             .padding(top = 4.dp, bottom = 22.dp)
+            .padding(horizontal = 22.dp)
             .paint(
                 painterResource(id = R.drawable.ic_my_jogbo_fold),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.FillWidth
             )
     ) {
-        Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+        Column {
             Icon(
                 painter = painterResource(id = R.drawable.ic_my_store),
                 contentDescription = "store image",

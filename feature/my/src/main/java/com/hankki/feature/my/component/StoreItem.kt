@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -28,6 +29,7 @@ import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
+import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
@@ -43,7 +45,8 @@ fun StoreItem(
     isIconUsed: Boolean,
     isIconSelected: Boolean,
     modifier: Modifier = Modifier,
-    editSelected: () -> Unit = {}
+    editSelected: () -> Unit = {},
+    onClickItem: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -51,7 +54,8 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(vertical = 16.dp),
+            .padding(vertical = 16.dp)
+            .noRippleClickable(onClickItem),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -65,11 +69,15 @@ fun StoreItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column(modifier = Modifier.wrapContentHeight()) {
+        Column(modifier = Modifier.wrapContentHeight().weight(1f)) {
             Row(modifier = Modifier.padding(top = 11.5.dp)) {
                 Text(
                     text = name,
-                    style = HankkiTheme.typography.suitSub1
+                    style = HankkiTheme.typography.suitSub1,
+                    color = Gray900,
+                    maxLines = 1,
+                    overflow = Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
 
                 Spacer(modifier = Modifier.width(5.dp))
@@ -121,8 +129,6 @@ fun StoreItem(
         }
 
         if (isIconUsed) {
-            Spacer(modifier = Modifier.weight(1f))
-
             Icon(
                 painter = painterResource(id = R.drawable.ic_heart_filled),
                 contentDescription = "plus button",
