@@ -1,6 +1,7 @@
 package com.hankki.feature.my.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,8 +55,8 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(vertical = 16.dp)
-            .noRippleClickable(onClickItem),
+            .padding(vertical = 16.dp),
+            //.noRippleClickable(onClickItem),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -69,15 +70,20 @@ fun StoreItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column(modifier = Modifier.wrapContentHeight().weight(1f)) {
-            Row(modifier = Modifier.padding(top = 11.5.dp)) {
+        Column(
+            modifier = Modifier
+                .wrapContentHeight()
+                .weight(1f),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row {
                 Text(
                     text = name,
                     style = HankkiTheme.typography.suitSub1,
                     color = Gray900,
                     maxLines = 1,
                     overflow = Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f, fill = false),
                 )
 
                 Spacer(modifier = Modifier.width(5.dp))
@@ -85,11 +91,11 @@ fun StoreItem(
                 HankkiCategoryChip(text = category)
             }
 
-            Spacer(modifier = Modifier.height(7.dp))
+            Spacer(modifier = Modifier.height(3.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_food),
+                    painter = painterResource(id = com.hankki.feature.my.R.drawable.ic_food_small),
                     contentDescription = "icon",
                     tint = Gray300
                 )

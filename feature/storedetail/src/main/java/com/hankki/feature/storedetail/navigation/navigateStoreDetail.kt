@@ -15,12 +15,14 @@ fun NavController.navigateStoreDetail(storeId: Long, navOptions: NavOptions?) {
 
 fun NavGraphBuilder.storeDetailNavGraph(
     navigateUp: () -> Unit,
+    navigateToAddNewJogbo: () -> Unit
 ) {
     composable<StoreDetail> { backStackEntry ->
         val items = backStackEntry.toRoute<StoreDetail>()
         StoreDetailRoute(
             storeId = items.storeId,
-            navigateUp = navigateUp
+            navigateUp = navigateUp,
+            navigateToAddNewJogbo = navigateToAddNewJogbo
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.hankki.feature.storedetail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
@@ -47,10 +50,13 @@ import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
 import kotlinx.collections.immutable.PersistentList
@@ -61,6 +67,7 @@ import kotlinx.coroutines.launch
 fun StoreDetailRoute(
     storeId: Long,
     navigateUp: () -> Unit,
+    navigateToAddNewJogbo: () -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
@@ -68,6 +75,29 @@ fun StoreDetailRoute(
 
     LaunchedEffect(storeId) {
         viewModel.fetchStoreDetail(storeId)
+    }
+
+    val systemUiController = rememberSystemUiController()
+    val customColor = White
+
+    DisposableEffect(systemUiController) {
+        systemUiController.setNavigationBarColor(
+            color = customColor,
+            darkIcons = true
+        )
+
+        onDispose {
+            systemUiController.setStatusBarColor(
+                color = Color.Transparent,
+                darkIcons = true,
+                transformColorForLightContent = { Gray900 }
+            )
+            systemUiController.setNavigationBarColor(
+                color = Color.Transparent,
+                darkIcons = true,
+                navigationBarContrastEnforced = false
+            )
+        }
     }
 
     when (val state = storeState.storeDetail) {
@@ -91,6 +121,10 @@ fun StoreDetailRoute(
                 isOpenBottomSheet = storeState.isOpenBottomSheet,
                 openBottomSheet = viewModel::controlMyJogboBottomSheet,
                 jogboItems = storeState.jogboItems,
+                addNewJogbo = {
+                    navigateToAddNewJogbo()
+                    viewModel.controlMyJogboBottomSheet()
+                },
                 onDismissBottomSheetRequest = viewModel::controlMyJogboBottomSheet,
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
@@ -120,11 +154,12 @@ fun StoreDetailRoute(
             ImageDoubleButtonDialog(
                 name = storeState.nickname,
                 title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
-                negativeButtonTitle = "취소",
-                positiveButtonTitle = "확인",
-                onNegativeButtonClicked = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) },
+                negativeButtonTitle = "",
+                positiveButtonTitle = "돌아가기",
+                onNegativeButtonClicked = { },
                 onPositiveButtonClicked = {
                     viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                    viewModel.resetSelectedIndex()
                 }
             )
         }
@@ -149,10 +184,11 @@ fun StoreDetailScreen(
     isOpenBottomSheet: Boolean,
     openBottomSheet: () -> Unit,
     jogboItems: PersistentList<JogboResponseModel>,
+    addNewJogbo: () -> Unit,
     onDismissBottomSheetRequest: () -> Unit,
     addStoreAtJogbo: (Long) -> Unit,
     onAddMenuClicked: () -> Unit,
-    onReportClicked: () -> Unit
+    onReportClicked: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -160,6 +196,7 @@ fun StoreDetailScreen(
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
+            addNewJogbo = addNewJogbo,
             onDismissRequest = onDismissBottomSheetRequest,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId)
@@ -178,30 +215,29 @@ fun StoreDetailScreen(
         },
         content = { contentPadding ->
             Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .background(Gray50)
+    ) {
+        Box {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = "식당 사진",
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(contentPadding)
-                    .navigationBarsPadding()
-            ) {
-                Box {
-                    AsyncImage(
-                        model = imageUrl,
-                        contentDescription = "식당 사진",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1.5f),
-                        contentScale = ContentScale.FillWidth,
-                        placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
-                        error = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail)
-                    )
+                    .aspectRatio(1.5f),
+                contentScale = ContentScale.FillBounds,
+                placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
+                error = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail)
+            )
 
-                    Image(
-                        painter = painterResource(id = R.drawable.img_black_gradient_top),
-                        contentDescription = "black gradient",
-                        modifier = Modifier.fillMaxWidth(),
-                        contentScale = ContentScale.FillWidth
-                    )
+            Image(
+                painter = painterResource(id = R.drawable.img_black_gradation_top),
+                contentDescription = "black gradient",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds
+            )
 
                     Column {
                         Spacer(modifier = Modifier.statusBarsPadding())
@@ -219,7 +255,6 @@ fun StoreDetailScreen(
                         )
                     }
                 }
-
                 Column(
                     modifier = Modifier
                         .offset(y = (-50).dp)
@@ -332,6 +367,7 @@ fun StoreDetailScreen(
                         )
                     }
                 }
+
             }
         }
     )

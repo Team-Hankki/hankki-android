@@ -67,7 +67,6 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
-import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
@@ -115,7 +114,8 @@ fun HomeRoute(
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: (Long) -> Unit,
-    isNewUniversity: Boolean,
+    isNewUniversity: Boolean, // TODO: 앱잼 종료 후 적용예정....
+    navigateToAddNewJogbo: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -134,11 +134,7 @@ fun HomeRoute(
     }
 
     LaunchedEffect(key1 = true) {
-        // if (isNewUniversity) {
         viewModel.getUniversityInformation()
-//        }else {
-//            viewModel.fetchData()
-//        }
     }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
@@ -212,6 +208,10 @@ fun HomeRoute(
         clickSortChip = viewModel::clickSortChip,
         selectSortChipItem = viewModel::selectSortChipItem,
         dismissSortChip = viewModel::dismissSortChip,
+        addNewJogbo = {
+            navigateToAddNewJogbo()
+            viewModel.controlMyJogboBottomSheet()
+        },
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
     ) {
@@ -273,6 +273,7 @@ fun HomeScreen(
     selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     dismissSortChip: () -> Unit = {},
     getJogboItems: (Long) -> Unit = {},
+    addNewJogbo: () -> Unit = {},
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
     reposition: () -> Unit = {},
 ) {
@@ -318,6 +319,7 @@ fun HomeScreen(
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
+            addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
                 coroutineScope.launch {

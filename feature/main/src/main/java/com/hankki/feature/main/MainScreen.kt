@@ -45,13 +45,16 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.homeNavGraph
+import com.hankki.feature.login.navigation.Login
+import com.hankki.feature.login.navigation.Onboarding
 import com.hankki.feature.login.navigation.loginNavGraph
-import com.hankki.feature.login.navigation.onboardingNavgraph
+import com.hankki.feature.login.navigation.onboardingNavGraph
 import com.hankki.feature.main.splash.navigation.splashNavGraph
 import com.hankki.feature.my.navigation.myNavGraph
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.reportNavGraph
 import com.hankki.feature.storedetail.navigation.storeDetailNavGraph
+import com.hankki.feature.universityselection.navigation.UniversitySelection
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -98,13 +101,24 @@ internal fun MainScreen(
                                 isNewUniversity = true
                             )
                         },
-                        navigateToLogIn = navigator::navigateToLogin
+                        navigateToLogIn = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToLogin(
+                                navOptions = navOptions
+                            )
+                        },
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = {},
                         navigateStoreDetail = navigator::navigateToStoreDetail,
-                        navigateToUniversitySelection = navigator::navigateToUniversity
+                        navigateToUniversitySelection = navigator::navigateToUniversity,
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
                     )
                     reportNavGraph(
                         navigateReport = { latitude, longitude, location, address ->
@@ -156,7 +170,8 @@ internal fun MainScreen(
                                 launchSingleTop = true
                             }
                             navigator.navigateToStoreDetail(storeId, navOptions)
-                        }
+                        },
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
@@ -165,19 +180,7 @@ internal fun MainScreen(
                         navigateToMyStore = navigator::navigateToMyStore,
                         navigateToJogboDetail = navigator::navigateToMyJogboDetail,
                         navigateToNewJogbo = navigator::navigateToNewJogbo,
-                        navigateToStoreDetail = navigator::navigateToStoreDetail
-                    )
-                    loginNavGraph(
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions)
-                        },
-                        navigateToOnboarding = navigator::navigateToOnboarding
-                    )
-                    onboardingNavgraph(
+                        navigateToStoreDetail = navigator::navigateToStoreDetail,
                         navigateToHome = {
                             val navOptions = navOptions {
                                 popUpTo<Home> {
@@ -188,18 +191,53 @@ internal fun MainScreen(
                             navigator.navigateToHome(navOptions)
                         }
                     )
+                    loginNavGraph(
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        },
+                        navigateToOnboarding = {
+                            val navOptions = navOptions {
+                                popUpTo<Login> {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToOnboarding(navOptions)
+                        }
+                    )
+
+                    onboardingNavGraph(
+                        navigateToUniversity = {
+                            val navOptions = navOptions {
+                                popUpTo<Onboarding> {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToUniversity(navOptions)
+                        }
+                    )
                     universitySelectionNavGraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
+                                popUpTo<UniversitySelection> {
+                                    inclusive = true
                                 }
                                 launchSingleTop = true
                             }
                             navigator.navigateToHome(navOptions, true)
                         }
                     )
-                    storeDetailNavGraph(navigateUp = navigator::navigateUpIfNotHome)
+                    storeDetailNavGraph(
+                        navigateUp = navigator::navigateUpIfNotHome,
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
+                    )
                 }
             }
         },
@@ -240,7 +278,7 @@ private fun MainBottomBar(
                     .fillMaxWidth()
                     .height(75.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 tabs.forEach { tab ->
                     MainBottomBarItem(
@@ -263,7 +301,6 @@ private fun RowScope.MainBottomBarItem(
 ) {
     Box(
         modifier = Modifier
-            .weight(1f)
             .fillMaxHeight()
             .selectable(
                 selected = selected,

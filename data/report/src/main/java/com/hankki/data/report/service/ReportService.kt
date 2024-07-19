@@ -5,9 +5,12 @@ import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.report.dto.request.ValidateStoreRequestDto
 import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
+import com.hankki.data.report.dto.response.FavoritesResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
 import com.hankki.data.report.dto.response.UniversityResponseDto
+import com.hankki.data.report.dto.response.UserInfoResponseDto
+import com.hankki.domain.report.entity.response.UserInfoResponseEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -16,6 +19,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ReportService {
@@ -44,4 +48,18 @@ interface ReportService {
 
     @GET("api/v1/users/me/university")
     suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto>
+
+    @GET("/api/v1/users/me")
+    suspend fun getUserInfo() : BaseResponse<UserInfoResponseDto>
+
+    @GET("api/v1/favorites")
+    suspend fun getMyJogbo(
+        @Query("candidate") candidate: Long
+    ): BaseResponse<FavoritesResponseDto>
+
+    @POST("api/v1/favorites/{favoriteId}/stores/{storeId}")
+    suspend fun addStoreAtJogbo(
+        @Path("favoriteId") favoriteId: Long,
+        @Path("storeId") storeId: Long
+    ): CreatedBaseResponse
 }

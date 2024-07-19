@@ -46,9 +46,9 @@ fun SelectedImageController(
                 contentDescription = "selected image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(84.dp)
-                    .clip(RoundedCornerShape(10.dp))
                     .padding(top = 12.dp, end = 12.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .size(84.dp)
                     .align(Alignment.BottomStart)
             )
             Icon(
@@ -73,7 +73,7 @@ fun SelectedImageController(
                 .padding(vertical = 8.dp, horizontal = 10.dp)
         ) {
             Text(
-                text = "변경하기",
+                text = "바꾸기",
                 style = HankkiTheme.typography.body3,
                 color = Gray700
             )

@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.main.R
 
@@ -40,6 +44,21 @@ fun SplashScreen(
                     is SplashSideEffect.NavigateLogin -> navigateToLogIn()
                 }
             }
+    }
+
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Color.Transparent,
+            darkIcons = true,
+            transformColorForLightContent = { Gray900 }
+        )
+        systemUiController.setNavigationBarColor(
+            color = Color.Transparent,
+            darkIcons = true,
+            navigationBarContrastEnforced = false
+        )
     }
 
     Column(

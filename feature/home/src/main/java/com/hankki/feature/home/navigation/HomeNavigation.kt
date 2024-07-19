@@ -22,6 +22,7 @@ fun NavGraphBuilder.homeNavGraph(
     onShowSnackBar: (Int) -> Unit,
     navigateStoreDetail: (Long) -> Unit,
     navigateToUniversitySelection: () -> Unit,
+    navigateToAddNewJogbo: () -> Unit,
 ) {
     composable<Home> { backStackEntry ->
         val items = backStackEntry.toRoute<Home>()
@@ -30,7 +31,8 @@ fun NavGraphBuilder.homeNavGraph(
             onShowSnackBar = onShowSnackBar,
             navigateStoreDetail = navigateStoreDetail,
             isNewUniversity = items.isNewUniversity,
-            navigateToUniversitySelection = navigateToUniversitySelection
+            navigateToUniversitySelection = navigateToUniversitySelection,
+            navigateToAddNewJogbo = navigateToAddNewJogbo
         )
     }
 }
