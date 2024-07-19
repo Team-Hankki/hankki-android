@@ -13,7 +13,6 @@ data class ReportState(
     val location: LocationModel = LocationModel(),
     val storeId: Long = 0,
     val buttonEnabled: Boolean = false,
-    val canReported: Boolean = true,
     val selectedCategory: String? = null,
     val selectedImageUri: Uri? = null,
     val categoryList: PersistentList<CategoryEntity> = persistentListOf(),
