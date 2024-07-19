@@ -94,21 +94,14 @@ fun ImageDoubleButtonDialog(
 
                 Spacer(modifier = Modifier.height(26.dp))
 
-                Row {
-                    HankkiTextButton(
-                        text = negativeButtonTitle,
-                        onClick = onNegativeButtonClicked,
-                        enabled = true,
-                        textStyle = HankkiTheme.typography.sub3
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    HankkiButton(
-                        text = positiveButtonTitle,
-                        onClick = onPositiveButtonClicked,
-                        enabled = true,
-                        textStyle = HankkiTheme.typography.sub3
-                    )
-                }
+
+                HankkiButton(
+                    text = positiveButtonTitle,
+                    onClick = onPositiveButtonClicked,
+                    enabled = true,
+                    textStyle = HankkiTheme.typography.sub3
+                )
+
             }
         }
     }
