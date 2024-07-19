@@ -104,7 +104,6 @@ fun HankkiTitleTextField(
 fun HankkiMenuTextField(
     value: String,
     onTextChanged: (String) -> Unit,
-    isFocused: Boolean,
     modifier: Modifier = Modifier,
     placeholder: String = "예) 된장찌개",
     title: String = "메뉴 이름",
@@ -126,7 +125,6 @@ fun HankkiMenuTextField(
 fun HankkiPriceTextField(
     value: String,
     onTextChanged: (String) -> Unit,
-    isFocused: Boolean,
     isError: Boolean,
     modifier: Modifier = Modifier,
     title: String = "가격",
@@ -165,22 +163,19 @@ fun HankkiTitleTextFieldPreview() {
                 title = "메뉴 이름",
                 value = "",
                 placeholder = "예) 된장찌개",
-                onTextChanged = {},
-                isFocused = false
+                onTextChanged = {}
             )
             HankkiMenuTextField(
                 title = "메뉴 이름",
                 value = "김치찌개",
                 placeholder = "예) 된장찌개",
-                onTextChanged = {},
-                isFocused = false
+                onTextChanged = {}
             )
             HankkiMenuTextField(
                 title = "메뉴 이름",
                 value = "김치찌개",
                 placeholder = "예) 된장찌개",
-                onTextChanged = {},
-                isFocused = true
+                onTextChanged = {}
             )
 
             HankkiPriceTextField(
@@ -189,7 +184,6 @@ fun HankkiTitleTextFieldPreview() {
                 placeholder = "7900",
                 onTextChanged = {},
                 isError = false,
-                isFocused = false
             )
 
             HankkiPriceTextField(
@@ -198,7 +192,6 @@ fun HankkiTitleTextFieldPreview() {
                 placeholder = "7900",
                 onTextChanged = {},
                 isError = false,
-                isFocused = true
             )
 
             HankkiPriceTextField(
@@ -206,8 +199,7 @@ fun HankkiTitleTextFieldPreview() {
                 value = "9000",
                 placeholder = "7900",
                 onTextChanged = {},
-                isError = true,
-                isFocused = false
+                isError = true
             )
         }
     }

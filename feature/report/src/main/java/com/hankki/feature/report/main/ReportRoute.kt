@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -395,23 +397,19 @@ fun MenuWithPriceInputComponent(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
             modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
         ) {
             HankkiMenuTextField(
                 value = name,
                 onTextChanged = onMenuChange,
-                isFocused = false,
                 modifier = Modifier.fillMaxWidth(0.55f)
             )
             Spacer(modifier = Modifier.width(8.dp))
             HankkiPriceTextField(
                 value = price,
                 onTextChanged = onPriceChange,
-                isFocused = false,
                 isError = isPriceError,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -425,8 +423,7 @@ fun MenuWithPriceInputComponent(
                 color = Color.Transparent
             )
 
-            Spacer(modifier = Modifier.height(3.dp))
-
+            Spacer(modifier = Modifier.height(11.dp))
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_circle_x),
