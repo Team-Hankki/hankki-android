@@ -349,7 +349,8 @@ fun HomeScreen(
                 HankkiTopBar(
                     content = {
                         Row(
-                            modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
+                            modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = universityName,
