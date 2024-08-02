@@ -1,7 +1,6 @@
 package com.hankki.hankkijogbo
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
