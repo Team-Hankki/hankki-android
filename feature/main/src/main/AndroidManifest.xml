@@ -7,7 +7,7 @@
             android:name=".MainActivity"
             android:configChanges="uiMode"
             android:exported="true"
-            android:theme="@style/Theme.Hankkijogbo">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
