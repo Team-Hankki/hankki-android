@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -156,7 +157,7 @@ fun HomeRoute(
     }
 
     var isInitialComposition by rememberSaveable { mutableStateOf(true) }
-    LaunchedEffect(
+    LaunchedEffect( // TODO: 너무 많은 호출이 발생하는 중. 수정이 필요.
         key1 = state.categoryChipState,
         key2 = state.priceChipState,
         key3 = state.sortChipState
@@ -386,7 +387,8 @@ fun HomeScreen(
                         uiSettings = MapUiSettings(
                             isCompassEnabled = false,
                             isZoomControlEnabled = false,
-                            isScaleBarEnabled = false
+                            isScaleBarEnabled = false,
+                            logoGravity = -1
                         ),
                         onMapClick = { _, _ ->
                             clickMap()
@@ -555,8 +557,8 @@ fun HomeScreen(
                                         RepositionButton(
                                             height = height.dp,
                                             modifier = Modifier.padding(
-                                                bottom = 19.dp,
-                                                end = 19.dp
+                                                bottom = 12.dp,
+                                                end = 12.dp
                                             ),
                                             onClick = reposition
                                         )
@@ -571,7 +573,7 @@ fun HomeScreen(
                                         ) {
                                             RepositionButton(
                                                 height = 0.dp,
-                                                modifier = Modifier.padding(end = 19.dp),
+                                                modifier = Modifier.padding(end = 12.dp),
                                                 onClick = reposition
                                             )
                                         }
@@ -583,13 +585,12 @@ fun HomeScreen(
                                             storeName = selectedStoreItem.name,
                                             price = selectedStoreItem.lowestPrice,
                                             heartCount = selectedStoreItem.heartCount,
-                                            modifier = Modifier.padding(22.dp),
+                                            modifier = Modifier.padding(horizontal = 22.dp, vertical = 12.dp),
                                             onClickItem = navigateStoreDetail
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems(selectedStoreItem.id)
                                         }
-                                        Spacer(modifier = Modifier.height(22.dp))
                                     }
                                 }
                             }
