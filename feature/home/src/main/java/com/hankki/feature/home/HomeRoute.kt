@@ -1,6 +1,7 @@
 package com.hankki.feature.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -237,6 +238,7 @@ fun HomeRoute(
     ExperimentalLayoutApi::class,
     ExperimentalMaterialApi::class
 )
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
     isOpenDialog: Boolean,
@@ -335,11 +337,9 @@ fun HomeScreen(
                 HankkiTextSnackBar("스낵바")
             }
         },
-        content = { contentPadding ->
+        content = {
             Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(contentPadding)
+                modifier = Modifier.padding(paddingValues)
             ) {
                 HankkiTopBar(
                     content = {
