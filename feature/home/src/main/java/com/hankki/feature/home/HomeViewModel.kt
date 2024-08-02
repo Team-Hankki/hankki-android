@@ -52,7 +52,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchData() {
+    fun fetchData() {
         getStoreItems()
         getMarkerItems()
     }
@@ -63,7 +63,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getStoreItems() {
+    private fun getStoreItems() {
         viewModelScope.launch {
             homeRepository.getStores(
                 universityId = _state.value.myUniversityModel.id,
@@ -103,7 +103,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getMarkerItems() {
+    private fun getMarkerItems() {
         viewModelScope.launch {
             homeRepository.getStoresPins(
                 universityId = _state.value.myUniversityModel.id,

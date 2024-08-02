@@ -45,9 +45,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,7 +71,6 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
-import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
@@ -134,10 +135,6 @@ fun HomeRoute(
         )
     }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.getUniversityInformation()
-    }
-
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
@@ -154,19 +151,27 @@ fun HomeRoute(
         }
     }
 
+    LaunchedEffect(key1 = true) {
+        viewModel.getUniversityInformation()
+    }
+
+    var isInitialComposition by rememberSaveable { mutableStateOf(true) }
     LaunchedEffect(
         key1 = state.categoryChipState,
         key2 = state.priceChipState,
         key3 = state.sortChipState
     ) {
-        if (state.categoryChipState !is ChipState.Selected && state.priceChipState !is ChipState.Selected && state.sortChipState !is ChipState.Selected) {
-            with(viewModel) {
-                getStoreItems()
-                getMarkerItems()
+        if (isInitialComposition) {
+            isInitialComposition = false
+        } else {
+            if (state.categoryChipState !is ChipState.Selected &&
+                state.priceChipState !is ChipState.Selected &&
+                state.sortChipState !is ChipState.Selected
+            ) {
+                viewModel.fetchData()
             }
         }
     }
-
 
     HomeScreen(
         isOpenDialog = state.isOpenDialog,
