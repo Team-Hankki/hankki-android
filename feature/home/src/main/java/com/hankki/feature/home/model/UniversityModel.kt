@@ -3,8 +3,8 @@ package com.hankki.feature.home.model
 import com.hankki.domain.home.entity.response.UniversityResponseEntity
 
 data class UniversityModel(
-    val id: Long = 1,
-    val name: String? = "",
+    val id: Long? = null,
+    val name: String? = null,
     val longitude: Double = 0.0,
     val latitude: Double = 0.0,
 )
