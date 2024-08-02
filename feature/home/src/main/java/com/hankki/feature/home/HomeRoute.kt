@@ -378,6 +378,7 @@ fun HomeScreen(
                             locationTrackingMode = LocationTrackingMode.NoFollow
                         ),
                         uiSettings = MapUiSettings(
+                            isCompassEnabled = false,
                             isZoomControlEnabled = false,
                             isScaleBarEnabled = false
                         ),
