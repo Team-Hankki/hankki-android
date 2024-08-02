@@ -80,9 +80,7 @@ class HomeViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     storeItems = stores.map { it.toModel() }.toPersistentList()
                 )
-            }.onFailure { error ->
-                Timber.e(error)
-            }
+            }.onFailure(Timber::e)
         }
     }
 
@@ -101,9 +99,7 @@ class HomeViewModel @Inject constructor(
                             )
                         }.toPersistentList()
                     )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
@@ -124,9 +120,7 @@ class HomeViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     markerItems = pins.map { it.toModel() }.toPersistentList()
                 )
-            }.onFailure { error ->
-                Timber.e(error)
-            }
+            }.onFailure(Timber::e)
         }
     }
 
@@ -138,9 +132,7 @@ class HomeViewModel @Inject constructor(
                         isMainBottomSheetOpen = false,
                     )
                     selectStoreItem(store.toModel())
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
@@ -174,9 +166,7 @@ class HomeViewModel @Inject constructor(
                             )
                         }.toPersistentList()
                     )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
@@ -209,9 +199,7 @@ class HomeViewModel @Inject constructor(
                             )
                         }.toPersistentList()
                     )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
@@ -244,9 +232,7 @@ class HomeViewModel @Inject constructor(
                             )
                         }.toPersistentList()
                     )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
@@ -273,9 +259,7 @@ class HomeViewModel @Inject constructor(
             homeRepository.addStoreAtJogbo(favoriteId, storeId)
                 .onSuccess {
 
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
