@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -82,7 +81,6 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.component.DropdownFilterChip
-import com.hankki.feature.home.component.HankkiFilterChip
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
@@ -118,7 +116,6 @@ fun HomeRoute(
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: (Long) -> Unit,
-    isNewUniversity: Boolean, // TODO: 앱잼 종료 후 적용예정....
     navigateToAddNewJogbo: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -157,23 +154,23 @@ fun HomeRoute(
         viewModel.getUniversityInformation()
     }
 
-//    var isInitialComposition by rememberSaveable { mutableStateOf(true) }
-//    LaunchedEffect( // TODO: 너무 많은 호출이 발생하는 중. 수정이 필요.
-//        key1 = state.categoryChipState,
-//        key2 = state.priceChipState,
-//        key3 = state.sortChipState
-//    ) {
-//        if (isInitialComposition) {
-//            isInitialComposition = false
-//        } else {
-//            if (state.categoryChipState !is ChipState.Selected &&
-//                state.priceChipState !is ChipState.Selected &&
-//                state.sortChipState !is ChipState.Selected
-//            ) {
-//                viewModel.fetchData()
-//            }
-//        }
-//    }
+    var isInitialComposition by rememberSaveable { mutableStateOf(true) }
+    LaunchedEffect(
+        key1 = state.categoryChipState,
+        key2 = state.priceChipState,
+        key3 = state.sortChipState
+    ) {
+        if (isInitialComposition) {
+            isInitialComposition = false
+        } else if (
+            state.categoryChipState !is ChipState.Selected &&
+            state.priceChipState !is ChipState.Selected &&
+            state.sortChipState !is ChipState.Selected
+        ) {
+            viewModel.fetchData()
+        }
+
+    }
 
     HomeScreen(
         isOpenDialog = state.isOpenDialog,
@@ -576,7 +573,10 @@ fun HomeScreen(
                                             storeName = selectedStoreItem.name,
                                             price = selectedStoreItem.lowestPrice,
                                             heartCount = selectedStoreItem.heartCount,
-                                            modifier = Modifier.padding(horizontal = 22.dp, vertical = 12.dp),
+                                            modifier = Modifier.padding(
+                                                horizontal = 22.dp,
+                                                vertical = 12.dp
+                                            ),
                                             onClickItem = navigateStoreDetail
                                         ) {
                                             controlMyJogboBottomSheet()

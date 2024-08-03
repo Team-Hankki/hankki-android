@@ -96,10 +96,7 @@ internal fun MainScreen(
                                 }
                                 launchSingleTop = true
                             }
-                            navigator.navigateToHome(
-                                navOptions = navOptions,
-                                isNewUniversity = true
-                            )
+                            navigator.navigateToHome(navOptions = navOptions)
                         },
                         navigateToLogIn = {
                             val navOptions = navOptions {
@@ -199,7 +196,7 @@ internal fun MainScreen(
                                 }
                                 launchSingleTop = true
                             }
-                            navigator.navigateToHome(navOptions)
+                            navigator.navigateToHome(navOptions = navOptions)
                         },
                         navigateToOnboarding = {
                             val navOptions = navOptions {
@@ -231,7 +228,9 @@ internal fun MainScreen(
                                 }
                                 launchSingleTop = true
                             }
-                            navigator.navigateToHome(navOptions, true)
+                            navigator.navigateToHome(
+                                navOptions = navOptions
+                            )
                         }
                     )
                     storeDetailNavGraph(
