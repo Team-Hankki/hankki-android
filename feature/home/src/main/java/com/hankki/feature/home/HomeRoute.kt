@@ -154,7 +154,7 @@ fun HomeRoute(
         viewModel.getUniversityInformation()
     }
 
-    var isInitialComposition by rememberSaveable { mutableStateOf(true) }
+    var isInitialComposition by remember { mutableStateOf(true) }
     LaunchedEffect(
         key1 = state.categoryChipState,
         key2 = state.priceChipState,
