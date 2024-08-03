@@ -149,24 +149,39 @@ class HomeViewModel @Inject constructor(
     }
 
     fun clickCategoryChip() {
-        viewModelScope.launch {
-            homeRepository.getCategories()
-                .onSuccess { chips ->
-                    _state.value = _state.value.copy(
-                        categoryChipState = when (_state.value.categoryChipState) {
-                            is ChipState.Fixed -> ChipState.Unselected()
-                            is ChipState.Selected -> ChipState.Unselected()
-                            is ChipState.Unselected -> ChipState.Selected()
-                        },
-                        categoryChipItems = chips.map {
-                            CategoryChipItem(
-                                name = it.name,
-                                tag = it.tag,
-                                imageUrl = it.imageUrl
-                            )
-                        }.toPersistentList()
-                    )
-                }.onFailure(Timber::e)
+        _state.value = _state.value.copy(
+            categoryChipState = when (_state.value.categoryChipState) {
+                is ChipState.Fixed -> ChipState.Unselected()
+                is ChipState.Selected -> ChipState.Unselected()
+                is ChipState.Unselected -> ChipState.Selected()
+            },
+            priceChipState = if (_state.value.priceChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.priceChipState
+            },
+            sortChipState = if (_state.value.sortChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.sortChipState
+            }
+        )
+
+        if (_state.value.categoryChipState is ChipState.Selected) {
+            viewModelScope.launch {
+                homeRepository.getCategories()
+                    .onSuccess { chips ->
+                        _state.value = _state.value.copy(
+                            categoryChipItems = chips.map {
+                                CategoryChipItem(
+                                    name = it.name,
+                                    tag = it.tag,
+                                    imageUrl = it.imageUrl
+                                )
+                            }.toPersistentList()
+                        )
+                    }.onFailure(Timber::e)
+            }
         }
     }
 
@@ -176,30 +191,38 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun dismissCategoryChip() {
-        _state.value = _state.value.copy(
-            categoryChipState = ChipState.Unselected()
-        )
-    }
-
     fun clickPriceChip() {
-        viewModelScope.launch {
-            homeRepository.getPriceCategories()
-                .onSuccess { chips ->
-                    _state.value = _state.value.copy(
-                        priceChipState = when (_state.value.priceChipState) {
-                            is ChipState.Fixed -> ChipState.Unselected()
-                            is ChipState.Selected -> ChipState.Unselected()
-                            is ChipState.Unselected -> ChipState.Selected()
-                        },
-                        priceChipItems = chips.map {
-                            ChipItem(
-                                name = it.name,
-                                tag = it.tag
-                            )
-                        }.toPersistentList()
-                    )
-                }.onFailure(Timber::e)
+        _state.value = _state.value.copy(
+            priceChipState = when (_state.value.priceChipState) {
+                is ChipState.Fixed -> ChipState.Unselected()
+                is ChipState.Selected -> ChipState.Unselected()
+                is ChipState.Unselected -> ChipState.Selected()
+            },
+            categoryChipState = if (_state.value.categoryChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.categoryChipState
+            },
+            sortChipState = if (_state.value.sortChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.sortChipState
+            }
+        )
+        if (_state.value.priceChipState is ChipState.Selected) {
+            viewModelScope.launch {
+                homeRepository.getPriceCategories()
+                    .onSuccess { chips ->
+                        _state.value = _state.value.copy(
+                            priceChipItems = chips.map {
+                                ChipItem(
+                                    name = it.name,
+                                    tag = it.tag
+                                )
+                            }.toPersistentList()
+                        )
+                    }.onFailure(Timber::e)
+            }
         }
     }
 
@@ -209,42 +232,45 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun dismissPriceChip() {
-        _state.value = _state.value.copy(
-            priceChipState = ChipState.Unselected()
-        )
-    }
-
     fun clickSortChip() {
-        viewModelScope.launch {
-            homeRepository.getSortCategories()
-                .onSuccess { chips ->
-                    _state.value = _state.value.copy(
-                        sortChipState = when (_state.value.sortChipState) {
-                            is ChipState.Fixed -> ChipState.Unselected()
-                            is ChipState.Selected -> ChipState.Unselected()
-                            is ChipState.Unselected -> ChipState.Selected()
-                        },
-                        sortChipItems = chips.map {
-                            ChipItem(
-                                name = it.name,
-                                tag = it.tag
-                            )
-                        }.toPersistentList()
-                    )
-                }.onFailure(Timber::e)
+        _state.value = _state.value.copy(
+            sortChipState = when (_state.value.sortChipState) {
+                is ChipState.Fixed -> ChipState.Unselected()
+                is ChipState.Selected -> ChipState.Unselected()
+                is ChipState.Unselected -> ChipState.Selected()
+            },
+            priceChipState = if (_state.value.priceChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.priceChipState
+            },
+            categoryChipState = if (_state.value.categoryChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.sortChipState
+            }
+        )
+
+        if (_state.value.sortChipState is ChipState.Selected) {
+            viewModelScope.launch {
+                homeRepository.getSortCategories()
+                    .onSuccess { chips ->
+                        _state.value = _state.value.copy(
+                            sortChipItems = chips.map {
+                                ChipItem(
+                                    name = it.name,
+                                    tag = it.tag
+                                )
+                            }.toPersistentList()
+                        )
+                    }.onFailure(Timber::e)
+            }
         }
     }
 
     fun selectSortChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             sortChipState = ChipState.Fixed(item, tag)
-        )
-    }
-
-    fun dismissSortChip() {
-        _state.value = _state.value.copy(
-            sortChipState = ChipState.Unselected()
         )
     }
 

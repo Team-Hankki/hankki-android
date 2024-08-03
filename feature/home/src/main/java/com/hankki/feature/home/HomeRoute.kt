@@ -82,6 +82,7 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.component.DropdownFilterChip
+import com.hankki.feature.home.component.HankkiFilterChip
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
 import com.hankki.feature.home.component.StoreItem
@@ -156,23 +157,23 @@ fun HomeRoute(
         viewModel.getUniversityInformation()
     }
 
-    var isInitialComposition by rememberSaveable { mutableStateOf(true) }
-    LaunchedEffect( // TODO: 너무 많은 호출이 발생하는 중. 수정이 필요.
-        key1 = state.categoryChipState,
-        key2 = state.priceChipState,
-        key3 = state.sortChipState
-    ) {
-        if (isInitialComposition) {
-            isInitialComposition = false
-        } else {
-            if (state.categoryChipState !is ChipState.Selected &&
-                state.priceChipState !is ChipState.Selected &&
-                state.sortChipState !is ChipState.Selected
-            ) {
-                viewModel.fetchData()
-            }
-        }
-    }
+//    var isInitialComposition by rememberSaveable { mutableStateOf(true) }
+//    LaunchedEffect( // TODO: 너무 많은 호출이 발생하는 중. 수정이 필요.
+//        key1 = state.categoryChipState,
+//        key2 = state.priceChipState,
+//        key3 = state.sortChipState
+//    ) {
+//        if (isInitialComposition) {
+//            isInitialComposition = false
+//        } else {
+//            if (state.categoryChipState !is ChipState.Selected &&
+//                state.priceChipState !is ChipState.Selected &&
+//                state.sortChipState !is ChipState.Selected
+//            ) {
+//                viewModel.fetchData()
+//            }
+//        }
+//    }
 
     HomeScreen(
         isOpenDialog = state.isOpenDialog,
@@ -208,13 +209,10 @@ fun HomeRoute(
         clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
         selectCategoryChipItem = viewModel::selectCategoryChipItem,
-        dismissCategoryChip = viewModel::dismissCategoryChip,
         clickPriceChip = viewModel::clickPriceChip,
         selectPriceChipItem = viewModel::selectPriceChipItem,
-        dismissPriceChip = viewModel::dismissPriceChip,
         clickSortChip = viewModel::clickSortChip,
         selectSortChipItem = viewModel::selectSortChipItem,
-        dismissSortChip = viewModel::dismissSortChip,
         addNewJogbo = {
             navigateToAddNewJogbo()
             viewModel.controlMyJogboBottomSheet()
@@ -273,13 +271,10 @@ fun HomeScreen(
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
     selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
-    dismissCategoryChip: () -> Unit = {},
     clickPriceChip: () -> Unit = {},
     selectPriceChipItem: (String, String) -> Unit = { _, _ -> },
-    dismissPriceChip: () -> Unit = {},
     clickSortChip: () -> Unit = {},
     selectSortChipItem: (String, String) -> Unit = { _, _ -> },
-    dismissSortChip: () -> Unit = {},
     getJogboItems: (Long) -> Unit = {},
     addNewJogbo: () -> Unit = {},
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
@@ -292,7 +287,6 @@ fun HomeScreen(
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = bottomSheetState
-
     )
 
     val listState = rememberLazyListState()
@@ -425,7 +419,6 @@ fun HomeScreen(
                                 chipState = categoryChipState,
                                 defaultTitle = "종류",
                                 menus = categoryChipItems,
-                                onDismissRequest = dismissCategoryChip,
                                 onClickMenu = selectCategoryChipItem,
                                 onClickChip = {
                                     clickCategoryChip()
@@ -440,7 +433,6 @@ fun HomeScreen(
                                 chipState = priceChipState,
                                 defaultTitle = "가격대",
                                 menus = priceChipItems,
-                                onDismissRequest = dismissPriceChip,
                                 onClickMenu = selectPriceChipItem,
                                 onClickChip = {
                                     clickPriceChip()
@@ -455,7 +447,6 @@ fun HomeScreen(
                                 chipState = sortChipState,
                                 defaultTitle = "정렬",
                                 menus = sortChipItems,
-                                onDismissRequest = dismissSortChip,
                                 onClickMenu = selectSortChipItem,
                                 onClickChip = {
                                     clickSortChip()
