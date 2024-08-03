@@ -45,11 +45,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -154,15 +152,12 @@ fun HomeRoute(
         viewModel.getUniversityInformation()
     }
 
-    var isInitialComposition by remember { mutableStateOf(true) }
     LaunchedEffect(
         key1 = state.categoryChipState,
         key2 = state.priceChipState,
         key3 = state.sortChipState
     ) {
-        if (isInitialComposition) {
-            isInitialComposition = false
-        } else if (
+        if (
             state.categoryChipState !is ChipState.Selected &&
             state.priceChipState !is ChipState.Selected &&
             state.sortChipState !is ChipState.Selected
