@@ -249,7 +249,7 @@ class HomeViewModel @Inject constructor(
             categoryChipState = if (_state.value.categoryChipState is ChipState.Selected) {
                 ChipState.Unselected()
             } else {
-                _state.value.sortChipState
+                _state.value.categoryChipState
             }
         )
 
