@@ -37,13 +37,13 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
-                    if (_state.value.myUniversityModel != university.toModel() ) {
+                    if (_state.value.myUniversityModel.id != university.id) {
+                        _state.value = _state.value.copy(
+                            myUniversityModel = university.toModel()
+                        )
                         moveMap(
                             _state.value.myUniversityModel.latitude,
                             _state.value.myUniversityModel.longitude
-                        )
-                        _state.value = _state.value.copy(
-                            myUniversityModel = university.toModel()
                         )
                         fetchData()
                     }
