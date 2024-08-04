@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.view.Gravity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateDpAsState
@@ -382,7 +383,7 @@ fun HomeScreen(
                             isCompassEnabled = false,
                             isZoomControlEnabled = false,
                             isScaleBarEnabled = false,
-                            logoGravity = -1
+                            logoGravity = Gravity.TOP or Gravity.END
                         ),
                         onMapClick = { _, _ ->
                             clickMap()
