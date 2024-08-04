@@ -200,6 +200,7 @@ fun HomeRoute(
         clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
+        clearChipFocus = viewModel::clearChipFocus,
         selectCategoryChipItem = viewModel::selectCategoryChipItem,
         clickPriceChip = viewModel::clickPriceChip,
         selectPriceChipItem = viewModel::selectPriceChipItem,
@@ -262,6 +263,7 @@ fun HomeScreen(
     clickMarkerItem: (Long) -> Unit = {},
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
+    clearChipFocus: () -> Unit = {},
     selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
     clickPriceChip: () -> Unit = {},
     selectPriceChipItem: (String, String) -> Unit = { _, _ -> },
@@ -294,6 +296,12 @@ fun HomeScreen(
     ) {
         if (bottomSheetState.isCollapsed) {
             listState.animateScrollToItem(0)
+        }
+    }
+
+    LaunchedEffect(key1 = bottomSheetState.progress) {
+        if (!bottomSheetState.isExpanded) {
+            clearChipFocus()
         }
     }
 

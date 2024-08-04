@@ -296,4 +296,24 @@ class HomeViewModel @Inject constructor(
             isOpenDialog = isOpen
         )
     }
+
+    fun clearChipFocus() {
+        _state.value = _state.value.copy(
+            categoryChipState = if (_state.value.categoryChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.categoryChipState
+            },
+            priceChipState = if (_state.value.priceChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.priceChipState
+            },
+            sortChipState = if (_state.value.sortChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.sortChipState
+            }
+        )
+    }
 }
