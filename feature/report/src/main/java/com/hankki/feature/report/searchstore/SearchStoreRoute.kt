@@ -174,7 +174,10 @@ fun SearchStoreScreen(
                 is EmptyUiState.Success -> LocationList(
                     selectedLocation = selectedLocation,
                     locations = state.data,
-                    onClick = onClickLocation
+                    onClick = {
+                        onClickLocation(it)
+                        focusManager.clearFocus()
+                    }
                 )
             }
 
