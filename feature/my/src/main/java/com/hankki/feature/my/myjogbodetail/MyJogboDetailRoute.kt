@@ -200,10 +200,11 @@ fun MyJogboDetailScreen(
 
         when (storeItems) {
             is EmptyUiState.Loading -> {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(White)
-                ){
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(White)
+                ) {
                     CircleLoadingScreen()
                 }
             }
@@ -212,15 +213,14 @@ fun MyJogboDetailScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(White)
-                        .padding(horizontal = 22.dp),
+                        .background(White),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     item {
                         Spacer(modifier = Modifier.height(4.dp))
                     }
 
-                    items(storeItems .data) { store ->
+                    items(storeItems.data) { store ->
                         StoreItem(
                             imageUrl = store.imageUrl,
                             category = store.category,
