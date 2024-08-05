@@ -13,8 +13,8 @@ import com.hankki.core.navigation.Route
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.Login
-import com.hankki.feature.main.splash.navigation.Splash
 import com.hankki.feature.login.navigation.navigateOnboarding
+import com.hankki.feature.main.splash.navigation.Splash
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
 import com.hankki.feature.my.navigation.navigateMyJogboDetail
@@ -43,15 +43,16 @@ internal class MainNavigator(
 
     fun navigate(tab: MainTab) {
         when (tab) {
-            MainTab.HOME -> navController.navigateHome(navOptions =
-            navOptions {
-                popUpTo<Home> {
-                    inclusive = false
-                    saveState = true
+            MainTab.HOME -> navController.navigateHome(
+                navOptions = navOptions {
+                    popUpTo<Home> {
+                        inclusive = false
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
                 }
-                launchSingleTop = true
-                restoreState = true
-            })
+            )
 
             MainTab.REPORT -> navController.navigateToReport()
             MainTab.MY -> navController.navigateMy(
@@ -97,9 +98,8 @@ internal class MainNavigator(
 
     fun navigateToHome(
         navOptions: NavOptions,
-        isNewUniversity: Boolean = false,
     ) {
-        navController.navigate(Home(isNewUniversity), navOptions)
+        navController.navigate(Home, navOptions)
     }
 
     fun navigateToReport(location: LocationModel, navOptions: NavOptions) {

@@ -3,6 +3,9 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
+import com.hankki.domain.home.entity.response.CategoriesEntity
+import com.hankki.domain.home.entity.response.CategoryEntity
+import com.hankki.domain.home.entity.response.CategoryResponseEntity
 import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
@@ -19,6 +22,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import timber.log.Timber.Forest.tag
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,14 +41,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
-                    _state.value = _state.value.copy(
-                        myUniversityModel = university.toModel()
-                    )
-                    moveMap(
-                        _state.value.myUniversityModel.latitude,
-                        _state.value.myUniversityModel.longitude
-                    )
-                    fetchData()
+                    if (_state.value.myUniversityModel.id != university.id) {
+                        _state.value = _state.value.copy(
+                            myUniversityModel = university.toModel()
+                        )
+                        moveMap(
+                            _state.value.myUniversityModel.latitude,
+                            _state.value.myUniversityModel.longitude
+                        )
+                        fetchData()
+                    }
                 }.onFailure { error ->
                     fetchData()
                     Timber.e(error)
@@ -52,7 +58,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchData() {
+    fun fetchData() {
         getStoreItems()
         getMarkerItems()
     }
@@ -63,7 +69,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getStoreItems() {
+    private fun getStoreItems() {
         viewModelScope.launch {
             homeRepository.getStores(
                 universityId = _state.value.myUniversityModel.id,
@@ -80,9 +86,7 @@ class HomeViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     storeItems = stores.map { it.toModel() }.toPersistentList()
                 )
-            }.onFailure { error ->
-                Timber.e(error)
-            }
+            }.onFailure(Timber::e)
         }
     }
 
@@ -101,13 +105,11 @@ class HomeViewModel @Inject constructor(
                             )
                         }.toPersistentList()
                     )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
-    fun getMarkerItems() {
+    private fun getMarkerItems() {
         viewModelScope.launch {
             homeRepository.getStoresPins(
                 universityId = _state.value.myUniversityModel.id,
@@ -124,9 +126,7 @@ class HomeViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     markerItems = pins.map { it.toModel() }.toPersistentList()
                 )
-            }.onFailure { error ->
-                Timber.e(error)
-            }
+            }.onFailure(Timber::e)
         }
     }
 
@@ -138,9 +138,7 @@ class HomeViewModel @Inject constructor(
                         isMainBottomSheetOpen = false,
                     )
                     selectStoreItem(store.toModel())
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
@@ -156,27 +154,88 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+    private fun updateChipState(
+        targetChipState: ChipState,
+        updateState: (ChipState) -> Unit,
+        fetchItems: suspend () -> Result<List<CategoryEntity>>,
+        onSuccess: (List<CategoryEntity>) -> Unit = { },
+    ) {
+        val newState = when (targetChipState) {
+            is ChipState.Fixed -> ChipState.Unselected()
+            is ChipState.Selected -> ChipState.Unselected()
+            is ChipState.Unselected -> ChipState.Selected()
+        }
+
+        _state.value = _state.value.copy(
+            categoryChipState = if (_state.value.categoryChipState is ChipState.Selected && targetChipState != _state.value.categoryChipState) ChipState.Unselected() else _state.value.categoryChipState,
+            priceChipState = if (_state.value.priceChipState is ChipState.Selected && targetChipState != _state.value.priceChipState) ChipState.Unselected() else _state.value.priceChipState,
+            sortChipState = if (_state.value.sortChipState is ChipState.Selected && targetChipState != _state.value.sortChipState) ChipState.Unselected() else _state.value.sortChipState
+        )
+
+        updateState(newState)
+
+        if (newState is ChipState.Selected) {
+            viewModelScope.launch {
+                fetchItems()
+                    .onSuccess { chips ->
+                        onSuccess(chips)
+                    }.onFailure(Timber::e)
+            }
+        }
+    }
+
     fun clickCategoryChip() {
-        viewModelScope.launch {
-            homeRepository.getCategories()
-                .onSuccess { chips ->
-                    _state.value = _state.value.copy(
-                        categoryChipState = when (_state.value.categoryChipState) {
-                            is ChipState.Fixed -> ChipState.Unselected()
-                            is ChipState.Selected -> ChipState.Unselected()
-                            is ChipState.Unselected -> ChipState.Selected()
-                        },
-                        categoryChipItems = chips.map {
-                            CategoryChipItem(
-                                name = it.name,
-                                tag = it.tag,
-                                imageUrl = it.imageUrl
-                            )
-                        }.toPersistentList()
+        updateChipState(
+            targetChipState = _state.value.categoryChipState,
+            updateState = { _state.value = _state.value.copy(categoryChipState = it) },
+            fetchItems = { homeRepository.getCategories() },
+        ) { chips ->
+            _state.value = _state.value.copy(
+                categoryChipItems = chips.map { chip ->
+                    chip as CategoryResponseEntity
+                    CategoryChipItem(
+                        name = chip.name,
+                        tag = chip.tag,
+                        imageUrl = chip.imageUrl
                     )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.toPersistentList()
+            )
+        }
+    }
+
+    fun clickPriceChip() {
+        updateChipState(
+            targetChipState = _state.value.priceChipState,
+            updateState = { _state.value = _state.value.copy(priceChipState = it) },
+            fetchItems = { homeRepository.getPriceCategories() }
+        ) { chips ->
+            _state.value = _state.value.copy(
+                priceChipItems = chips.map { chip ->
+                    chip as CategoriesEntity
+                    ChipItem(
+                        name = chip.name,
+                        tag = chip.tag
+                    )
+                }.toPersistentList()
+            )
+        }
+    }
+
+    fun clickSortChip() {
+        updateChipState(
+            targetChipState = _state.value.sortChipState,
+            updateState = { _state.value = _state.value.copy(sortChipState = it) },
+            fetchItems = { homeRepository.getSortCategories() }
+        ){ chips ->
+            _state.value = _state.value.copy(
+                sortChipItems = chips.map { chip ->
+                    chip as CategoriesEntity
+                    ChipItem(
+                        name = chip.name,
+                        tag = chip.tag
+                    )
+                }.toPersistentList()
+            )
         }
     }
 
@@ -186,79 +245,15 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun dismissCategoryChip() {
-        _state.value = _state.value.copy(
-            categoryChipState = ChipState.Unselected()
-        )
-    }
-
-    fun clickPriceChip() {
-        viewModelScope.launch {
-            homeRepository.getPriceCategories()
-                .onSuccess { chips ->
-                    _state.value = _state.value.copy(
-                        priceChipState = when (_state.value.priceChipState) {
-                            is ChipState.Fixed -> ChipState.Unselected()
-                            is ChipState.Selected -> ChipState.Unselected()
-                            is ChipState.Unselected -> ChipState.Selected()
-                        },
-                        priceChipItems = chips.map {
-                            ChipItem(
-                                name = it.name,
-                                tag = it.tag
-                            )
-                        }.toPersistentList()
-                    )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
-        }
-    }
-
     fun selectPriceChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             priceChipState = ChipState.Fixed(item, tag)
         )
     }
 
-    fun dismissPriceChip() {
-        _state.value = _state.value.copy(
-            priceChipState = ChipState.Unselected()
-        )
-    }
-
-    fun clickSortChip() {
-        viewModelScope.launch {
-            homeRepository.getSortCategories()
-                .onSuccess { chips ->
-                    _state.value = _state.value.copy(
-                        sortChipState = when (_state.value.sortChipState) {
-                            is ChipState.Fixed -> ChipState.Unselected()
-                            is ChipState.Selected -> ChipState.Unselected()
-                            is ChipState.Unselected -> ChipState.Selected()
-                        },
-                        sortChipItems = chips.map {
-                            ChipItem(
-                                name = it.name,
-                                tag = it.tag
-                            )
-                        }.toPersistentList()
-                    )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
-        }
-    }
-
     fun selectSortChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             sortChipState = ChipState.Fixed(item, tag)
-        )
-    }
-
-    fun dismissSortChip() {
-        _state.value = _state.value.copy(
-            sortChipState = ChipState.Unselected()
         )
     }
 
@@ -273,15 +268,33 @@ class HomeViewModel @Inject constructor(
             homeRepository.addStoreAtJogbo(favoriteId, storeId)
                 .onSuccess {
 
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
     fun setDialog(isOpen: Boolean) {
         _state.value = _state.value.copy(
             isOpenDialog = isOpen
+        )
+    }
+
+    fun clearChipFocus() {
+        _state.value = _state.value.copy(
+            categoryChipState = if (_state.value.categoryChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.categoryChipState
+            },
+            priceChipState = if (_state.value.priceChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.priceChipState
+            },
+            sortChipState = if (_state.value.sortChipState is ChipState.Selected) {
+                ChipState.Unselected()
+            } else {
+                _state.value.sortChipState
+            }
         )
     }
 }

@@ -19,7 +19,7 @@ internal enum class MainTab(
         selectedIconResource = R.drawable.ic_home_selected,
         unselectedIconResource = R.drawable.ic_home_unselected,
         contentDescription = "홈",
-        route = Home()
+        route = Home
     ),
     REPORT(
         selectedIconResource = R.drawable.ic_jaebo,

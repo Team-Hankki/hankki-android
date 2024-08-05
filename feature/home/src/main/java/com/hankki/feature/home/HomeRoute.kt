@@ -1,10 +1,12 @@
 package com.hankki.feature.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.view.Gravity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateDpAsState
@@ -68,7 +70,6 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
-import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
@@ -114,7 +115,6 @@ fun HomeRoute(
     onShowSnackBar: (Int) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: (Long) -> Unit,
-    isNewUniversity: Boolean, // TODO: 앱잼 종료 후 적용예정....
     navigateToAddNewJogbo: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -133,10 +133,6 @@ fun HomeRoute(
         )
     }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.getUniversityInformation()
-    }
-
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
@@ -153,19 +149,24 @@ fun HomeRoute(
         }
     }
 
+    LaunchedEffect(key1 = true) {
+        viewModel.getUniversityInformation()
+    }
+
     LaunchedEffect(
         key1 = state.categoryChipState,
         key2 = state.priceChipState,
         key3 = state.sortChipState
     ) {
-        if (state.categoryChipState !is ChipState.Selected && state.priceChipState !is ChipState.Selected && state.sortChipState !is ChipState.Selected) {
-            with(viewModel) {
-                getStoreItems()
-                getMarkerItems()
-            }
+        if (
+            state.categoryChipState !is ChipState.Selected &&
+            state.priceChipState !is ChipState.Selected &&
+            state.sortChipState !is ChipState.Selected
+        ) {
+            viewModel.fetchData()
         }
-    }
 
+    }
 
     HomeScreen(
         isOpenDialog = state.isOpenDialog,
@@ -200,14 +201,12 @@ fun HomeRoute(
         clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
+        clearChipFocus = viewModel::clearChipFocus,
         selectCategoryChipItem = viewModel::selectCategoryChipItem,
-        dismissCategoryChip = viewModel::dismissCategoryChip,
         clickPriceChip = viewModel::clickPriceChip,
         selectPriceChipItem = viewModel::selectPriceChipItem,
-        dismissPriceChip = viewModel::dismissPriceChip,
         clickSortChip = viewModel::clickSortChip,
         selectSortChipItem = viewModel::selectSortChipItem,
-        dismissSortChip = viewModel::dismissSortChip,
         addNewJogbo = {
             navigateToAddNewJogbo()
             viewModel.controlMyJogboBottomSheet()
@@ -237,6 +236,7 @@ fun HomeRoute(
     ExperimentalLayoutApi::class,
     ExperimentalMaterialApi::class
 )
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
     isOpenDialog: Boolean,
@@ -264,14 +264,12 @@ fun HomeScreen(
     clickMarkerItem: (Long) -> Unit = {},
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
+    clearChipFocus: () -> Unit = {},
     selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
-    dismissCategoryChip: () -> Unit = {},
     clickPriceChip: () -> Unit = {},
     selectPriceChipItem: (String, String) -> Unit = { _, _ -> },
-    dismissPriceChip: () -> Unit = {},
     clickSortChip: () -> Unit = {},
     selectSortChipItem: (String, String) -> Unit = { _, _ -> },
-    dismissSortChip: () -> Unit = {},
     getJogboItems: (Long) -> Unit = {},
     addNewJogbo: () -> Unit = {},
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
@@ -284,7 +282,6 @@ fun HomeScreen(
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = bottomSheetState
-
     )
 
     val listState = rememberLazyListState()
@@ -300,6 +297,12 @@ fun HomeScreen(
     ) {
         if (bottomSheetState.isCollapsed) {
             listState.animateScrollToItem(0)
+        }
+    }
+
+    LaunchedEffect(key1 = bottomSheetState.progress) {
+        if (!bottomSheetState.isExpanded) {
+            clearChipFocus()
         }
     }
 
@@ -335,16 +338,15 @@ fun HomeScreen(
                 HankkiTextSnackBar("스낵바")
             }
         },
-        content = { contentPadding ->
+        content = {
             Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(contentPadding)
+                modifier = Modifier.padding(paddingValues)
             ) {
                 HankkiTopBar(
                     content = {
                         Row(
-                            modifier = Modifier.noRippleClickable(navigateToUniversitySelection)
+                            modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = universityName,
@@ -378,8 +380,10 @@ fun HomeScreen(
                             locationTrackingMode = LocationTrackingMode.NoFollow
                         ),
                         uiSettings = MapUiSettings(
+                            isCompassEnabled = false,
                             isZoomControlEnabled = false,
-                            isScaleBarEnabled = false
+                            isScaleBarEnabled = false,
+                            logoGravity = Gravity.TOP or Gravity.END
                         ),
                         onMapClick = { _, _ ->
                             clickMap()
@@ -416,7 +420,6 @@ fun HomeScreen(
                                 chipState = categoryChipState,
                                 defaultTitle = "종류",
                                 menus = categoryChipItems,
-                                onDismissRequest = dismissCategoryChip,
                                 onClickMenu = selectCategoryChipItem,
                                 onClickChip = {
                                     clickCategoryChip()
@@ -431,7 +434,6 @@ fun HomeScreen(
                                 chipState = priceChipState,
                                 defaultTitle = "가격대",
                                 menus = priceChipItems,
-                                onDismissRequest = dismissPriceChip,
                                 onClickMenu = selectPriceChipItem,
                                 onClickChip = {
                                     clickPriceChip()
@@ -446,7 +448,6 @@ fun HomeScreen(
                                 chipState = sortChipState,
                                 defaultTitle = "정렬",
                                 menus = sortChipItems,
-                                onDismissRequest = dismissSortChip,
                                 onClickMenu = selectSortChipItem,
                                 onClickChip = {
                                     clickSortChip()
@@ -548,8 +549,8 @@ fun HomeScreen(
                                         RepositionButton(
                                             height = height.dp,
                                             modifier = Modifier.padding(
-                                                bottom = 19.dp,
-                                                end = 19.dp
+                                                bottom = 12.dp,
+                                                end = 12.dp
                                             ),
                                             onClick = reposition
                                         )
@@ -564,7 +565,7 @@ fun HomeScreen(
                                         ) {
                                             RepositionButton(
                                                 height = 0.dp,
-                                                modifier = Modifier.padding(end = 19.dp),
+                                                modifier = Modifier.padding(end = 12.dp),
                                                 onClick = reposition
                                             )
                                         }
@@ -576,13 +577,15 @@ fun HomeScreen(
                                             storeName = selectedStoreItem.name,
                                             price = selectedStoreItem.lowestPrice,
                                             heartCount = selectedStoreItem.heartCount,
-                                            modifier = Modifier.padding(22.dp),
+                                            modifier = Modifier.padding(
+                                                horizontal = 22.dp,
+                                                vertical = 12.dp
+                                            ),
                                             onClickItem = navigateStoreDetail
                                         ) {
                                             controlMyJogboBottomSheet()
                                             getJogboItems(selectedStoreItem.id)
                                         }
-                                        Spacer(modifier = Modifier.height(22.dp))
                                     }
                                 }
                             }
