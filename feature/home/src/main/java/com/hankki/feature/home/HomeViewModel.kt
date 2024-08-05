@@ -258,6 +258,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun controlMyJogboBottomSheet() {
+        clearChipFocus()
         _state.value = _state.value.copy(
             isMyJogboBottomSheetOpen = !_state.value.isMyJogboBottomSheetOpen
         )
