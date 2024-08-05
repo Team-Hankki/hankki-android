@@ -4,19 +4,21 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,10 +32,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,6 +54,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
+import com.hankki.core.common.extension.animateScrollAroundItem
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.AddPhotoButton
@@ -136,6 +147,7 @@ fun ReportRoute(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReportScreen(
     count: Long,
@@ -159,6 +171,7 @@ fun ReportScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+    val isVisibleIme = WindowInsets.isImeVisible
 
     Column(
         modifier = Modifier
@@ -184,8 +197,7 @@ fun ReportScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(White),
-            contentAlignment = Alignment.BottomCenter
+                .background(White)
         ) {
             Column(
                 modifier = Modifier
@@ -211,6 +223,7 @@ fun ReportScreen(
                     modifier = Modifier
                         .padding(horizontal = 22.dp)
                         .fillMaxWidth()
+                        .imePadding()
                 ) {
                     StoreCategoryChips(
                         title = stringResource(id = com.hankki.feature.report.R.string.show_store_categories),
@@ -267,7 +280,8 @@ fun ReportScreen(
                                 onPriceChange = { price ->
                                     changePrice(index, price)
                                 },
-                                deleteMenu = { deleteMenu(index) }
+                                deleteMenu = { deleteMenu(index) },
+                                modifier = Modifier.animateScrollAroundItem(scrollState)
                             )
                             if (index != menuList.lastIndex) {
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -279,7 +293,12 @@ fun ReportScreen(
                             addMenu()
                             coroutineScope.launch {
                                 delay(100)
-                                scrollState.animateScrollTo(scrollState.maxValue)
+
+                                if (isVisibleIme) {
+                                    focusManager.moveFocus(FocusDirection.Down)
+                                } else {
+                                    scrollState.animateScrollTo(scrollState.maxValue)
+                                }
                             }
                         })
 
@@ -292,6 +311,7 @@ fun ReportScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
                     .noRippleClickable(),
                 contentAlignment = Alignment.BottomCenter
             ) {

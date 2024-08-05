@@ -2,18 +2,23 @@ package com.hankki.core.common.extension
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
@@ -21,8 +26,11 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import kotlinx.coroutines.launch
 
 inline fun Modifier.noRippleClickable(
     crossinline onClick: () -> Unit = {},
@@ -118,4 +126,25 @@ fun Modifier.ignoreNextModifiers(): Modifier {
             return this
         }
     }
+}
+
+fun Modifier.animateScrollAroundItem(
+    scrollState: ScrollState,
+    yPosition: Float = 50f,
+): Modifier = composed {
+    var scrollToPosition by remember {
+        mutableFloatStateOf(0f)
+    }
+    val coroutineScope = rememberCoroutineScope()
+    this
+        .onGloballyPositioned { coordinates ->
+            scrollToPosition = coordinates.positionInParent().y + yPosition
+        }
+        .onFocusEvent {
+            if (it.isFocused) {
+                coroutineScope.launch {
+                    scrollState.animateScrollTo(scrollToPosition.toInt())
+                }
+            }
+        }
 }

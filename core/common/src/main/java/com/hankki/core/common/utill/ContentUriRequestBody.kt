@@ -79,10 +79,10 @@ class ContentUriRequestBody(
             val outputStream = ByteArrayOutputStream()
             val imageSizeMb = size / (MAX_WIDTH * MAX_HEIGHT.toDouble())
             outputStream.use {
-                val compressRate = ((3 / imageSizeMb) * 100).toInt()
+                val compressRate = ((IMAGE_SIZE_MB / imageSizeMb) * 100).toInt()
                 originalBitmap.compress(
                     Bitmap.CompressFormat.JPEG,
-                    if (imageSizeMb >= 1) compressRate else 100,
+                    if (imageSizeMb >= IMAGE_SIZE_MB) compressRate else 100,
                     it,
                 )
             }
@@ -120,6 +120,7 @@ class ContentUriRequestBody(
     fun toFormData(name: String) = MultipartBody.Part.createFormData(name, getFileName(), this)
 
     companion object {
+        const val IMAGE_SIZE_MB = 1
         const val MAX_WIDTH = 1024
         const val MAX_HEIGHT = 1024
     }

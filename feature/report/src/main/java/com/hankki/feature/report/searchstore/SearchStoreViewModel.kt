@@ -42,7 +42,7 @@ class SearchStoreViewModel @Inject constructor(
     init {
         getUniversityId()
         viewModelScope.launch {
-            _value.debounce(500)
+            _value.debounce(DEBOUNCE_DURATION)
                 .collectLatest { debounced ->
                     if (debounced.isNotBlank()) {
                         getStores(debounced)
@@ -123,5 +123,9 @@ class SearchStoreViewModel @Inject constructor(
                 _sideEffect.emit(SearchStoreSideEffect.OpenDialog)
             }
         }
+    }
+
+    companion object {
+        private const val DEBOUNCE_DURATION: Long = 300
     }
 }
