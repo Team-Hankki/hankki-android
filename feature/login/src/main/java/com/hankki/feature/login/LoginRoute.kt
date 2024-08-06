@@ -11,22 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.common.utill.SystemBarColorChanger
-import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import kotlinx.coroutines.flow.collectLatest
@@ -79,17 +73,20 @@ fun LoginScreen(
         )
 
         Column(
-            modifier = Modifier.align(Alignment.TopStart)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .fillMaxSize()
         ) {
+            Spacer(modifier = Modifier.weight(0.16875f))
             Text(
                 text = stringResource(R.string.done_worry),
                 color = White,
                 style = HankkiTheme.typography.suitH1,
                 modifier = Modifier
-                    .padding(start = 22.dp, top = 54.dp)
+                    .padding(start = 22.dp)
                     .align(Alignment.Start)
             )
-            Spacer(modifier = Modifier.height(41.dp))
+            Spacer(modifier = Modifier.weight(0.76375f))
         }
 
         Image(
