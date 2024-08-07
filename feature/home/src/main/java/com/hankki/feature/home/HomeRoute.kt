@@ -323,9 +323,7 @@ fun HomeScreen(
             addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
-                coroutineScope.launch {
-                    onShowSnackBar(localContextResource.getString(com.hankki.feature.home.R.string.success_add_my_jogbo))
-                }
+                onShowSnackBar(localContextResource.getString(com.hankki.feature.home.R.string.success_add_my_jogbo))
             }
         )
     }
