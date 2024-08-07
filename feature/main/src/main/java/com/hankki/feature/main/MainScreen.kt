@@ -40,6 +40,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
+import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
@@ -73,6 +74,15 @@ internal fun MainScreen(
             textSnackBarWithButtonHostState.showSnackbar(message)
         }
     }
+
+    val whiteSnackBarWithButtonHostState = remember { SnackbarHostState() }
+    val onShowWhiteSnackBarWithButton: (String) -> Unit = { message ->
+        coroutineScope.launch {
+            whiteSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
+            whiteSnackBarWithButtonHostState.showSnackbar(message)
+        }
+    }
+
 
     Scaffold(
         content = { paddingValue ->
@@ -168,7 +178,8 @@ internal fun MainScreen(
                             }
                             navigator.navigateToStoreDetail(storeId, navOptions)
                         },
-                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+                        onShowSnackBar = onShowWhiteSnackBarWithButton
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
@@ -250,11 +261,24 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackbarData ->
+            SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackBarData ->
                 HankkiTextSnackBarWithButton(
-                    message = snackbarData.visuals.message,
+                    message = snackBarData.visuals.message,
                 ) {
-                    snackbarData.dismiss()
+                    snackBarData.dismiss()
+                    // TODO: 족보로 화면 이동
+                }
+            }
+
+            SnackbarHost(
+                hostState = whiteSnackBarWithButtonHostState,
+                modifier = Modifier.fillMaxSize()
+            ) { snackBarData ->
+                HankkiWhiteSnackBarWithButton(
+                    message = snackBarData.visuals.message,
+                ) {
+                    snackBarData.dismiss()
+                    // TODO: 족보로 화면 이동
                 }
             }
         },

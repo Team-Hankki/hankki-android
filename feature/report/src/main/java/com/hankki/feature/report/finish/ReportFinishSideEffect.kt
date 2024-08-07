@@ -1,9 +1,10 @@
 package com.hankki.feature.report.finish
 
 sealed class ReportFinishSideEffect {
-    data class navigateToStoreDetail(
-        val storeId: Long
+    data class NavigateToStoreDetail(
+        val storeId: Long,
     ) : ReportFinishSideEffect()
 
-    data object navigateToHome : ReportFinishSideEffect()
+    data object NavigateToHome : ReportFinishSideEffect()
+    data class ShowSnackBar(val message: String) : ReportFinishSideEffect()
 }

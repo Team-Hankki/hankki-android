@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,42 +19,48 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 
 @Composable
-fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
-    val message = "나의 족보에 추가했어요"
-    val buttonText = "보기"
-
+fun HankkiWhiteSnackBarWithButton(
+    message: String,
+    onClick: () -> Unit,
+) {
     Box(
-        modifier = Modifier
-            .statusBarsPadding()
-            .fillMaxWidth(0.65f)
-            .padding(vertical = 14.dp)
-            .clip(RoundedCornerShape(65.dp))
-            .background(color = White)
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Row(
+        Box(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(top = 35.dp)
+                .statusBarsPadding()
+                .clip(RoundedCornerShape(65.dp))
+                .background(color = White)
         ) {
-            Text(
-                text = message,
-                color = Gray900,
-                style = HankkiTheme.typography.sub3,
-                modifier = Modifier.padding(start = 22.dp)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = buttonText,
-                color = Red,
-                style = HankkiTheme.typography.sub3,
+            Row(
                 modifier = Modifier
-                    .noRippleClickable(onClick = onClick)
-                    .padding(end = 12.dp),
-            )
+                    .padding(14.dp)
+                    .padding(start = 22.dp, end = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = message,
+                    color = Gray900,
+                    style = HankkiTheme.typography.sub3,
+                    modifier = Modifier.weight(1f, false)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = "보기",
+                    color = Red,
+                    style = HankkiTheme.typography.sub3,
+                    modifier = Modifier
+                        .noRippleClickable(onClick = onClick)
+                        .padding(horizontal = 12.dp),
+                )
+            }
         }
     }
 }
@@ -61,5 +68,10 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
 @Preview
 @Composable
 fun PreviewHankkiWhiteSnackBarWithButton() {
-    // HankkiTextSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
+    HankkijogboTheme {
+        HankkiWhiteSnackBarWithButton(
+            message = "내 족보에 추가했어요",
+            onClick = { /* 클릭 시 실행될 코드 */ }
+        )
+    }
 }
