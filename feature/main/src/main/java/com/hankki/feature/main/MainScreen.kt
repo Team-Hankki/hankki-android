@@ -32,7 +32,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -41,6 +40,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
+import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
@@ -250,8 +250,17 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
+//            SnackbarHost(hostState = textSnackBarHostState) { snackBarData ->
+//                HankkiTextSnackBar(snackBarData.visuals.message)
+//            }
+
             SnackbarHost(hostState = textSnackBarHostState) { snackbarData ->
-                HankkiTextSnackBar(snackbarData.visuals.message)
+                HankkiTextSnackBarWithButton(
+                    message = snackbarData.visuals.message,
+                ) {
+                    snackbarData.dismiss()
+                }
+                // HankkiTextSnackBar(snackbarData.visuals.message)
             }
         },
     )

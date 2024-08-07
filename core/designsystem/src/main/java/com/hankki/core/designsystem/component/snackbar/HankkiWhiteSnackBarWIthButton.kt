@@ -61,5 +61,5 @@ fun HankkiWhiteSnackBarWithButton(onClick: () -> Unit) {
 @Preview
 @Composable
 fun PreviewHankkiWhiteSnackBarWithButton() {
-    HankkiTextSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
+    // HankkiTextSnackBarWithButton(onClick = { /* 클릭 시 실행될 코드 */ })
 }
