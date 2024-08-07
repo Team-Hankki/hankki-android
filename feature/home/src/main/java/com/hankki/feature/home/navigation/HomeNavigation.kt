@@ -17,7 +17,7 @@ fun NavController.navigateHome(
 
 fun NavGraphBuilder.homeNavGraph(
     paddingValues: PaddingValues,
-    onShowSnackBar: (Int) -> Unit,
+    onShowSnackBar: (String) -> Unit,
     navigateStoreDetail: (Long) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
