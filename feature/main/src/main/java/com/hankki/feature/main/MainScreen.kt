@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -67,11 +66,11 @@ internal fun MainScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val textSnackBarHostState = remember { SnackbarHostState() }
-    val onShowTextSnackBar: (String) -> Unit = { message ->
+    val textSnackBarWithButtonHostState = remember { SnackbarHostState() }
+    val onShowTextSnackBarWithButton: (String) -> Unit = { message ->
         coroutineScope.launch {
-            textSnackBarHostState.currentSnackbarData?.dismiss()
-            textSnackBarHostState.showSnackbar(message)
+            textSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
+            textSnackBarWithButtonHostState.showSnackbar(message)
         }
     }
 
@@ -113,7 +112,7 @@ internal fun MainScreen(
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
-                        onShowSnackBar = onShowTextSnackBar,
+                        onShowSnackBar = onShowTextSnackBarWithButton,
                         navigateStoreDetail = navigator::navigateToStoreDetail,
                         navigateToUniversitySelection = navigator::navigateToUniversity,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo
@@ -236,7 +235,8 @@ internal fun MainScreen(
                     )
                     storeDetailNavGraph(
                         navigateUp = navigator::navigateUpIfNotHome,
-                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+                        onShowSnackBar = onShowTextSnackBarWithButton
                     )
                 }
             }
@@ -250,17 +250,12 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-//            SnackbarHost(hostState = textSnackBarHostState) { snackBarData ->
-//                HankkiTextSnackBar(snackBarData.visuals.message)
-//            }
-
-            SnackbarHost(hostState = textSnackBarHostState) { snackbarData ->
+            SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackbarData ->
                 HankkiTextSnackBarWithButton(
                     message = snackbarData.visuals.message,
                 ) {
                     snackbarData.dismiss()
                 }
-                // HankkiTextSnackBar(snackbarData.visuals.message)
             }
         },
     )
