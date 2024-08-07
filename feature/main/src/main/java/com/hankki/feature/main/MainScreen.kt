@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
@@ -65,12 +66,12 @@ internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
-    val localContextResource = LocalContext.current.resources
-    val onShowSnackBar: (Int) -> Unit = { errorMessage ->
+
+    val textSnackBarHostState = remember { SnackbarHostState() }
+    val onShowTextSnackBar: (String) -> Unit = { message ->
         coroutineScope.launch {
-            snackBarHostState.currentSnackbarData?.dismiss()
-            snackBarHostState.showSnackbar(localContextResource.getString(errorMessage))
+            textSnackBarHostState.currentSnackbarData?.dismiss()
+            textSnackBarHostState.showSnackbar(message)
         }
     }
 
@@ -112,7 +113,7 @@ internal fun MainScreen(
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
-                        onShowSnackBar = {},
+                        onShowSnackBar = onShowTextSnackBar,
                         navigateStoreDetail = navigator::navigateToStoreDetail,
                         navigateToUniversitySelection = navigator::navigateToUniversity,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo
@@ -248,7 +249,11 @@ internal fun MainScreen(
                 onTabSelected = navigator::navigate
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        snackbarHost = {
+            SnackbarHost(hostState = textSnackBarHostState) { snackbarData ->
+                HankkiTextSnackBar(snackbarData.visuals.message)
+            }
+        },
     )
 }
 
