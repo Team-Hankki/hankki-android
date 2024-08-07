@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -186,6 +187,8 @@ fun StoreDetailScreen(
     onAddMenuClicked: () -> Unit,
     onReportClicked: () -> Unit,
 ) {
+    val localContextResource = LocalContext.current.resources
+
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
@@ -193,7 +196,7 @@ fun StoreDetailScreen(
             onDismissRequest = onDismissBottomSheetRequest,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId)
-                onShowSnackBar("나의 족보에 추가되었습니다.")
+                onShowSnackBar(localContextResource.getString(R.string.success_add_my_jogbo))
             }
         )
     }

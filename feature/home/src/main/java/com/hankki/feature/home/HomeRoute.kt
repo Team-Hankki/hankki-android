@@ -323,7 +323,7 @@ fun HomeScreen(
             addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
-                onShowSnackBar(localContextResource.getString(com.hankki.feature.home.R.string.success_add_my_jogbo))
+                onShowSnackBar(localContextResource.getString(R.string.success_add_my_jogbo))
             }
         )
     }
