@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.domain.my.repository.MyRepository
+import com.hankki.feature.my.myjogbodetail.MyJogboSideEffect
 import com.hankki.feature.my.mystore.model.toMyStoreModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -119,7 +120,11 @@ class MyStoreViewModel @Inject constructor(
         }
     }
 
-
+    fun navigateToStoreDetail(storeId: Long) {
+        viewModelScope.launch {
+            _mySideEffect.emit(MyStoreSideEffect.NavigateToDetail(storeId))
+        }
+    }
 //    fun updateStoreSelected(id: Long, isLiked: Boolean) {
 //        viewModelScope.launch {
 //            if (isLiked) {

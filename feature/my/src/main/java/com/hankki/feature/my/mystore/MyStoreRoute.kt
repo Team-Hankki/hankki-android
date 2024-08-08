@@ -73,8 +73,9 @@ fun MyStoreRoute(
         type = type,
         state = myStoreState.uiState,
         updateStoreSelected = myStoreViewModel::updateStoreSelected,
-        onClickItem = myStoreViewModel::onClickItem
-    )
+        onClickItem = myStoreViewModel::onClickItem,
+        navigateToStoreDetail = myStoreViewModel::navigateToStoreDetail,
+        )
 }
 
 @Composable
@@ -85,8 +86,9 @@ fun MyStoreScreen(
     state: EmptyUiState<PersistentList<MyStoreModel>>,
     modifier: Modifier = Modifier,
     updateStoreSelected: (Long, Boolean) -> Unit,
-    onClickItem: (Long) -> Unit = {}
-) {
+    onClickItem: (Long) -> Unit = {},
+    navigateToStoreDetail: (Long) -> Unit,
+    ) {
     Column(
         modifier = modifier
             .padding((paddingValues))
@@ -147,6 +149,9 @@ fun MyStoreScreen(
                                 editSelected = {
                                     updateStoreSelected(store.id, store.isLiked == true)
                                 },
+                                modifier =  Modifier.noRippleClickable{
+                                    navigateToStoreDetail(store.id)
+                                },
                                 onClickItem = {
                                     onClickItem(store.id)
                                 }
@@ -175,7 +180,8 @@ fun MyStoreScreenPreview() {
             navigateUp = {},
             type = "like",
             state = EmptyUiState.Empty,
-            updateStoreSelected = { _, _ -> }
+            updateStoreSelected = { _, _ -> },
+            navigateToStoreDetail = {}
         )
     }
 }
