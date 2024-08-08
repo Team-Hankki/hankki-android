@@ -65,13 +65,23 @@ fun StoreDetailRoute(
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+    val sideEffectFlow = viewModel.sideEffects
+
+    val systemUiController = rememberSystemUiController()
+    val customColor = White
 
     LaunchedEffect(storeId) {
         viewModel.fetchStoreDetail(storeId)
     }
 
-    val systemUiController = rememberSystemUiController()
-    val customColor = White
+    LaunchedEffect(sideEffectFlow) {
+        sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
+                StoreDetailSideEffect.NavigateUp -> navigateUp()
+                StoreDetailSideEffect.NavigateToAddNewJogbo -> navigateToAddNewJogbo()
+            }
+        }
+    }
 
     DisposableEffect(systemUiController) {
         systemUiController.setNavigationBarColor(
@@ -122,10 +132,10 @@ fun StoreDetailRoute(
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
                 },
-                onAddMenuClicked = { viewModel.updateDialogState(StoreDetailDialogState.MENU_EDIT) },
+                onAddMenuClicked = { viewModel.showMenuEditDialog() },
                 onReportClicked = {
                     viewModel.fetchNickname()
-                    viewModel.updateDialogState(StoreDetailDialogState.REPORT_CONFIRMATION)
+                    viewModel.showReportConfirmation()
                 }
             )
         }
@@ -139,7 +149,7 @@ fun StoreDetailRoute(
                 title = "조금만 기다려주세요!",
                 description = "메뉴를 편집할 수 있도록 준비하고 있어요 :)",
                 buttonTitle = "확인",
-                onConfirmation = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) }
+                onConfirmation = { viewModel.closeDialog() }
             )
         }
 
@@ -150,11 +160,11 @@ fun StoreDetailRoute(
                 negativeButtonTitle = "돌아가기",
                 positiveButtonTitle = "제보하기",
                 onNegativeButtonClicked = {
-                    viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                    viewModel.closeDialog()
                     viewModel.resetSelectedIndex()
                 },
                 onPositiveButtonClicked = {
-                    viewModel.updateDialogState(StoreDetailDialogState.REPORT)
+                    viewModel.showThankYouDialog()
                     viewModel.resetSelectedIndex()
                 }
             )
@@ -168,7 +178,7 @@ fun StoreDetailRoute(
                 positiveButtonTitle = "돌아가기",
                 onNegativeButtonClicked = { },
                 onPositiveButtonClicked = {
-                    viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                    viewModel.closeDialog()
                     viewModel.resetSelectedIndex()
                 }
             )
