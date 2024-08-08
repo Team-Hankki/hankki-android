@@ -248,14 +248,14 @@ fun MyJogboDetailScreen(
 
                     item {
                         Spacer(modifier = Modifier.height(20.dp))
-
+                        //컴포넌트화 필요
                         Row(
                             modifier = Modifier
                                 .padding(bottom = 30.dp)
                                 .clip(RoundedCornerShape(14.dp))
                                 .wrapContentSize()
                                 .background(Gray100)
-                                .padding(12.dp)
+                                .padding(vertical = 10.dp, horizontal = 12.dp)
                                 .padding(end = 3.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -280,7 +280,8 @@ fun MyJogboDetailScreen(
             is EmptyUiState.Empty -> {
                 EmptyStoreView(
                     text = "나의 족보에\n" +
-                            "식당을 추가해보세요"
+                            "식당을 추가해보세요",
+                    navigateToHome = navigateToHome
                 )
             }
 
