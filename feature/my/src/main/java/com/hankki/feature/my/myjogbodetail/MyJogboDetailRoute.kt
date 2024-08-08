@@ -76,11 +76,12 @@ fun MyJogboDetailRoute(
         myJogboDetailViewModel.getUserName()
     }
 
-    LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
-        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { sideEffect ->
+    LaunchedEffect(myJogboDetailViewModel.mySideEffect,lifecycleOwner) {
+        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
                 when (sideEffect) {
                     is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+
+                    is MyJogboSideEffect.NavigateToHome -> navigateToHome()
                 }
             }
     }
@@ -106,7 +107,7 @@ fun MyJogboDetailRoute(
         updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
         onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) },
         userName = myJogboDetailState.userInformation.nickname,
-        navigateToHome = navigateToHome
+        navigateToHome = myJogboDetailViewModel::navigateToHome
     )
 }
 

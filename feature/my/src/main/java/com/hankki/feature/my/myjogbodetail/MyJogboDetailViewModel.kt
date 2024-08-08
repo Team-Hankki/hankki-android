@@ -84,6 +84,12 @@ class MyJogboDetailViewModel @Inject constructor(
         }
     }
 
+    fun navigateToHome() {
+        viewModelScope.launch {
+            _mySideEffect.emit(MyJogboSideEffect.NavigateToHome)
+        }
+    }
+
     fun getUserName() {
         viewModelScope.launch {
             myRepository.getUserInformation()
