@@ -73,9 +73,8 @@ fun MyStoreRoute(
         type = type,
         state = myStoreState.uiState,
         updateStoreSelected = myStoreViewModel::updateStoreSelected,
-        onClickItem = myStoreViewModel::onClickItem,
         navigateToStoreDetail = myStoreViewModel::navigateToStoreDetail,
-        )
+    )
 }
 
 @Composable
@@ -86,9 +85,8 @@ fun MyStoreScreen(
     state: EmptyUiState<PersistentList<MyStoreModel>>,
     modifier: Modifier = Modifier,
     updateStoreSelected: (Long, Boolean) -> Unit,
-    onClickItem: (Long) -> Unit = {},
     navigateToStoreDetail: (Long) -> Unit,
-    ) {
+) {
     Column(
         modifier = modifier
             .padding((paddingValues))
@@ -133,10 +131,7 @@ fun MyStoreScreen(
                 EmptyUiState.Loading -> {}
 
                 is EmptyUiState.Success -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(start = 22.dp, end = 11.dp)
-                    ) {
+                    LazyColumn {
                         itemsIndexed(state.data) { index, store ->
                             StoreItem(
                                 imageUrl = store.imageURL,
@@ -149,16 +144,16 @@ fun MyStoreScreen(
                                 editSelected = {
                                     updateStoreSelected(store.id, store.isLiked == true)
                                 },
-                                modifier =  Modifier.noRippleClickable{
+                                modifier = Modifier.noRippleClickable {
                                     navigateToStoreDetail(store.id)
-                                },
-                                onClickItem = {
-                                    onClickItem(store.id)
                                 }
                             )
                             if (index != state.data.lastIndex) {
                                 HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 1.dp),
+                                    modifier = Modifier.padding(
+                                        vertical = 1.dp,
+                                        horizontal = 22.dp
+                                    ),
                                     thickness = 1.dp,
                                     color = Gray200
                                 )

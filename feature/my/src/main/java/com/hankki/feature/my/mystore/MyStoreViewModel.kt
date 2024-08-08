@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.domain.my.repository.MyRepository
-import com.hankki.feature.my.myjogbodetail.MyJogboSideEffect
 import com.hankki.feature.my.mystore.model.toMyStoreModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -123,41 +122,6 @@ class MyStoreViewModel @Inject constructor(
     fun navigateToStoreDetail(storeId: Long) {
         viewModelScope.launch {
             _mySideEffect.emit(MyStoreSideEffect.NavigateToDetail(storeId))
-        }
-    }
-//    fun updateStoreSelected(id: Long, isLiked: Boolean) {
-//        viewModelScope.launch {
-//            if (isLiked) {
-//                myRepository.unLikeStore(id).onSuccess {
-//                    _myStoreState.value = _myStoreState.value.copy(
-//                        uiState = _myStoreState.value.uiState.map {
-//                            if (it.id == id) {
-//                                it.copy(isLiked = false)
-//                            } else {
-//                                it
-//                            }
-//                        }.toPersistentList()
-//                    )
-//                }
-//            } else {
-//                myRepository.likeStore(id).onSuccess {
-//                    _myStoreState.value = _myStoreState.value.copy(
-//                        uiState = _myStoreState.value.uiState.map {
-//                            if (it.id == id) {
-//                                it.copy(isLiked = true)
-//                            } else {
-//                                it
-//                            }
-//                        }.toPersistentList()
-//                    )
-//                }
-//            }
-//        }
-//    }
-
-    fun onClickItem(id: Long) {
-        viewModelScope.launch {
-            _mySideEffect.emit(MyStoreSideEffect.NavigateToDetail(id))
         }
     }
 }
