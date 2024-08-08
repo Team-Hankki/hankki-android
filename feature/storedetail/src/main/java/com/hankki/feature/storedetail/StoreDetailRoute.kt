@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,16 +17,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,12 +39,12 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
-import com.hankki.core.designsystem.component.button.StoreDetailButton
+import com.hankki.core.designsystem.component.button.StoreDetailMenuButton
+import com.hankki.core.designsystem.component.button.StoreDetailReportButton
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
-import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500
@@ -61,7 +55,6 @@ import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.launch
 
 @Composable
 fun StoreDetailRoute(
@@ -144,13 +137,30 @@ fun StoreDetailRoute(
         StoreDetailDialogState.MENU_EDIT -> {
             SingleButtonDialog(
                 title = "조금만 기다려주세요!",
-                description = "메뉴를 편집할 수 있도록\n준비하고 있어요",
+                description = "메뉴를 편집할 수 있도록 준비하고 있어요 :)",
                 buttonTitle = "확인",
                 onConfirmation = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) }
             )
         }
 
         StoreDetailDialogState.REPORT_CONFIRMATION -> {
+            DoubleButtonDialog(
+                title = "정말 제보하시겠어요?",
+                description = "여러분의 제보가 더 정확한 한끼족보를 만들어줘요!",
+                negativeButtonTitle = "돌아가기",
+                positiveButtonTitle = "제보하기",
+                onNegativeButtonClicked = {
+                    viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                    viewModel.resetSelectedIndex()
+                },
+                onPositiveButtonClicked = {
+                    viewModel.updateDialogState(StoreDetailDialogState.REPORT)
+                    viewModel.resetSelectedIndex()
+                }
+            )
+        }
+
+        StoreDetailDialogState.REPORT -> {
             ImageDoubleButtonDialog(
                 name = storeState.nickname,
                 title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
@@ -190,9 +200,6 @@ fun StoreDetailScreen(
     onAddMenuClicked: () -> Unit,
     onReportClicked: () -> Unit,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
@@ -200,21 +207,11 @@ fun StoreDetailScreen(
             onDismissRequest = onDismissBottomSheetRequest,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId)
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar("나의 족보에 추가되었습니다.")
-                }
             }
         )
     }
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
-                HankkiTextSnackBar("스낵바")
-            }
-        },
-        content = { contentPadding ->
-            Column(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
@@ -239,136 +236,130 @@ fun StoreDetailScreen(
                 contentScale = ContentScale.FillBounds
             )
 
-                    Column {
-                        Spacer(modifier = Modifier.statusBarsPadding())
-                        HankkiTopBar(
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_arrow_back),
-                                    contentDescription = "뒤로가기",
-                                    modifier = Modifier
-                                        .size(48.dp)
-                                        .noRippleClickable(onClick = onNavigateUp),
-                                    tint = Color.Unspecified
-                                )
-                            }
-                        )
-                    }
-                }
-                Column(
-                    modifier = Modifier
-                        .offset(y = (-50).dp)
-                        .padding(horizontal = 18.dp)
-                        .fillMaxSize()
-                ) {
-                    StoreDetailMenuBox(
-                        title = title,
-                        tag = tag,
-                        menuItems = menuItems,
-                        likeButton = {
-                            StoreDetailButton(
-                                leadingIcon = {
-                                    Icon(
-                                        painter = painterResource(id = if (isLiked) R.drawable.ic_red_like else R.drawable.ic_like),
-                                        contentDescription = "좋아요 아이콘",
-                                        tint = Color.Unspecified
-                                    )
-                                },
-                                content = {
-                                    Text(
-                                        text = heartCount.toString(),
-                                        style = HankkiTheme.typography.sub3,
-                                        color = Gray500
-                                    )
-                                },
-                                onClick = {
-                                    onLikeClicked()
-                                }
-                            )
-                        },
-                        addMyJogboButton = {
-                            StoreDetailButton(
-                                leadingIcon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_add_circle_dark_plus),
-                                        contentDescription = "추가 아이콘",
-                                        tint = Color.Unspecified
-                                    )
-                                },
-                                content = {
-                                    Text(
-                                        text = stringResource(id = R.string.add_new_jogbo),
-                                        style = HankkiTheme.typography.sub3,
-                                        color = Gray500
-                                    )
-                                },
-                                onClick = {
-                                    openBottomSheet()
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar("나의 족보에 추가되었습니다.")
-                                    }
-                                }
-                            )
-                        },
-                        onMenuEditClick = onAddMenuClicked
-                    )
-
-                    Spacer(modifier = Modifier.height(50.dp))
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(id = com.hankki.feature.storedetail.R.string.is_it_different),
-                            style = HankkiTheme.typography.sub1,
-                            color = Gray900,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                        buttonLabels.forEachIndexed { index, label ->
-                            val isSelected = selectedIndex == index
-                            StoreDetailButton(
-                                content = {
-                                    Text(
-                                        text = label,
-                                        style = HankkiTheme.typography.body3.copy(color = if (isSelected) Color.Red else Gray400),
-                                        modifier = Modifier.weight(1f),
-                                    )
-                                },
-                                onClick = {
-                                    onSelectIndex(index)
-                                },
-                                tailingIcon = {
-                                    Icon(
-                                        painter = painterResource(id = if (isSelected) R.drawable.ic_check_btn else R.drawable.ic_uncheck_btn),
-                                        contentDescription = "체크박스 아이콘",
-                                        modifier = Modifier.size(24.dp),
-                                        tint = Color.Unspecified
-                                    )
-                                },
-                                isSelected = isSelected
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        HankkiButton(
-                            text = "제보하기",
-                            onClick = onReportClicked,
+            Column {
+                Spacer(modifier = Modifier.statusBarsPadding())
+                HankkiTopBar(
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_back),
+                            contentDescription = "뒤로가기",
                             modifier = Modifier
-                                .fillMaxWidth(0.4f),
-                            textStyle = HankkiTheme.typography.sub3,
-                            enabled = selectedIndex != -1
+                                .size(48.dp)
+                                .noRippleClickable(onClick = onNavigateUp),
+                            tint = Color.Unspecified
                         )
                     }
-                }
-
+                )
             }
         }
-    )
+        Column(
+            modifier = Modifier
+                .offset(y = (-50).dp)
+                .padding(horizontal = 18.dp)
+                .fillMaxSize()
+        ) {
+            StoreDetailMenuBox(
+                title = title,
+                tag = tag,
+                menuItems = menuItems,
+                likeButton = {
+                    StoreDetailMenuButton(
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(id = if (isLiked) R.drawable.ic_red_like else R.drawable.ic_like),
+                                contentDescription = "좋아요 아이콘",
+                                tint = Color.Unspecified
+                            )
+                        },
+                        content = {
+                            Text(
+                                text = heartCount.toString(),
+                                style = HankkiTheme.typography.sub3,
+                                color = Gray500
+                            )
+                        },
+                        onClick = {
+                            onLikeClicked()
+                        }
+                    )
+                },
+                addMyJogboButton = {
+                    StoreDetailMenuButton(
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_add_circle_dark_plus),
+                                contentDescription = "추가 아이콘",
+                                tint = Color.Unspecified
+                            )
+                        },
+                        content = {
+                            Text(
+                                text = stringResource(id = R.string.add_new_jogbo),
+                                style = HankkiTheme.typography.sub3,
+                                color = Gray500
+                            )
+                        },
+                        onClick = {
+                            openBottomSheet()
+                        }
+                    )
+                },
+                onMenuEditClick = onAddMenuClicked
+            )
+
+            Spacer(modifier = Modifier.height(50.dp))
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(id = com.hankki.feature.storedetail.R.string.is_it_different),
+                    style = HankkiTheme.typography.sub1,
+                    color = Gray900,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                buttonLabels.forEachIndexed { index, label ->
+                    val isSelected = selectedIndex == index
+                    StoreDetailReportButton(
+                        content = {
+                            Text(
+                                text = label,
+                                style = HankkiTheme.typography.body3.copy(color = if (isSelected) Color.Red else Gray400),
+                                modifier = Modifier.weight(1f),
+                            )
+                        },
+                        onClick = {
+                            onSelectIndex(index)
+                        },
+                        tailingIcon = {
+                            Icon(
+                                painter = painterResource(id = if (isSelected) R.drawable.ic_btn_radio_check else R.drawable.ic_btn_radio_uncheck),
+                                contentDescription = "라디오 아이콘",
+                                modifier = Modifier.size(24.dp),
+                                tint = Color.Unspecified
+                            )
+                        },
+                        isSelected = isSelected
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                HankkiButton(
+                    text = "제보하기",
+                    onClick = onReportClicked,
+                    modifier = Modifier
+                        .fillMaxWidth(0.4f),
+                    textStyle = HankkiTheme.typography.sub3,
+                    enabled = selectedIndex != -1
+                )
+            }
+        }
+    }
 }
