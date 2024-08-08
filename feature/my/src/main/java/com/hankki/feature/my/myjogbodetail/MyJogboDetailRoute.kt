@@ -104,7 +104,7 @@ fun MyJogboDetailRoute(
             )
         },
         selectedStoreId = myJogboDetailState.selectedStoreId,
-        updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
+        updateSelectedStoreId = myJogboDetailViewModel::updateSelectedStoreId,
         navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
         userName = myJogboDetailState.userInformation.nickname,
         navigateToHome = myJogboDetailViewModel::navigateToHome
