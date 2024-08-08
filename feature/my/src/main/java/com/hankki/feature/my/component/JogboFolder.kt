@@ -35,7 +35,7 @@ import kotlinx.collections.immutable.PersistentList
 fun JogboFolder(
     title: String,
     chips: PersistentList<String>,
-    userName: String,
+    userNickname: String,
     shareJogbo: () -> Unit,
 ) {
     Box(
@@ -95,7 +95,7 @@ fun JogboFolder(
                         modifier = Modifier.size(26.dp)
                     )
                     Text(
-                        text = userName,
+                        text = userNickname,
                         style = HankkiTheme.typography.body4,
                         color = Gray600,
                         modifier = Modifier.padding(start = 8.dp)
