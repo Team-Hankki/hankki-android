@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -29,38 +28,31 @@ fun HankkiWhiteSnackBarWithButton(
     onClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.TopCenter
+        modifier = Modifier
+            .clip(RoundedCornerShape(65.dp))
+            .background(color = White)
     ) {
-        Box(
+        Row(
             modifier = Modifier
-                .padding(top = 35.dp)
-                .statusBarsPadding()
-                .clip(RoundedCornerShape(65.dp))
-                .background(color = White)
+                .padding(14.dp)
+                .padding(start = 22.dp, end = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
+            Text(
+                text = message,
+                color = Gray900,
+                style = HankkiTheme.typography.sub3,
+                modifier = Modifier.weight(1f, false)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = "보기",
+                color = Red,
+                style = HankkiTheme.typography.sub3,
                 modifier = Modifier
-                    .padding(14.dp)
-                    .padding(start = 22.dp, end = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = message,
-                    color = Gray900,
-                    style = HankkiTheme.typography.sub3,
-                    modifier = Modifier.weight(1f, false)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = "보기",
-                    color = Red,
-                    style = HankkiTheme.typography.sub3,
-                    modifier = Modifier
-                        .noRippleClickable(onClick = onClick)
-                        .padding(horizontal = 12.dp),
-                )
-            }
+                    .noRippleClickable(onClick = onClick)
+                    .padding(horizontal = 12.dp),
+            )
         }
     }
 }
