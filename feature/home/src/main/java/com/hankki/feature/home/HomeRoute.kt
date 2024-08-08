@@ -134,7 +134,7 @@ fun HomeRoute(
             when (sideEffect) {
                 is HomeSideEffect.ShowSnackBar -> onShowSnackBar(
                     sideEffect.message,
-                    sideEffect.storeId
+                    sideEffect.jogboId
                 )
 
                 is HomeSideEffect.MoveMap -> {
