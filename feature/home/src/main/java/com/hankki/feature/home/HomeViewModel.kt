@@ -68,9 +68,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun showSnackBar(message: String) {
+    fun showSnackBar(message: String, storeId: Long) {
         viewModelScope.launch {
-            _sideEffect.emit(HomeSideEffect.ShowSnackBar(message))
+            _sideEffect.emit(HomeSideEffect.ShowSnackBar(message, storeId))
         }
     }
 

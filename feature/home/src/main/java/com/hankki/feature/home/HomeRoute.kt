@@ -108,7 +108,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeRoute(
     paddingValues: PaddingValues,
-    onShowSnackBar: (String) -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: (Long) -> Unit,
     navigateToAddNewJogbo: () -> Unit,
@@ -132,7 +132,11 @@ fun HomeRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is HomeSideEffect.ShowSnackBar -> onShowSnackBar(sideEffect.message)
+                is HomeSideEffect.ShowSnackBar -> onShowSnackBar(
+                    sideEffect.message,
+                    sideEffect.storeId
+                )
+
                 is HomeSideEffect.MoveMap -> {
                     cameraPositionState.move(
                         CameraUpdate.scrollAndZoomTo(
@@ -252,7 +256,7 @@ fun HomeScreen(
     sortChipItems: PersistentList<ChipItem>,
     isMainBottomSheetOpen: Boolean,
     isMyJogboBottomSheetOpen: Boolean,
-    onShowSnackBar: (String) -> Unit = {},
+    onShowSnackBar: (String, Long) -> Unit = { _, _ -> },
     dialogNegativeClicked: () -> Unit = {},
     dialogPositiveClicked: () -> Unit = {},
     selectStoreItem: (StoreItemModel) -> Unit = {},
@@ -323,7 +327,10 @@ fun HomeScreen(
             addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
-                onShowSnackBar(localContextResource.getString(R.string.success_add_my_jogbo))
+                onShowSnackBar(
+                    localContextResource.getString(R.string.success_add_my_jogbo),
+                    jogboId
+                )
             }
         )
     }

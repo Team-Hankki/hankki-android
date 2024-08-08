@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,14 +54,13 @@ import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.launch
 
 @Composable
 fun StoreDetailRoute(
     storeId: Long,
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
-    onShowSnackBar: (String) -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
@@ -174,7 +172,7 @@ fun StoreDetailScreen(
     imageUrl: String?,
     selectedIndex: Int,
     buttonLabels: PersistentList<String>,
-    onShowSnackBar: (String) -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
     onNavigateUp: () -> Unit,
     onLikeClicked: () -> Unit,
     onSelectIndex: (Int) -> Unit,
@@ -196,7 +194,10 @@ fun StoreDetailScreen(
             onDismissRequest = onDismissBottomSheetRequest,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId)
-                onShowSnackBar(localContextResource.getString(R.string.success_add_my_jogbo))
+                onShowSnackBar(
+                    localContextResource.getString(R.string.success_add_my_jogbo),
+                    jogboId
+                )
             }
         )
     }
