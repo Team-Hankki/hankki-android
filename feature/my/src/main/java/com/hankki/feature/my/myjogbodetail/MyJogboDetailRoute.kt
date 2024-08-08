@@ -6,18 +6,14 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,9 +37,7 @@ import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.CircleLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -55,6 +48,7 @@ import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.EmptyStoreView
 import com.hankki.feature.my.component.JogboFolder
+import com.hankki.feature.my.component.MoveToHomeButton
 import com.hankki.feature.my.component.StoreItem
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -248,31 +242,34 @@ fun MyJogboDetailScreen(
 
                     item {
                         Spacer(modifier = Modifier.height(20.dp))
-                        //컴포넌트화 필요
-                        Row(
-                            modifier = Modifier
-                                .padding(bottom = 30.dp)
-                                .clip(RoundedCornerShape(14.dp))
-                                .wrapContentSize()
-                                .background(Gray100)
-                                .padding(vertical = 10.dp, horizontal = 12.dp)
-                                .padding(end = 3.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_add),
-                                contentDescription = "add",
-                                modifier = Modifier.size(24.dp),
-                                tint = Gray500
-                            )
-                            Spacer(modifier = Modifier.width(5.dp))
-                            Text(
-                                text = stringResource(R.string.go_to_store),
-                                color = Gray500,
-                                style = HankkiTheme.typography.body6,
-                                modifier = Modifier.noRippleClickable(navigateToHome)
-                            )
-                        }
+                        MoveToHomeButton(
+                            modifier = Modifier.padding(bottom = 30.dp),
+                            navigateToHome = navigateToHome
+                        )
+//                        Row(
+//                            modifier = Modifier
+//                                .padding(bottom = 30.dp)
+//                                .clip(RoundedCornerShape(14.dp))
+//                                .wrapContentSize()
+//                                .background(Gray100)
+//                                .padding(vertical = 10.dp, horizontal = 12.dp)
+//                                .padding(end = 3.dp),
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.ic_add),
+//                                contentDescription = "add",
+//                                modifier = Modifier.size(24.dp),
+//                                tint = Gray500
+//                            )
+//                            Spacer(modifier = Modifier.width(5.dp))
+//                            Text(
+//                                text = stringResource(R.string.go_to_store),
+//                                color = Gray500,
+//                                style = HankkiTheme.typography.body6,
+//                                modifier = Modifier.noRippleClickable(navigateToHome)
+//                            )
+//                        }
                     }
                 }
             }
