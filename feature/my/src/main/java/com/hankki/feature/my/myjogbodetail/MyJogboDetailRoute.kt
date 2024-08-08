@@ -105,7 +105,7 @@ fun MyJogboDetailRoute(
         },
         selectedStoreId = myJogboDetailState.selectedStoreId,
         updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
-        onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) },
+        navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
         userName = myJogboDetailState.userInformation.nickname,
         navigateToHome = myJogboDetailViewModel::navigateToHome
     )
@@ -127,7 +127,7 @@ fun MyJogboDetailScreen(
     deleteJogboStore: (Long) -> Unit,
     selectedStoreId: Long,
     updateSelectedStoreId: (Long) -> Unit,
-    onClickStoreItem: (Long) -> Unit,
+    navigateToStoreDetail: (Long) -> Unit,
     userName: String,
     navigateToHome: () -> Unit,
 ) {
@@ -231,7 +231,7 @@ fun MyJogboDetailScreen(
                             isIconUsed = false,
                             isIconSelected = false,
                             modifier = Modifier.combinedClickable(
-                                onClick = { onClickStoreItem(store.id) },
+                                onClick = { navigateToStoreDetail(store.id) },
                                 onLongClick = {
                                     updateSelectedStoreId(store.id)
                                     updateDeleteDialogState()

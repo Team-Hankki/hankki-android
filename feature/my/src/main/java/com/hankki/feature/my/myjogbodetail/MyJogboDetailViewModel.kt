@@ -78,9 +78,9 @@ class MyJogboDetailViewModel @Inject constructor(
         )
     }
 
-    fun onClickStoreItem(storeId: Long) {
+    fun navigateToStoreDetail(storeId: Long) {
         viewModelScope.launch {
-
+            _mySideEffect.emit(MyJogboSideEffect.NavigateToDetail(storeId))
         }
     }
 
