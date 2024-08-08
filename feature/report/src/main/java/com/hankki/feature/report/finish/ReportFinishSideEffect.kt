@@ -6,5 +6,5 @@ sealed class ReportFinishSideEffect {
     ) : ReportFinishSideEffect()
 
     data object NavigateToHome : ReportFinishSideEffect()
-    data class ShowSnackBar(val message: String) : ReportFinishSideEffect()
+    data class ShowSnackBar(val message: String, val jogboId: Long) : ReportFinishSideEffect()
 }

@@ -70,21 +70,24 @@ internal fun MainScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val textSnackBarWithButtonHostState = remember { SnackbarHostState() }
-    val onShowTextSnackBarWithButton: (String, Long) -> Unit = { message, storeId ->
+    val onShowTextSnackBarWithButton: (String, Long) -> Unit = { message, jogboId ->
         coroutineScope.launch {
             textSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
             textSnackBarWithButtonHostState.showSnackbar(
                 message = message,
-                actionLabel = "$storeId"
+                actionLabel = "$jogboId"
             )
         }
     }
 
     val whiteSnackBarWithButtonHostState = remember { SnackbarHostState() }
-    val onShowWhiteSnackBarWithButton: (String) -> Unit = { message ->
+    val onShowWhiteSnackBarWithButton: (String, Long) -> Unit = { message, jogboId ->
         coroutineScope.launch {
             whiteSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
-            whiteSnackBarWithButtonHostState.showSnackbar(message)
+            whiteSnackBarWithButtonHostState.showSnackbar(
+                message = message,
+                actionLabel = "$jogboId"
+            )
         }
     }
 
@@ -267,7 +270,10 @@ internal fun MainScreen(
                         message = snackBarData.visuals.message,
                     ) {
                         snackBarData.dismiss()
-                        // TODO: 족보로 화면 이동
+
+                        navigator.navigateToMyJogboDetail(
+                            snackBarData.visuals.actionLabel?.toLong() ?: 0L
+                        )
                     }
                 }
             }

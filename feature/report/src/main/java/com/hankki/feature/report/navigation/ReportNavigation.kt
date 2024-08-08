@@ -67,7 +67,7 @@ fun NavGraphBuilder.reportNavGraph(
     navigateToStoreDetail: (storeId: Long) -> Unit,
     navigateToHome: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
-    onShowSnackBar: (String) -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
 ) {
     composable<Report> { backStackEntry ->
         val items = backStackEntry.toRoute<Report>()

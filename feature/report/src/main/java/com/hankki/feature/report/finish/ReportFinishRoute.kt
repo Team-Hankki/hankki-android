@@ -51,7 +51,7 @@ fun ReportFinishRoute(
     navigateToHome: () -> Unit,
     navigateToStoreDetail: (storeId: Long) -> Unit,
     navigateToAddNewJogbo: () -> Unit,
-    onShowSnackBar: (String) -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
     viewModel: ReportFinishViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -73,7 +73,10 @@ fun ReportFinishRoute(
                 )
 
                 is ReportFinishSideEffect.NavigateToHome -> navigateToHome()
-                is ReportFinishSideEffect.ShowSnackBar -> onShowSnackBar(sideEffect.message)
+                is ReportFinishSideEffect.ShowSnackBar -> onShowSnackBar(
+                    sideEffect.message,
+                    sideEffect.jogboId
+                )
             }
         }
     }
@@ -105,7 +108,7 @@ fun ReportFinishScreen(
     storeId: Long,
     showBottomSheet: Boolean,
     jogboItems: PersistentList<JogboResponseModel>,
-    onShowSnackBar: (String) -> Unit = {},
+    onShowSnackBar: (String, Long) -> Unit = { _, _ -> },
     addNewJogbo: () -> Unit = {},
     bottomSheetControl: (Boolean) -> Unit = { },
     moveToStoreDetail: () -> Unit = { },
@@ -121,7 +124,10 @@ fun ReportFinishScreen(
             onDismissRequest = { bottomSheetControl(false) },
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, storeId)
-                onShowSnackBar(localContextResource.getString(R.string.add_store_at_jogbo))
+                onShowSnackBar(
+                    localContextResource.getString(R.string.add_store_at_jogbo),
+                    jogboId
+                )
             }
         )
     }
