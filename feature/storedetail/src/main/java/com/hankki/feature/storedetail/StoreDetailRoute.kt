@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,6 +42,7 @@ import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailMenuButton
 import com.hankki.core.designsystem.component.button.StoreDetailReportButton
+import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
@@ -285,7 +287,10 @@ fun StoreDetailScreen(
                             Text(
                                 text = heartCount.toString(),
                                 style = HankkiTheme.typography.sub3,
-                                color = Gray500
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = Gray500,
+                                modifier = Modifier.weight(1f, false)
                             )
                         },
                         onClick = {
@@ -306,6 +311,9 @@ fun StoreDetailScreen(
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
                                 style = HankkiTheme.typography.sub3,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f, false),
                                 color = Gray500
                             )
                         },
@@ -340,7 +348,9 @@ fun StoreDetailScreen(
                             Text(
                                 text = label,
                                 style = HankkiTheme.typography.body3.copy(color = if (isSelected) Color.Red else Gray400),
-                                modifier = Modifier.weight(1f),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f, false),
                             )
                         },
                         onClick = {
