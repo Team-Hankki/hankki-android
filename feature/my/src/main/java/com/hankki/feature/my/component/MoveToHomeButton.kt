@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -25,8 +24,7 @@ import com.hankki.feature.my.R
 
 @Composable
 fun MoveToHomeButton(
-    modifier: Modifier = Modifier,
-    navigateToHome: () -> Unit = {}
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
@@ -48,7 +46,6 @@ fun MoveToHomeButton(
             text = stringResource(R.string.go_to_store),
             color = Gray500,
             style = HankkiTheme.typography.body6,
-            modifier = Modifier.noRippleClickable(navigateToHome)
         )
     }
 }

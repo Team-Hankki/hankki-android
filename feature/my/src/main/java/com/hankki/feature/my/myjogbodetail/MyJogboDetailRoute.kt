@@ -242,8 +242,9 @@ fun MyJogboDetailScreen(
                     item {
                         Spacer(modifier = Modifier.height(20.dp))
                         MoveToHomeButton(
-                            modifier = Modifier.padding(bottom = 30.dp),
-                            navigateToHome = navigateToHome
+                            modifier = Modifier
+                                .padding(bottom = 30.dp)
+                                .noRippleClickable(navigateToHome),
                         )
                     }
                 }
@@ -258,7 +259,6 @@ fun MyJogboDetailScreen(
                             modifier = Modifier
                                 .padding(top = 20.dp)
                                 .noRippleClickable(navigateToHome),
-                            navigateToHome = navigateToHome
                         )
                     }
                 )
