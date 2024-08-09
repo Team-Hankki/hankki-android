@@ -183,6 +183,7 @@ fun StoreDetailRoute(
                 onPositiveButtonClicked = {
                     viewModel.closeDialog()
                     viewModel.resetSelectedIndex()
+                    navigateUp()
                 }
             )
         }
