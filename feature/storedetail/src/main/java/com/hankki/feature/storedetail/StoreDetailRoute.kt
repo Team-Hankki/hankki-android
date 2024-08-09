@@ -42,7 +42,6 @@ import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreDetailMenuButton
 import com.hankki.core.designsystem.component.button.StoreDetailReportButton
-import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
@@ -122,7 +121,9 @@ fun StoreDetailRoute(
                 buttonLabels = storeState.buttonLabels,
                 onNavigateUp = navigateUp,
                 onLikeClicked = { viewModel.toggleLike(storeId) },
-                onSelectIndex = viewModel::updateSelectedIndex,
+                onSelectIndex = { index ->
+                    viewModel.updateSelectedIndex(index)
+                },
                 isOpenBottomSheet = storeState.isOpenBottomSheet,
                 openBottomSheet = viewModel::controlMyJogboBottomSheet,
                 jogboItems = storeState.jogboItems,
@@ -354,7 +355,11 @@ fun StoreDetailScreen(
                             )
                         },
                         onClick = {
-                            onSelectIndex(index)
+                            if (selectedIndex == index) {
+                                onSelectIndex(-1)
+                            } else {
+                                onSelectIndex(index)
+                            }
                         },
                         tailingIcon = {
                             Icon(
