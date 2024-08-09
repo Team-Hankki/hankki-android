@@ -27,7 +27,7 @@ import com.hankki.feature.my.R
 fun EmptyStoreView(
     text: String,
     modifier: Modifier = Modifier,
-    navigateToHome: () -> Unit = {}
+    navigateToHome: (() -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -51,10 +51,12 @@ fun EmptyStoreView(
                 color = Gray500,
                 style = HankkiTheme.typography.body6
             )
-            MoveToHomeButton(
-                modifier = Modifier.padding(top = 20.dp),
-                navigateToHome = navigateToHome
-            )
+            navigateToHome?.let {
+                MoveToHomeButton(
+                    modifier = Modifier.padding(top = 20.dp),
+                    navigateToHome = navigateToHome
+                )
+            }
 //            Row(
 //                modifier = Modifier
 //                    .padding(top = 20.dp)
