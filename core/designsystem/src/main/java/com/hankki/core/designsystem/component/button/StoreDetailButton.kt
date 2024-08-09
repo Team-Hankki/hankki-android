@@ -37,7 +37,7 @@ fun StoreDetailButton(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
-            .background(color = White)
+            .background(color = backgroundColor)
             .noRippleClickable(onClick = onClick)
             .padding(horizontal = 20.dp, vertical = 15.5.dp)
     ) {

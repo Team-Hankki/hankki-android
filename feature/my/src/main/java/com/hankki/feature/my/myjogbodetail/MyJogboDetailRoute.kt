@@ -44,7 +44,6 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
-import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.EmptyStoreView
 import com.hankki.feature.my.component.JogboFolder
@@ -70,11 +69,12 @@ fun MyJogboDetailRoute(
         myJogboDetailViewModel.getUserName()
     }
 
-    LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
-        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { sideEffect ->
+    LaunchedEffect(myJogboDetailViewModel.mySideEffect,lifecycleOwner) {
+        myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
                 when (sideEffect) {
                     is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+
+                    is MyJogboSideEffect.NavigateToHome -> navigateToHome()
                 }
             }
     }
@@ -87,7 +87,7 @@ fun MyJogboDetailRoute(
         storeItems = myJogboDetailState.storesUiState,
         deleteDialogState = myJogboDetailState.showDeleteDialog,
         shareDialogState = myJogboDetailState.showShareDialog,
-        userInformation = myJogboDetailState.userInformation,
+        userNickname = myJogboDetailState.userInformation.nickname,
         updateShareDialogState = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
         updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) },
         deleteJogboStore = { storeId ->
@@ -97,10 +97,9 @@ fun MyJogboDetailRoute(
             )
         },
         selectedStoreId = myJogboDetailState.selectedStoreId,
-        updateSelectedStoreId = { storeId -> myJogboDetailViewModel.updateSelectedStoreId(storeId) },
-        onClickStoreItem = { storeId -> myJogboDetailViewModel.onClickStoreItem(storeId) },
-        userName = myJogboDetailState.userInformation.nickname,
-        navigateToHome = navigateToHome
+        updateSelectedStoreId = myJogboDetailViewModel::updateSelectedStoreId,
+        navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
+        navigateToHome = myJogboDetailViewModel::navigateToHome
     )
 }
 
@@ -114,14 +113,13 @@ fun MyJogboDetailScreen(
     storeItems: EmptyUiState<PersistentList<Store>>,
     deleteDialogState: Boolean,
     shareDialogState: Boolean,
-    userInformation: UserInformationEntity,
+    userNickname: String,
     updateShareDialogState: () -> Unit,
     updateDeleteDialogState: () -> Unit,
     deleteJogboStore: (Long) -> Unit,
     selectedStoreId: Long,
     updateSelectedStoreId: (Long) -> Unit,
-    onClickStoreItem: (Long) -> Unit,
-    userName: String,
+    navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
 ) {
     if (shareDialogState) {
@@ -188,7 +186,7 @@ fun MyJogboDetailScreen(
         JogboFolder(
             title = jogboTitle,
             chips = jogboChips,
-            userName = userInformation.nickname,
+            userNickname = userNickname,
             shareJogbo = updateShareDialogState
         )
 
@@ -224,7 +222,7 @@ fun MyJogboDetailScreen(
                             isIconUsed = false,
                             isIconSelected = false,
                             modifier = Modifier.combinedClickable(
-                                onClick = { onClickStoreItem(store.id) },
+                                onClick = { navigateToStoreDetail(store.id) },
                                 onLongClick = {
                                     updateSelectedStoreId(store.id)
                                     updateDeleteDialogState()

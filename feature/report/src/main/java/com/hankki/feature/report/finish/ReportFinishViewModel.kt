@@ -81,13 +81,13 @@ class ReportFinishViewModel @Inject constructor(
 
     fun navigateToStoreDetail() {
         viewModelScope.launch {
-            _sideEffect.emit(ReportFinishSideEffect.navigateToStoreDetail(_state.value.storeId))
+            _sideEffect.emit(ReportFinishSideEffect.NavigateToStoreDetail(_state.value.storeId))
         }
     }
 
     fun navigateToHome() {
         viewModelScope.launch {
-            _sideEffect.emit(ReportFinishSideEffect.navigateToHome)
+            _sideEffect.emit(ReportFinishSideEffect.NavigateToHome)
         }
     }
 

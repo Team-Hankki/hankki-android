@@ -119,40 +119,9 @@ class MyStoreViewModel @Inject constructor(
         }
     }
 
-
-//    fun updateStoreSelected(id: Long, isLiked: Boolean) {
-//        viewModelScope.launch {
-//            if (isLiked) {
-//                myRepository.unLikeStore(id).onSuccess {
-//                    _myStoreState.value = _myStoreState.value.copy(
-//                        uiState = _myStoreState.value.uiState.map {
-//                            if (it.id == id) {
-//                                it.copy(isLiked = false)
-//                            } else {
-//                                it
-//                            }
-//                        }.toPersistentList()
-//                    )
-//                }
-//            } else {
-//                myRepository.likeStore(id).onSuccess {
-//                    _myStoreState.value = _myStoreState.value.copy(
-//                        uiState = _myStoreState.value.uiState.map {
-//                            if (it.id == id) {
-//                                it.copy(isLiked = true)
-//                            } else {
-//                                it
-//                            }
-//                        }.toPersistentList()
-//                    )
-//                }
-//            }
-//        }
-//    }
-
-    fun onClickItem(id: Long) {
+    fun navigateToStoreDetail(storeId: Long) {
         viewModelScope.launch {
-            _mySideEffect.emit(MyStoreSideEffect.NavigateToDetail(id))
+            _mySideEffect.emit(MyStoreSideEffect.NavigateToDetail(storeId))
         }
     }
 }

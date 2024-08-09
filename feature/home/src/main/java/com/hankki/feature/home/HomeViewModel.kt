@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import timber.log.Timber.Forest.tag
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,6 +65,12 @@ class HomeViewModel @Inject constructor(
     fun moveMap(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             _sideEffect.emit(HomeSideEffect.MoveMap(latitude, longitude))
+        }
+    }
+
+    fun showSnackBar(message: String, storeId: Long) {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.ShowSnackBar(message, storeId))
         }
     }
 
