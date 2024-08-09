@@ -32,6 +32,7 @@ fun HankkiWhiteSnackBarWithButton(
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(65.dp))
+            .shadow(50.dp, shape = RoundedCornerShape(65.dp))
             .background(color = White)
     ) {
         Row(
