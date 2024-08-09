@@ -10,7 +10,9 @@ import com.hankki.domain.storedetail.repository.StoreDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -21,11 +23,8 @@ import javax.inject.Inject
 class StoreDetailViewModel @Inject constructor(
     private val storeDetailRepository: StoreDetailRepository,
 ) : ViewModel() {
-    private val _dialogState = MutableStateFlow(StoreDetailDialogState.CLOSED)
-    val dialogState: StateFlow<StoreDetailDialogState> = _dialogState
-
     private val _storeState = MutableStateFlow(
-        StoreState(
+        StoreDetailState(
             buttonLabels = persistentListOf(
                 "식당이 사라졌어요",
                 "더이상 8000원이하인 메뉴가 없어요",
@@ -33,11 +32,13 @@ class StoreDetailViewModel @Inject constructor(
             )
         )
     )
-    val storeState: StateFlow<StoreState> get() = _storeState.asStateFlow()
+    val storeState: StateFlow<StoreDetailState> get() = _storeState.asStateFlow()
 
-    fun updateDialogState(newState: StoreDetailDialogState) {
-        _dialogState.value = newState
-    }
+    private val _sideEffects = MutableSharedFlow<StoreDetailSideEffect>()
+    val sideEffects: SharedFlow<StoreDetailSideEffect> get() = _sideEffects
+
+    private val _dialogState = MutableStateFlow(StoreDetailDialogState.CLOSED)
+    val dialogState: StateFlow<StoreDetailDialogState> = _dialogState
 
     fun fetchStoreDetail(storeId: Long) {
         viewModelScope.launch {
@@ -111,7 +112,7 @@ class StoreDetailViewModel @Inject constructor(
         }
     }
 
-    fun getJogboItems(storeId: Long) {
+    private fun getJogboItems(storeId: Long) {
         viewModelScope.launch {
             storeDetailRepository.getFavorites(storeId)
                 .onSuccess { jogboItems ->
@@ -145,5 +146,21 @@ class StoreDetailViewModel @Inject constructor(
 
     fun resetSelectedIndex() {
         _storeState.value = _storeState.value.copy(selectedIndex = -1)
+    }
+
+    fun showReportConfirmation() {
+        _dialogState.value = StoreDetailDialogState.REPORT_CONFIRMATION
+    }
+
+    fun showThankYouDialog() {
+        _dialogState.value = StoreDetailDialogState.REPORT
+    }
+
+    fun showMenuEditDialog() {
+        _dialogState.value = StoreDetailDialogState.MENU_EDIT
+    }
+
+    fun closeDialog() {
+        _dialogState.value = StoreDetailDialogState.CLOSED
     }
 }

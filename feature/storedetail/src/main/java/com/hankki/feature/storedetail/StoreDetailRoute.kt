@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,7 +41,9 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
-import com.hankki.core.designsystem.component.button.StoreDetailButton
+import com.hankki.core.designsystem.component.button.StoreDetailMenuButton
+import com.hankki.core.designsystem.component.button.StoreDetailReportButton
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -65,13 +68,23 @@ fun StoreDetailRoute(
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+    val sideEffectFlow = viewModel.sideEffects
+
+    val systemUiController = rememberSystemUiController()
+    val customColor = White
 
     LaunchedEffect(storeId) {
         viewModel.fetchStoreDetail(storeId)
     }
 
-    val systemUiController = rememberSystemUiController()
-    val customColor = White
+    LaunchedEffect(sideEffectFlow) {
+        sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
+                StoreDetailSideEffect.NavigateUp -> navigateUp()
+                StoreDetailSideEffect.NavigateToAddNewJogbo -> navigateToAddNewJogbo()
+            }
+        }
+    }
 
     DisposableEffect(systemUiController) {
         systemUiController.setNavigationBarColor(
@@ -111,7 +124,9 @@ fun StoreDetailRoute(
                 onNavigateUp = navigateUp,
                 onShowSnackBar = onShowSnackBar,
                 onLikeClicked = { viewModel.toggleLike(storeId) },
-                onSelectIndex = viewModel::updateSelectedIndex,
+                onSelectIndex = { index ->
+                    viewModel.updateSelectedIndex(index)
+                },
                 isOpenBottomSheet = storeState.isOpenBottomSheet,
                 openBottomSheet = viewModel::controlMyJogboBottomSheet,
                 jogboItems = storeState.jogboItems,
@@ -123,10 +138,10 @@ fun StoreDetailRoute(
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
                 },
-                onAddMenuClicked = { viewModel.updateDialogState(StoreDetailDialogState.MENU_EDIT) },
+                onAddMenuClicked = { viewModel.showMenuEditDialog() },
                 onReportClicked = {
                     viewModel.fetchNickname()
-                    viewModel.updateDialogState(StoreDetailDialogState.REPORT_CONFIRMATION)
+                    viewModel.showReportConfirmation()
                 }
             )
         }
@@ -138,13 +153,30 @@ fun StoreDetailRoute(
         StoreDetailDialogState.MENU_EDIT -> {
             SingleButtonDialog(
                 title = "조금만 기다려주세요!",
-                description = "메뉴를 편집할 수 있도록\n준비하고 있어요",
+                description = "메뉴를 편집할 수 있도록 준비하고 있어요 :)",
                 buttonTitle = "확인",
-                onConfirmation = { viewModel.updateDialogState(StoreDetailDialogState.CLOSED) }
+                onConfirmation = { viewModel.closeDialog() }
             )
         }
 
         StoreDetailDialogState.REPORT_CONFIRMATION -> {
+            DoubleButtonDialog(
+                title = "정말 제보하시겠어요?",
+                description = "여러분의 제보가 더 정확한 한끼족보를 만들어줘요!",
+                negativeButtonTitle = "돌아가기",
+                positiveButtonTitle = "제보하기",
+                onNegativeButtonClicked = {
+                    viewModel.closeDialog()
+                    viewModel.resetSelectedIndex()
+                },
+                onPositiveButtonClicked = {
+                    viewModel.showThankYouDialog()
+                    viewModel.resetSelectedIndex()
+                }
+            )
+        }
+
+        StoreDetailDialogState.REPORT -> {
             ImageDoubleButtonDialog(
                 name = storeState.nickname,
                 title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
@@ -152,8 +184,9 @@ fun StoreDetailRoute(
                 positiveButtonTitle = "돌아가기",
                 onNegativeButtonClicked = { },
                 onPositiveButtonClicked = {
-                    viewModel.updateDialogState(StoreDetailDialogState.CLOSED)
+                    viewModel.closeDialog()
                     viewModel.resetSelectedIndex()
+                    navigateUp()
                 }
             )
         }
@@ -254,7 +287,7 @@ fun StoreDetailScreen(
                 tag = tag,
                 menuItems = menuItems,
                 likeButton = {
-                    StoreDetailButton(
+                    StoreDetailMenuButton(
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(id = if (isLiked) R.drawable.ic_red_like else R.drawable.ic_like),
@@ -266,7 +299,10 @@ fun StoreDetailScreen(
                             Text(
                                 text = heartCount.toString(),
                                 style = HankkiTheme.typography.sub3,
-                                color = Gray500
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = Gray500,
+                                modifier = Modifier.weight(1f, false)
                             )
                         },
                         onClick = {
@@ -275,7 +311,7 @@ fun StoreDetailScreen(
                     )
                 },
                 addMyJogboButton = {
-                    StoreDetailButton(
+                    StoreDetailMenuButton(
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_add_circle_dark_plus),
@@ -292,7 +328,6 @@ fun StoreDetailScreen(
                         },
                         onClick = {
                             openBottomSheet()
-                            // onShowSnackBar
                         }
                     )
                 },
@@ -317,21 +352,27 @@ fun StoreDetailScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 buttonLabels.forEachIndexed { index, label ->
                     val isSelected = selectedIndex == index
-                    StoreDetailButton(
+                    StoreDetailReportButton(
                         content = {
                             Text(
                                 text = label,
                                 style = HankkiTheme.typography.body3.copy(color = if (isSelected) Color.Red else Gray400),
-                                modifier = Modifier.weight(1f),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f, false),
                             )
                         },
                         onClick = {
-                            onSelectIndex(index)
+                            if (selectedIndex == index) {
+                                onSelectIndex(-1)
+                            } else {
+                                onSelectIndex(index)
+                            }
                         },
                         tailingIcon = {
                             Icon(
-                                painter = painterResource(id = if (isSelected) R.drawable.ic_check_btn else R.drawable.ic_uncheck_btn),
-                                contentDescription = "체크박스 아이콘",
+                                painter = painterResource(id = if (isSelected) R.drawable.ic_btn_radio_check else R.drawable.ic_btn_radio_uncheck),
+                                contentDescription = "라디오 아이콘",
                                 modifier = Modifier.size(24.dp),
                                 tint = Color.Unspecified
                             )

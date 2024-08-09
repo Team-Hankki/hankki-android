@@ -6,7 +6,7 @@ import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
-data class StoreState(
+data class StoreDetailState(
     val storeDetail: UiState<StoreDetailResponseEntity> = UiState.Loading,
     val isLiked: Boolean = false,
     val heartCount: Int = 0,
