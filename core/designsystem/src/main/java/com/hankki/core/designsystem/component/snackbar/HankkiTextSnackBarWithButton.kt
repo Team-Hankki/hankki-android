@@ -23,6 +23,7 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun HankkiTextSnackBarWithButton(
     message: String,
+    buttonText: String = "보기",
     onClick: () -> Unit,
 ) {
     Box(
@@ -43,7 +44,7 @@ fun HankkiTextSnackBarWithButton(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "보기",
+                    text = buttonText,
                     style = HankkiTheme.typography.body4,
                     color = White,
                     textDecoration = TextDecoration.Underline,

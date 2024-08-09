@@ -74,8 +74,7 @@ internal fun MainScreen(
         coroutineScope.launch {
             textSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
             textSnackBarWithButtonHostState.showSnackbar(
-                message = message,
-                actionLabel = "$jogboId"
+                message = "$message/$jogboId",
             )
         }
     }
@@ -85,8 +84,7 @@ internal fun MainScreen(
         coroutineScope.launch {
             whiteSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
             whiteSnackBarWithButtonHostState.showSnackbar(
-                message = message,
-                actionLabel = "$jogboId"
+                message = "$message/$jogboId",
             )
         }
     }
@@ -266,14 +264,25 @@ internal fun MainScreen(
                         .statusBarsPadding()
                         .padding(top = 35.dp)
                 ) { snackBarData ->
-                    HankkiWhiteSnackBarWithButton(
-                        message = snackBarData.visuals.message,
-                    ) {
-                        snackBarData.dismiss()
+                    runCatching {
+                        val (message, jogboId) = snackBarData.visuals.message.split("/")
 
-                        navigator.navigateToMyJogboDetail(
-                            snackBarData.visuals.actionLabel?.toLong() ?: 0L
-                        )
+                        HankkiWhiteSnackBarWithButton(
+                            message = message
+                        ) {
+                            snackBarData.dismiss()
+
+                            navigator.navigateToMyJogboDetail(
+                                jogboId.toLong()
+                            )
+                        }
+                    }.onFailure {
+                        HankkiWhiteSnackBarWithButton(
+                            message = "오류가 발생했어요",
+                            buttonText = "닫기"
+                        ) {
+                            snackBarData.dismiss()
+                        }
                     }
                 }
             }
@@ -288,14 +297,25 @@ internal fun MainScreen(
         },
         snackbarHost = {
             SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackBarData ->
-                HankkiTextSnackBarWithButton(
-                    message = snackBarData.visuals.message,
-                ) {
-                    snackBarData.dismiss()
+                runCatching {
+                    val (message, jogboId) = snackBarData.visuals.message.split("/")
 
-                    navigator.navigateToMyJogboDetail(
-                        snackBarData.visuals.actionLabel?.toLong() ?: 0L
-                    )
+                    HankkiTextSnackBarWithButton(
+                        message = message,
+                    ) {
+                        snackBarData.dismiss()
+
+                        navigator.navigateToMyJogboDetail(
+                            jogboId.toLong()
+                        )
+                    }
+                }.onFailure {
+                    HankkiTextSnackBarWithButton(
+                        message = snackBarData.visuals.message,
+                        buttonText = "닫기"
+                    ) {
+                        snackBarData.dismiss()
+                    }
                 }
             }
         },

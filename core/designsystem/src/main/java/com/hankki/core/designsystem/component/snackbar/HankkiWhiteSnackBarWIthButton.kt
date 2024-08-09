@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
@@ -25,6 +26,7 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun HankkiWhiteSnackBarWithButton(
     message: String,
+    buttonText: String = "보기",
     onClick: () -> Unit,
 ) {
     Box(
@@ -46,7 +48,7 @@ fun HankkiWhiteSnackBarWithButton(
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = "보기",
+                text = buttonText,
                 color = Red,
                 style = HankkiTheme.typography.sub3,
                 modifier = Modifier
