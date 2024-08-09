@@ -26,7 +26,7 @@ import com.hankki.feature.my.R
 @Composable
 fun MoveToHomeButton(
     modifier: Modifier = Modifier,
-    navigateToHome: () -> Unit = {} // 컴폰넌트가 이 변수를 가져도 되는가에 대한 의문... sideEffect 사용?
+    navigateToHome: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
