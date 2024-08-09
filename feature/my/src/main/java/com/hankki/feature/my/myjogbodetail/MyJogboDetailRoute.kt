@@ -250,8 +250,8 @@ fun MyJogboDetailScreen(
 
             is EmptyUiState.Empty -> {
                 EmptyStoreView(
-                    text = "나의 족보에\n" +
-                            "식당을 추가해보세요",
+                    text = stringResource(R.string.my_jogbo) +
+                            stringResource(R.string.add_store_to_jogbo),
                     navigateToHome = navigateToHome
                 )
             }
