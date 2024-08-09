@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +26,7 @@ import com.hankki.feature.my.R
 fun EmptyStoreView(
     text: String,
     modifier: Modifier = Modifier,
-    navigateToHome: (() -> Unit)? = null
+    content: @Composable () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -51,12 +50,7 @@ fun EmptyStoreView(
                 color = Gray500,
                 style = HankkiTheme.typography.body6
             )
-            navigateToHome?.let {
-                MoveToHomeButton(
-                    modifier = Modifier.padding(top = 20.dp),
-                    navigateToHome = navigateToHome
-                )
-            }
+            content()
         }
         Spacer(modifier = Modifier.weight(2f))
     }
