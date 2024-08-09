@@ -1,5 +1,6 @@
 package com.hankki.feature.login
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,7 @@ fun LoginRoute(
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
         viewModel.loginSideEffects
@@ -53,7 +56,7 @@ fun LoginRoute(
     }
 
     LoginScreen(
-        onLoginClick = { viewModel.startKakaoLogin() }
+        onLoginClick = { viewModel.startKakaoLogin(context as Activity) }
     )
 }
 
