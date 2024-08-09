@@ -66,18 +66,15 @@ fun StoreDetailMenuBox(
         }
 
         Spacer(modifier = Modifier.padding(top = 30.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
             menuItems.forEach { item ->
                 StoreDetailItem(name = item.name, price = item.price.toString())
+                Spacer(modifier = Modifier.height(8.dp))
             }
-
         }
 
         Spacer(modifier = Modifier.height(23.dp))
