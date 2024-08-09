@@ -1,5 +1,7 @@
 package com.hankki.feature.my.myjogbo
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -69,6 +71,12 @@ fun MyJogboRoute(
         dialogState = myJogboState.showDialog,
         updateToDialogState = myJogboViewModel::updateToDialogState,
         deleteJogboItems = myJogboViewModel::deleteJogboStore
+    )
+
+    BackOnPressed(
+        editMode = myJogboState.editMode,
+        resetJogboState = myJogboViewModel::resetJogboState,
+        navigateUp = navigateUp,
     )
 }
 
@@ -169,6 +177,20 @@ fun MyJogboScreen(
         }
     }
 }
+
+    @Composable
+    fun BackOnPressed(
+        editMode: Boolean = false,
+        resetJogboState: () -> Unit,
+        navigateUp: () -> Unit,
+    ) {
+        BackHandler(onBack = {
+            if (editMode)
+                resetJogboState()
+            else
+                navigateUp()
+        })
+    }
 
 @Composable
 @Preview
