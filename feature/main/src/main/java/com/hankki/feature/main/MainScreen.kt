@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -32,7 +34,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -40,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
+import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
@@ -65,14 +68,27 @@ internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
-    val localContextResource = LocalContext.current.resources
-    val onShowSnackBar: (Int) -> Unit = { errorMessage ->
+
+    val textSnackBarWithButtonHostState = remember { SnackbarHostState() }
+    val onShowTextSnackBarWithButton: (String, Long) -> Unit = { message, jogboId ->
         coroutineScope.launch {
-            snackBarHostState.currentSnackbarData?.dismiss()
-            snackBarHostState.showSnackbar(localContextResource.getString(errorMessage))
+            textSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
+            textSnackBarWithButtonHostState.showSnackbar(
+                message = "$message/$jogboId",
+            )
         }
     }
+
+    val whiteSnackBarWithButtonHostState = remember { SnackbarHostState() }
+    val onShowWhiteSnackBarWithButton: (String, Long) -> Unit = { message, jogboId ->
+        coroutineScope.launch {
+            whiteSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
+            whiteSnackBarWithButtonHostState.showSnackbar(
+                message = "$message/$jogboId",
+            )
+        }
+    }
+
 
     Scaffold(
         content = { paddingValue ->
@@ -112,7 +128,7 @@ internal fun MainScreen(
                     )
                     homeNavGraph(
                         paddingValues = paddingValue,
-                        onShowSnackBar = {},
+                        onShowSnackBar = onShowTextSnackBarWithButton,
                         navigateStoreDetail = navigator::navigateToStoreDetail,
                         navigateToUniversitySelection = navigator::navigateToUniversity,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo
@@ -168,7 +184,8 @@ internal fun MainScreen(
                             }
                             navigator.navigateToStoreDetail(storeId, navOptions)
                         },
-                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+                        onShowSnackBar = onShowWhiteSnackBarWithButton
                     )
                     myNavGraph(
                         paddingValues = paddingValue,
@@ -235,8 +252,38 @@ internal fun MainScreen(
                     )
                     storeDetailNavGraph(
                         navigateUp = navigator::navigateUpIfNotHome,
-                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
+                        navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+                        onShowSnackBar = onShowTextSnackBarWithButton
                     )
+                }
+
+                SnackbarHost(
+                    hostState = whiteSnackBarWithButtonHostState,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .statusBarsPadding()
+                        .padding(top = 35.dp)
+                ) { snackBarData ->
+                    runCatching {
+                        val (message, jogboId) = snackBarData.visuals.message.split("/")
+
+                        HankkiWhiteSnackBarWithButton(
+                            message = message
+                        ) {
+                            snackBarData.dismiss()
+
+                            navigator.navigateToMyJogboDetail(
+                                jogboId.toLong()
+                            )
+                        }
+                    }.onFailure {
+                        HankkiWhiteSnackBarWithButton(
+                            message = "오류가 발생했어요",
+                            buttonText = "닫기"
+                        ) {
+                            snackBarData.dismiss()
+                        }
+                    }
                 }
             }
         },
@@ -248,7 +295,30 @@ internal fun MainScreen(
                 onTabSelected = navigator::navigate
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        snackbarHost = {
+            SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackBarData ->
+                runCatching {
+                    val (message, jogboId) = snackBarData.visuals.message.split("/")
+
+                    HankkiTextSnackBarWithButton(
+                        message = message,
+                    ) {
+                        snackBarData.dismiss()
+
+                        navigator.navigateToMyJogboDetail(
+                            jogboId.toLong()
+                        )
+                    }
+                }.onFailure {
+                    HankkiTextSnackBarWithButton(
+                        message = snackBarData.visuals.message,
+                        buttonText = "닫기"
+                    ) {
+                        snackBarData.dismiss()
+                    }
+                }
+            }
+        },
     )
 }
 

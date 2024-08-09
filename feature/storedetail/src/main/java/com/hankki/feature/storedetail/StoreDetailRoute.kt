@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -62,6 +63,7 @@ fun StoreDetailRoute(
     storeId: Long,
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
@@ -120,6 +122,7 @@ fun StoreDetailRoute(
                 selectedIndex = storeState.selectedIndex,
                 buttonLabels = storeState.buttonLabels,
                 onNavigateUp = navigateUp,
+                onShowSnackBar = onShowSnackBar,
                 onLikeClicked = { viewModel.toggleLike(storeId) },
                 onSelectIndex = { index ->
                     viewModel.updateSelectedIndex(index)
@@ -202,6 +205,7 @@ fun StoreDetailScreen(
     imageUrl: String?,
     selectedIndex: Int,
     buttonLabels: PersistentList<String>,
+    onShowSnackBar: (String, Long) -> Unit,
     onNavigateUp: () -> Unit,
     onLikeClicked: () -> Unit,
     onSelectIndex: (Int) -> Unit,
@@ -214,6 +218,8 @@ fun StoreDetailScreen(
     onAddMenuClicked: () -> Unit,
     onReportClicked: () -> Unit,
 ) {
+    val localContextResource = LocalContext.current.resources
+
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
@@ -221,6 +227,10 @@ fun StoreDetailScreen(
             onDismissRequest = onDismissBottomSheetRequest,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId)
+                onShowSnackBar(
+                    localContextResource.getString(R.string.success_add_my_jogbo),
+                    jogboId
+                )
             }
         )
     }
@@ -384,5 +394,6 @@ fun StoreDetailScreen(
                 )
             }
         }
+
     }
 }

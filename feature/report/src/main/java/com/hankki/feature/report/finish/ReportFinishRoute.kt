@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -50,6 +51,7 @@ fun ReportFinishRoute(
     navigateToHome: () -> Unit,
     navigateToStoreDetail: (storeId: Long) -> Unit,
     navigateToAddNewJogbo: () -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
     viewModel: ReportFinishViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -66,11 +68,15 @@ fun ReportFinishRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is ReportFinishSideEffect.navigateToStoreDetail -> navigateToStoreDetail(
+                is ReportFinishSideEffect.NavigateToStoreDetail -> navigateToStoreDetail(
                     sideEffect.storeId
                 )
 
-                is ReportFinishSideEffect.navigateToHome -> navigateToHome()
+                is ReportFinishSideEffect.NavigateToHome -> navigateToHome()
+                is ReportFinishSideEffect.ShowSnackBar -> onShowSnackBar(
+                    sideEffect.message,
+                    sideEffect.jogboId
+                )
             }
         }
     }
@@ -82,6 +88,7 @@ fun ReportFinishRoute(
         storeId = state.storeId,
         showBottomSheet = state.showBottomSheet,
         jogboItems = state.jogboItems,
+        onShowSnackBar = onShowSnackBar,
         addNewJogbo = {
             navigateToAddNewJogbo()
             viewModel.controlBottomSheetState(false)
@@ -101,12 +108,15 @@ fun ReportFinishScreen(
     storeId: Long,
     showBottomSheet: Boolean,
     jogboItems: PersistentList<JogboResponseModel>,
+    onShowSnackBar: (String, Long) -> Unit = { _, _ -> },
     addNewJogbo: () -> Unit = {},
     bottomSheetControl: (Boolean) -> Unit = { },
     moveToStoreDetail: () -> Unit = { },
     moveToHome: () -> Unit = { },
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
 ) {
+    val localContextResource = LocalContext.current.resources
+
     if (showBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
@@ -114,6 +124,10 @@ fun ReportFinishScreen(
             onDismissRequest = { bottomSheetControl(false) },
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, storeId)
+                onShowSnackBar(
+                    localContextResource.getString(R.string.add_store_at_jogbo),
+                    jogboId
+                )
             }
         )
     }
@@ -178,9 +192,7 @@ fun ReportFinishScreen(
             ReportFinishCard(
                 storeName = storeName,
                 onClick = { bottomSheetControl(true) },
-                modifier = Modifier
-                    .fillMaxWidth()
-
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.weight(1f))
