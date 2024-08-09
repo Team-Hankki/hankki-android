@@ -313,9 +313,6 @@ fun StoreDetailScreen(
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
                                 style = HankkiTheme.typography.sub3,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1f, false),
                                 color = Gray500
                             )
                         },
