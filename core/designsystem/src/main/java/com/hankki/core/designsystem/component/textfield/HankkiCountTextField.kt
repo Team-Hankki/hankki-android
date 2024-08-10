@@ -106,7 +106,7 @@ fun HankkiCountTextField(
 
                         val parts = modifiedValue.split("#").filter { it.isNotEmpty() }
                         val limitedParts = parts.take(2)
-                        val processedParts = limitedParts.map { it.take(9) }
+                        val processedParts = limitedParts.map { it.take(8) }
 
                         modifiedValue = processedParts.joinToString("#", prefix = "#")
 
