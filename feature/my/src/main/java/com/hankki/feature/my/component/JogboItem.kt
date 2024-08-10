@@ -6,6 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -69,7 +71,7 @@ fun JogboItem(
             AsyncImage(
                 model = image,
                 contentDescription = "jogbo image",
-                modifier = modifier.wrapContentSize(),
+                modifier = modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
         }
