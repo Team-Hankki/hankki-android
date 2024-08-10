@@ -59,7 +59,6 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
-import com.hankki.feature.my.mypage.model.MySideEffect
 import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable

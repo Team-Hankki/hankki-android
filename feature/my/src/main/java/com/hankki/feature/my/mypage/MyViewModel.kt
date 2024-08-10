@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.repository.MyRepository
 import com.hankki.domain.token.repository.TokenRepository
-import com.hankki.feature.my.mypage.model.MySideEffect
 import com.hankki.feature.my.mypage.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
