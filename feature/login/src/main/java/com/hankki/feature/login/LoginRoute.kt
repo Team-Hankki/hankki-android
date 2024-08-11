@@ -1,5 +1,6 @@
 package com.hankki.feature.login
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,8 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -31,6 +35,7 @@ fun LoginRoute(
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
         viewModel.loginSideEffects
@@ -48,14 +53,31 @@ fun LoginRoute(
                     is LoginSideEffect.LoginError -> {
                         //LoginError 필요시 추가 동작
                     }
+
+                    is LoginSideEffect.StartKakaoTalkLogin -> {
+                        startKakaoTalkLogin(context) { token, error ->
+                            viewModel.handleLoginResult(token, error)
+                        }
+                    }
+
+                    is LoginSideEffect.StartKakaoWebLogin -> {
+                        startKakaoWebLogin(context) { token, error ->
+                            viewModel.handleLoginResult(token, error)
+                        }
+                    }
                 }
             }
     }
 
     LoginScreen(
-        onLoginClick = { viewModel.startKakaoLogin() }
+        onLoginClick = {
+            viewModel.startKakaoLogin(
+                isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
+            )
+        }
     )
 }
+
 
 @Composable
 fun LoginScreen(
@@ -97,5 +119,23 @@ fun LoginScreen(
                 .padding(bottom = 24.dp)
                 .navigationBarsPadding()
         )
+    }
+}
+
+private fun startKakaoTalkLogin(
+    context: Context,
+    handleLogin: (OAuthToken?, Throwable?) -> Unit,
+) {
+    UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+        handleLogin(token, error)
+    }
+}
+
+private fun startKakaoWebLogin(
+    context: Context,
+    handleLogin: (OAuthToken?, Throwable?) -> Unit,
+) {
+    UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+        handleLogin(token, error)
     }
 }
