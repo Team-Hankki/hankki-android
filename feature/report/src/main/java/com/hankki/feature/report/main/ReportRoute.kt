@@ -234,7 +234,7 @@ fun ReportScreen(
                     ) {
                         Text(
                             text = stringResource(id = com.hankki.feature.report.R.string.add_menu_title),
-                            style = HankkiTheme.typography.sub1,
+                            style = HankkiTheme.typography.sub2,
                             color = Gray900
                         )
                         Spacer(modifier = Modifier.height(3.dp))
@@ -379,7 +379,7 @@ fun StoreCategoryChips(
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
-            style = HankkiTheme.typography.sub1,
+            style = HankkiTheme.typography.sub2,
             color = Gray900
         )
         Spacer(modifier = Modifier.height(16.dp))
