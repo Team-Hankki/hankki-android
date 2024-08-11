@@ -45,7 +45,7 @@ import com.hankki.core.designsystem.theme.Red
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.EmptyView
+import com.hankki.feature.my.component.EmptyViewWithButton
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.MoveToHomeButton
 import com.hankki.feature.my.component.StoreItem
@@ -251,7 +251,7 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Empty -> {
-                EmptyView(
+                EmptyViewWithButton(
                     text = stringResource(R.string.my_jogbo) +
                             stringResource(R.string.add_store_to_jogbo),
                     content = {

@@ -23,7 +23,7 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 
 @Composable
-fun EmptyView(
+fun BaseEmptyView(
     text: String,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit = {}
@@ -56,11 +56,35 @@ fun EmptyView(
     }
 }
 
+@Composable
+fun EmptyView(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    BaseEmptyView(
+        text = text,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun EmptyViewWithButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    BaseEmptyView(
+        text = text,
+        modifier = modifier,
+        content = content
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun BaseEmptyViewPreview() {
     HankkijogboTheme {
-        EmptyView(
+        BaseEmptyView(
             text = "한끼네 한정식"
         )
     }
