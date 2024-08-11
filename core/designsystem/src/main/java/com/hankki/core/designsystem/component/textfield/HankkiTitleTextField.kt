@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_UNDER20_REGEX
+import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER30_REGEX
 import com.hankki.core.common.utill.VALID_NUMBER_UNDER_100000_REGEX
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray300
@@ -113,7 +113,7 @@ fun HankkiMenuTextField(
         value = value,
         placeholder = placeholder,
         onTextChanged = { menu ->
-            if (KOREAN_NUMBER_ENGLISH_SPECIAL_UNDER20_REGEX.matcher(menu).matches()) {
+            if (KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER30_REGEX.matcher(menu).matches()) {
                 onTextChanged(menu)
             }
         },
