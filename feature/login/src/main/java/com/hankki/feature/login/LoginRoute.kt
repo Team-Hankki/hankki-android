@@ -1,6 +1,6 @@
 package com.hankki.feature.login
 
-import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +24,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -51,14 +52,27 @@ fun LoginRoute(
                     is LoginSideEffect.LoginError -> {
                         //LoginError 필요시 추가 동작
                     }
+
+                    is LoginSideEffect.StartKakaoTalkLogin -> {
+                        startKakaoTalkLogin(context, viewModel)
+                    }
+
+                    is LoginSideEffect.StartKakaoWebLogin -> {
+                        startKakaoWebLogin(context, viewModel)
+                    }
                 }
             }
     }
 
     LoginScreen(
-        onLoginClick = { viewModel.startKakaoLogin(context as Activity) }
+        onLoginClick = {
+            viewModel.startKakaoLogin(
+                isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
+            )
+        }
     )
 }
+
 
 @Composable
 fun LoginScreen(
@@ -100,5 +114,17 @@ fun LoginScreen(
                 .padding(bottom = 24.dp)
                 .navigationBarsPadding()
         )
+    }
+}
+
+private fun startKakaoTalkLogin(context: Context, viewModel: LoginViewModel) {
+    UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+        viewModel.handleLoginResult(token, error)
+    }
+}
+
+private fun startKakaoWebLogin(context: Context, viewModel: LoginViewModel) {
+    UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+        viewModel.handleLoginResult(token, error)
     }
 }
