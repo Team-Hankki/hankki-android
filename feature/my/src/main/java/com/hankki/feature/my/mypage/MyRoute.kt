@@ -59,7 +59,6 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
-import com.hankki.feature.my.mypage.model.MySideEffect
 import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable
@@ -138,12 +137,12 @@ fun MyScreen(
             title = if (showDialog == DialogState.LOGOUT) stringResource(R.string.ask_logout) else stringResource(
                 R.string.disappear_jogbo
             ),
-            negativeButtonTitle = stringResource(id = R.string.go_back),
-            positiveButtonTitle = if (showDialog == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
+            positiveButtonTitle = stringResource(id = R.string.go_back),
+            negativeButtonTitle = if (showDialog == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
                 R.string.quit
             ),
-            onNegativeButtonClicked = { updateDialog(DialogState.CLOSED) },
-            onPositiveButtonClicked = {
+            onPositiveButtonClicked = { updateDialog(DialogState.CLOSED) },
+            onNegativeButtonClicked = {
                 if (showDialog == DialogState.LOGOUT) {
                     onLogout()
                 } else if (showDialog == DialogState.QUIT) {
