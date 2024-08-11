@@ -162,7 +162,7 @@ fun StoreDetailRoute(
         StoreDetailDialogState.REPORT_CONFIRMATION -> {
             DoubleButtonDialog(
                 title = "정말 제보하시겠어요?",
-                description = "여러분의 제보가 더 정확한 한끼족보를 만들어줘요!",
+                description = "제보시 식당 정보가 앱에서 사라져요",
                 negativeButtonTitle = "돌아가기",
                 positiveButtonTitle = "제보하기",
                 onNegativeButtonClicked = {
