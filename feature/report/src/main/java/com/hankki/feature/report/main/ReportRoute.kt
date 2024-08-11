@@ -165,7 +165,6 @@ fun ReportScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
     val isVisibleIme = WindowInsets.isImeVisible
 
     Column(
@@ -212,7 +211,7 @@ fun ReportScreen(
                     thickness = 12.dp,
                     color = Gray100
                 )
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Column(
                     modifier = Modifier
@@ -228,7 +227,7 @@ fun ReportScreen(
                         selectCategory(item)
                     }
 
-                    Spacer(modifier = Modifier.height(50.dp))
+                    Spacer(modifier = Modifier.height(48.dp))
 
                     Column(
                         modifier = Modifier.fillMaxWidth()
@@ -238,7 +237,7 @@ fun ReportScreen(
                             style = HankkiTheme.typography.sub1,
                             color = Gray900
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(3.dp))
                         Text(
                             text = stringResource(id = com.hankki.feature.report.R.string.add_menu_sub_title),
                             style = HankkiTheme.typography.body4,
@@ -247,12 +246,12 @@ fun ReportScreen(
 
 
                         if (selectedImageUri == null) {
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(24.dp))
                             AddPhotoButton(
                                 onClick = selectImageUri,
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(24.dp))
                         } else {
                             Spacer(modifier = Modifier.height(20.dp))
                             SelectedImageController(
@@ -383,7 +382,7 @@ fun StoreCategoryChips(
             style = HankkiTheme.typography.sub1,
             color = Gray900
         )
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         FlowRow(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
