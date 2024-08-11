@@ -1,5 +1,6 @@
 package com.hankki.feature.my.newjogbo
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.entity.request.NewJogboEntity
@@ -38,7 +39,7 @@ class NewJogboViewModel @Inject constructor(
     }
 
     fun updateButtonState(title: String, tags: String) {
-        val tagsList = tags.split("#").filter { it.isNotBlank() }.joinToString("#", prefix = "#")
+        val tagsList = tags.replace("#", "")
 
         _newJogboState.value = _newJogboState.value.copy(
             isButtonEnabled = title.isNotEmpty() && tagsList.isNotEmpty()
