@@ -23,12 +23,15 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 
 @Composable
-fun EmptyStoreView(
+fun BaseEmptyView(
     text: String,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.fillMaxSize().background(White),
+        modifier = modifier
+            .fillMaxSize()
+            .background(White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(1f))
@@ -40,23 +43,48 @@ fun EmptyStoreView(
                 contentDescription = "empty",
                 modifier = Modifier.size(100.dp)
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = text,
                 textAlign = TextAlign.Center,
                 color = Gray500,
                 style = HankkiTheme.typography.body6
             )
+            content()
         }
         Spacer(modifier = Modifier.weight(2f))
     }
 }
 
+@Composable
+fun EmptyView(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    BaseEmptyView(
+        text = text,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun EmptyViewWithButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    BaseEmptyView(
+        text = text,
+        modifier = modifier,
+        content = content
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
-fun EmptyStoreViewPreview() {
+fun BaseEmptyViewPreview() {
     HankkijogboTheme {
-        EmptyStoreView(
+        BaseEmptyView(
             text = "한끼네 한정식"
         )
     }

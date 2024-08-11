@@ -1,4 +1,4 @@
-package com.hankki.feature.my.mypage.model
+package com.hankki.feature.my.mypage
 
 sealed class MySideEffect {
     data object ShowLogoutSuccess : MySideEffect()
