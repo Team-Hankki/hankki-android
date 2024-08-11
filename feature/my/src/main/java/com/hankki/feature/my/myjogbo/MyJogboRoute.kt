@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray800
@@ -34,14 +36,12 @@ import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.domain.my.entity.response.MyJogboEntity
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.AddJogboItem
 import com.hankki.feature.my.component.JogboItem
 import com.hankki.feature.my.myjogbo.model.MyJogboModel
-import com.hankki.feature.my.myjogbo.model.toMyJogboModel
+import com.hankki.feature.my.myjogbo.model.transformImage
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun MyJogboRoute(
@@ -62,7 +62,7 @@ fun MyJogboRoute(
         navigateUp = navigateUp,
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
-        jogboItems = myJogboState.myJogboItems,
+        state = myJogboState.uiState,
         editMode = myJogboState.editMode,
         updateEditMode = myJogboViewModel::updateMode,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
@@ -85,7 +85,7 @@ fun MyJogboScreen(
     navigateUp: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
-    jogboItems: PersistentList<MyJogboModel>,
+    state: UiState<PersistentList<MyJogboModel>>,
     editMode: Boolean = false,
     updateEditMode: () -> Unit,
     updateJogboSelectedState: (Int, Boolean) -> Unit,
@@ -148,48 +148,52 @@ fun MyJogboScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        LazyVerticalGrid(
-            modifier = Modifier.padding(horizontal = 22.dp),
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(17.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
-                AddJogboItem(
-                    isEditMode = editMode,
-                    onClick = navigateToNewJogbo
-                )
-            }
-
-            items(jogboItems.size) { index ->
-                val jogbo = jogboItems[index]
-                JogboItem(
-                    id = jogbo.jogboId,
-                    title = jogbo.jogboName,
-                    image = jogbo.jogboImage,
-                    isEditMode = editMode,
-                    isSelected = jogbo.jogboSelected,
-                    editJogbo = { updateJogboSelectedState(index, !jogbo.jogboSelected) },
-                    navigateToJogboDetail = { navigateToJogboDetail(jogbo.jogboId) }
-                )
+        when (state) {
+            UiState.Failure -> {}
+            UiState.Loading -> {}
+            is UiState.Success -> {
+                LazyVerticalGrid(
+                    modifier = Modifier.padding(horizontal = 22.dp),
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(17.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    item {
+                        AddJogboItem(
+                            isEditMode = editMode,
+                            onClick = navigateToNewJogbo
+                        )
+                    }
+                    itemsIndexed(state.data) { index, jogbo ->
+                        JogboItem(
+                            id = jogbo.jogboId,
+                            title = jogbo.jogboName,
+                            image = transformImage(jogbo.jogboImage),
+                            isEditMode = editMode,
+                            isSelected = jogbo.jogboSelected,
+                            editJogbo = { updateJogboSelectedState(index, !jogbo.jogboSelected) },
+                            navigateToJogboDetail = { navigateToJogboDetail(jogbo.jogboId) }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
-    @Composable
-    fun BackOnPressed(
-        editMode: Boolean = false,
-        resetJogboState: () -> Unit,
-        navigateUp: () -> Unit,
-    ) {
-        BackHandler(onBack = {
-            if (editMode)
-                resetJogboState()
-            else
-                navigateUp()
-        })
-    }
+@Composable
+fun BackOnPressed(
+    editMode: Boolean = false,
+    resetJogboState: () -> Unit,
+    navigateUp: () -> Unit,
+) {
+    BackHandler(onBack = {
+        if (editMode)
+            resetJogboState()
+        else
+            navigateUp()
+    })
+}
 
 @Composable
 @Preview
@@ -200,10 +204,7 @@ fun MyJogboScreenPreview() {
             navigateToJogboDetail = { _ -> },
             navigateToNewJogbo = {},
             paddingValues = PaddingValues(),
-            jogboItems = persistentListOf(
-                MyJogboEntity(1, "TYPE_ONE", "성대쪽문\n가성비 맛집\n진짜 추천드림요1").toMyJogboModel(),
-                MyJogboEntity(2, "TYPE_TWO", "성대쪽문\n가성비 맛집\n진짜 추천드림요2").toMyJogboModel()
-            ),
+            state = UiState.Loading,
             updateEditMode = {},
             updateJogboSelectedState = { _, _ -> },
             resetJogboState = {},
