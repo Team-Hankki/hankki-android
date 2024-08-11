@@ -93,7 +93,7 @@ fun HankkiCountTextField(
                 ) {
                     if (trailingIcon) {
                         textFieldValue = newValue.copy(
-                            text = newValue.text.take(18),
+                            text = newValue.text.take(16),
                             selection = TextRange(newValue.text.length)
                         )
                         onValueChanged(textFieldValue.text)
@@ -126,7 +126,7 @@ fun HankkiCountTextField(
             tailingIcon = {
                 if (trailingIcon)
                     Text(
-                        text = "(${valueLength}/18)",
+                        text = "(${valueLength}/16)",
                         style = HankkiTheme.typography.body3,
                         color = Gray400
                     )
