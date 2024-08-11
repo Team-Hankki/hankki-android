@@ -34,7 +34,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.EmptyStoreView
+import com.hankki.feature.my.component.EmptyView
 import com.hankki.feature.my.component.StoreItem
 import com.hankki.feature.my.mystore.model.MyStoreModel
 import kotlinx.collections.immutable.PersistentList
@@ -119,7 +119,7 @@ fun MyStoreScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             when (state) {
                 EmptyUiState.Empty -> {
-                    EmptyStoreView(
+                    EmptyView(
                         text = if (type == "like") stringResource(R.string.no_liked_store) else stringResource(
                             R.string.no_reported_store
                         )
