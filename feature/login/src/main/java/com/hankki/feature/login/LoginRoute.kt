@@ -24,6 +24,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
+import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 
@@ -54,11 +55,15 @@ fun LoginRoute(
                     }
 
                     is LoginSideEffect.StartKakaoTalkLogin -> {
-                        startKakaoTalkLogin(context, viewModel)
+                        startKakaoTalkLogin(context) { token, error ->
+                            viewModel.handleLoginResult(token, error)
+                        }
                     }
 
                     is LoginSideEffect.StartKakaoWebLogin -> {
-                        startKakaoWebLogin(context, viewModel)
+                        startKakaoWebLogin(context) { token, error ->
+                            viewModel.handleLoginResult(token, error)
+                        }
                     }
                 }
             }
@@ -117,14 +122,20 @@ fun LoginScreen(
     }
 }
 
-private fun startKakaoTalkLogin(context: Context, viewModel: LoginViewModel) {
+private fun startKakaoTalkLogin(
+    context: Context,
+    handleLogin: (OAuthToken?, Throwable?) -> Unit,
+) {
     UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-        viewModel.handleLoginResult(token, error)
+        handleLogin(token, error)
     }
 }
 
-private fun startKakaoWebLogin(context: Context, viewModel: LoginViewModel) {
+private fun startKakaoWebLogin(
+    context: Context,
+    handleLogin: (OAuthToken?, Throwable?) -> Unit,
+) {
     UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-        viewModel.handleLoginResult(token, error)
+        handleLogin(token, error)
     }
 }
