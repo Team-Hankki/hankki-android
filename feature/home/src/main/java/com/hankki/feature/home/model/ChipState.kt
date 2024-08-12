@@ -7,6 +7,8 @@ import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.White
 import com.hankki.core.designsystem.theme.Yellow
 import com.hankki.core.designsystem.theme.Yellow100
+import com.hankki.core.designsystem.theme.Yellow300
+import com.hankki.core.designsystem.theme.Yellow500
 
 sealed class ChipState {
     abstract val title: String
@@ -48,8 +50,8 @@ data class ChipStyle(
         )
 
         val FIXED = ChipStyle(
-            containerColor = Yellow100,
-            borderColor = Yellow,
+            containerColor = Yellow300,
+            borderColor = Yellow500,
             labelColor = Gray600,
             iconColor = Gray600
         )
