@@ -45,6 +45,9 @@ class ReportViewModel @Inject constructor(
                         universityId = university.id
                     )
                 }.onFailure { error ->
+                    _state.value = _state.value.copy(
+                        isUniversityError = true
+                    )
                     Timber.e(error)
                 }
         }
@@ -187,6 +190,12 @@ class ReportViewModel @Inject constructor(
                         && selectedCategory != null
                         && location.location.isNotEmpty()
             )
+        }
+    }
+
+    fun universityErrorSideEffect() {
+        viewModelScope.launch {
+            _sideEffect.emit(ReportSideEffect.UniversityError)
         }
     }
 }

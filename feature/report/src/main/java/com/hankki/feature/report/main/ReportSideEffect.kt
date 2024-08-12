@@ -4,6 +4,8 @@ sealed class ReportSideEffect {
     data class NavigateReportFinish(
         val count: Long,
         val storeName: String,
-        val storeId: Long
+        val storeId: Long,
     ) : ReportSideEffect()
+
+    data object UniversityError : ReportSideEffect()
 }

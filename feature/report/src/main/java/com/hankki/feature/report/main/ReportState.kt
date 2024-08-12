@@ -12,6 +12,7 @@ data class ReportState(
     val count: Long = 0,
     val location: LocationModel = LocationModel(),
     val storeId: Long = 0,
+    val isUniversityError: Boolean = false,
     val buttonEnabled: Boolean = false,
     val selectedCategory: String? = null,
     val selectedImageUri: Uri? = null,
