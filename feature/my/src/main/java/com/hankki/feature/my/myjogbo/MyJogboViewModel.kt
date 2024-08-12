@@ -34,9 +34,7 @@ class MyJogboViewModel @Inject constructor(
                         )
                     )
                 }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+                .onFailure(Timber::e)
         }
     }
 
@@ -104,9 +102,7 @@ class MyJogboViewModel @Inject constructor(
                         )
                         getMyJogboList()
                     }
-                    .onFailure { error ->
-                        Timber.e(error)
-                    }
+                    .onFailure(Timber::e)
             }
         }
     }

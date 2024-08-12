@@ -1,6 +1,5 @@
 package com.hankki.feature.my.newjogbo
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.my.entity.request.NewJogboEntity
@@ -51,18 +50,17 @@ class NewJogboViewModel @Inject constructor(
         return tagsWithoutHash.length
     }
 
-    fun createNewJogbo(){
+    fun createNewJogbo() {
         viewModelScope.launch {
             myRepository.createNewJogbo(
                 NewJogboEntity(
                     title = _newJogboState.value.title,
-                    details = _newJogboState.value.tags.split("#").filter { it.isNotBlank() }.map { "#$it" }
+                    details = _newJogboState.value.tags.split("#").filter { it.isNotBlank() }
+                        .map { "#$it" }
                 )
             ).onSuccess {
                 _newJogboSideEffect.emit(NewJogboSideEffect.NavigateToNewJogbo)
-            }.onFailure { error ->
-                Timber.e(error)
-            }
+            }.onFailure(Timber::e)
         }
     }
 }
