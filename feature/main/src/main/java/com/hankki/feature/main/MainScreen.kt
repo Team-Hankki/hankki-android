@@ -340,12 +340,12 @@ private fun MainBottomBar(
             HorizontalDivider(
                 color = Gray100
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(11.dp))
             Row(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .fillMaxWidth()
-                    .height(75.dp),
+                    .height(47.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
