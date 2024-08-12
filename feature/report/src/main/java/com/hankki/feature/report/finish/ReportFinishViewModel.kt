@@ -53,8 +53,7 @@ class ReportFinishViewModel @Inject constructor(
         viewModelScope.launch {
             reportRepository.getUserInfo().onSuccess {
                 _state.value = _state.value.copy(name = it.nickname)
-            }.onFailure {
-            }
+            }.onFailure(Timber::e)
         }
     }
 
@@ -103,6 +102,7 @@ class ReportFinishViewModel @Inject constructor(
                             favoriteId
                         )
                     )
+                    _state.value = _state.value.copy(isAddedJogbo = true)
                 }.onFailure(Timber::e)
         }
     }
