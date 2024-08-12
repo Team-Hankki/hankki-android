@@ -145,12 +145,19 @@ fun HomeRoute(
                         ).animate(CameraAnimation.Fly)
                     )
                 }
+
+                is HomeSideEffect.MoveMyLocation -> {
+                    focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                        viewModel.moveMap(location.latitude, location.longitude)
+                    }.addOnFailureListener {
+                        viewModel.moveMap(
+                            state.myUniversityModel.latitude,
+                            state.myUniversityModel.longitude
+                        )
+                    }
+                }
             }
         }
-    }
-
-    LaunchedEffect(key1 = true) {
-        viewModel.getUniversityInformation()
     }
 
     LaunchedEffect(
@@ -163,9 +170,8 @@ fun HomeRoute(
             state.priceChipState !is ChipState.Selected &&
             state.sortChipState !is ChipState.Selected
         ) {
-            viewModel.fetchData()
+            viewModel.getUniversityInformation()
         }
-
     }
 
     HomeScreen(
@@ -225,9 +231,7 @@ fun HomeRoute(
         ) {
             viewModel.setDialog(true)
         } else {
-            focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                viewModel.moveMap(location.latitude, location.longitude)
-            }
+            viewModel.moveMyLocation()
         }
     }
 }
