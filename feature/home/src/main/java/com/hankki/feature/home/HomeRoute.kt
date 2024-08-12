@@ -344,9 +344,10 @@ fun HomeScreen(
                     modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Spacer(modifier = Modifier.padding(start = 22.dp))
                     Text(
                         text = universityName,
-                        style = HankkiTheme.typography.suitH2,
+                        style = HankkiTheme.typography.sub1,
                         color = Gray900
                     )
                     Icon(
