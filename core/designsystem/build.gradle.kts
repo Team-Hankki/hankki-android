@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.immutable)
+    implementation(libs.lottie.compose)
 }
