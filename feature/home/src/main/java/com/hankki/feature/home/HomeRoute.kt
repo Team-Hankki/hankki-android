@@ -547,7 +547,7 @@ fun HomeScreen(
                                     height = height.dp,
                                     modifier = Modifier.padding(
                                         bottom = 12.dp,
-                                        end = 12.dp
+                                        end = 22.dp
                                     ),
                                     onClick = reposition
                                 )
@@ -562,7 +562,7 @@ fun HomeScreen(
                                 ) {
                                     RepositionButton(
                                         height = 0.dp,
-                                        modifier = Modifier.padding(end = 12.dp),
+                                        modifier = Modifier.padding(end = 22.dp),
                                         onClick = reposition
                                     )
                                 }
