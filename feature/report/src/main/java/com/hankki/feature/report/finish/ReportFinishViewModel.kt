@@ -1,10 +1,13 @@
 package com.hankki.feature.report.finish
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.report.repository.ReportRepository
+import com.hankki.feature.report.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ReportFinishViewModel @Inject constructor(
     private val reportRepository: ReportRepository,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
     private val _state: MutableStateFlow<ReportFinishState> = MutableStateFlow(ReportFinishState())
     val state: StateFlow<ReportFinishState>
@@ -72,9 +76,7 @@ class ReportFinishViewModel @Inject constructor(
                                 )
                             }.toPersistentList()
                         )
-                    }.onFailure { error ->
-                        Timber.e(error)
-                    }
+                    }.onFailure(Timber::e)
             }
         }
     }
@@ -95,8 +97,13 @@ class ReportFinishViewModel @Inject constructor(
         viewModelScope.launch {
             reportRepository.addStoreAtJogbo(favoriteId = favoriteId, storeId = storeId)
                 .onSuccess {
-                }.onFailure {
-                }
+                    _sideEffect.emit(
+                        ReportFinishSideEffect.ShowSnackBar(
+                            context.getString(R.string.add_store_at_jogbo),
+                            favoriteId
+                        )
+                    )
+                }.onFailure(Timber::e)
         }
     }
 }
