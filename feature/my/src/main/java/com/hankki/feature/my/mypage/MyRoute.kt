@@ -48,7 +48,7 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.ButtonWithArrowIcon
@@ -198,7 +198,7 @@ fun MyScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        Red,
+                        Red500,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clip(RoundedCornerShape(12.dp))

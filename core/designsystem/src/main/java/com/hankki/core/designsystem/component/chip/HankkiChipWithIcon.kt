@@ -26,8 +26,8 @@ import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.core.designsystem.theme.YellowDark
-import com.hankki.core.designsystem.theme.YellowLighten
+import com.hankki.core.designsystem.theme.Yellow500
+import com.hankki.core.designsystem.theme.Yellow300
 
 @Composable
 fun HankkiChipWithIcon(
@@ -44,8 +44,8 @@ fun HankkiChipWithIcon(
                 onClick = onClick
             )
             .clip(RoundedCornerShape(100.dp))
-            .border(1.dp, if (isSelected) YellowDark else Gray200, RoundedCornerShape(100.dp))
-            .background(if (isSelected) YellowLighten else White)
+            .border(1.dp, if (isSelected) Yellow500 else Gray200, RoundedCornerShape(100.dp))
+            .background(if (isSelected) Yellow300 else White)
             .padding(vertical = 4.dp)
             .padding(start = 8.dp, end = 10.dp),
         verticalAlignment = Alignment.CenterVertically

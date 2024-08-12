@@ -2,12 +2,11 @@ package com.hankki.feature.home.model
 
 import androidx.compose.ui.graphics.Color
 import com.hankki.core.designsystem.theme.Gray300
-import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.White
 import com.hankki.core.designsystem.theme.Yellow
-import com.hankki.core.designsystem.theme.YellowLight
+import com.hankki.core.designsystem.theme.Yellow100
 
 sealed class ChipState {
     abstract val title: String
@@ -49,7 +48,7 @@ data class ChipStyle(
         )
 
         val FIXED = ChipStyle(
-            containerColor = YellowLight,
+            containerColor = Yellow100,
             borderColor = Yellow,
             labelColor = Gray600,
             iconColor = Gray600

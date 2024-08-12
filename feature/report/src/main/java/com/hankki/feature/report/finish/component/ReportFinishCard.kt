@@ -27,7 +27,7 @@ import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -79,11 +79,11 @@ fun ReportFinishCard(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_red),
                     contentDescription = "add",
-                    tint = Red
+                    tint = Red500
                 )
                 Text(
                     text = stringResource(id = com.hankki.feature.report.R.string.add_my_jogbo),
-                    color = Red,
+                    color = Red500,
                     style = HankkiTheme.typography.body3,
                     modifier = Modifier
                 )

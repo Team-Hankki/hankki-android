@@ -28,7 +28,7 @@ import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 
 @Composable
 fun HankkiTitleTextField(
@@ -46,19 +46,19 @@ fun HankkiTitleTextField(
     var isFocused by remember { mutableStateOf(false) }
 
     val titleColor = when {
-        isError -> Red
+        isError -> Red500
         isFocused -> Gray800
         else -> Gray500
     }
 
     val borderColor = when {
-        isError -> Red
+        isError -> Red500
         isFocused -> Gray850
         else -> Gray300
     }
 
     val textColor = when {
-        isError -> Red
+        isError -> Red500
         else -> Gray800
     }
 
@@ -93,7 +93,7 @@ fun HankkiTitleTextField(
                 Text(
                     text = errorMessage,
                     style = HankkiTheme.typography.caption1,
-                    color = Red
+                    color = Red500
                 )
             }
         }
