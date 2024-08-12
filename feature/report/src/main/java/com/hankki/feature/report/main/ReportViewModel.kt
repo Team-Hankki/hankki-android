@@ -92,7 +92,7 @@ class ReportViewModel @Inject constructor(
 
     fun selectCategory(category: String) {
         _state.value = _state.value.copy(
-            selectedCategory = category
+            selectedCategory = if (category == _state.value.selectedCategory) null else category
         )
         checkButtonEnabled()
     }
