@@ -178,19 +178,6 @@ fun MyJogboDetailScreen(
             }
         )
 
-        Spacer(
-            modifier = Modifier
-                .background(Red500)
-                .height(16.dp)
-        )
-
-        JogboFolder(
-            title = jogboTitle,
-            chips = jogboChips,
-            userNickname = userNickname,
-            shareJogbo = updateShareDialogState
-        )
-
         when (storeItems) {
             is EmptyUiState.Loading -> {
                 Box(
@@ -203,6 +190,19 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Success -> {
+                Spacer(
+                    modifier = Modifier
+                        .background(Red500)
+                        .height(16.dp)
+                )
+
+                JogboFolder(
+                    title = jogboTitle,
+                    chips = jogboChips,
+                    userNickname = userNickname,
+                    shareJogbo = updateShareDialogState
+                )
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -251,6 +251,19 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Empty -> {
+                Spacer(
+                    modifier = Modifier
+                        .background(Red500)
+                        .height(16.dp)
+                )
+
+                JogboFolder(
+                    title = jogboTitle,
+                    chips = jogboChips,
+                    userNickname = userNickname,
+                    shareJogbo = updateShareDialogState
+                )
+
                 EmptyViewWithButton(
                     text = stringResource(R.string.my_jogbo) +
                             stringResource(R.string.add_store_to_jogbo),
