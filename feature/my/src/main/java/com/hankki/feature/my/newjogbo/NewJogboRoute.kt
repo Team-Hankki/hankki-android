@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,7 +27,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.textfield.HankkiCountTextField
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray900
@@ -34,6 +34,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
+import com.hankki.feature.my.component.NewJogboButton
 
 @Composable
 fun NewJogboRoute(
@@ -45,11 +46,12 @@ fun NewJogboRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(newJogboViewModel.newJogboSideEffect, lifecycleOwner) {
-        newJogboViewModel.newJogboSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
-            when (sideEffect) {
-                is NewJogboSideEffect.NavigateToNewJogbo -> navigateUp()
+        newJogboViewModel.newJogboSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is NewJogboSideEffect.NavigateToNewJogbo -> navigateUp()
+                }
             }
-        }
     }
 
     NewJogboScreen(
@@ -62,7 +64,7 @@ fun NewJogboRoute(
         buttonEnabled = newJogboState.isButtonEnabled,
         editTagsLength = newJogboViewModel::editTagsLength,
         createNewJogbo = newJogboViewModel::createNewJogbo,
-        )
+    )
 }
 
 @Composable
@@ -75,7 +77,7 @@ fun NewJogboScreen(
     onTagsChange: (String) -> Unit,
     editTagsLength: (String) -> Int,
     buttonEnabled: Boolean,
-    createNewJogbo : () -> Unit,
+    createNewJogbo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
@@ -95,7 +97,8 @@ fun NewJogboScreen(
                 modifier = Modifier
                     .padding(start = 9.dp)
                     .size(44.dp)
-                    .noRippleClickable(onClick = navigateUp)
+                    .noRippleClickable(onClick = navigateUp),
+                tint = Color.Unspecified
             )
         })
 
@@ -135,12 +138,11 @@ fun NewJogboScreen(
 
             Spacer(modifier = Modifier.height(38.dp))
 
-            HankkiButton(
+            NewJogboButton(
                 text = stringResource(R.string.make_jogbo),
                 onClick = createNewJogbo,
                 enabled = buttonEnabled,
                 textStyle = HankkiTheme.typography.sub3,
-                modifier = Modifier.padding(horizontal = 38.dp, vertical = 13.dp)
             )
         }
     }

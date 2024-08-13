@@ -72,7 +72,7 @@ fun HankkiCountTextField(
             value = textFieldValue,
             placeholder = placeholder,
             borderColor = borderColor,
-            textColor = Gray800,
+            textColor = Gray900,
             onFocusChanged = { focusState ->
                 isFocused = focusState
                 if (!trailingIcon) {

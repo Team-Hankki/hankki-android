@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.Red300
 import com.hankki.core.designsystem.theme.Red500
-import com.hankki.core.designsystem.theme.Red100
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 
@@ -34,8 +34,9 @@ fun AddJogboItem(
             .wrapContentSize()
             .clip(RoundedCornerShape(12.dp))
             .run {
-                if (!isEditMode) { background(Red500).noRippleClickable(onClick = onClick) }
-                else background(Red100)
+                if (!isEditMode) {
+                    background(Red500).noRippleClickable(onClick = onClick)
+                } else background(Red300)
             },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,

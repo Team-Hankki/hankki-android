@@ -31,7 +31,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray800
+import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -117,7 +117,7 @@ fun MyJogboScreen(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
                     contentDescription = "Back",
                     modifier = Modifier
-                        .padding(start = 9.dp)
+                        .padding(start = 6.dp)
                         .size(44.dp)
                         .noRippleClickable(if (editMode) resetJogboState else navigateUp),
                     tint = Color.Unspecified
@@ -134,10 +134,10 @@ fun MyJogboScreen(
                 Text(
                     text = if (editMode) stringResource(R.string.delete) else stringResource(R.string.edit),
                     style = HankkiTheme.typography.body1,
-                    color = Gray800,
+                    color = Gray700,
                     modifier = Modifier
                         .padding(vertical = 12.dp, horizontal = 14.dp)
-                        .padding(end = 8.dp)
+                        .padding(end = 9.dp)
                         .run {
                             if (editMode) noRippleClickable { updateToDialogState(true) }
                             else noRippleClickable(updateEditMode)
@@ -146,7 +146,7 @@ fun MyJogboScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         when (state) {
             UiState.Failure -> {}
@@ -155,8 +155,8 @@ fun MyJogboScreen(
                 LazyVerticalGrid(
                     modifier = Modifier.padding(horizontal = 22.dp),
                     columns = GridCells.Fixed(2),
-                    verticalArrangement = Arrangement.spacedBy(17.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     item {
                         AddJogboItem(
