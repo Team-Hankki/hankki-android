@@ -218,7 +218,7 @@ fun MyJogboDetailScreen(
                             imageUrl = store.imageUrl,
                             category = store.category,
                             name = store.name,
-                            price = store.lowestPrice,
+                            price = store.lowestPrice.toString(),
                             heartCount = store.heartCount,
                             isIconUsed = false,
                             isIconSelected = false,

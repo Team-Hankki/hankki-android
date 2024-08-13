@@ -137,7 +137,7 @@ fun MyStoreScreen(
                                 imageUrl = store.imageURL,
                                 category = store.category,
                                 name = store.name,
-                                price = store.lowestPrice,
+                                price = store.lowestPrice.toString(),
                                 heartCount = store.heartCount,
                                 isIconUsed = (type == "like"),
                                 isIconSelected = store.isLiked ?: false,
