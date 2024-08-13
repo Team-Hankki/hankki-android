@@ -6,20 +6,18 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import android.view.Gravity
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideOut
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +26,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -54,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -70,7 +69,6 @@ import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
-import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray900
@@ -462,79 +460,67 @@ fun HomeScreen(
                 BottomSheetScaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = 30.dp,
-                                topEnd = 30.dp
-                            )
-                        )
                         .ignoreNextModifiers(),
                     sheetBackgroundColor = Color.Transparent,
                     backgroundColor = Color.Transparent,
+                    sheetShape = RoundedCornerShape(
+                        topStart = 30.dp,
+                        topEnd = 30.dp
+                    ),
                     sheetGesturesEnabled = true,
                     sheetContent = {
-                        AnimatedVisibility(
-                            visible = isMainBottomSheetOpen,
-                            enter = EnterTransition.None,
-                            exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(White)
+                                .sizeIn(minHeight = height.dp),
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .clip(
-                                        RoundedCornerShape(
-                                            topStart = 30.dp,
-                                            topEnd = 30.dp
-                                        )
-                                    )
-                                    .fillMaxSize()
-                                    .background(White)
-                            ) {
-                                Spacer(
-                                    modifier = Modifier.height(8.dp)
-                                )
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_drag_handle),
-                                    contentDescription = "drag handle",
-                                    tint = Gray200,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                                Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(
+                                modifier = Modifier.height(8.dp)
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_drag_handle),
+                                contentDescription = "drag handle",
+                                tint = Gray200,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
 
-                                if (storeItems.isEmpty()) {
-                                    Spacer(modifier = Modifier.height(38.dp))
-                                    EmptyImageWithText(
-                                        text = "조건에 맞는 식당이 없어요",
-                                        modifier = Modifier
-                                            .align(Alignment.CenterHorizontally)
-                                    )
-                                } else {
-                                    LazyColumn(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .background(White),
-                                        state = listState
-                                    ) {
-                                        items(
-                                            items = storeItems,
-                                            key = { item -> item.id }
-                                        ) { item ->
-                                            StoreItem(
-                                                storeId = item.id,
-                                                storeImageUrl = item.imageUrl,
-                                                category = item.category,
-                                                storeName = item.name,
-                                                price = item.lowestPrice,
-                                                heartCount = item.heartCount,
-                                                onClickItem = navigateStoreDetail
-                                            ) {
-                                                controlMyJogboBottomSheet()
-                                                getJogboItems(item.id)
-                                                selectStoreItem(item)
-                                            }
+                            if (storeItems.isEmpty()) {
+                                Spacer(modifier = Modifier.height(27.dp))
+                                EmptyImageWithText(
+                                    text = "조건에 맞는 식당이 없어요",
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
 
-                                            if (item == storeItems.last()) {
-                                                Spacer(modifier = Modifier.height(12.dp))
-                                            }
+                                )
+                            } else {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(White),
+                                    state = listState
+                                ) {
+                                    items(
+                                        items = storeItems,
+                                        key = { item -> item.id }
+                                    ) { item ->
+                                        StoreItem(
+                                            storeId = item.id,
+                                            storeImageUrl = item.imageUrl,
+                                            category = item.category,
+                                            storeName = item.name,
+                                            price = item.lowestPrice,
+                                            heartCount = item.heartCount,
+                                            onClickItem = navigateStoreDetail
+                                        ) {
+                                            controlMyJogboBottomSheet()
+                                            getJogboItems(item.id)
+                                            selectStoreItem(item)
+                                        }
+
+                                        if (item == storeItems.last()) {
+                                            Spacer(modifier = Modifier.height(12.dp))
                                         }
                                     }
                                 }
@@ -544,6 +530,7 @@ fun HomeScreen(
                     scaffoldState = bottomSheetScaffoldState,
                     sheetPeekHeight = animateDpAsState(
                         targetValue = if (isMainBottomSheetOpen) height.dp else 0.dp,
+                        animationSpec = tween(300),
                         label = ""
                     ).value,
                 ) {
