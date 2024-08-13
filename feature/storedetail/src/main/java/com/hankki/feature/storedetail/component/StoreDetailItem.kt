@@ -23,21 +23,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.extension.formatPrice
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.HankkiTheme
-import java.text.DecimalFormat
 
 @Composable
 fun StoreDetailItem(name: String, price: String) {
-    val formattedPrice = try {
-        val priceValue = price.toInt()
-        val formatter = DecimalFormat("#,###")
-        formatter.format(priceValue)
-    } catch (e: NumberFormatException) {
-        price
-    }
+    val formattedPrice = price.formatPrice()
 
     val minPadding = 5.dp
     val maxPadding = 27.dp
