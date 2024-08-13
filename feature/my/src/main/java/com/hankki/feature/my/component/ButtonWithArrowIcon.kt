@@ -39,7 +39,10 @@ fun ButtonWithArrowIcon(
             style = HankkiTheme.typography.body3,
             color = Gray900
         )
-        Image(painterResource(id = R.drawable.ic_arrow_right), "ic_arrow_right")
+        Image(
+            painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = "ic_arrow_right"
+        )
     }
     HorizontalDivider(thickness = 1.dp, color = Gray200)
 }
