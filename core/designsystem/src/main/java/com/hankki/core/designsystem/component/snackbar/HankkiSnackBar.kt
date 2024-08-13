@@ -16,7 +16,7 @@ fun HankkiSnackBar(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(6.dp))
-            .background(color = Gray800)
+            .background(color = Gray800.copy(alpha = 0.85f))
             .padding(vertical = 14.dp, horizontal = 22.dp)
     ) {
         content()
