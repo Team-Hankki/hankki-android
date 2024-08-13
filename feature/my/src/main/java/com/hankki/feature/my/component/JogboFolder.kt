@@ -77,7 +77,7 @@ fun JogboFolder(
                 }
             }
 
-            Spacer(modifier = Modifier.height(38.dp))
+            Spacer(modifier = Modifier.height(34.dp))
 
             Row(
                 modifier = Modifier

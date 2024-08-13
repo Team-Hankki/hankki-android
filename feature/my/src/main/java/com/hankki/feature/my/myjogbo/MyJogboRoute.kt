@@ -3,6 +3,7 @@ package com.hankki.feature.my.myjogbo
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.Gray900
@@ -146,7 +148,16 @@ fun MyJogboScreen(
 
         when (state) {
             UiState.Failure -> {}
-            UiState.Loading -> {}
+            UiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(White)
+                ) {
+                    HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                }
+            }
+
             is UiState.Success -> {
                 LazyVerticalGrid(
                     modifier = Modifier.padding(horizontal = 22.dp),
