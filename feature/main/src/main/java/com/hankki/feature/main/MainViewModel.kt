@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    networkMonitor: NetworkMonitor
+    networkMonitor: NetworkMonitor,
 ) : ViewModel() {
     val isConnected = networkMonitor.isConnected
 }
