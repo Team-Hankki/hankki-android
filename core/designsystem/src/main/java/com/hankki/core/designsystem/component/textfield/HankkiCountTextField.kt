@@ -39,6 +39,8 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 
+private const val TEXT_FIELD_LIMIT = 16
+
 @Composable
 fun HankkiCountTextField(
     title: String,
@@ -93,7 +95,7 @@ fun HankkiCountTextField(
                 ) {
                     if (trailingIcon) {
                         textFieldValue = newValue.copy(
-                            text = newValue.text.take(18),
+                            text = newValue.text.take(TEXT_FIELD_LIMIT),
                             selection = TextRange(newValue.text.length)
                         )
                         onValueChanged(textFieldValue.text)
@@ -106,7 +108,7 @@ fun HankkiCountTextField(
 
                         val parts = modifiedValue.split("#").filter { it.isNotEmpty() }
                         val limitedParts = parts.take(2)
-                        val processedParts = limitedParts.map { it.take(9) }
+                        val processedParts = limitedParts.map { it.take(8) }
 
                         modifiedValue = processedParts.joinToString("#", prefix = "#")
 
@@ -126,7 +128,7 @@ fun HankkiCountTextField(
             tailingIcon = {
                 if (trailingIcon)
                     Text(
-                        text = "(${valueLength}/18)",
+                        text = "(${valueLength}/$TEXT_FIELD_LIMIT)",
                         style = HankkiTheme.typography.body3,
                         color = Gray400
                     )

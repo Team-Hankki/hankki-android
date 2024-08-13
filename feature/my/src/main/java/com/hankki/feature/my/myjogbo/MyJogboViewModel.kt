@@ -2,6 +2,7 @@ package com.hankki.feature.my.myjogbo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.core.common.utill.UiState
 import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.myjogbo.model.toMyJogboModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,16 +24,17 @@ class MyJogboViewModel @Inject constructor(
 
     fun getMyJogboList() {
         viewModelScope.launch {
-            myRepository.getMyJogboList().onSuccess { jogboList ->
-                _myJogboState.value = _myJogboState.value.copy(
-                    myJogboItems = jogboList.map {
-                        it.toMyJogboModel()
-                    }.toPersistentList()
-                )
-            }
-                .onFailure { error ->
-                    Timber.e(error)
+            myRepository.getMyJogboList()
+                .onSuccess { jogboList ->
+                    _myJogboState.value = _myJogboState.value.copy(
+                        uiState = UiState.Success(
+                            jogboList.map {
+                                it.toMyJogboModel()
+                            }.toPersistentList()
+                        )
+                    )
                 }
+                .onFailure(Timber::e)
         }
     }
 
@@ -43,23 +45,37 @@ class MyJogboViewModel @Inject constructor(
     }
 
     fun updateJogboSeleted(index: Int, isJogboSelected: Boolean) {
-        if (_myJogboState.value.myJogboItems.size <= index) return
-        if (_myJogboState.value.myJogboItems.isEmpty()) return
+        val currentState = _myJogboState.value.uiState
+        if (currentState is UiState.Success) {
+            val jogboItems = currentState.data
+            if (jogboItems.size <= index) return
+            if (jogboItems.isEmpty()) return
 
-        _myJogboState.value = _myJogboState.value.copy(
-            myJogboItems = _myJogboState.value.myJogboItems.set(
-                index,
-                _myJogboState.value.myJogboItems[index].copy(jogboSelected = isJogboSelected)
+            _myJogboState.value = _myJogboState.value.copy(
+                uiState = UiState.Success(
+                    jogboItems.set(
+                        index,
+                        jogboItems[index].copy(jogboSelected = isJogboSelected)
+                    )
+                )
             )
-        )
+        }
     }
 
     fun resetJogboState() {
-        _myJogboState.value =
-            _myJogboState.value.copy(myJogboItems = _myJogboState.value.myJogboItems.map { jogboItem ->
-                jogboItem.copy(jogboSelected = false)
-            }.toPersistentList())
-        updateMode()
+        val currentState = _myJogboState.value.uiState
+        if (currentState is UiState.Success) {
+            val jogboItems = currentState.data
+            _myJogboState.value =
+                _myJogboState.value.copy(
+                    uiState = UiState.Success(
+                        jogboItems.map { jogboItem ->
+                            jogboItem.copy(jogboSelected = false)
+                        }.toPersistentList()
+                    )
+                )
+            updateMode()
+        }
     }
 
     fun updateToDialogState(state: Boolean) {
@@ -69,23 +85,25 @@ class MyJogboViewModel @Inject constructor(
     }
 
     fun deleteJogboStore() {
-        val deleteList = _myJogboState.value.myJogboItems.filter {
-            it.jogboSelected
-        }.map {
-            it.jogboId
-        }
-        viewModelScope.launch {
-            myRepository.deleteJogboStores(deleteList)
-                .onSuccess {
-                    _myJogboState.value = _myJogboState.value.copy(
-                        showDialog = false,
-                        editMode = false
-                    )
-                    getMyJogboList()
-                }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+        val currentState = _myJogboState.value.uiState
+        if (currentState is UiState.Success) {
+            val jogboItems = currentState.data
+            val deleteList = jogboItems.filter {
+                it.jogboSelected
+            }.map {
+                it.jogboId
+            }
+            viewModelScope.launch {
+                myRepository.deleteJogboStores(deleteList)
+                    .onSuccess {
+                        _myJogboState.value = _myJogboState.value.copy(
+                            showDialog = false,
+                            editMode = false
+                        )
+                        getMyJogboList()
+                    }
+                    .onFailure(Timber::e)
+            }
         }
     }
 }

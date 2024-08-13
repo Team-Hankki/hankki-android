@@ -41,9 +41,7 @@ class MyJogboDetailViewModel @Inject constructor(
                         storesUiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(jogbo.stores.toPersistentList())
                     )
                 }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+                .onFailure(Timber::e)
         }
     }
 
@@ -66,9 +64,7 @@ class MyJogboDetailViewModel @Inject constructor(
                     updateDeleteDialog(true)
                     getJogboDetail(favoriteId)
                 }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+                .onFailure(Timber::e)
         }
     }
 
@@ -101,9 +97,7 @@ class MyJogboDetailViewModel @Inject constructor(
                         )
                     )
                 }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+                .onFailure(Timber::e)
         }
     }
 }

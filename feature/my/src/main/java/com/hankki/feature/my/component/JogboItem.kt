@@ -1,11 +1,13 @@
 package com.hankki.feature.my.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray800
@@ -29,9 +30,9 @@ import com.hankki.core.designsystem.theme.Red500
 
 @Composable
 fun JogboItem(
-    id :Long,
+    id: Long,
     title: String,
-    image: Int,
+    @DrawableRes image: Int,
     modifier: Modifier = Modifier,
     isEditMode: Boolean = false,
     isSelected: Boolean = false,
@@ -43,7 +44,7 @@ fun JogboItem(
             .clip(RoundedCornerShape(12.dp))
             .background(Gray100)
             .run {
-                if (!isEditMode) noRippleClickable(onClick = {navigateToJogboDetail(id)})
+                if (!isEditMode) noRippleClickable(onClick = { navigateToJogboDetail(id) })
                 else noRippleClickable(onClick = editJogbo)
             }
     ) {
@@ -66,10 +67,10 @@ fun JogboItem(
                     color = Gray800
                 )
             }
-            AsyncImage(
-                model = image,
+            Image(
+                painter = painterResource(id = image),
                 contentDescription = "jogbo image",
-                modifier = modifier.wrapContentSize(),
+                modifier = modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
         }

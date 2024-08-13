@@ -38,7 +38,7 @@ class NewJogboViewModel @Inject constructor(
     }
 
     fun updateButtonState(title: String, tags: String) {
-        val tagsList = tags.split("#").filter { it.isNotBlank() }.joinToString("#", prefix = "#")
+        val tagsList = tags.replace("#", "")
 
         _newJogboState.value = _newJogboState.value.copy(
             isButtonEnabled = title.isNotEmpty() && tagsList.isNotEmpty()
@@ -50,18 +50,17 @@ class NewJogboViewModel @Inject constructor(
         return tagsWithoutHash.length
     }
 
-    fun createNewJogbo(){
+    fun createNewJogbo() {
         viewModelScope.launch {
             myRepository.createNewJogbo(
                 NewJogboEntity(
                     title = _newJogboState.value.title,
-                    details = _newJogboState.value.tags.split("#").filter { it.isNotBlank() }.map { "#$it" }
+                    details = _newJogboState.value.tags.split("#").filter { it.isNotBlank() }
+                        .map { "#$it" }
                 )
             ).onSuccess {
                 _newJogboSideEffect.emit(NewJogboSideEffect.NavigateToNewJogbo)
-            }.onFailure { error ->
-                Timber.e(error)
-            }
+            }.onFailure(Timber::e)
         }
     }
 }
