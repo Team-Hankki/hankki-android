@@ -94,8 +94,7 @@ fun HankkiCountTextField(
                 ) {
                     if (trailingIcon) {
                         textFieldValue = newValue.copy(
-                            text = newValue.text.take(TEXT_FIELD_LIMIT),
-                            selection = TextRange(newValue.text.length)
+                            text = newValue.text.take(TEXT_FIELD_LIMIT)
                         )
                         onValueChanged(textFieldValue.text)
                     } else {
@@ -116,8 +115,7 @@ fun HankkiCountTextField(
                         }
 
                         textFieldValue = newValue.copy(
-                            text = modifiedValue,
-                            selection = TextRange(modifiedValue.length)
+                            text = modifiedValue
                         )
 
                         onValueChanged(modifiedValue)
