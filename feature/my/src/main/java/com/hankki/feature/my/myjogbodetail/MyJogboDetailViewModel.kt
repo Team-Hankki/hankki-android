@@ -25,8 +25,8 @@ class MyJogboDetailViewModel @Inject constructor(
     val myJogboDetailState: StateFlow<MyJogboDetailState>
         get() = _myJogboDetailState.asStateFlow()
 
-    private val _mySideEffect: MutableSharedFlow<MyJogboSideEffect> = MutableSharedFlow()
-    val mySideEffect: SharedFlow<MyJogboSideEffect>
+    private val _mySideEffect: MutableSharedFlow<MyJogboDetailSideEffect> = MutableSharedFlow()
+    val mySideEffect: SharedFlow<MyJogboDetailSideEffect>
         get() = _mySideEffect.asSharedFlow()
 
     fun getJogboDetail(favoriteId: Long) {
@@ -76,13 +76,13 @@ class MyJogboDetailViewModel @Inject constructor(
 
     fun navigateToStoreDetail(storeId: Long) {
         viewModelScope.launch {
-            _mySideEffect.emit(MyJogboSideEffect.NavigateToDetail(storeId))
+            _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToDetail(storeId))
         }
     }
 
     fun navigateToHome() {
         viewModelScope.launch {
-            _mySideEffect.emit(MyJogboSideEffect.NavigateToHome)
+            _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToHome)
         }
     }
 

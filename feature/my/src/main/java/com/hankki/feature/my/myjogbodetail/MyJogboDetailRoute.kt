@@ -35,7 +35,6 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
-import com.hankki.core.designsystem.component.layout.CircleLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
@@ -74,9 +73,9 @@ fun MyJogboDetailRoute(
         myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+                    is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
 
-                    is MyJogboSideEffect.NavigateToHome -> navigateToHome()
+                    is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                 }
             }
     }
