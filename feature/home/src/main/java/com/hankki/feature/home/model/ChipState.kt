@@ -5,8 +5,6 @@ import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.White
-import com.hankki.core.designsystem.theme.Yellow
-import com.hankki.core.designsystem.theme.Yellow100
 import com.hankki.core.designsystem.theme.Yellow300
 import com.hankki.core.designsystem.theme.Yellow500
 
