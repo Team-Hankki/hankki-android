@@ -33,21 +33,36 @@ fun HankkiTopBar(
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.CenterStart
-        ){
+        ) {
             leadingIcon()
         }
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.CenterStart
-        ){
+            contentAlignment = Alignment.Center
+        ) {
             content()
         }
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.CenterEnd
-        ){
+        ) {
             trailingIcon()
         }
+    }
+}
+
+@Composable
+fun HankkiHeadTopBar(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {},
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(50.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        content()
     }
 }
 

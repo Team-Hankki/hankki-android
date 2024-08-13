@@ -69,6 +69,7 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
+import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -340,7 +341,7 @@ fun HomeScreen(
     Column(
         modifier = Modifier.padding(paddingValues)
     ) {
-        HankkiTopBar(
+        HankkiHeadTopBar(
             content = {
                 Row(
                     modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
