@@ -26,7 +26,8 @@ fun JogboItemText(
             .fillMaxWidth()
             .padding(
                 top = 14.dp,
-                start = 17.dp
+                start = 17.dp,
+                end = 22.dp
             ),
         maxLines = 3,
         overflow = TextOverflow.Ellipsis

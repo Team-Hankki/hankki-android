@@ -163,7 +163,7 @@ fun MyJogboDetailScreen(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
                     contentDescription = "Back",
                     modifier = Modifier
-                        .padding(start = 9.dp)
+                        .padding(start = 6.dp)
                         .size(44.dp)
                         .noRippleClickable(onClick = navigateUp),
                     tint = Color.Unspecified
@@ -181,7 +181,7 @@ fun MyJogboDetailScreen(
         Spacer(
             modifier = Modifier
                 .background(Red500)
-                .height(4.dp)
+                .height(16.dp)
         )
 
         JogboFolder(
