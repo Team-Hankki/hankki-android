@@ -14,7 +14,7 @@ data class StoresResponseDto(
         @SerialName("id")
         val id: Long,
         @SerialName("imageUrl")
-        val imageUrl: String,
+        val imageUrl: String?,
         @SerialName("category")
         val category: String,
         @SerialName("name")
