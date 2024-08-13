@@ -118,7 +118,7 @@ fun StoreDetailRoute(
                 isLiked = storeState.isLiked,
                 heartCount = storeState.heartCount,
                 imageUrl = storeDetail.imageUrls.firstOrNull()
-                    ?: (com.hankki.feature.storedetail.R.drawable.img_default_store_detail).toString(),
+                    ?: (com.hankki.feature.storedetail.R.drawable.img_store_default).toString(),
                 selectedIndex = storeState.selectedIndex,
                 buttonLabels = storeState.buttonLabels,
                 onNavigateUp = navigateUp,
@@ -243,6 +243,9 @@ fun StoreDetailScreen(
             .background(Gray50)
     ) {
         Box {
+            val isDefaultImage =
+                imageUrl == (com.hankki.feature.storedetail.R.drawable.img_store_default).toString()
+
             AsyncImage(
                 model = imageUrl,
                 contentDescription = "식당 사진",
@@ -250,16 +253,18 @@ fun StoreDetailScreen(
                     .fillMaxSize()
                     .aspectRatio(1.5f),
                 contentScale = ContentScale.FillBounds,
-                placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
-                error = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail)
+                placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default),
+                error = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default)
             )
 
-            Image(
-                painter = painterResource(id = R.drawable.img_black_gradation_top),
-                contentDescription = "black gradient",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
+            if (!isDefaultImage) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_black_gradation_top),
+                    contentDescription = "black gradient",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds
+                )
+            }
 
             Column {
                 Spacer(modifier = Modifier.statusBarsPadding())
