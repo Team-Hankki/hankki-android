@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
@@ -15,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -27,6 +29,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.core.designsystem.component.layout.EmptyView
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
@@ -34,7 +38,6 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.core.designsystem.component.layout.EmptyView
 import com.hankki.feature.my.component.StoreItem
 import com.hankki.feature.my.mystore.model.MyStoreModel
 import kotlinx.collections.immutable.PersistentList
@@ -52,6 +55,7 @@ fun MyStoreRoute(
 
     LaunchedEffect(type) {
         if (type == "like") {
+            if (myStoreState.uiState is EmptyUiState.Success) return@LaunchedEffect
             myStoreViewModel.getLikedStoreList()
         } else {
             myStoreViewModel.getReportedStoreList()
@@ -128,7 +132,13 @@ fun MyStoreScreen(
 
                 EmptyUiState.Failure -> {}
 
-                EmptyUiState.Loading -> {}
+                EmptyUiState.Loading -> {
+                    HankkiLoadingScreen(
+                        modifier = Modifier
+                            .width(120.dp)
+                            .align(Alignment.Center)
+                    )
+                }
 
                 is EmptyUiState.Success -> {
                     LazyColumn {
