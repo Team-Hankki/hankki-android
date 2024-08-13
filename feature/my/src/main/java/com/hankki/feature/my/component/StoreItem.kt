@@ -33,7 +33,7 @@ import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -140,7 +140,7 @@ fun StoreItem(
                 modifier = Modifier
                     .size(52.dp)
                     .noRippleClickable(onClick = editSelected),
-                tint = if (isIconSelected) Red else Gray200
+                tint = if (isIconSelected) Red500 else Gray200
             )
         }
     }

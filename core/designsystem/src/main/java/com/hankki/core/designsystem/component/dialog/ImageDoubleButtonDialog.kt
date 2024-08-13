@@ -28,7 +28,7 @@ import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -61,14 +61,14 @@ fun ImageDoubleButtonDialog(
                 Spacer(modifier = Modifier.height(26.dp))
 
                 val nameText = buildAnnotatedString {
-                    append(AnnotatedString(name, SpanStyle(color = Red)))
+                    append(AnnotatedString(name, SpanStyle(color = Red500)))
                     append(AnnotatedString("님,", SpanStyle(color = Gray900)))
                 }
 
                 Text(
                     text = nameText,
                     style = HankkiTheme.typography.sub3,
-                    color = Red,
+                    color = Red500,
                     textAlign = TextAlign.Center
                 )
 

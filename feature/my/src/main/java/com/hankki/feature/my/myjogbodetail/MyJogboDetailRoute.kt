@@ -41,11 +41,11 @@ import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.EmptyViewWithButton
+import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.MoveToHomeButton
 import com.hankki.feature.my.component.StoreItem
@@ -148,16 +148,16 @@ fun MyJogboDetailScreen(
         modifier = Modifier
             .padding(bottom = paddingValues.calculateBottomPadding())
             .fillMaxSize()
-            .background(Red),
+            .background(Red500),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(
             modifier = Modifier
                 .statusBarsPadding()
-                .background(Red)
+                .background(Red500)
         )
         HankkiTopBar(
-            modifier = Modifier.background(Red),
+            modifier = Modifier.background(Red500),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
@@ -180,7 +180,7 @@ fun MyJogboDetailScreen(
 
         Spacer(
             modifier = Modifier
-                .background(Red)
+                .background(Red500)
                 .height(4.dp)
         )
 

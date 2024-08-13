@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.graphics.Color
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -30,7 +30,7 @@ fun StoreDetailMenuButton(
     onClick: () -> Unit,
     tailingIcon: @Composable () -> Unit = {},
     isSelected: Boolean = false,
-    borderColor: Color = if (isSelected) Red else Gray200
+    borderColor: Color = if (isSelected) Red500 else Gray200
 ) {
 
     Box(
@@ -62,7 +62,7 @@ fun StoreDetailReportButton(
     onClick: () -> Unit,
     tailingIcon: @Composable () -> Unit = {},
     isSelected: Boolean = false,
-    borderColor: Color = if (isSelected) Red else Gray200
+    borderColor: Color = if (isSelected) Red500 else Gray200
 ) {
 
     Box(

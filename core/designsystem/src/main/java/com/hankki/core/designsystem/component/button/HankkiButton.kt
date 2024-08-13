@@ -18,8 +18,8 @@ import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
-import com.hankki.core.designsystem.theme.SemiRed
+import com.hankki.core.designsystem.theme.Red500
+import com.hankki.core.designsystem.theme.Red400
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -41,7 +41,7 @@ fun HankkiButton(
                 else this
             }
             .clip(RoundedCornerShape(16.dp))
-            .background(if (enabled) Red else SemiRed)
+            .background(if (enabled) Red500 else Red400)
             .padding(vertical = 15.dp, horizontal = 22.dp)
     ) {
         Text(
@@ -75,7 +75,7 @@ fun HankkiTextButton(
         Text(
             text = text,
             style = textStyle,
-            color = Red
+            color = Red500
         )
     }
 }

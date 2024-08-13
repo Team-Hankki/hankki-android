@@ -66,7 +66,7 @@ import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.report.entity.CategoryEntity
 import com.hankki.feature.report.main.component.SelectedImageController
@@ -353,7 +353,7 @@ fun ReportTopContent(
         Text(
             text = count.toString() + stringResource(id = com.hankki.feature.report.R.string.counted_report),
             style = HankkiTheme.typography.body4,
-            color = if (location.isEmpty()) Red else Gray600,
+            color = if (location.isEmpty()) Red500 else Gray600,
             modifier = Modifier.padding(start = 4.dp)
         )
 

@@ -1,5 +1,6 @@
 package com.hankki.feature.home.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -8,11 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,10 +35,9 @@ fun RepositionButton(
                 .background(White)
                 .noRippleClickable(onClick = onClick)
         ) {
-            Icon(
+            Image(
                 painter = painterResource(id = R.drawable.ic_map_here),
-                contentDescription = "reposition user location",
-                tint = Color.Unspecified
+                contentDescription = "reposition user location"
             )
         }
         Spacer(modifier = Modifier.height(height))

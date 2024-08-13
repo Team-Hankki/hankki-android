@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.feature.my.R
 import kotlinx.collections.immutable.PersistentList
 
@@ -41,7 +41,7 @@ fun JogboFolder(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Red)
+            .background(Red500)
             .padding(top = 4.dp, bottom = 22.dp)
             .padding(horizontal = 22.dp)
             .paint(

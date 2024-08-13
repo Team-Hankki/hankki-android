@@ -26,7 +26,7 @@ import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.RedLight
+import com.hankki.core.designsystem.theme.Red100
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -137,7 +137,7 @@ fun DoubleCenterButtonDialog(
                         onClick = onNegativeButtonClicked,
                         enabled = true,
                         modifier = Modifier.defaultMinSize(94.dp),
-                        backgroundColor = RedLight,
+                        backgroundColor = Red100,
                         textStyle = HankkiTheme.typography.sub3
                     )
                     Spacer(modifier = Modifier.width(24.dp))
