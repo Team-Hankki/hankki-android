@@ -25,4 +25,8 @@ interface StoreDetailDataSource {
     suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): CreatedBaseResponse
 
     suspend fun getStoreDetailNickname(): BaseResponse<StoreDetailNicknameResponseDto>
+
+    suspend fun deleteStoreDetail(
+        storeId: Long,
+    )
 }

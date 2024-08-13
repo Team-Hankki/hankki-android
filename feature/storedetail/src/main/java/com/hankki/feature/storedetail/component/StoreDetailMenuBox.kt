@@ -53,6 +53,7 @@ fun StoreDetailMenuBox(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
+
             Text(
                 text = title,
                 style = HankkiTheme.typography.suitH1,
@@ -61,6 +62,7 @@ fun StoreDetailMenuBox(
                 color = Gray900,
                 modifier = Modifier.weight(1f, false)
             )
+
             Spacer(modifier = Modifier.width(8.dp))
             HankkiCategoryChip(text = tag)
         }

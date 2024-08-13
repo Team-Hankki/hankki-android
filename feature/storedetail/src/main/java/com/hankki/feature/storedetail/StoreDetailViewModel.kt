@@ -163,4 +163,15 @@ class StoreDetailViewModel @Inject constructor(
     fun closeDialog() {
         _dialogState.value = StoreDetailDialogState.CLOSED
     }
+
+    fun deleteStoreDetail(storeId: Long) {
+        viewModelScope.launch {
+            storeDetailRepository.deleteStoreDetail(storeId)
+                .onSuccess {
+                    Timber.d("Store delete successfully")
+                }.onFailure { error ->
+                    Timber.e("Failed to delete store123: ${error.message}")
+                }
+        }
+    }
 }

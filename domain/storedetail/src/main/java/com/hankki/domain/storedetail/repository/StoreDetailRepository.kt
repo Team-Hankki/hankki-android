@@ -23,4 +23,6 @@ interface StoreDetailRepository {
     suspend fun addStoreAtJogbo(favoriteId: Long, storeId: Long): Result<Unit>
 
     suspend fun getStoreDetailNickname(): Result<StoreDetailNicknameEntity>
+
+    suspend fun deleteStoreDetail(storeId: Long) : Result<Unit>
 }

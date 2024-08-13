@@ -501,7 +501,7 @@ fun HomeScreen(
                             } else {
                                 LazyColumn(
                                     modifier = Modifier
-                                        .fillMaxSize()
+                                        .fillMaxWidth()
                                         .background(White),
                                     state = listState
                                 ) {
