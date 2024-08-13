@@ -5,9 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -146,8 +144,6 @@ fun MyJogboScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
-
         when (state) {
             UiState.Failure -> {}
             UiState.Loading -> {}
@@ -156,7 +152,8 @@ fun MyJogboScreen(
                     modifier = Modifier.padding(horizontal = 22.dp),
                     columns = GridCells.Fixed(2),
                     verticalArrangement = Arrangement.spacedBy(20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    contentPadding = PaddingValues(top = 32.dp, bottom = 34.dp)
                 ) {
                     item {
                         AddJogboItem(
