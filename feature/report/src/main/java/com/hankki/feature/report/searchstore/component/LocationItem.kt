@@ -22,8 +22,8 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
-import com.hankki.core.designsystem.theme.RedLight
+import com.hankki.core.designsystem.theme.Red500
+import com.hankki.core.designsystem.theme.Red100
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -38,7 +38,7 @@ fun LocationItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .background(if (isSelected) RedLight else White)
+            .background(if (isSelected) Red100 else White)
             .padding(vertical = 24.dp)
             .padding(start = 22.dp, end = 14.dp)
             .noRippleClickable(onClick)
@@ -51,7 +51,7 @@ fun LocationItem(
             Text(
                 text = location,
                 style = HankkiTheme.typography.suitSub1,
-                color = if (isSelected) Red else Gray900
+                color = if (isSelected) Red500 else Gray900
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(

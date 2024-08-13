@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_UNDER20_REGEX
+import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER30_REGEX
 import com.hankki.core.common.utill.VALID_NUMBER_UNDER_100000_REGEX
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray300
@@ -28,7 +28,7 @@ import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 
 @Composable
 fun HankkiTitleTextField(
@@ -46,19 +46,19 @@ fun HankkiTitleTextField(
     var isFocused by remember { mutableStateOf(false) }
 
     val titleColor = when {
-        isError -> Red
+        isError -> Red500
         isFocused -> Gray800
         else -> Gray500
     }
 
     val borderColor = when {
-        isError -> Red
+        isError -> Red500
         isFocused -> Gray850
         else -> Gray300
     }
 
     val textColor = when {
-        isError -> Red
+        isError -> Red500
         else -> Gray800
     }
 
@@ -93,7 +93,7 @@ fun HankkiTitleTextField(
                 Text(
                     text = errorMessage,
                     style = HankkiTheme.typography.caption1,
-                    color = Red
+                    color = Red500
                 )
             }
         }
@@ -113,7 +113,7 @@ fun HankkiMenuTextField(
         value = value,
         placeholder = placeholder,
         onTextChanged = { menu ->
-            if (KOREAN_NUMBER_ENGLISH_SPECIAL_UNDER20_REGEX.matcher(menu).matches()) {
+            if (KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER30_REGEX.matcher(menu).matches()) {
                 onTextChanged(menu)
             }
         },

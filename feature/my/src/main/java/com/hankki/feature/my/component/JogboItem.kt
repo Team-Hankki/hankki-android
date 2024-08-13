@@ -26,7 +26,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 
 @Composable
 fun JogboItem(
@@ -80,7 +80,7 @@ fun JogboItem(
                     .matchParentSize()
                     .border(
                         width = 2.dp,
-                        color = Red,
+                        color = Red500,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {

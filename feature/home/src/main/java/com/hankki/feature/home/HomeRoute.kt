@@ -7,18 +7,17 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.view.Gravity
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideOut
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +26,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -53,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,7 +67,8 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
-import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.component.layout.EmptyImageWithText
+import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray900
@@ -145,12 +146,19 @@ fun HomeRoute(
                         ).animate(CameraAnimation.Fly)
                     )
                 }
+
+                is HomeSideEffect.MoveMyLocation -> {
+                    focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                        viewModel.moveMap(location.latitude, location.longitude)
+                    }.addOnFailureListener {
+                        viewModel.moveMap(
+                            state.myUniversityModel.latitude,
+                            state.myUniversityModel.longitude
+                        )
+                    }
+                }
             }
         }
-    }
-
-    LaunchedEffect(key1 = true) {
-        viewModel.getUniversityInformation()
     }
 
     LaunchedEffect(
@@ -163,9 +171,8 @@ fun HomeRoute(
             state.priceChipState !is ChipState.Selected &&
             state.sortChipState !is ChipState.Selected
         ) {
-            viewModel.fetchData()
+            viewModel.getUniversityInformation()
         }
-
     }
 
     HomeScreen(
@@ -225,9 +232,7 @@ fun HomeRoute(
         ) {
             viewModel.setDialog(true)
         } else {
-            focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                viewModel.moveMap(location.latitude, location.longitude)
-            }
+            viewModel.moveMyLocation()
         }
     }
 }
@@ -289,7 +294,7 @@ fun HomeScreen(
     val listState = rememberLazyListState()
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
-        mutableDoubleStateOf(configuration.screenHeightDp * 0.3)
+        mutableDoubleStateOf(configuration.screenHeightDp * 0.34)
     }
 
     LaunchedEffect(
@@ -338,15 +343,16 @@ fun HomeScreen(
     Column(
         modifier = Modifier.padding(paddingValues)
     ) {
-        HankkiTopBar(
+        HankkiHeadTopBar(
             content = {
                 Row(
                     modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Spacer(modifier = Modifier.padding(start = 22.dp))
                     Text(
                         text = universityName,
-                        style = HankkiTheme.typography.suitH2,
+                        style = HankkiTheme.typography.sub1,
                         color = Gray900
                     )
                     Icon(
@@ -458,44 +464,41 @@ fun HomeScreen(
                 BottomSheetScaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = 30.dp,
-                                topEnd = 30.dp
-                            )
-                        )
                         .ignoreNextModifiers(),
                     sheetBackgroundColor = Color.Transparent,
                     backgroundColor = Color.Transparent,
+                    sheetShape = RoundedCornerShape(
+                        topStart = 30.dp,
+                        topEnd = 30.dp
+                    ),
                     sheetGesturesEnabled = true,
                     sheetContent = {
-                        AnimatedVisibility(
-                            visible = isMainBottomSheetOpen,
-                            enter = EnterTransition.None,
-                            exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(White)
+                                .sizeIn(minHeight = height.dp),
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .clip(
-                                        RoundedCornerShape(
-                                            topStart = 30.dp,
-                                            topEnd = 30.dp
-                                        )
-                                    )
-                                    .fillMaxSize()
-                                    .background(White)
-                            ) {
-                                Spacer(
-                                    modifier = Modifier.height(8.dp)
-                                )
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_drag_handle),
-                                    contentDescription = "drag handle",
-                                    tint = Gray200,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                                Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(
+                                modifier = Modifier.height(8.dp)
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_drag_handle),
+                                contentDescription = "drag handle",
+                                tint = Gray200,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
 
+                            if (storeItems.isEmpty()) {
+                                Spacer(modifier = Modifier.height(27.dp))
+                                EmptyImageWithText(
+                                    text = "조건에 맞는 식당이 없어요",
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+
+                                )
+                            } else {
                                 LazyColumn(
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -531,6 +534,7 @@ fun HomeScreen(
                     scaffoldState = bottomSheetScaffoldState,
                     sheetPeekHeight = animateDpAsState(
                         targetValue = if (isMainBottomSheetOpen) height.dp else 0.dp,
+                        animationSpec = tween(300),
                         label = ""
                     ).value,
                 ) {
@@ -546,7 +550,7 @@ fun HomeScreen(
                                     height = height.dp,
                                     modifier = Modifier.padding(
                                         bottom = 12.dp,
-                                        end = 12.dp
+                                        end = 22.dp
                                     ),
                                     onClick = reposition
                                 )
@@ -561,7 +565,7 @@ fun HomeScreen(
                                 ) {
                                     RepositionButton(
                                         height = 0.dp,
-                                        modifier = Modifier.padding(end = 12.dp),
+                                        modifier = Modifier.padding(end = 22.dp),
                                         onClick = reposition
                                     )
                                 }

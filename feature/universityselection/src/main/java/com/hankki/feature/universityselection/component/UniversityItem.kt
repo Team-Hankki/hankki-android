@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 
 @Composable
@@ -27,6 +27,6 @@ fun UniversityItem(
                 onSelectUniversity(university.name)
             }
             .padding(14.dp),
-        color = if (isSelected) Red else Gray800
+        color = if (isSelected) Red500 else Gray800
     )
 }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 
@@ -34,7 +34,7 @@ fun JogboShareButton(
         Icon(
             painter = painterResource(id = R.drawable.ic_share),
             contentDescription = "share",
-            tint = Red
+            tint = Red500
         )
         Text(text = "공유", style = HankkiTheme.typography.body3, color = White)
     }

@@ -26,6 +26,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -61,7 +62,10 @@ import com.hankki.feature.universityselection.navigation.UniversitySelection
 import com.hankki.feature.universityselection.navigation.universitySelectionNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+private const val SNACK_BAR_DURATION = 2000L
 
 @Composable
 internal fun MainScreen(
@@ -73,9 +77,14 @@ internal fun MainScreen(
     val onShowTextSnackBarWithButton: (String, Long) -> Unit = { message, jogboId ->
         coroutineScope.launch {
             textSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
-            textSnackBarWithButtonHostState.showSnackbar(
-                message = "$message/$jogboId",
-            )
+
+            val job = launch {
+                textSnackBarWithButtonHostState.showSnackbar(
+                    message = "$message/$jogboId",
+                )
+            }
+            delay(SNACK_BAR_DURATION)
+            job.cancel()
         }
     }
 
@@ -83,9 +92,14 @@ internal fun MainScreen(
     val onShowWhiteSnackBarWithButton: (String, Long) -> Unit = { message, jogboId ->
         coroutineScope.launch {
             whiteSnackBarWithButtonHostState.currentSnackbarData?.dismiss()
-            whiteSnackBarWithButtonHostState.showSnackbar(
-                message = "$message/$jogboId",
-            )
+
+            val job = launch {
+                whiteSnackBarWithButtonHostState.showSnackbar(
+                    message = "$message/$jogboId",
+                )
+            }
+            delay(SNACK_BAR_DURATION)
+            job.cancel()
         }
     }
 
@@ -340,12 +354,12 @@ private fun MainBottomBar(
             HorizontalDivider(
                 color = Gray100
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(11.dp))
             Row(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .fillMaxWidth()
-                    .height(75.dp),
+                    .height(47.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {

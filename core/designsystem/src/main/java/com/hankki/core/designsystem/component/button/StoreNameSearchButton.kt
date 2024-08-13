@@ -27,8 +27,8 @@ import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
-import com.hankki.core.designsystem.theme.RedLight
+import com.hankki.core.designsystem.theme.Red500
+import com.hankki.core.designsystem.theme.Red100
 
 @Composable
 fun StoreNameSearchButton(
@@ -74,7 +74,7 @@ fun StoreNameSelectedButton(
         modifier = modifier
             .bounceClick(onClick = onClick)
             .clip(RoundedCornerShape(10.dp))
-            .background(RedLight)
+            .background(Red100)
             .padding(vertical = 12.dp, horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -82,7 +82,7 @@ fun StoreNameSelectedButton(
         Text(
             text = text,
             style = HankkiTheme.typography.sub3,
-            color = Red,
+            color = Red500,
             modifier = Modifier.weight(1f, fill = false),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

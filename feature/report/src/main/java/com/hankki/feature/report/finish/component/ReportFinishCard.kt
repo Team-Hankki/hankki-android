@@ -27,12 +27,13 @@ import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun ReportFinishCard(
     storeName: String,
+    isAddedJogbo: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -79,11 +80,18 @@ fun ReportFinishCard(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_red),
                     contentDescription = "add",
-                    tint = Red
+                    tint = Red500
                 )
                 Text(
-                    text = stringResource(id = com.hankki.feature.report.R.string.add_my_jogbo),
-                    color = Red,
+                    text = stringResource(
+                        id =
+                        if (isAddedJogbo){
+                            com.hankki.feature.report.R.string.add_my_other_jogbo
+                        }else {
+                            com.hankki.feature.report.R.string.add_my_jogbo
+                        }
+                    ),
+                    color = Red500,
                     style = HankkiTheme.typography.body3,
                     modifier = Modifier
                 )
@@ -96,6 +104,6 @@ fun ReportFinishCard(
 @Composable
 fun ReportFinishCardPreview() {
     HankkijogboTheme {
-        ReportFinishCard(storeName = "한끼네 한정식", onClick = {}, modifier = Modifier.fillMaxWidth())
+        ReportFinishCard(storeName = "한끼네 한정식", isAddedJogbo = false, onClick = {}, modifier = Modifier.fillMaxWidth())
     }
 }

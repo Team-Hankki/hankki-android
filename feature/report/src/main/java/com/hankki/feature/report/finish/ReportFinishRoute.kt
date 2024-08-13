@@ -87,8 +87,8 @@ fun ReportFinishRoute(
         storeName = state.storeName,
         storeId = state.storeId,
         showBottomSheet = state.showBottomSheet,
+        isAddedJogbo = state.isAddedJogbo,
         jogboItems = state.jogboItems,
-        onShowSnackBar = onShowSnackBar,
         addNewJogbo = {
             navigateToAddNewJogbo()
             viewModel.controlBottomSheetState(false)
@@ -107,16 +107,14 @@ fun ReportFinishScreen(
     storeName: String,
     storeId: Long,
     showBottomSheet: Boolean,
+    isAddedJogbo: Boolean,
     jogboItems: PersistentList<JogboResponseModel>,
-    onShowSnackBar: (String, Long) -> Unit = { _, _ -> },
     addNewJogbo: () -> Unit = {},
     bottomSheetControl: (Boolean) -> Unit = { },
     moveToStoreDetail: () -> Unit = { },
     moveToHome: () -> Unit = { },
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
 ) {
-    val localContextResource = LocalContext.current.resources
-
     if (showBottomSheet) {
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
@@ -124,10 +122,6 @@ fun ReportFinishScreen(
             onDismissRequest = { bottomSheetControl(false) },
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, storeId)
-                onShowSnackBar(
-                    localContextResource.getString(R.string.add_store_at_jogbo),
-                    jogboId
-                )
             }
         )
     }
@@ -181,7 +175,7 @@ fun ReportFinishScreen(
                 style = HankkiTheme.typography.suitH2
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text( // TODO: 이 부분은 랜덤 텍스트가 들어가고, 아직 확정나지 않아 하드코딩 해두겠습니다.
+            Text(
                 text = "${name}님이 모두의 지갑을 지켰어요!",
                 color = Gray500,
                 style = HankkiTheme.typography.suitBody1
@@ -191,6 +185,7 @@ fun ReportFinishScreen(
 
             ReportFinishCard(
                 storeName = storeName,
+                isAddedJogbo = isAddedJogbo,
                 onClick = { bottomSheetControl(true) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -229,6 +224,7 @@ fun PreviewReportFinishScreen() {
             storeName = "한끼네 한정식",
             storeId = 1,
             showBottomSheet = false,
+            isAddedJogbo = false,
             jogboItems = persistentListOf()
         )
     }

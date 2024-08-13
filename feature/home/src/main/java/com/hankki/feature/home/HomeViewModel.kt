@@ -40,24 +40,30 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
-                    if (_state.value.myUniversityModel.id != university.id) {
-                        _state.value = _state.value.copy(
-                            myUniversityModel = university.toModel()
-                        )
-                        moveMap(
-                            _state.value.myUniversityModel.latitude,
-                            _state.value.myUniversityModel.longitude
-                        )
-                        fetchData()
-                    }
+                    _state.value = _state.value.copy(
+                        myUniversityModel = university.toModel()
+                    )
+                    moveMap(
+                        state.value.myUniversityModel.latitude,
+                        state.value.myUniversityModel.longitude
+                    )
+                    fetchData()
                 }.onFailure { error ->
+                    if (state.value.myUniversityModel.id == null) {
+                        moveMyLocation()
+                    } else {
+                        moveMap(
+                            state.value.myUniversityModel.latitude,
+                            state.value.myUniversityModel.longitude
+                        )
+                    }
                     fetchData()
                     Timber.e(error)
                 }
         }
     }
 
-    fun fetchData() {
+    private fun fetchData() {
         getStoreItems()
         getMarkerItems()
     }
@@ -65,6 +71,12 @@ class HomeViewModel @Inject constructor(
     fun moveMap(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             _sideEffect.emit(HomeSideEffect.MoveMap(latitude, longitude))
+        }
+    }
+
+    fun moveMyLocation() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.MoveMyLocation)
         }
     }
 
@@ -231,7 +243,7 @@ class HomeViewModel @Inject constructor(
             targetChipState = _state.value.sortChipState,
             updateState = { _state.value = _state.value.copy(sortChipState = it) },
             fetchItems = { homeRepository.getSortCategories() }
-        ){ chips ->
+        ) { chips ->
             _state.value = _state.value.copy(
                 sortChipItems = chips.map { chip ->
                     chip as CategoriesEntity
