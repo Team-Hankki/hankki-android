@@ -10,5 +10,6 @@ data class ReportFinishState(
     val storeName: String = "",
     val storeId: Long = 0,
     val showBottomSheet: Boolean = false,
+    val isAddedJogbo: Boolean = false,
     val jogboItems: PersistentList<JogboResponseModel> = persistentListOf(),
 )

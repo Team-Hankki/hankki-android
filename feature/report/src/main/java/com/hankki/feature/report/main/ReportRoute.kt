@@ -31,12 +31,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -56,6 +54,7 @@ import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.StoreNameSearchButton
 import com.hankki.core.designsystem.component.button.StoreNameSelectedButton
 import com.hankki.core.designsystem.component.chip.HankkiChipWithIcon
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiMenuTextField
 import com.hankki.core.designsystem.component.textfield.HankkiPriceTextField
@@ -114,6 +113,8 @@ fun ReportRoute(
                     sideEffect.storeName,
                     sideEffect.storeId
                 )
+
+                ReportSideEffect.UniversityError -> navigateUp()
             }
         }
     }
@@ -125,6 +126,8 @@ fun ReportRoute(
         navigateUp = navigateUp,
         categoryList = state.categoryList,
         selectedImageUri = state.selectedImageUri,
+        isUniversityError = state.isUniversityError,
+        onDismissDialog = { viewModel.universityErrorSideEffect() },
         selectImageUri = {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         },
@@ -150,6 +153,8 @@ fun ReportScreen(
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
     selectedImageUri: Uri?,
+    isUniversityError: Boolean,
+    onDismissDialog: () -> Unit = {},
     selectImageUri: () -> Unit,
     clearSelectedImageUri: () -> Unit = {},
     selectedCategory: String?,
@@ -165,8 +170,15 @@ fun ReportScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
     val isVisibleIme = WindowInsets.isImeVisible
+
+    if (isUniversityError) {
+        SingleButtonDialog(
+            title = "대학교를 먼저 선택해주세요",
+            buttonTitle = "확인",
+            onConfirmation = onDismissDialog
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -212,7 +224,7 @@ fun ReportScreen(
                     thickness = 12.dp,
                     color = Gray100
                 )
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Column(
                     modifier = Modifier
@@ -228,17 +240,17 @@ fun ReportScreen(
                         selectCategory(item)
                     }
 
-                    Spacer(modifier = Modifier.height(50.dp))
+                    Spacer(modifier = Modifier.height(48.dp))
 
                     Column(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
                             text = stringResource(id = com.hankki.feature.report.R.string.add_menu_title),
-                            style = HankkiTheme.typography.sub1,
+                            style = HankkiTheme.typography.sub2,
                             color = Gray900
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(3.dp))
                         Text(
                             text = stringResource(id = com.hankki.feature.report.R.string.add_menu_sub_title),
                             style = HankkiTheme.typography.body4,
@@ -247,12 +259,12 @@ fun ReportScreen(
 
 
                         if (selectedImageUri == null) {
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(24.dp))
                             AddPhotoButton(
                                 onClick = selectImageUri,
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(24.dp))
                         } else {
                             Spacer(modifier = Modifier.height(20.dp))
                             SelectedImageController(
@@ -380,10 +392,10 @@ fun StoreCategoryChips(
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
-            style = HankkiTheme.typography.sub1,
+            style = HankkiTheme.typography.sub2,
             color = Gray900
         )
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         FlowRow(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -498,7 +510,9 @@ fun ReportScreenPreview() {
             addMenu = {},
             deleteMenu = {},
             navigateSearchStore = {},
-            submitReport = {}
+            submitReport = {},
+            isUniversityError = false,
+            onDismissDialog = {}
         )
     }
 }

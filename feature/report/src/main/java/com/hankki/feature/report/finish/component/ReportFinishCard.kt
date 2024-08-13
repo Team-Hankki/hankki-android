@@ -33,6 +33,7 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun ReportFinishCard(
     storeName: String,
+    isAddedJogbo: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -82,7 +83,14 @@ fun ReportFinishCard(
                     tint = Red
                 )
                 Text(
-                    text = stringResource(id = com.hankki.feature.report.R.string.add_my_jogbo),
+                    text = stringResource(
+                        id =
+                        if (isAddedJogbo){
+                            com.hankki.feature.report.R.string.add_my_other_jogbo
+                        }else {
+                            com.hankki.feature.report.R.string.add_my_jogbo
+                        }
+                    ),
                     color = Red,
                     style = HankkiTheme.typography.body3,
                     modifier = Modifier
@@ -96,6 +104,6 @@ fun ReportFinishCard(
 @Composable
 fun ReportFinishCardPreview() {
     HankkijogboTheme {
-        ReportFinishCard(storeName = "한끼네 한정식", onClick = {}, modifier = Modifier.fillMaxWidth())
+        ReportFinishCard(storeName = "한끼네 한정식", isAddedJogbo = false, onClick = {}, modifier = Modifier.fillMaxWidth())
     }
 }

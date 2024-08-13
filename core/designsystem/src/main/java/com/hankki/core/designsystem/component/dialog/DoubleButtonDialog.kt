@@ -46,7 +46,12 @@ fun DoubleButtonDialog(
             ),
         ) {
             Column(
-                modifier = Modifier.padding(20.dp),
+                modifier = Modifier.padding(
+                    top = 20.dp,
+                    start = 20.dp,
+                    end = 18.dp,
+                    bottom = 18.dp
+                ),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.End
             ) {
