@@ -47,7 +47,6 @@ fun StoreItem(
     isIconSelected: Boolean,
     modifier: Modifier = Modifier,
     editSelected: () -> Unit = {},
-    onClickItem: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -90,7 +89,7 @@ fun StoreItem(
                 HankkiCategoryChip(text = category)
             }
 
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(2.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
