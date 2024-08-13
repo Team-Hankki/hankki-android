@@ -172,6 +172,7 @@ fun StoreDetailRoute(
                 onPositiveButtonClicked = {
                     viewModel.showThankYouDialog()
                     viewModel.resetSelectedIndex()
+                    viewModel.deleteStoreDetail(storeId)
                 }
             )
         }
@@ -265,9 +266,10 @@ fun StoreDetailScreen(
                 HankkiTopBar(
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_back),
+                            painter = painterResource(id = R.drawable.ic_arrow_left_gray50),
                             contentDescription = "뒤로가기",
                             modifier = Modifier
+                                .offset(x = 16.dp, y = 12.dp)
                                 .size(48.dp)
                                 .noRippleClickable(onClick = onNavigateUp),
                             tint = Color.Unspecified
@@ -298,7 +300,7 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = heartCount.toString(),
-                                style = HankkiTheme.typography.sub3,
+                                style = HankkiTheme.typography.body4,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 color = Gray500,
@@ -322,7 +324,7 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
-                                style = HankkiTheme.typography.sub3,
+                                style = HankkiTheme.typography.body4,
                                 color = Gray500
                             )
                         },
