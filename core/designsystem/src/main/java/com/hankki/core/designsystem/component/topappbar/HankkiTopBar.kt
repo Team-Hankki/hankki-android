@@ -87,4 +87,3 @@ fun HankkiTopBarPreview() {
         trailingIcon = {}
     )
 }
-

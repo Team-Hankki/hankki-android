@@ -52,4 +52,9 @@ class StoreDetailRepositoryImpl @Inject constructor(
         runCatching {
             storeDetailDataSource.getStoreDetailNickname().data.toStoreDetailNicknameEntity()
         }
+
+    override suspend fun deleteStoreDetail(storeId: Long): Result<Unit> =
+        runCatching {
+            storeDetailDataSource.deleteStoreDetail(storeId)
+        }
 }

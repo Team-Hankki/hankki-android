@@ -118,7 +118,7 @@ fun StoreDetailRoute(
                 isLiked = storeState.isLiked,
                 heartCount = storeState.heartCount,
                 imageUrl = storeDetail.imageUrls.firstOrNull()
-                    ?: (com.hankki.feature.storedetail.R.drawable.img_default_store_detail).toString(),
+                    ?: (com.hankki.feature.storedetail.R.drawable.img_store_default).toString(),
                 selectedIndex = storeState.selectedIndex,
                 buttonLabels = storeState.buttonLabels,
                 onNavigateUp = navigateUp,
@@ -172,6 +172,7 @@ fun StoreDetailRoute(
                 onPositiveButtonClicked = {
                     viewModel.showThankYouDialog()
                     viewModel.resetSelectedIndex()
+                    viewModel.deleteStoreDetail(storeId)
                 }
             )
         }
@@ -242,6 +243,9 @@ fun StoreDetailScreen(
             .background(Gray50)
     ) {
         Box {
+            val isDefaultImage =
+                imageUrl == (com.hankki.feature.storedetail.R.drawable.img_store_default).toString()
+
             AsyncImage(
                 model = imageUrl,
                 contentDescription = "식당 사진",
@@ -249,25 +253,28 @@ fun StoreDetailScreen(
                     .fillMaxSize()
                     .aspectRatio(1.5f),
                 contentScale = ContentScale.FillBounds,
-                placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail),
-                error = painterResource(com.hankki.feature.storedetail.R.drawable.img_default_store_detail)
+                placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default),
+                error = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default)
             )
 
-            Image(
-                painter = painterResource(id = R.drawable.img_black_gradation_top),
-                contentDescription = "black gradient",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
+            if (!isDefaultImage) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_black_gradation_top),
+                    contentDescription = "black gradient",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds
+                )
+            }
 
             Column {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 HankkiTopBar(
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_back),
+                            painter = painterResource(id = R.drawable.ic_arrow_left_gray50),
                             contentDescription = "뒤로가기",
                             modifier = Modifier
+                                .offset(x = 16.dp, y = 12.dp)
                                 .size(48.dp)
                                 .noRippleClickable(onClick = onNavigateUp),
                             tint = Color.Unspecified
@@ -298,7 +305,7 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = heartCount.toString(),
-                                style = HankkiTheme.typography.sub3,
+                                style = HankkiTheme.typography.body4,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 color = Gray500,
@@ -322,7 +329,7 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
-                                style = HankkiTheme.typography.sub3,
+                                style = HankkiTheme.typography.body4,
                                 color = Gray500
                             )
                         },

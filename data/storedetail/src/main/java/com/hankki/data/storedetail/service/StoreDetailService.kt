@@ -41,5 +41,10 @@ interface StoreDetailService {
     ): CreatedBaseResponse
 
     @GET("/api/v1/users/me")
-    suspend fun getStoreDetailNickname() : BaseResponse<StoreDetailNicknameResponseDto>
+    suspend fun getStoreDetailNickname(): BaseResponse<StoreDetailNicknameResponseDto>
+
+    @DELETE("/api/v1/stores/{storeId}")
+    suspend fun deleteStoreDetail(
+        @Path("storeId") storeId: Long
+    )
 }
