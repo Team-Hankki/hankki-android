@@ -2,8 +2,8 @@ package com.hankki.feature.report.searchstore
 
 sealed class SearchStoreSideEffect {
     data class ValidateUniversitySuccess(
-        val latitude: Float,
-        val longitude: Float,
+        val latitude: String,
+        val longitude: String,
         val location: String,
         val address: String,
     ) : SearchStoreSideEffect()
