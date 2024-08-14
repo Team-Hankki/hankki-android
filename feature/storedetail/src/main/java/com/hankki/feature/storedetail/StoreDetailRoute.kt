@@ -305,7 +305,7 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = heartCount.toString(),
-                                style = HankkiTheme.typography.body4,
+                                style = HankkiTheme.typography.body5,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 color = Gray500,
@@ -329,7 +329,7 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = stringResource(id = R.string.add_new_jogbo),
-                                style = HankkiTheme.typography.body4,
+                                style = HankkiTheme.typography.body5,
                                 color = Gray500
                             )
                         },
@@ -363,7 +363,7 @@ fun StoreDetailScreen(
                         content = {
                             Text(
                                 text = label,
-                                style = HankkiTheme.typography.body3.copy(color = if (isSelected) Color.Red else Gray400),
+                                style = HankkiTheme.typography.body4.copy(color = if (isSelected) Color.Red else Gray400),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.weight(1f, false),

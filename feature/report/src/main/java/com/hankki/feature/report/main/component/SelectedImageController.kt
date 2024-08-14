@@ -22,14 +22,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun SelectedImageController(
@@ -74,7 +72,7 @@ fun SelectedImageController(
         ) {
             Text(
                 text = "바꾸기",
-                style = HankkiTheme.typography.body3,
+                style = HankkiTheme.typography.body4,
                 color = Gray700
             )
         }

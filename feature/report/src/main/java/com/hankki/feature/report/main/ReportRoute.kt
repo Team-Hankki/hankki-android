@@ -253,7 +253,7 @@ fun ReportScreen(
                         Spacer(modifier = Modifier.height(3.dp))
                         Text(
                             text = stringResource(id = com.hankki.feature.report.R.string.add_menu_sub_title),
-                            style = HankkiTheme.typography.body4,
+                            style = HankkiTheme.typography.body5,
                             color = Gray400
                         )
 
@@ -352,7 +352,7 @@ fun ReportTopContent(
     ) {
         Text(
             text = count.toString() + stringResource(id = com.hankki.feature.report.R.string.counted_report),
-            style = HankkiTheme.typography.body4,
+            style = HankkiTheme.typography.body5,
             color = if (location.isEmpty()) Red500 else Gray600,
             modifier = Modifier.padding(start = 4.dp)
         )
@@ -446,7 +446,7 @@ fun MenuWithPriceInputComponent(
         Column {
             Text(
                 text = "",
-                style = HankkiTheme.typography.body5,
+                style = HankkiTheme.typography.body6,
                 color = Color.Transparent
             )
 
@@ -479,7 +479,7 @@ fun AddMenuButton(onClick: () -> Unit) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(id = com.hankki.feature.report.R.string.add_menu),
-            style = HankkiTheme.typography.body6,
+            style = HankkiTheme.typography.body2,
             color = Gray400
         )
     }

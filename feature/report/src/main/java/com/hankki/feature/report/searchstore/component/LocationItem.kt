@@ -56,7 +56,7 @@ fun LocationItem(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = address,
-                style = HankkiTheme.typography.body5,
+                style = HankkiTheme.typography.body6,
                 color = Gray400
             )
         }

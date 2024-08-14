@@ -54,7 +54,7 @@ fun ButtonWithImageAndBorder(
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = description,
-            style = HankkiTheme.typography.body3,
+            style = HankkiTheme.typography.body4,
             color = Gray900,
             textAlign = TextAlign.Center
         )

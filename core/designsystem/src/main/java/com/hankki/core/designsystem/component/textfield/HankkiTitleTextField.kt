@@ -67,7 +67,7 @@ fun HankkiTitleTextField(
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = title,
-                style = HankkiTheme.typography.body5,
+                style = HankkiTheme.typography.body6,
                 color = titleColor
             )
         }
