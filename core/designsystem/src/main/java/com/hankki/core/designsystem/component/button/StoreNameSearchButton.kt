@@ -92,7 +92,7 @@ fun StoreNameSelectedButton(
 
         Icon(
             modifier = Modifier.size(24.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_down),
+            painter = painterResource(id = R.drawable.ic_arrow_down_thick),
             contentDescription = "arrow down icon",
             tint = Gray400
         )
