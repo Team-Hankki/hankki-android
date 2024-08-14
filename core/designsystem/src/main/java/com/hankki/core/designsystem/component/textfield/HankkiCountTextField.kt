@@ -61,7 +61,7 @@ fun HankkiCountTextField(
     Column(modifier = modifier.background(White)) {
         Text(
             text = title,
-            style = HankkiTheme.typography.suitSub1,
+            style = HankkiTheme.typography.suitSub2,
             color = Gray900
         )
 

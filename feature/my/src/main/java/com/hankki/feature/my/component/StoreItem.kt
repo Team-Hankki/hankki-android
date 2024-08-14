@@ -80,7 +80,7 @@ fun StoreItem(
             Row {
                 Text(
                     text = name,
-                    style = HankkiTheme.typography.suitSub1,
+                    style = HankkiTheme.typography.suitSub2,
                     color = Gray900,
                     maxLines = 1,
                     overflow = Ellipsis,

@@ -50,7 +50,7 @@ fun LocationItem(
         ) {
             Text(
                 text = location,
-                style = HankkiTheme.typography.suitSub1,
+                style = HankkiTheme.typography.suitSub2,
                 color = if (isSelected) Red500 else Gray900
             )
             Spacer(modifier = Modifier.height(4.dp))
