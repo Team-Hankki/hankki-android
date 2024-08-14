@@ -257,7 +257,6 @@ fun ReportScreen(
                             color = Gray400
                         )
 
-
                         if (selectedImageUri == null) {
                             Spacer(modifier = Modifier.height(24.dp))
                             AddPhotoButton(
@@ -266,15 +265,14 @@ fun ReportScreen(
                             )
                             Spacer(modifier = Modifier.height(24.dp))
                         } else {
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(12.dp))
                             SelectedImageController(
                                 imageUri = selectedImageUri,
                                 deleteImage = clearSelectedImageUri,
                                 changeImage = selectImageUri
                             )
-                            Spacer(modifier = Modifier.height(42.dp))
+                            Spacer(modifier = Modifier.height(24.dp))
                         }
-
 
                         menuList.forEachIndexed { index, menu ->
                             MenuWithPriceInputComponent(
