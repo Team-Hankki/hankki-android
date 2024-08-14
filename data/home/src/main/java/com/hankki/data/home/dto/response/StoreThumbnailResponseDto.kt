@@ -17,7 +17,7 @@ data class StoreThumbnailResponseDto(
     @SerialName("heartCount")
     val heartCount: Int,
     @SerialName("imageUrl")
-    val imageUrl: String,
+    val imageUrl: String?,
 ) {
     fun toEntity() = StoreEntity(
         id = id,

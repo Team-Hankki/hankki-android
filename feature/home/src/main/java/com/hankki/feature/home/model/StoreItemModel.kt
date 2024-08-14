@@ -8,7 +8,7 @@ data class StoreItemModel(
     val category: String = "",
     val lowestPrice: Int = 0,
     val heartCount: Int = 0,
-    val imageUrl: String = ""
+    val imageUrl: String? = null
 )
 
 fun StoreEntity.toModel() = StoreItemModel(

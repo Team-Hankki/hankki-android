@@ -35,7 +35,7 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun StoreItem(
     storeId: Long,
-    storeImageUrl: String,
+    storeImageUrl: String?,
     category: String,
     storeName: String,
     price: Int,
@@ -55,7 +55,7 @@ fun StoreItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
-            model = storeImageUrl,
+            model = storeImageUrl ?: R.drawable.img_store_default,
             contentDescription = "Store Image",
             modifier = Modifier
                 .size(72.dp)
