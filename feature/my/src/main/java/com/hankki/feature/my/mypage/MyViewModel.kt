@@ -36,9 +36,7 @@ class MyViewModel @Inject constructor(
                     _myState.value = _myState.value.copy(
                         myModel = information.toModel()
                     )
-                }.onFailure { error ->
-                    Timber.e(error)
-                }
+                }.onFailure(Timber::e)
         }
     }
 
