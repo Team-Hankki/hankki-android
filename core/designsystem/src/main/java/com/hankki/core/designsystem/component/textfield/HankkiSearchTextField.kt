@@ -45,9 +45,11 @@ fun HankkiSearchTextField(
         value = value,
         placeholder = "식당 이름으로 검색하기",
         onTextChanged = onTextChanged,
+        border = if (isFocused) 1.5.dp else 1.dp,
         borderColor = borderColor,
         textColor = Gray800,
         backgroundColor = Gray100,
+        modifier = modifier,
         onFocusChanged = { isFocused = it },
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Search

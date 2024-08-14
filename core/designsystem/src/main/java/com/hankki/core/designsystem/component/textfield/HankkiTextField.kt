@@ -22,6 +22,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
@@ -36,6 +37,7 @@ fun HankkiTextField(
     value: String,
     placeholder: String,
     onTextChanged: (String) -> Unit,
+    border: Dp,
     borderColor: Color,
     textColor: Color,
     onFocusChanged: (Boolean) -> Unit,
@@ -54,7 +56,11 @@ fun HankkiTextField(
         onValueChange = onTextChanged,
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(10.dp))
+            .border(
+                border,
+                borderColor,
+                RoundedCornerShape(10.dp)
+            )
             .background(backgroundColor)
             .padding(12.dp)
             .focusRequester(focusRequester)
@@ -100,6 +106,7 @@ fun HankkiTextFieldPreview() {
                 value = "",
                 placeholder = "예) 된장찌개",
                 borderColor = Gray300,
+                border = 1.dp,
                 textColor = Gray300,
                 onFocusChanged = {},
                 onTextChanged = {
@@ -111,6 +118,7 @@ fun HankkiTextFieldPreview() {
                 value = "김치찌개",
                 placeholder = "예) 된장찌개",
                 borderColor = Gray850,
+                border = 1.dp,
                 textColor = Gray800,
                 onFocusChanged = {},
                 onTextChanged = {
@@ -122,6 +130,7 @@ fun HankkiTextFieldPreview() {
                 value = "8000",
                 placeholder = "5000",
                 borderColor = Gray850,
+                border = 1.dp,
                 textColor = Gray800,
                 onFocusChanged = {},
                 onTextChanged = {

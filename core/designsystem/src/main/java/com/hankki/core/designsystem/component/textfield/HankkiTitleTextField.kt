@@ -78,11 +78,13 @@ fun HankkiTitleTextField(
             value = value,
             placeholder = placeholder,
             onTextChanged = onTextChanged,
+            border = if (isFocused) 1.5.dp else 1.dp,
             borderColor = borderColor,
             textColor = textColor,
             tailingIcon = tailingIcon,
             modifier = modifier,
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             onFocusChanged = { isFocused = it }
         )
 
