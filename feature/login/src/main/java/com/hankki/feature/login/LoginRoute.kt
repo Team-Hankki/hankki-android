@@ -102,7 +102,7 @@ fun LoginScreen(
             Text(
                 text = stringResource(R.string.done_worry),
                 color = White,
-                style = HankkiTheme.typography.suitH1,
+                style = HankkiTheme.typography.sub1,
                 modifier = Modifier
                     .padding(start = 22.dp)
                     .align(Alignment.Start)
@@ -117,6 +117,7 @@ fun LoginScreen(
                 .noRippleClickable(onClick = onLoginClick)
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp)
+                .padding(horizontal = 22.dp)
                 .navigationBarsPadding()
         )
     }
