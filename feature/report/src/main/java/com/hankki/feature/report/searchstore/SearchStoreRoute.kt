@@ -127,7 +127,7 @@ fun SearchStoreScreen(
 
             is DialogState.OtherSchool -> {
                 Triple(
-                    "다른학교에 제보된 식당이에\n우리학교에도 추가할까요?",
+                    "다른학교에 제보된 식당이에요\n우리학교에도 추가할까요?",
                     "아니요",
                     "추가하기"
                 )
