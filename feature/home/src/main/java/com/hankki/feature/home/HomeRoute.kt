@@ -352,7 +352,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.padding(start = 22.dp))
                     Text(
                         text = universityName,
-                        style = HankkiTheme.typography.sub1,
+                        style = HankkiTheme.typography.suitSub1,
                         color = Gray900
                     )
                     Icon(
