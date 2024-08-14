@@ -215,7 +215,9 @@ internal fun MainScreen(
                         },
                         navigateToStoreDetail = { storeId ->
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToStoreDetail(storeId, navOptions)

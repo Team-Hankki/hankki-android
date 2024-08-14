@@ -8,5 +8,5 @@ sealed class SearchStoreSideEffect {
         val address: String,
     ) : SearchStoreSideEffect()
 
-    data object OpenDialog : SearchStoreSideEffect()
+    data class NavigateToStoreDetail(val storeId: Long) : SearchStoreSideEffect()
 }

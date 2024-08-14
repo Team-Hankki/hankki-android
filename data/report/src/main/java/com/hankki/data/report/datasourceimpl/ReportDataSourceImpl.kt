@@ -3,12 +3,14 @@ package com.hankki.data.report.datasourceimpl
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.report.datasource.ReportDataSource
+import com.hankki.data.report.dto.request.ReportOtherSchoolStoreRequestDto
 import com.hankki.data.report.dto.request.ValidateStoreRequestDto
 import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
 import com.hankki.data.report.dto.response.FavoritesResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
+import com.hankki.data.report.dto.response.StoreValidateResponseDto
 import com.hankki.data.report.dto.response.UniversityResponseDto
 import com.hankki.data.report.dto.response.UserInfoResponseDto
 import com.hankki.data.report.service.ReportService
@@ -25,7 +27,7 @@ class ReportDataSourceImpl @Inject constructor(
     override suspend fun getReportsCount(): BaseResponse<CountResponseDto> =
         reportService.getReportsCount()
 
-    override suspend fun getStoreValidate(body: ValidateStoreRequestDto): CreatedBaseResponse =
+    override suspend fun getStoreValidate(body: ValidateStoreRequestDto): BaseResponse<StoreValidateResponseDto> =
         reportService.getStoreValidate(body)
 
     override suspend fun getCategories(): BaseResponse<CategoriesResponseDto> =
@@ -36,6 +38,9 @@ class ReportDataSourceImpl @Inject constructor(
         request: RequestBody,
     ): BaseResponse<GeneratedStoreResponseDto> =
         reportService.postReport(image, request)
+
+    override suspend fun postUniversityStore(body: ReportOtherSchoolStoreRequestDto): CreatedBaseResponse =
+        reportService.postUniversityStore(body)
 
     override suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto> =
         reportService.getMyUniversity()

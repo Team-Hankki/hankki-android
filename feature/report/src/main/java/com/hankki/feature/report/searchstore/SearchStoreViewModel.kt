@@ -107,21 +107,53 @@ class SearchStoreViewModel @Inject constructor(
                     latitude = _state.value.selectedLocation.latitude.toDouble(),
                     longitude = _state.value.selectedLocation.longitude.toDouble()
                 )
-            ).onSuccess {
-                with(_state.value.selectedLocation) {
-                    _sideEffect.emit(
-                        SearchStoreSideEffect.ValidateUniversitySuccess(
-                            latitude = latitude,
-                            longitude = longitude,
-                            location = location,
-                            address = address
+            ).onSuccess { response ->
+                when {
+                    response.id == null -> {
+                        with(_state.value.selectedLocation) {
+                            _sideEffect.emit(
+                                SearchStoreSideEffect.ValidateUniversitySuccess(
+                                    latitude = latitude,
+                                    longitude = longitude,
+                                    location = location,
+                                    address = address
+                                )
+                            )
+                        }
+                    }
+
+                    response.isRegistered -> {
+                        _state.value = _state.value.copy(
+                            dialogState = DialogState.MySchool(response.id ?: 0),
+                            isOpenDialog = true
                         )
-                    )
+                    }
+
+                    else -> {
+                        _state.value = _state.value.copy(
+                            dialogState = DialogState.OtherSchool(response.id ?: 0),
+                            isOpenDialog = true
+                        )
+                    }
                 }
-            }.onFailure { error ->
-                Timber.e(error)
-                _sideEffect.emit(SearchStoreSideEffect.OpenDialog)
-            }
+            }.onFailure(Timber::e)
+        }
+    }
+
+    fun postUniversityStore(storeId: Long) {
+        viewModelScope.launch {
+            reportRepository.postUniversityStore(
+                storeId = storeId,
+                universityId = _state.value.universityId
+            ).onSuccess {
+                navigateToStoreDetail(storeId)
+            }.onFailure(Timber::e)
+        }
+    }
+
+    fun navigateToStoreDetail(storeId: Long) {
+        viewModelScope.launch {
+            _sideEffect.emit(SearchStoreSideEffect.NavigateToStoreDetail(storeId))
         }
     }
 
