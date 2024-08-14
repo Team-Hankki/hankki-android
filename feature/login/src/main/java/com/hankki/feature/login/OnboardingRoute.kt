@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -80,7 +79,7 @@ fun OnboardingScreen1(navController: NavHostController) {
         Text(
             text = stringResource(R.string.skip),
             color = Gray100,
-            style = HankkiTheme.typography.body3,
+            style = HankkiTheme.typography.body4,
             modifier = Modifier
                 .statusBarsPadding()
                 .padding(top = 25.dp, end = 22.dp)
@@ -147,7 +146,7 @@ fun OnboardingScreen2(navController: NavHostController) {
             Text(
                 text = stringResource(R.string.skip),
                 color = Gray400,
-                style = HankkiTheme.typography.body3,
+                style = HankkiTheme.typography.body4,
                 modifier = Modifier
                     .padding(top = 25.dp, end = 22.dp)
                     .noRippleClickable {
@@ -211,7 +210,7 @@ fun OnboardingScreen3(navController: NavHostController) {
             Text(
                 text = stringResource(R.string.skip),
                 color = Gray400,
-                style = HankkiTheme.typography.body3,
+                style = HankkiTheme.typography.body4,
                 modifier = Modifier
                     .padding(top = 25.dp, end = 22.dp)
                     .clickable {

@@ -69,7 +69,7 @@ fun StoreItem(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = storeName,
-                style = HankkiTheme.typography.suitSub1
+                style = HankkiTheme.typography.suitSub2
             )
             Spacer(modifier = Modifier.height(2.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {

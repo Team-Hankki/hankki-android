@@ -36,6 +36,6 @@ fun JogboShareButton(
             contentDescription = "share",
             tint = Red500
         )
-        Text(text = "공유", style = HankkiTheme.typography.body3, color = White)
+        Text(text = "공유", style = HankkiTheme.typography.body4, color = White)
     }
 }

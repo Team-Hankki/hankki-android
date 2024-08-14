@@ -117,7 +117,7 @@ fun HankkiStoreJogboBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.my_store_jogbo),
             textAlign = TextAlign.Center,
-            style = HankkiTheme.typography.body2,
+            style = HankkiTheme.typography.body3,
         )
 
         AddNewJogboButton(
@@ -185,7 +185,7 @@ fun AddNewJogboButton(
         Spacer(modifier = Modifier.width(18.dp))
         Text(
             text = stringResource(id = R.string.add_new_jogbo),
-            style = HankkiTheme.typography.body2,
+            style = HankkiTheme.typography.body3,
             color = Gray800
         )
     }
@@ -240,7 +240,7 @@ fun JogboItem(
         ) {
             Text(
                 text = title,
-                style = HankkiTheme.typography.body2,
+                style = HankkiTheme.typography.body3,
                 color = if (isReported) Gray300 else Gray800,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis

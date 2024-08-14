@@ -94,7 +94,7 @@ fun UniversitySelectionScreen(
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = stringResource(id = R.string.wait_a_minute),
-                style = HankkiTheme.typography.body4,
+                style = HankkiTheme.typography.body5,
                 color = Gray400
             )
 

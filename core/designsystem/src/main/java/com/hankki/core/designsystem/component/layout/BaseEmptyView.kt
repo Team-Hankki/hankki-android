@@ -66,7 +66,7 @@ fun EmptyImageWithText(
             text = text,
             textAlign = TextAlign.Center,
             color = Gray500,
-            style = HankkiTheme.typography.body6
+            style = HankkiTheme.typography.body2
         )
     }
 }

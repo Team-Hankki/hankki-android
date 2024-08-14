@@ -58,7 +58,7 @@ fun StoreNameSearchButton(
 
         Text(
             text = stringResource(id = R.string.search_to_name),
-            style = HankkiTheme.typography.body6,
+            style = HankkiTheme.typography.body2,
             color = Gray400
         )
     }

@@ -61,7 +61,7 @@ fun HankkiCountTextField(
     Column(modifier = modifier.background(White)) {
         Text(
             text = title,
-            style = HankkiTheme.typography.suitSub1,
+            style = HankkiTheme.typography.suitSub2,
             color = Gray900
         )
 
@@ -126,7 +126,7 @@ fun HankkiCountTextField(
                 if (trailingIcon)
                     Text(
                         text = "(${valueLength}/$TEXT_FIELD_LIMIT)",
-                        style = HankkiTheme.typography.body3,
+                        style = HankkiTheme.typography.body4,
                         color = Gray400
                     )
             }
