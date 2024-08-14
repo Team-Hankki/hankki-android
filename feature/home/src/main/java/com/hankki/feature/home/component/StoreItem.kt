@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.hankki.core.common.extension.formatPrice
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
@@ -80,7 +81,7 @@ fun StoreItem(
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 Text(
-                    text = "${price}원",
+                    text = "${price.toString().formatPrice()}원",
                     style = HankkiTheme.typography.button1,
                     color = Gray500
                 )
