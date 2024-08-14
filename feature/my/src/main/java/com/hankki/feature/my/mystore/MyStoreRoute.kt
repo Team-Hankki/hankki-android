@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -27,6 +28,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.core.designsystem.component.layout.EmptyView
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
@@ -34,7 +37,6 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.core.designsystem.component.layout.EmptyView
 import com.hankki.feature.my.component.StoreItem
 import com.hankki.feature.my.mystore.model.MyStoreModel
 import kotlinx.collections.immutable.PersistentList
@@ -100,7 +102,7 @@ fun MyStoreScreen(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
                     contentDescription = "Back",
                     modifier = Modifier
-                        .padding(start = 9.dp)
+                        .padding(start = 6.dp)
                         .size(44.dp)
                         .noRippleClickable(onClick = navigateUp),
                     tint = Color.Unspecified
@@ -128,7 +130,15 @@ fun MyStoreScreen(
 
                 EmptyUiState.Failure -> {}
 
-                EmptyUiState.Loading -> {}
+                EmptyUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(White)
+                    ) {
+                        HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
 
                 is EmptyUiState.Success -> {
                     LazyColumn {
@@ -137,7 +147,7 @@ fun MyStoreScreen(
                                 imageUrl = store.imageURL,
                                 category = store.category,
                                 name = store.name,
-                                price = store.lowestPrice,
+                                price = store.lowestPrice.toString(),
                                 heartCount = store.heartCount,
                                 isIconUsed = (type == "like"),
                                 isIconSelected = store.isLiked ?: false,

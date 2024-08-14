@@ -54,8 +54,8 @@ fun JogboFolder(
                 painter = painterResource(id = R.drawable.ic_my_store),
                 contentDescription = "store image",
                 modifier = Modifier
-                    .padding(top = 16.dp, start = 18.dp)
-                    .size(43.dp),
+                    .padding(top = 16.dp, start = 17.dp)
+                    .size(45.dp),
                 tint = Color.Unspecified
             )
 
@@ -64,7 +64,7 @@ fun JogboFolder(
                 color = Gray900,
                 style = HankkiTheme.typography.h2,
                 modifier = Modifier.padding(start = 22.dp, end = 50.dp, top = 11.dp),
-                maxLines = 3,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
 
@@ -77,7 +77,7 @@ fun JogboFolder(
                 }
             }
 
-            Spacer(modifier = Modifier.height(38.dp))
+            Spacer(modifier = Modifier.height(34.dp))
 
             Row(
                 modifier = Modifier

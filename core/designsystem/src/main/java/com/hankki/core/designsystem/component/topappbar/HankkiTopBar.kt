@@ -28,7 +28,7 @@ fun HankkiTopBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp),
+            .height(48.dp),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

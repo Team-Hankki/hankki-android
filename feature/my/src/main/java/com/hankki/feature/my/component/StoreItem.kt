@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.hankki.core.common.extension.formatPrice
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
@@ -41,14 +42,15 @@ fun StoreItem(
     imageUrl: String,
     category: String,
     name: String,
-    price: Int,
+    price: String,
     heartCount: Int,
     isIconUsed: Boolean,
     isIconSelected: Boolean,
     modifier: Modifier = Modifier,
     editSelected: () -> Unit = {},
-    onClickItem: () -> Unit = {}
 ) {
+    val formattedPrice = price.formatPrice()
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -90,7 +92,7 @@ fun StoreItem(
                 HankkiCategoryChip(text = category)
             }
 
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(2.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -102,7 +104,7 @@ fun StoreItem(
                 Spacer(modifier = Modifier.width(3.dp))
 
                 Text(
-                    text = "${price}원",
+                    text = "${formattedPrice}원",
                     style = HankkiTheme.typography.button1,
                     color = Gray500
                 )
@@ -154,7 +156,7 @@ fun StoreItemPreview() {
             imageUrl = "",
             category = "한식",
             name = "한끼네 한정식",
-            price = 7900,
+            price = 7900.toString(),
             heartCount = 300,
             isIconUsed = true,
             isIconSelected = true,

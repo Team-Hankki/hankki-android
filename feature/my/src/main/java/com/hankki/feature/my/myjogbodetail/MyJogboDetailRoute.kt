@@ -35,7 +35,6 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
-import com.hankki.core.designsystem.component.layout.CircleLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
@@ -46,6 +45,7 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.MoveToHomeButton
 import com.hankki.feature.my.component.StoreItem
@@ -73,9 +73,9 @@ fun MyJogboDetailRoute(
         myJogboDetailViewModel.mySideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is MyJogboSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+                    is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
 
-                    is MyJogboSideEffect.NavigateToHome -> navigateToHome()
+                    is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                 }
             }
     }
@@ -163,7 +163,7 @@ fun MyJogboDetailScreen(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
                     contentDescription = "Back",
                     modifier = Modifier
-                        .padding(start = 9.dp)
+                        .padding(start = 6.dp)
                         .size(44.dp)
                         .noRippleClickable(onClick = navigateUp),
                     tint = Color.Unspecified
@@ -178,19 +178,6 @@ fun MyJogboDetailScreen(
             }
         )
 
-        Spacer(
-            modifier = Modifier
-                .background(Red500)
-                .height(4.dp)
-        )
-
-        JogboFolder(
-            title = jogboTitle,
-            chips = jogboChips,
-            userNickname = userNickname,
-            shareJogbo = updateShareDialogState
-        )
-
         when (storeItems) {
             is EmptyUiState.Loading -> {
                 Box(
@@ -198,11 +185,24 @@ fun MyJogboDetailScreen(
                         .fillMaxSize()
                         .background(White)
                 ) {
-                    CircleLoadingScreen()
+                    HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
                 }
             }
 
             is EmptyUiState.Success -> {
+                Spacer(
+                    modifier = Modifier
+                        .background(Red500)
+                        .height(16.dp)
+                )
+
+                JogboFolder(
+                    title = jogboTitle,
+                    chips = jogboChips,
+                    userNickname = userNickname,
+                    shareJogbo = updateShareDialogState
+                )
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -218,7 +218,7 @@ fun MyJogboDetailScreen(
                             imageUrl = store.imageUrl,
                             category = store.category,
                             name = store.name,
-                            price = store.lowestPrice,
+                            price = store.lowestPrice.toString(),
                             heartCount = store.heartCount,
                             isIconUsed = false,
                             isIconSelected = false,
@@ -251,6 +251,19 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Empty -> {
+                Spacer(
+                    modifier = Modifier
+                        .background(Red500)
+                        .height(16.dp)
+                )
+
+                JogboFolder(
+                    title = jogboTitle,
+                    chips = jogboChips,
+                    userNickname = userNickname,
+                    shareJogbo = updateShareDialogState
+                )
+
                 EmptyViewWithButton(
                     text = stringResource(R.string.my_jogbo) +
                             stringResource(R.string.add_store_to_jogbo),

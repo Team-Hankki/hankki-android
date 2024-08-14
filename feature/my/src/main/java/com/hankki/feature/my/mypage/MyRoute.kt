@@ -171,7 +171,7 @@ fun MyScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(23.dp))
 
         AsyncImage(
             modifier = Modifier
@@ -182,7 +182,7 @@ fun MyScreen(
             contentScale = ContentScale.Crop
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         Text(
             text = stringResource(R.string.message_user_name, userName),
@@ -202,7 +202,7 @@ fun MyScreen(
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clip(RoundedCornerShape(12.dp))
-                    .padding(start = 28.dp, end = 17.dp)
+                    .padding(start = 30.dp, end = 17.dp)
                     .noRippleClickable(onClick = navigateToMyJogbo),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -249,7 +249,7 @@ fun MyScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp)
+                    .padding(top = 10.dp, bottom = 43.dp)
                     .noRippleClickable(onClick = {}),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
