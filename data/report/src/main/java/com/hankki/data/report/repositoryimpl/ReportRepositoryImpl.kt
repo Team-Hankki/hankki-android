@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.hankki.core.common.utill.ContentUriRequestBody
 import com.hankki.data.report.datasource.ReportDataSource
+import com.hankki.data.report.dto.request.ReportOtherSchoolStoreRequestDto
 import com.hankki.data.report.dto.request.toDto
 import com.hankki.data.report.dto.response.toEntity
 import com.hankki.domain.report.entity.CategoryEntity
@@ -13,6 +14,7 @@ import com.hankki.domain.report.entity.request.ReportStoreRequestEntity
 import com.hankki.domain.report.entity.request.ValidateStoreRequestEntity
 import com.hankki.domain.report.entity.response.GeneratedStoreResponseEntity
 import com.hankki.domain.report.entity.response.JogboResponseEntity
+import com.hankki.domain.report.entity.response.StoreValidateResponseEntity
 import com.hankki.domain.report.entity.response.UniversityResponseEntity
 import com.hankki.domain.report.entity.response.UserInfoResponseEntity
 import com.hankki.domain.report.repository.ReportRepository
@@ -37,9 +39,9 @@ class ReportRepositoryImpl @Inject constructor(
             reportDataSource.getReportsCount().data.toEntity()
         }
 
-    override suspend fun getStoreValidate(body: ValidateStoreRequestEntity): Result<Unit> =
+    override suspend fun getStoreValidate(body: ValidateStoreRequestEntity): Result<StoreValidateResponseEntity> =
         runCatching {
-            reportDataSource.getStoreValidate(body.toDto())
+            reportDataSource.getStoreValidate(body.toDto()).data.toEntity()
         }
 
     override suspend fun getCategories(): Result<List<CategoryEntity>> = runCatching {
@@ -63,6 +65,16 @@ class ReportRepositoryImpl @Inject constructor(
             ).data.toEntity()
         }
     }
+
+    override suspend fun postUniversityStore(storeId: Long, universityId: Long): Result<Unit> =
+        runCatching {
+            reportDataSource.postUniversityStore(
+                ReportOtherSchoolStoreRequestDto(
+                    storeId,
+                    universityId
+                )
+            )
+        }
 
     override suspend fun getMyUniversity(): Result<UniversityResponseEntity> = runCatching {
         reportDataSource.getMyUniversity().data.toEntity()

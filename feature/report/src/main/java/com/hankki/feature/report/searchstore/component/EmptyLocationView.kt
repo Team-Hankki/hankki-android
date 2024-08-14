@@ -32,14 +32,14 @@ fun EmptyLocationView(
 
     val annotatedString = buildAnnotatedString {
         withStyle(
-            style = HankkiTheme.typography.body6.toSpanStyle().copy(
+            style = HankkiTheme.typography.body2.toSpanStyle().copy(
                 color = Gray800
             )
         ) {
             append("'$text'")
         }
         withStyle(
-            style = HankkiTheme.typography.body6.toSpanStyle().copy(
+            style = HankkiTheme.typography.body2.toSpanStyle().copy(
                 color = Gray500
             )
         ) {

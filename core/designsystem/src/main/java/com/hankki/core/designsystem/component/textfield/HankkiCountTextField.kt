@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER20_REGEX
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -62,7 +61,7 @@ fun HankkiCountTextField(
     Column(modifier = modifier.background(White)) {
         Text(
             text = title,
-            style = HankkiTheme.typography.suitSub1,
+            style = HankkiTheme.typography.suitSub2,
             color = Gray900
         )
 
@@ -72,7 +71,7 @@ fun HankkiCountTextField(
             value = textFieldValue,
             placeholder = placeholder,
             borderColor = borderColor,
-            textColor = Gray800,
+            textColor = Gray900,
             onFocusChanged = { focusState ->
                 isFocused = focusState
                 if (!trailingIcon) {
@@ -95,8 +94,7 @@ fun HankkiCountTextField(
                 ) {
                     if (trailingIcon) {
                         textFieldValue = newValue.copy(
-                            text = newValue.text.take(TEXT_FIELD_LIMIT),
-                            selection = TextRange(newValue.text.length)
+                            text = newValue.text.take(TEXT_FIELD_LIMIT)
                         )
                         onValueChanged(textFieldValue.text)
                     } else {
@@ -117,8 +115,7 @@ fun HankkiCountTextField(
                         }
 
                         textFieldValue = newValue.copy(
-                            text = modifiedValue,
-                            selection = TextRange(modifiedValue.length)
+                            text = modifiedValue
                         )
 
                         onValueChanged(modifiedValue)
@@ -129,7 +126,7 @@ fun HankkiCountTextField(
                 if (trailingIcon)
                     Text(
                         text = "(${valueLength}/$TEXT_FIELD_LIMIT)",
-                        style = HankkiTheme.typography.body3,
+                        style = HankkiTheme.typography.body4,
                         color = Gray400
                     )
             }

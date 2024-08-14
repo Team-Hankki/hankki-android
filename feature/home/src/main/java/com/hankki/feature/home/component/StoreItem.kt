@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.hankki.core.common.extension.formatPrice
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
@@ -35,7 +36,7 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun StoreItem(
     storeId: Long,
-    storeImageUrl: String,
+    storeImageUrl: String?,
     category: String,
     storeName: String,
     price: Int,
@@ -55,7 +56,7 @@ fun StoreItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
-            model = storeImageUrl,
+            model = storeImageUrl ?: R.drawable.img_store_default,
             contentDescription = "Store Image",
             modifier = Modifier
                 .size(72.dp)
@@ -68,7 +69,7 @@ fun StoreItem(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = storeName,
-                style = HankkiTheme.typography.suitSub1
+                style = HankkiTheme.typography.suitSub2
             )
             Spacer(modifier = Modifier.height(2.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -80,7 +81,7 @@ fun StoreItem(
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 Text(
-                    text = "${price}원",
+                    text = "${price.toString().formatPrice()}원",
                     style = HankkiTheme.typography.button1,
                     color = Gray500
                 )

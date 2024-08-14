@@ -26,22 +26,27 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
+import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
 import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
 import com.hankki.core.designsystem.theme.Gray100
@@ -70,8 +75,26 @@ private const val SNACK_BAR_DURATION = 2000L
 @Composable
 internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
+    viewModel: MainViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
+
+    val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
+
+    val errorSnackBarHostState = remember { SnackbarHostState() }
+    val onShowErrorSnackBar: () -> Unit = {
+        coroutineScope.launch {
+            errorSnackBarHostState.currentSnackbarData?.dismiss()
+
+            val job = launch {
+                errorSnackBarHostState.showSnackbar(
+                    message = "오류가 발생했어요. 다시 시도해주세요.",
+                )
+            }
+            delay(SNACK_BAR_DURATION)
+            job.cancel()
+        }
+    }
 
     val textSnackBarWithButtonHostState = remember { SnackbarHostState() }
     val onShowTextSnackBarWithButton: (String, Long) -> Unit = { message, jogboId ->
@@ -102,7 +125,6 @@ internal fun MainScreen(
             job.cancel()
         }
     }
-
 
     Scaffold(
         content = { paddingValue ->
@@ -193,7 +215,9 @@ internal fun MainScreen(
                         },
                         navigateToStoreDetail = { storeId ->
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id)
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
                                 launchSingleTop = true
                             }
                             navigator.navigateToStoreDetail(storeId, navOptions)
@@ -271,6 +295,16 @@ internal fun MainScreen(
                     )
                 }
 
+                if (!isConnected) {
+                    SingleButtonDialog(
+                        title = "네트워크 오류가 발생했어요",
+                        description = "네트워크 연결 상태를 확인하고 다시 시도해주세요",
+                        buttonTitle = "확인"
+                    ) {
+                        navigator.navigateUpIfNotHome()
+                    }
+                }
+
                 SnackbarHost(
                     hostState = whiteSnackBarWithButtonHostState,
                     modifier = Modifier
@@ -310,6 +344,10 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
+            SnackbarHost(hostState = errorSnackBarHostState) { snackBarData ->
+                HankkiTextSnackBar(message = snackBarData.visuals.message)
+            }
+
             SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackBarData ->
                 runCatching {
                     val (message, jogboId) = snackBarData.visuals.message.split("/")

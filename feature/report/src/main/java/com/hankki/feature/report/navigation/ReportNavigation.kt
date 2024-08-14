@@ -88,6 +88,7 @@ fun NavGraphBuilder.reportNavGraph(
             navigateReport = { latitude, longitude, location, address ->
                 navigateReport(latitude, longitude, location, address)
             },
+            navigateToStoreDetail = navigateToStoreDetail,
             navigateUp = navigateUp
         )
     }

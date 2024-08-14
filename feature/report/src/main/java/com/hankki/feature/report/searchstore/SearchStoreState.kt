@@ -8,5 +8,12 @@ data class SearchStoreState(
     val universityId: Long = 1,
     val selectedLocation: LocationModel = LocationModel(),
     val isOpenDialog: Boolean = false,
-    val uiState: EmptyUiState<PersistentList<LocationModel>> = EmptyUiState.Loading
+    val dialogState: DialogState = DialogState.None,
+    val uiState: EmptyUiState<PersistentList<LocationModel>> = EmptyUiState.Loading,
 )
+
+sealed class DialogState {
+    data object None : DialogState()
+    class MySchool(val storeId: Long) : DialogState()
+    class OtherSchool(val storeId: Long) : DialogState()
+}

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
@@ -55,7 +54,6 @@ fun MyStoreRoute(
 
     LaunchedEffect(type) {
         if (type == "like") {
-            if (myStoreState.uiState is EmptyUiState.Success) return@LaunchedEffect
             myStoreViewModel.getLikedStoreList()
         } else {
             myStoreViewModel.getReportedStoreList()
@@ -104,7 +102,7 @@ fun MyStoreScreen(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
                     contentDescription = "Back",
                     modifier = Modifier
-                        .padding(start = 9.dp)
+                        .padding(start = 6.dp)
                         .size(44.dp)
                         .noRippleClickable(onClick = navigateUp),
                     tint = Color.Unspecified
@@ -133,11 +131,13 @@ fun MyStoreScreen(
                 EmptyUiState.Failure -> {}
 
                 EmptyUiState.Loading -> {
-                    HankkiLoadingScreen(
+                    Box(
                         modifier = Modifier
-                            .width(120.dp)
-                            .align(Alignment.Center)
-                    )
+                            .fillMaxSize()
+                            .background(White)
+                    ) {
+                        HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                    }
                 }
 
                 is EmptyUiState.Success -> {
@@ -147,7 +147,7 @@ fun MyStoreScreen(
                                 imageUrl = store.imageURL,
                                 category = store.category,
                                 name = store.name,
-                                price = store.lowestPrice,
+                                price = store.lowestPrice.toString(),
                                 heartCount = store.heartCount,
                                 isIconUsed = (type == "like"),
                                 isIconSelected = store.isLiked ?: false,

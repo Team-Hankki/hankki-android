@@ -34,7 +34,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.HankkiButton
-import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiSearchTextField
@@ -57,6 +57,7 @@ fun SearchStoreRoute(
         location: String,
         address: String,
     ) -> Unit,
+    navigateToStoreDetail: (storeId: Long) -> Unit,
     navigateUp: () -> Unit,
     viewModel: SearchStoreViewModel = hiltViewModel(),
 ) {
@@ -67,10 +68,6 @@ fun SearchStoreRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                SearchStoreSideEffect.OpenDialog -> {
-                    viewModel.setDialogState(true)
-                }
-
                 is SearchStoreSideEffect.ValidateUniversitySuccess -> {
                     navigateReport(
                         sideEffect.latitude,
@@ -79,6 +76,8 @@ fun SearchStoreRoute(
                         sideEffect.address
                     )
                 }
+
+                is SearchStoreSideEffect.NavigateToStoreDetail -> navigateToStoreDetail(sideEffect.storeId)
             }
         }
     }
@@ -87,10 +86,13 @@ fun SearchStoreRoute(
         value = value,
         selectedLocation = state.selectedLocation,
         isOpenDialog = state.isOpenDialog,
+        dialogState = state.dialogState,
         state = state.uiState,
         onValueChange = viewModel::setValue,
         onClickLocation = viewModel::setLocation,
         navigateUp = navigateUp,
+        navigateToStoreDetail = viewModel::navigateToStoreDetail,
+        postUniversityStore = viewModel::postUniversityStore,
         reportButtonClicked = viewModel::reportButtonClicked,
         onDismissDialog = { viewModel.setDialogState(false) }
     )
@@ -101,20 +103,59 @@ fun SearchStoreScreen(
     value: String,
     selectedLocation: LocationModel,
     isOpenDialog: Boolean,
+    dialogState: DialogState,
     state: EmptyUiState<PersistentList<LocationModel>>,
-    onValueChange: (String) -> Unit,
-    onClickLocation: (LocationModel) -> Unit,
-    navigateUp: () -> Unit,
-    reportButtonClicked: () -> Unit,
+    onValueChange: (String) -> Unit = {},
+    onClickLocation: (LocationModel) -> Unit = {},
+    navigateUp: () -> Unit = {},
+    navigateToStoreDetail: (storeId: Long) -> Unit = {},
+    postUniversityStore: (storeId: Long) -> Unit = {},
+    reportButtonClicked: () -> Unit = {},
     onDismissDialog: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
 
     if (isOpenDialog) {
-        SingleButtonDialog(
-            title = "이미 등록된 식당이에요\n다른 식당을 제보해보세요 ",
-            buttonTitle = "확인",
-            onConfirmation = onDismissDialog
+        val (title, negativeButtonTitle, positiveButtonTitle) = when (dialogState) {
+            is DialogState.MySchool -> {
+                Triple(
+                    "등록된 식당이 있어요\n식당으로 이동할까요?",
+                    "아니요",
+                    "이동하기"
+                )
+            }
+
+            is DialogState.OtherSchool -> {
+                Triple(
+                    "다른학교에 제보된 식당이에\n우리학교에도 추가할까요?",
+                    "아니요",
+                    "추가하기"
+                )
+            }
+
+            else -> Triple("오류가 발생했어요", "", "돌아가기")
+        }
+
+        DoubleButtonDialog(
+            title = title,
+            negativeButtonTitle = negativeButtonTitle,
+            positiveButtonTitle = positiveButtonTitle,
+            onNegativeButtonClicked = onDismissDialog,
+            onPositiveButtonClicked = {
+                when (dialogState) {
+                    is DialogState.MySchool -> {
+                        navigateToStoreDetail(dialogState.storeId)
+                    }
+
+                    is DialogState.OtherSchool -> {
+                        postUniversityStore(dialogState.storeId)
+                    }
+
+                    else -> {
+                        onDismissDialog()
+                    }
+                }
+            },
         )
     }
 
@@ -268,7 +309,9 @@ private fun BookmarkCardPreview(
             onClickLocation = { },
             navigateUp = {},
             reportButtonClicked = {},
-            onDismissDialog = {}
+            onDismissDialog = {},
+            dialogState = DialogState.None,
+            navigateToStoreDetail = { }
         )
     }
 }

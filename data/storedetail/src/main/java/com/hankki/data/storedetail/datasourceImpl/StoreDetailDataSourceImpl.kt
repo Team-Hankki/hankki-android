@@ -10,12 +10,12 @@ import com.hankki.data.storedetail.response.StoreDetailResponseDto
 import com.hankki.data.storedetail.service.StoreDetailService
 import javax.inject.Inject
 
-class StoreDetailDataSourceImpl @Inject constructor (
+class StoreDetailDataSourceImpl @Inject constructor(
     private val storeDetailService: StoreDetailService
 ) : StoreDetailDataSource {
     override suspend fun getStoreDetail(
         id: Long
-    ) : BaseResponse<StoreDetailResponseDto> =
+    ): BaseResponse<StoreDetailResponseDto> =
         storeDetailService.getStoreDetail(id)
 
     override suspend fun postStoreDetailHearts(
@@ -36,4 +36,7 @@ class StoreDetailDataSourceImpl @Inject constructor (
 
     override suspend fun getStoreDetailNickname(): BaseResponse<StoreDetailNicknameResponseDto> =
         storeDetailService.getStoreDetailNickname()
+
+    override suspend fun deleteStoreDetail(storeId: Long) =
+        storeDetailService.deleteStoreDetail(storeId)
 }

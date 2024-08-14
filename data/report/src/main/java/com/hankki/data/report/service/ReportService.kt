@@ -2,12 +2,14 @@ package com.hankki.data.report.service
 
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
+import com.hankki.data.report.dto.request.ReportOtherSchoolStoreRequestDto
 import com.hankki.data.report.dto.request.ValidateStoreRequestDto
 import com.hankki.data.report.dto.response.CategoriesResponseDto
 import com.hankki.data.report.dto.response.CountResponseDto
 import com.hankki.data.report.dto.response.FavoritesResponseDto
 import com.hankki.data.report.dto.response.GeneratedStoreResponseDto
 import com.hankki.data.report.dto.response.LocationsResponseDto
+import com.hankki.data.report.dto.response.StoreValidateResponseDto
 import com.hankki.data.report.dto.response.UniversityResponseDto
 import com.hankki.data.report.dto.response.UserInfoResponseDto
 import com.hankki.domain.report.entity.response.UserInfoResponseEntity
@@ -34,7 +36,7 @@ interface ReportService {
     @POST("api/v1/stores/validate")
     suspend fun getStoreValidate(
         @Body body: ValidateStoreRequestDto,
-    ): CreatedBaseResponse
+    ): BaseResponse<StoreValidateResponseDto>
 
     @GET("api/v1/stores/categories")
     suspend fun getCategories(): BaseResponse<CategoriesResponseDto>
@@ -45,6 +47,11 @@ interface ReportService {
         @Part image: MultipartBody.Part?,
         @Part("request") request: RequestBody,
     ): BaseResponse<GeneratedStoreResponseDto>
+
+    @POST("api/v1/university-stores")
+    suspend fun postUniversityStore(
+        @Body body: ReportOtherSchoolStoreRequestDto,
+    ): CreatedBaseResponse
 
     @GET("api/v1/users/me/university")
     suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto>

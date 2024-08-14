@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.dashedBorder
-import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
@@ -55,7 +54,7 @@ fun AddPhotoButton(
         Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = "대표 음식 이미지 첨부하기 (선택)",
-            style = HankkiTheme.typography.body3,
+            style = HankkiTheme.typography.body4,
             color = Gray500
         )
     }

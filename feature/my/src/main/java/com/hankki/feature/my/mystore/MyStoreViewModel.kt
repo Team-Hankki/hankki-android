@@ -34,9 +34,9 @@ class MyStoreViewModel @Inject constructor(
             myRepository.getLikedStore()
                 .onSuccess { storeList ->
                     _myStoreState.value = _myStoreState.value.copy(
-                        uiState = if(storeList.isEmpty()){
+                        uiState = if (storeList.isEmpty()) {
                             EmptyUiState.Empty
-                        } else{
+                        } else {
                             EmptyUiState.Success(
                                 storeList.map {
                                     it.toMyStoreModel()
@@ -45,9 +45,7 @@ class MyStoreViewModel @Inject constructor(
                         }
                     )
                 }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+                .onFailure(Timber::e)
         }
     }
 
@@ -56,9 +54,9 @@ class MyStoreViewModel @Inject constructor(
             myRepository.getReportedStore()
                 .onSuccess { storeList ->
                     _myStoreState.value = _myStoreState.value.copy(
-                        uiState = if(storeList.isEmpty()){
+                        uiState = if (storeList.isEmpty()) {
                             EmptyUiState.Empty
-                        }else {
+                        } else {
                             EmptyUiState.Success(
                                 storeList.map {
                                     it.toMyStoreModel()
@@ -67,9 +65,7 @@ class MyStoreViewModel @Inject constructor(
                         }
                     )
                 }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+                .onFailure(Timber::e)
         }
     }
 
@@ -92,9 +88,7 @@ class MyStoreViewModel @Inject constructor(
                             )
                         }
                     }
-                    .onFailure { error ->
-                        Timber.e(error)
-                    }
+                    .onFailure(Timber::e)
             } else {
                 myRepository.likeStore(id)
                     .onSuccess {
@@ -112,9 +106,7 @@ class MyStoreViewModel @Inject constructor(
                             )
                         }
                     }
-                    .onFailure { error ->
-                        Timber.e(error)
-                    }
+                    .onFailure(Timber::e)
             }
         }
     }

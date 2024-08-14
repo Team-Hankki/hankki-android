@@ -84,7 +84,7 @@ fun ImageDoubleButtonDialog(
 
                     Text(
                         text = description,
-                        style = HankkiTheme.typography.body4,
+                        style = HankkiTheme.typography.body5,
                         color = Gray500
                     )
                 }
