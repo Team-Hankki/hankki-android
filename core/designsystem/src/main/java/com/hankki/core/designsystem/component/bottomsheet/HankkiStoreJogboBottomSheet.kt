@@ -117,7 +117,7 @@ fun HankkiStoreJogboBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.my_store_jogbo),
             textAlign = TextAlign.Center,
-            style = HankkiTheme.typography.body3,
+            style = HankkiTheme.typography.sub3,
         )
 
         AddNewJogboButton(
