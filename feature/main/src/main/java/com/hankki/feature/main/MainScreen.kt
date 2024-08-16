@@ -83,13 +83,13 @@ internal fun MainScreen(
     val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
 
     val errorSnackBarHostState = remember { SnackbarHostState() }
-    val onShowErrorSnackBar: () -> Unit = {
+    val onShowErrorSnackBar: (String?) -> Unit = { text ->
         coroutineScope.launch {
             errorSnackBarHostState.currentSnackbarData?.dismiss()
 
             val job = launch {
                 errorSnackBarHostState.showSnackbar(
-                    message = "오류가 발생했어요. 다시 시도해주세요.",
+                    message = text ?: "오류가 발생했어요. 다시 시도해주세요.",
                 )
             }
             delay(SNACK_BAR_DURATION)
@@ -166,6 +166,7 @@ internal fun MainScreen(
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = onShowTextSnackBarWithButton,
+                        onShowTextSnackBar = onShowErrorSnackBar,
                         navigateStoreDetail = navigator::navigateToStoreDetail,
                         navigateToUniversitySelection = navigator::navigateToUniversity,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo
