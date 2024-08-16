@@ -141,7 +141,10 @@ fun HankkiStoreJogboBottomSheet(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            items(jogboItems) { item ->
+            items(
+                items = jogboItems,
+                key = { item -> item.id }
+            ) { item ->
                 JogboItem(
                     imageUrl = transformImage(item.imageType),
                     title = item.title,
@@ -206,7 +209,7 @@ fun JogboItem(
     }
 
     var color by remember {
-        mutableStateOf(if (isReported) Gray200 else Gray400)
+        mutableStateOf(Gray400)
     }
 
     Row(
@@ -265,7 +268,7 @@ fun JogboItem(
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = "more",
-                tint = color,
+                tint = if (isReported) Gray200 else color,
                 modifier = Modifier
                     .size(24.dp)
                     .noRippleClickable {
