@@ -20,6 +20,7 @@
     <string name="go_to_store">식당 구경하러 가기</string>
     <string name="delete_store">족보에서 식당을 삭제할까요?</string>
     <string name="go_back">돌아가기</string>
+    <string name="maintain">유지하기</string>
     <string name="go_to_register_store">등록된 식당이 있어요\n식당으로 이동할까요?</string>
     <string name="preparing_share_jogbo">친구에게 내 족보를 공유할 수 있도록\n준비 중이에요</string>
     <string name="check">확인</string>

@@ -136,7 +136,7 @@ fun MyJogboDetailScreen(
         DoubleButtonDialog(
             title = stringResource(R.string.delete_store),
             negativeButtonTitle = stringResource(R.string.go_back),
-            positiveButtonTitle = stringResource(id = R.string.delete),
+            positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = updateDeleteDialogState,
             onPositiveButtonClicked = {
                 deleteJogboStore(selectedStoreId)
