@@ -9,8 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class MyJogboDetailState(
     val userInformation: UserInformationEntity = UserInformationEntity(
-        nickname = "",
-        profileImageUrl = ""
+        nickname = ""
     ),
     val myStoreItems: MyJogboDetailEntity = MyJogboDetailEntity(
         title = "",

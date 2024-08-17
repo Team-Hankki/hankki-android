@@ -40,7 +40,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -108,7 +107,6 @@ fun MyRoute(
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.myModel.nickname,
-        userImage = myState.myModel.profileImageUrl,
         showDialog = myState.showDialog,
         showWebView = myViewModel::showWebView,
         updateDialog = myViewModel::updateDialogState,
@@ -123,7 +121,6 @@ fun MyScreen(
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
     userName: String,
-    userImage: String,
     showDialog: DialogState,
     showWebView: (String) -> Unit,
     updateDialog: (DialogState) -> Unit,
@@ -173,11 +170,11 @@ fun MyScreen(
 
         Spacer(modifier = Modifier.height(23.dp))
 
-        AsyncImage(
+        Image(
             modifier = Modifier
                 .size(98.dp)
                 .clip(CircleShape),
-            model = userImage,
+            painter = painterResource(id = R.drawable.img_my_profile),
             contentDescription = stringResource(R.string.profile_image),
             contentScale = ContentScale.Crop
         )
@@ -285,7 +282,6 @@ fun MyScreenPreview() {
             navigateToMyJogbo = {},
             navigateToMyStore = {},
             userName = "",
-            userImage = "",
             showDialog = DialogState.CLOSED,
             updateDialog = {},
             showWebView = { _ -> },
