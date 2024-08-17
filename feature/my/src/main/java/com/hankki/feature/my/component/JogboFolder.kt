@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -42,11 +41,10 @@ fun JogboFolder(
         modifier = Modifier
             .fillMaxWidth()
             .background(Red500)
-            .padding(top = 4.dp, bottom = 22.dp)
+            .padding(bottom = 23.dp)
             .padding(horizontal = 22.dp)
             .paint(
-                painterResource(id = R.drawable.ic_my_jogbo_fold),
-                contentScale = ContentScale.FillWidth
+                painterResource(id = R.drawable.ic_my_jogbo_fold)
             )
     ) {
         Column {

@@ -2,7 +2,9 @@ package com.hankki.feature.my.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -21,7 +23,7 @@ import com.hankki.feature.my.R
 
 @Composable
 fun JogboShareButton(
-    showShareDialog : () -> Unit
+    showShareDialog: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -36,6 +38,9 @@ fun JogboShareButton(
             contentDescription = "share",
             tint = Red500
         )
+
+        Spacer(modifier = Modifier.width(2.dp))
+
         Text(text = "공유", style = HankkiTheme.typography.body4, color = White)
     }
 }
