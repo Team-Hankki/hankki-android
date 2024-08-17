@@ -35,6 +35,8 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
+import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
@@ -44,8 +46,6 @@ import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
-import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
-import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.MoveToHomeButton
 import com.hankki.feature.my.component.StoreItem
@@ -232,7 +232,7 @@ fun MyJogboDetailScreen(
                         )
                         if (storeItems.data.indexOf(store) != storeItems.data.lastIndex) {
                             HorizontalDivider(
-                                modifier = Modifier.padding(vertical = 1.dp),
+                                modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
                                 thickness = 1.dp,
                                 color = Gray200
                             )
