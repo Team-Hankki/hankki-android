@@ -21,7 +21,7 @@ data class JogboDetailDto(
         @SerialName("name")
         val name: String,
         @SerialName("imageUrl")
-        val imageUrl: String,
+        val imageUrl: String?,
         @SerialName("category")
         val category: String,
         @SerialName("lowestPrice")
