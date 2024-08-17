@@ -29,10 +29,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER20_REGEX
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -54,8 +56,13 @@ fun HankkiCountTextField(
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = value)) }
 
     val borderColor = when {
-        isFocused -> Gray400
+        isFocused -> Gray600
         else -> Gray300
+    }
+
+    val borderWidth = when {
+        isFocused -> 1.5.dp
+        else -> 1.dp
     }
 
     Column(modifier = modifier.background(White)) {
@@ -71,6 +78,7 @@ fun HankkiCountTextField(
             value = textFieldValue,
             placeholder = placeholder,
             borderColor = borderColor,
+            borderWidth = borderWidth,
             textColor = Gray900,
             onFocusChanged = { focusState ->
                 isFocused = focusState
@@ -140,6 +148,7 @@ fun HankkiCountInnerTextField(
     placeholder: String,
     onTextChanged: (TextFieldValue) -> Unit,
     borderColor: Color,
+    borderWidth: Dp,
     textColor: Color,
     onFocusChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -156,7 +165,7 @@ fun HankkiCountInnerTextField(
         onValueChange = onTextChanged,
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(10.dp))
+            .border(borderWidth, borderColor, RoundedCornerShape(10.dp))
             .background(backgroundColor)
             .padding(12.dp)
             .focusRequester(focusRequester)
