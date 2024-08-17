@@ -14,7 +14,7 @@
     <string name="ask_delete_jogbo">족보를 삭제할까요?</string>
     <string name="delete">삭제</string>
     <string name="edit">편집</string>
-    <string name="add_new_jogbo_list">새로운\n족보\n추가하기</string>
+    <string name="add_new_jogbo_list">새로운\n식당 족보\n추가하기</string>
     <string name="close">닫기</string>
     <string name="do_delete">삭제하기</string>
     <string name="go_to_store">식당 구경하러 가기</string>
