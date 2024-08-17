@@ -96,6 +96,7 @@ fun StoreItem(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
+                    modifier = Modifier.width(16.dp),
                     painter = painterResource(id = com.hankki.feature.my.R.drawable.ic_food_small),
                     contentDescription = "icon",
                     tint = Gray300
@@ -120,7 +121,8 @@ fun StoreItem(
                 Spacer(modifier = Modifier.width(2.dp))
 
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_heart),
+                    modifier = Modifier.width(16.dp),
+                    painter = painterResource(id = R.drawable.ic_like),
                     contentDescription = "icon",
                     tint = Gray300
                 )
