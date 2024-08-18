@@ -41,8 +41,14 @@ fun StoreDetailMenuBox(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(1.dp, RoundedCornerShape(10.dp))
-            .clip(RoundedCornerShape(10.dp))
+            .shadow(
+                elevation = 10.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = Gray900.copy(alpha = 0.5f),
+                ambientColor = Gray900.copy(alpha = 0.5f),
+                clip = false
+            )
+            .clip(RoundedCornerShape(20.dp))
             .background(White)
             .padding(horizontal = 28.dp, vertical = 32.dp)
             .wrapContentSize()
