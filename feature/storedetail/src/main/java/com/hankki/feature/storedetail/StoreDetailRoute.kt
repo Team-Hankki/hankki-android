@@ -274,7 +274,7 @@ fun StoreDetailScreen(
                             painter = painterResource(id = R.drawable.ic_arrow_left_gray50),
                             contentDescription = "뒤로가기",
                             modifier = Modifier
-                                .offset(x = 16.dp, y = 12.dp)
+                                .offset(x = 20.43.dp, y = 12.dp)
                                 .size(48.dp)
                                 .noRippleClickable(onClick = onNavigateUp),
                             tint = Color.Unspecified
@@ -401,6 +401,5 @@ fun StoreDetailScreen(
                 )
             }
         }
-
     }
 }

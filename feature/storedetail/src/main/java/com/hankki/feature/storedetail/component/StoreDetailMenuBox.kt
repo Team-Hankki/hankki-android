@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -64,7 +63,7 @@ fun StoreDetailMenuBox(
             )
 
             Spacer(modifier = Modifier.width(8.dp))
-            HankkiCategoryChip(text = tag)
+            HankkiStoreDetailCategoryChip(text = tag)
         }
 
         Spacer(modifier = Modifier.padding(top = 30.dp))
