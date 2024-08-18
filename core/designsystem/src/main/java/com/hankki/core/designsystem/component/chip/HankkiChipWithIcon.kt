@@ -61,7 +61,7 @@ fun HankkiChipWithIcon(
 
         Text(
             text = title,
-            style = HankkiTheme.typography.caption1,
+            style = if (isSelected) HankkiTheme.typography.body4 else HankkiTheme.typography.body5,
             color = if (isSelected) Gray700 else Gray400
         )
     }

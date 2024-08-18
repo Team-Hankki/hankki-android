@@ -155,8 +155,8 @@ fun HankkiCountInnerTextField(
         value = value,
         onValueChange = onTextChanged,
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
             .background(backgroundColor)
             .padding(12.dp)
             .focusRequester(focusRequester)

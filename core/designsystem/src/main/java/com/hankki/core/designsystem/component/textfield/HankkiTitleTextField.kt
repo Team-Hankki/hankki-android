@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER30_REGEX
 import com.hankki.core.common.utill.VALID_NUMBER_UNDER_100000_REGEX
 import com.hankki.core.designsystem.R
+import com.hankki.core.designsystem.constant.FOCUSED_BORDER_RADIUS
+import com.hankki.core.designsystem.constant.UNFOCUSED_BORDER_RADIUS
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray800
@@ -78,11 +80,13 @@ fun HankkiTitleTextField(
             value = value,
             placeholder = placeholder,
             onTextChanged = onTextChanged,
+            border = if (isFocused) FOCUSED_BORDER_RADIUS.dp else UNFOCUSED_BORDER_RADIUS.dp,
             borderColor = borderColor,
             textColor = textColor,
             tailingIcon = tailingIcon,
             modifier = modifier,
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             onFocusChanged = { isFocused = it }
         )
 

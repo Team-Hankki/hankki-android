@@ -13,8 +13,8 @@ import com.hankki.feature.report.searchstore.SearchStoreRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateToReport(
-    latitude: Float = 0f,
-    longitude: Float = 0f,
+    latitude: String = "0.0",
+    longitude: String = "0.0",
     location: String = "",
     address: String = "",
     navOptions: NavOptions? = null,
@@ -52,8 +52,8 @@ fun NavController.navigateToReportFinish(
 
 fun NavGraphBuilder.reportNavGraph(
     navigateReport: (
-        latitude: Float,
-        longitude: Float,
+        latitude: String,
+        longitude: String,
         location: String,
         address: String,
     ) -> Unit,
@@ -108,8 +108,8 @@ fun NavGraphBuilder.reportNavGraph(
 
 @Serializable
 data class Report(
-    val latitude: Float = 0f,
-    val longitude: Float = 0f,
+    val latitude: String = "0.0",
+    val longitude: String = "0.0",
     val location: String = "",
     val address: String = "",
 ) : MainTabRoute
