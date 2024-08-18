@@ -3,6 +3,7 @@ package com.hankki.core.network
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import com.hankki.core.datastore.TokenDataStore
 import com.hankki.domain.reissuetoken.repository.ReissueTokenRepository
 import com.jakewharton.processphoenix.ProcessPhoenix
@@ -56,6 +57,7 @@ class OauthInterceptor @Inject constructor(
                 authRequest.newBuilder().addAuthorizationHeader().build()
             chain.proceed(newRequest)
         } else {
+            showReLoginMessage()
             clearUserInfoAndRestart()
             chain.proceed(authRequest.newBuilder().build())
         }
@@ -91,6 +93,12 @@ class OauthInterceptor @Inject constructor(
         dataStore.clearInfo()
         Handler(Looper.getMainLooper()).post {
             ProcessPhoenix.triggerRebirth(context)
+        }
+    }
+
+    private fun showReLoginMessage() {
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(context, "로그인 유효기간이 만료되었어요. 재로그인 해주세요.", Toast.LENGTH_LONG).show()
         }
     }
 
