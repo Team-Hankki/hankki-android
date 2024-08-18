@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
+import com.hankki.core.designsystem.constant.FOCUSED_BORDER_RADIUS
+import com.hankki.core.designsystem.constant.UNFOCUSED_BORDER_RADIUS
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray800
@@ -43,9 +45,9 @@ fun HankkiSearchTextField(
 
     HankkiTextField(
         value = value,
-        placeholder = "식당 이름으로 검색하기",
+        placeholder = placeholder,
         onTextChanged = onTextChanged,
-        border = if (isFocused) 1.5.dp else 1.dp,
+        border = if (isFocused) FOCUSED_BORDER_RADIUS.dp else UNFOCUSED_BORDER_RADIUS.dp,
         borderColor = borderColor,
         textColor = Gray800,
         backgroundColor = Gray100,
