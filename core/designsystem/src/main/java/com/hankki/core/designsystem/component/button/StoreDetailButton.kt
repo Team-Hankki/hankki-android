@@ -33,7 +33,6 @@ fun StoreDetailMenuButton(
     isSelected: Boolean = false,
     borderColor: Color = if (isSelected) Red500 else Gray100
 ) {
-
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
@@ -74,7 +73,7 @@ fun StoreDetailReportButton(
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
             .background(color = White)
             .noRippleClickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 15.5.dp)
+            .padding(horizontal = 20.dp, vertical = 15.5.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
