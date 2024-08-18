@@ -9,12 +9,17 @@ android {
 }
 
 dependencies {
-    implementation(libs.kakao.user)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
+    //domain
     implementation(projects.domain.login)
     implementation(projects.domain.token)
+
+    //kakao
+    implementation(libs.kakao.user)
+
+    //other
     implementation(libs.lottie.compose)
-    implementation(libs.androidx.tools.core)
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.androidx.tools.core)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
 }
