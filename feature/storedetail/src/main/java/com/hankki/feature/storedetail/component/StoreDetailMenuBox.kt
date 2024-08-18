@@ -58,7 +58,6 @@ fun StoreDetailMenuBox(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-
             Text(
                 text = title,
                 style = HankkiTheme.typography.suitH1,
@@ -78,9 +77,12 @@ fun StoreDetailMenuBox(
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
         ) {
-            menuItems.forEach { item ->
+            menuItems.forEachIndexed { index, item ->
                 StoreDetailItem(name = item.name, price = item.price.toString())
-                Spacer(modifier = Modifier.height(8.dp))
+
+                if (index != menuItems.lastIndex) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
 
