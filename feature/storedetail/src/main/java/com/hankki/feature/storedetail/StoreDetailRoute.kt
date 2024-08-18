@@ -252,7 +252,7 @@ fun StoreDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .aspectRatio(1.5f),
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default),
                 error = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default)
             )
