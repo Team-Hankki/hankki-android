@@ -55,11 +55,11 @@ fun HankkiTextField(
         value = value,
         onValueChange = onTextChanged,
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(8.dp))
             .border(
                 border,
                 borderColor,
-                RoundedCornerShape(10.dp)
+                RoundedCornerShape(8.dp)
             )
             .background(backgroundColor)
             .padding(12.dp)
