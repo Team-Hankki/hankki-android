@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -36,6 +40,7 @@ fun LoginRoute(
     val viewModel: LoginViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    var isButtonEnabled by remember { mutableStateOf(true) }
 
     LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
         viewModel.loginSideEffects
@@ -51,7 +56,7 @@ fun LoginRoute(
                     }
 
                     is LoginSideEffect.LoginError -> {
-                        //LoginError 필요시 추가 동작
+                        isButtonEnabled = true
                     }
 
                     is LoginSideEffect.StartKakaoTalkLogin -> {
@@ -61,8 +66,10 @@ fun LoginRoute(
                     }
 
                     is LoginSideEffect.StartKakaoWebLogin -> {
+                        isButtonEnabled = false
                         startKakaoWebLogin(context) { token, error ->
                             viewModel.handleLoginResult(token, error)
+                            isButtonEnabled = true
                         }
                     }
                 }
@@ -70,10 +77,14 @@ fun LoginRoute(
     }
 
     LoginScreen(
+        isButtonEnabled = isButtonEnabled,
         onLoginClick = {
-            viewModel.startKakaoLogin(
-                isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
-            )
+            if (isButtonEnabled) {
+                isButtonEnabled = false
+                viewModel.startKakaoLogin(
+                    isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
+                )
+            }
         }
     )
 }
@@ -81,6 +92,7 @@ fun LoginRoute(
 
 @Composable
 fun LoginScreen(
+    isButtonEnabled: Boolean,
     onLoginClick: () -> Unit
 ) {
     Box(
@@ -114,7 +126,11 @@ fun LoginScreen(
             painter = painterResource(id = R.drawable.btn_kakao),
             contentDescription = "Kakao Login Button",
             modifier = Modifier
-                .noRippleClickable(onClick = onLoginClick)
+                .noRippleClickable {
+                    if (isButtonEnabled) {
+                        onLoginClick()
+                    }
+                }
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp)
                 .padding(horizontal = 22.dp)
