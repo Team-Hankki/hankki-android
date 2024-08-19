@@ -10,7 +10,9 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +25,13 @@ class LoginViewModel @Inject constructor(
     private val _loginSideEffects = MutableSharedFlow<LoginSideEffect>()
     val loginSideEffects: SharedFlow<LoginSideEffect>
         get() = _loginSideEffects
+
+    private val _isButtonEnabled = MutableStateFlow(true)
+    val isButtonEnabled: StateFlow<Boolean> = _isButtonEnabled
+
+    fun setButtonEnabled(enabled: Boolean) {
+        _isButtonEnabled.value = enabled
+    }
 
     fun startKakaoLogin(isKakaoTalkAvailable: Boolean) {
         viewModelScope.launch {
@@ -42,8 +51,11 @@ class LoginViewModel @Inject constructor(
                 } else {
                     _loginSideEffects.emit(LoginSideEffect.StartKakaoWebLogin)
                 }
+                setButtonEnabled(true)
             } else if (token != null) {
                 sendTokenToServer(token.accessToken)
+            } else {
+                setButtonEnabled(true)
             }
         }
     }
@@ -62,6 +74,7 @@ class LoginViewModel @Inject constructor(
                             response.isRegistered
                         )
                     )
+                    setButtonEnabled(false)
                 }.onFailure { throwable ->
                     val errorMessage = throwable.localizedMessage ?: "Unknown error"
                     handleLoginError(errorMessage)
@@ -72,6 +85,7 @@ class LoginViewModel @Inject constructor(
     private fun handleLoginError(errorMessage: String) {
         viewModelScope.launch {
             _loginSideEffects.emit(LoginSideEffect.LoginError(errorMessage))
+            setButtonEnabled(true)
         }
     }
 

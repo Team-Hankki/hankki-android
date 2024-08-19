@@ -3,11 +3,11 @@ package com.hankki.feature.login
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -28,10 +28,10 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.button.HankkiBlackButton
-import com.hankki.core.designsystem.component.button.HankkiButton
+import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
@@ -70,85 +70,23 @@ fun OnboardingScreen1(navController: NavHostController) {
         LottieAnimation(
             composition = composition,
             iterations = LottieConstants.IterateForever,
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.BottomCenter),
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillWidth
         )
 
-        Text(
-            text = stringResource(R.string.skip),
-            color = Gray100,
-            style = HankkiTheme.typography.body4,
+        Column(
             modifier = Modifier
-                .statusBarsPadding()
-                .padding(top = 25.dp, end = 22.dp)
-                .align(Alignment.TopEnd)
-                .noRippleClickable {
-                    navController.navigate("onboarding4") {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
-                        }
-                    }
-                }
-        )
-
-        Text(
-            stringResource(R.string.rice_burden),
-            color = White,
-            style = HankkiTheme.typography.suitH1,
-            modifier = Modifier
-                .padding(top = 66.dp, start = 22.dp)
-                .align(Alignment.TopStart)
-        )
-
-        HankkiButton(
-            text = "다음으로",
-            textStyle = HankkiTheme.typography.sub3,
-            onClick = {
-                navController.navigate("onboarding2") {
-                    popUpTo("onboarding1") {
-                        inclusive = true
-                    }
-                }
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 22.dp)
-                .navigationBarsPadding()
-        )
-    }
-}
-
-@Composable
-fun OnboardingScreen2(navController: NavHostController) {
-    val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.step2)
-    )
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-
-        LottieAnimation(
-            composition = composition,
-            iterations = LottieConstants.IterateForever,
-            modifier = Modifier
-                .statusBarsPadding()
                 .fillMaxSize()
-                .align(Alignment.BottomCenter),
-            contentScale = ContentScale.FillWidth
-        )
-
-        Column(modifier = Modifier.align(Alignment.TopEnd)) {
-            Spacer(modifier = Modifier.statusBarsPadding())
-
+                .padding(horizontal = 22.dp)
+        ) {
             Text(
                 text = stringResource(R.string.skip),
-                color = Gray400,
+                color = Gray100,
                 style = HankkiTheme.typography.body4,
                 modifier = Modifier
-                    .padding(top = 25.dp, end = 22.dp)
+                    .align(Alignment.End)
+                    .padding(top = 25.dp)
+                    .statusBarsPadding()
                     .noRippleClickable {
                         navController.navigate("onboarding4") {
                             popUpTo(navController.graph.startDestinationId) {
@@ -157,32 +95,100 @@ fun OnboardingScreen2(navController: NavHostController) {
                         }
                     }
             )
-        }
 
-        Text(
-            stringResource(R.string.under_8000),
-            color = Gray900,
-            style = HankkiTheme.typography.suitH1,
-            modifier = Modifier
-                .padding(top = 66.dp, start = 22.dp)
-                .align(Alignment.TopStart)
-        )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                stringResource(R.string.rice_burden),
+                color = White,
+                style = HankkiTheme.typography.suitH1,
+                modifier = Modifier.align(Alignment.Start)
+            )
 
-        HankkiButton(
-            text = "다음으로",
-            textStyle = HankkiTheme.typography.sub3,
-            onClick = {
-                navController.navigate("onboarding3") {
-                    popUpTo("onboarding2") {
-                        inclusive = true
+            Spacer(modifier = Modifier.weight(1f))
+            HankkiMediumButton(
+                text = "다음으로",
+                textStyle = HankkiTheme.typography.sub3,
+                onClick = {
+                    navController.navigate("onboarding2") {
+                        popUpTo("onboarding1") {
+                            inclusive = true
+                        }
                     }
-                }
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 22.dp)
-                .navigationBarsPadding()
+                },
+                enabled = true,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 22.dp)
+                    .navigationBarsPadding()
+            )
+        }
+    }
+}
+
+
+@Composable
+fun OnboardingScreen2(navController: NavHostController) {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.step2)
+    )
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LottieAnimation(
+            composition = composition,
+            iterations = LottieConstants.IterateForever,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillWidth
         )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 22.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.skip),
+                color = Gray400,
+                style = HankkiTheme.typography.body4,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(top = 25.dp)
+                    .statusBarsPadding()
+                    .noRippleClickable {
+                        navController.navigate("onboarding4") {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                        }
+                    }
+            )
+
+            Spacer(modifier = Modifier.height(23.dp))
+            Text(
+                text = stringResource(R.string.under_8000),
+                color = Gray900,
+                style = HankkiTheme.typography.suitH1,
+                modifier = Modifier.align(Alignment.Start)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+            HankkiMediumButton(
+                text = "다음으로",
+                textStyle = HankkiTheme.typography.sub3,
+                onClick = {
+                    navController.navigate("onboarding3") {
+                        popUpTo("onboarding2") {
+                            inclusive = true
+                        }
+                    }
+                },
+                enabled = true,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 22.dp)
+                    .navigationBarsPadding()
+            )
+        }
     }
 }
 
@@ -197,23 +203,24 @@ fun OnboardingScreen3(navController: NavHostController) {
         LottieAnimation(
             composition = composition,
             iterations = LottieConstants.IterateForever,
-            modifier = Modifier
-                .statusBarsPadding()
-                .fillMaxSize()
-                .align(Alignment.BottomCenter),
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillWidth
         )
 
-        Column(modifier = Modifier.align(Alignment.TopEnd)) {
-            Spacer(modifier = Modifier.statusBarsPadding())
-
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 22.dp)
+        ) {
             Text(
                 text = stringResource(R.string.skip),
                 color = Gray400,
                 style = HankkiTheme.typography.body4,
                 modifier = Modifier
-                    .padding(top = 25.dp, end = 22.dp)
-                    .clickable {
+                    .align(Alignment.End)
+                    .padding(top = 25.dp)
+                    .statusBarsPadding()
+                    .noRippleClickable {
                         navController.navigate("onboarding4") {
                             popUpTo(navController.graph.startDestinationId) {
                                 inclusive = true
@@ -221,32 +228,33 @@ fun OnboardingScreen3(navController: NavHostController) {
                         }
                     }
             )
-        }
 
-        Text(
-            stringResource(R.string.report),
-            color = Gray900,
-            style = HankkiTheme.typography.suitH1,
-            modifier = Modifier
-                .padding(top = 66.dp, start = 22.dp)
-                .align(Alignment.TopStart)
-        )
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                stringResource(R.string.report),
+                color = Gray900,
+                style = HankkiTheme.typography.suitH1,
+                modifier = Modifier.align(Alignment.Start)
+            )
 
-        HankkiButton(
-            text = "다음으로",
-            textStyle = HankkiTheme.typography.sub3,
-            onClick = {
-                navController.navigate("onboarding4") {
-                    popUpTo("onboarding3") {
-                        inclusive = true
+            Spacer(modifier = Modifier.weight(1f))
+            HankkiMediumButton(
+                text = "다음으로",
+                textStyle = HankkiTheme.typography.sub3,
+                onClick = {
+                    navController.navigate("onboarding4") {
+                        popUpTo("onboarding3") {
+                            inclusive = true
+                        }
                     }
-                }
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 22.dp)
-                .navigationBarsPadding()
-        )
+                },
+                enabled = true,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 22.dp)
+                    .navigationBarsPadding()
+            )
+        }
     }
 }
 
@@ -263,16 +271,16 @@ fun OnboardingScreen4(
         LottieAnimation(
             composition = composition,
             iterations = 1,
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.BottomCenter),
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillWidth
         )
 
-        HankkiBlackButton(
+        HankkiMediumButton(
             text = "시작하기",
             textStyle = HankkiTheme.typography.sub3,
             onClick = navigateToUniversity,
+            enabled = true,
+            backgroundColor = Gray800,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 22.dp)

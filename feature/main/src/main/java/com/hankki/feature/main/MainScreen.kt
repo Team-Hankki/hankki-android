@@ -248,7 +248,7 @@ internal fun MainScreen(
                     loginNavGraph(
                         navigateToHome = {
                             val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id) {
+                                popUpTo<Login> {
                                     inclusive = true
                                 }
                                 launchSingleTop = true
