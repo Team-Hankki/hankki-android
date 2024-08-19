@@ -1,5 +1,6 @@
 package com.hankki.feature.my.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,10 +34,9 @@ fun MoveToHomeButton(
             .padding(start = 12.dp, end = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
+        Image(
             painter = painterResource(id = R.drawable.ic_add),
             contentDescription = "add",
-            tint = Gray500
         )
         Spacer(modifier = Modifier.width(5.dp))
         Text(

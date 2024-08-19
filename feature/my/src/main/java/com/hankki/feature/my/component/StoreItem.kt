@@ -1,5 +1,6 @@
 package com.hankki.feature.my.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,12 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
@@ -29,7 +30,6 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -95,11 +95,10 @@ fun StoreItem(
             Spacer(modifier = Modifier.height(2.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
+                Image(
                     modifier = Modifier.width(16.dp),
                     painter = painterResource(id = com.hankki.feature.my.R.drawable.ic_food_small),
                     contentDescription = "icon",
-                    tint = Gray300
                 )
 
                 Spacer(modifier = Modifier.width(3.dp))
@@ -112,19 +111,17 @@ fun StoreItem(
 
                 Spacer(modifier = Modifier.width(4.dp))
 
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.ic_ellipse),
                     contentDescription = "icon",
-                    tint = Gray300
                 )
 
                 Spacer(modifier = Modifier.width(2.dp))
 
-                Icon(
+                Image(
                     modifier = Modifier.width(16.dp),
                     painter = painterResource(id = R.drawable.ic_like),
-                    contentDescription = "icon",
-                    tint = Gray300
+                    contentDescription = "icon"
                 )
 
                 Spacer(modifier = Modifier.width(2.dp))
@@ -138,13 +135,13 @@ fun StoreItem(
         }
 
         if (isIconUsed) {
-            Icon(
+            Image(
                 painter = painterResource(id = R.drawable.ic_heart_filled),
                 contentDescription = "plus button",
                 modifier = Modifier
                     .size(52.dp)
                     .noRippleClickable(onClick = editSelected),
-                tint = if (isIconSelected) Red500 else Gray200
+                colorFilter = ColorFilter.tint(if (isIconSelected) Red500 else Gray200)
             )
         }
     }

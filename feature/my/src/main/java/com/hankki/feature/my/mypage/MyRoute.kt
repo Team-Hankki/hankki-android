@@ -21,7 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -261,10 +260,9 @@ fun MyScreen(
                     style = HankkiTheme.typography.body5,
                     color = Gray400,
                 )
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.ic_quit),
                     contentDescription = stringResource(id = R.string.quit),
-                    tint = Gray400,
                     modifier = Modifier.size(16.dp)
                 )
             }

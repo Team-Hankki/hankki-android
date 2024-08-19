@@ -13,13 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,13 +48,12 @@ fun JogboFolder(
             )
     ) {
         Column {
-            Icon(
+            Image(
                 painter = painterResource(id = R.drawable.ic_my_store),
                 contentDescription = "store image",
                 modifier = Modifier
                     .padding(top = 16.dp, start = 17.dp)
                     .size(45.dp),
-                tint = Color.Unspecified
             )
 
             Text(

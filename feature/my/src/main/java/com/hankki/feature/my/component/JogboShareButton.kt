@@ -1,12 +1,12 @@
 package com.hankki.feature.my.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
-import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 
@@ -33,10 +32,9 @@ fun JogboShareButton(
             .noRippleClickable(showShareDialog),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
+        Image(
             painter = painterResource(id = R.drawable.ic_share),
-            contentDescription = "share",
-            tint = Red500
+            contentDescription = "share"
         )
 
         Spacer(modifier = Modifier.width(2.dp))
