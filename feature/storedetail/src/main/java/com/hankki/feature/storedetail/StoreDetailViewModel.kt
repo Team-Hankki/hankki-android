@@ -27,7 +27,7 @@ class StoreDetailViewModel @Inject constructor(
         StoreDetailState(
             buttonLabels = persistentListOf(
                 "식당이 사라졌어요",
-                "더이상 8000원이하인 메뉴가 없어요",
+                "더이상 8,000원이하인 메뉴가 없어요",
                 "부적절한 제보에요"
             )
         )
