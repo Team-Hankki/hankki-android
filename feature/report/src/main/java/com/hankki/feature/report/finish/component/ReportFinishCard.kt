@@ -15,6 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -38,14 +40,15 @@ fun ReportFinishCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.shadow(
+            elevation = 7.dp,
+            spotColor = Color(0x0A000000),
+            ambientColor = Color(0x0A000000)
+        ),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = White
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
     ) {
         Row(
             modifier = Modifier
@@ -85,9 +88,9 @@ fun ReportFinishCard(
                 Text(
                     text = stringResource(
                         id =
-                        if (isAddedJogbo){
+                        if (isAddedJogbo) {
                             com.hankki.feature.report.R.string.add_my_other_jogbo
-                        }else {
+                        } else {
                             com.hankki.feature.report.R.string.add_my_jogbo
                         }
                     ),
@@ -104,6 +107,11 @@ fun ReportFinishCard(
 @Composable
 fun ReportFinishCardPreview() {
     HankkijogboTheme {
-        ReportFinishCard(storeName = "한끼네 한정식", isAddedJogbo = false, onClick = {}, modifier = Modifier.fillMaxWidth())
+        ReportFinishCard(
+            storeName = "한끼네 한정식",
+            isAddedJogbo = false,
+            onClick = {},
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

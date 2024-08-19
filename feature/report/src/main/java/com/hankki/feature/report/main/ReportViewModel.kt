@@ -153,8 +153,16 @@ class ReportViewModel @Inject constructor(
                     name = _state.value.location.location,
                     category = _state.value.selectedCategory ?: "",
                     address = _state.value.location.address,
-                    latitude = _state.value.location.latitude.toDouble(),
-                    longitude = _state.value.location.longitude.toDouble(),
+                    latitude = try {
+                        _state.value.location.latitude.toDouble()
+                    } catch (e: NumberFormatException) {
+                        0.0
+                    },
+                    longitude = try {
+                        _state.value.location.longitude.toDouble()
+                    } catch (e: NumberFormatException) {
+                        0.0
+                    },
                     universityId = _state.value.universityId,
                     menus = _state.value.menuList.map {
                         ReportStoreRequestEntity.MenuEntity(

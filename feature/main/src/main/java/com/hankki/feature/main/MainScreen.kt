@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -82,13 +83,13 @@ internal fun MainScreen(
     val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
 
     val errorSnackBarHostState = remember { SnackbarHostState() }
-    val onShowErrorSnackBar: () -> Unit = {
+    val onShowErrorSnackBar: (String?) -> Unit = { text ->
         coroutineScope.launch {
             errorSnackBarHostState.currentSnackbarData?.dismiss()
 
             val job = launch {
                 errorSnackBarHostState.showSnackbar(
-                    message = "오류가 발생했어요. 다시 시도해주세요.",
+                    message = text ?: "오류가 발생했어요. 다시 시도해주세요.",
                 )
             }
             delay(SNACK_BAR_DURATION)
@@ -165,6 +166,7 @@ internal fun MainScreen(
                     homeNavGraph(
                         paddingValues = paddingValue,
                         onShowSnackBar = onShowTextSnackBarWithButton,
+                        onShowTextSnackBar = onShowErrorSnackBar,
                         navigateStoreDetail = navigator::navigateToStoreDetail,
                         navigateToUniversitySelection = navigator::navigateToUniversity,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo
@@ -387,7 +389,7 @@ private fun MainBottomBar(
         exit = fadeOut() + slideOut { IntOffset(0, it.height) }
     ) {
         Column(
-            modifier = Modifier.background(White)
+            modifier = Modifier.shadow(24.dp).background(White)
         ) {
             HorizontalDivider(
                 color = Gray100
