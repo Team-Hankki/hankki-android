@@ -12,9 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -24,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -40,7 +38,7 @@ fun LoginRoute(
     val viewModel: LoginViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    var isButtonEnabled by remember { mutableStateOf(true) }
+    val isButtonEnabled by viewModel.isButtonEnabled.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
         viewModel.loginSideEffects
@@ -56,7 +54,7 @@ fun LoginRoute(
                     }
 
                     is LoginSideEffect.LoginError -> {
-                        isButtonEnabled = true
+                        // login error
                     }
 
                     is LoginSideEffect.StartKakaoTalkLogin -> {
@@ -66,10 +64,8 @@ fun LoginRoute(
                     }
 
                     is LoginSideEffect.StartKakaoWebLogin -> {
-                        isButtonEnabled = false
                         startKakaoWebLogin(context) { token, error ->
                             viewModel.handleLoginResult(token, error)
-                            isButtonEnabled = true
                         }
                     }
                 }
@@ -79,12 +75,9 @@ fun LoginRoute(
     LoginScreen(
         isButtonEnabled = isButtonEnabled,
         onLoginClick = {
-            if (isButtonEnabled) {
-                isButtonEnabled = false
-                viewModel.startKakaoLogin(
-                    isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
-                )
-            }
+            viewModel.startKakaoLogin(
+                isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
+            )
         }
     )
 }

@@ -28,10 +28,10 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.button.HankkiOnboardingBlackButton
-import com.hankki.core.designsystem.component.button.HankkiOnboardingButton
+import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
@@ -105,7 +105,7 @@ fun OnboardingScreen1(navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.weight(1f))
-            HankkiOnboardingButton(
+            HankkiMediumButton(
                 text = "다음으로",
                 textStyle = HankkiTheme.typography.sub3,
                 onClick = {
@@ -115,6 +115,7 @@ fun OnboardingScreen1(navController: NavHostController) {
                         }
                     }
                 },
+                enabled = true,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(bottom = 22.dp)
@@ -171,7 +172,7 @@ fun OnboardingScreen2(navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.weight(1f))
-            HankkiOnboardingButton(
+            HankkiMediumButton(
                 text = "다음으로",
                 textStyle = HankkiTheme.typography.sub3,
                 onClick = {
@@ -181,6 +182,7 @@ fun OnboardingScreen2(navController: NavHostController) {
                         }
                     }
                 },
+                enabled = true,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(bottom = 22.dp)
@@ -236,7 +238,7 @@ fun OnboardingScreen3(navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.weight(1f))
-            HankkiOnboardingButton(
+            HankkiMediumButton(
                 text = "다음으로",
                 textStyle = HankkiTheme.typography.sub3,
                 onClick = {
@@ -246,6 +248,7 @@ fun OnboardingScreen3(navController: NavHostController) {
                         }
                     }
                 },
+                enabled = true,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(bottom = 22.dp)
@@ -272,10 +275,12 @@ fun OnboardingScreen4(
             contentScale = ContentScale.FillWidth
         )
 
-        HankkiOnboardingBlackButton(
+        HankkiMediumButton(
             text = "시작하기",
             textStyle = HankkiTheme.typography.sub3,
             onClick = navigateToUniversity,
+            enabled = true,
+            backgroundColor = Gray800,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 22.dp)
