@@ -87,7 +87,7 @@ fun JogboFolder(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.user_image),
+                        painter = painterResource(id = R.drawable.img_user_image),
                         contentDescription = "user image",
                         modifier = Modifier.size(26.dp)
                     )
