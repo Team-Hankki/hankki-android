@@ -18,7 +18,6 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.feature.my.R
 
 @Composable
 fun JogboShareButton(
@@ -33,7 +32,7 @@ fun JogboShareButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_share),
+            painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_share),
             contentDescription = "share"
         )
 

@@ -30,6 +30,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray200
+import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -97,8 +98,9 @@ fun StoreItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     modifier = Modifier.width(16.dp),
-                    painter = painterResource(id = com.hankki.feature.my.R.drawable.ic_food_small),
+                    painter = painterResource(id = R.drawable.ic_food),
                     contentDescription = "icon",
+                    colorFilter = ColorFilter.tint(Gray300)
                 )
 
                 Spacer(modifier = Modifier.width(3.dp))

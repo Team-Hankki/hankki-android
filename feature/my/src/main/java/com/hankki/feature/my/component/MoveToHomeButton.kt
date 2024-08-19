@@ -35,7 +35,7 @@ fun MoveToHomeButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_add),
+            painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_add),
             contentDescription = "add",
         )
         Spacer(modifier = Modifier.width(5.dp))

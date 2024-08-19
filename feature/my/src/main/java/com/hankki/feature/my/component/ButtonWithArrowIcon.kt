@@ -18,7 +18,6 @@ import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.feature.my.R
 
 @Composable
 fun ButtonWithArrowIcon(
@@ -40,7 +39,7 @@ fun ButtonWithArrowIcon(
             color = Gray900
         )
         Image(
-            painterResource(id = R.drawable.ic_arrow_right),
+            painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_right),
             contentDescription = "ic_arrow_right"
         )
     }

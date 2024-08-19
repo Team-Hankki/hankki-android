@@ -226,7 +226,7 @@ fun MyScreen(
                 )
                 Spacer(modifier = Modifier.width(18.dp))
                 ButtonWithImageAndBorder(
-                    R.drawable.ic_good,
+                    com.hankki.core.designsystem.R.drawable.ic_good,
                     stringResource(R.string.description_store_like),
                     Modifier
                         .weight(1f)

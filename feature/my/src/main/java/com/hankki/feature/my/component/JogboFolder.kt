@@ -49,7 +49,7 @@ fun JogboFolder(
     ) {
         Column {
             Image(
-                painter = painterResource(id = R.drawable.ic_my_store),
+                painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_my_store),
                 contentDescription = "store image",
                 modifier = Modifier
                     .padding(top = 16.dp, start = 17.dp)
