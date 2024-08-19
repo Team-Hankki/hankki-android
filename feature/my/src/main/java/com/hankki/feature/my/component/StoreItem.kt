@@ -120,7 +120,7 @@ fun StoreItem(
 
                 Image(
                     modifier = Modifier.width(16.dp),
-                    painter = painterResource(id = R.drawable.ic_like),
+                    painter = painterResource(id = R.drawable.ic_like_heart),
                     contentDescription = "icon"
                 )
 
