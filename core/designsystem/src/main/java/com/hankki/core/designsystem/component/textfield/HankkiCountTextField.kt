@@ -87,10 +87,12 @@ fun HankkiCountTextField(
                 if (!trailingIcon) {
                     if (focusState) {
                         if (textFieldValue.text.isEmpty()) {
+                            textFieldValue = TextFieldValue("#", selection = TextRange(1))
                             onValueChanged("#")
                         }
                     } else {
                         if (textFieldValue.text == "#") {
+                            textFieldValue = TextFieldValue("")
                             onValueChanged("")
                         }
                     }
@@ -124,8 +126,9 @@ fun HankkiCountTextField(
 
                         textFieldValue = newValue.copy(
                             text = modifiedValue,
-                            selection = if (modifiedValue.isNotEmpty()) TextRange(modifiedValue.length) else TextRange(
-                                0
+                            selection = TextRange(
+                                start = newValue.selection.start.coerceAtLeast(1),
+                                end = newValue.selection.end.coerceAtMost(modifiedValue.length)
                             )
                         )
 
