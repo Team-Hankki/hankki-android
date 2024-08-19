@@ -32,22 +32,34 @@ class MyStoreViewModel @Inject constructor(
     fun getLikedStoreList() {
         viewModelScope.launch {
             myRepository.getLikedStore()
-                .onSuccess { storeList ->
+                .onSuccess { newLikedStoreList ->
+                    val newLikedStoreId = newLikedStoreList.map { it.id }.toSet()
+                    val uiState = _myStoreState.value.uiState
+                    val updatedItems = if (uiState is EmptyUiState.Success) {
+                        uiState.data.map { oldItem ->
+                            if (oldItem.id in newLikedStoreId) {
+                                val newItem = newLikedStoreList.find { it.id == oldItem.id }
+                                oldItem.copy(isLiked = newItem?.isLiked ?: false)
+                            } else {
+                                oldItem.copy(isLiked = false)
+                            }
+                        }.toPersistentList()
+                    } else {
+                        newLikedStoreList.map {
+                            it.toMyStoreModel()
+                        }.toPersistentList()
+                    }
+
                     _myStoreState.value = _myStoreState.value.copy(
-                        uiState = if (storeList.isEmpty()) {
-                            EmptyUiState.Empty
-                        } else {
-                            EmptyUiState.Success(
-                                storeList.map {
-                                    it.toMyStoreModel()
-                                }.toPersistentList()
-                            )
-                        }
+                        uiState = if (updatedItems.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(
+                            updatedItems
+                        )
                     )
                 }
                 .onFailure(Timber::e)
         }
     }
+
 
     fun getReportedStoreList() {
         viewModelScope.launch {
