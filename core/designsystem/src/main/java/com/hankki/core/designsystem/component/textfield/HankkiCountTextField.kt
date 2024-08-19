@@ -109,6 +109,11 @@ fun HankkiCountTextField(
                         onValueChanged(textFieldValue.text)
                     } else {
                         var modifiedValue = newValue.text.replace(" ", "#")
+                        val cursorPosition = if (modifiedValue.isEmpty()) {
+                            1
+                        } else {
+                            newValue.selection.start.coerceAtLeast(1).coerceAtMost(modifiedValue.length)
+                        }
 
                         if (newValue.text.contains("# ") || newValue.text.contains(" #")) {
                             return@HankkiCountInnerTextField
@@ -127,8 +132,8 @@ fun HankkiCountTextField(
                         textFieldValue = newValue.copy(
                             text = modifiedValue,
                             selection = TextRange(
-                                start = newValue.selection.start.coerceAtLeast(1),
-                                end = newValue.selection.end.coerceAtMost(modifiedValue.length)
+                                start = cursorPosition,
+                                end = cursorPosition
                             )
                         )
 
