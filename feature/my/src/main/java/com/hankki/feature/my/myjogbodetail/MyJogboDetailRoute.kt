@@ -5,10 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -55,7 +55,6 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun MyJogboDetailRoute(
     favoriteId: Long,
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
@@ -81,7 +80,6 @@ fun MyJogboDetailRoute(
     }
 
     MyJogboDetailScreen(
-        paddingValues = paddingValues,
         navigateUp = navigateUp,
         jogboTitle = myJogboDetailState.myStoreItems.title,
         jogboChips = myJogboDetailState.myStoreItems.chips.toPersistentList(),
@@ -107,7 +105,6 @@ fun MyJogboDetailRoute(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyJogboDetailScreen(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     jogboTitle: String,
     jogboChips: PersistentList<String>,
@@ -146,7 +143,7 @@ fun MyJogboDetailScreen(
 
     Column(
         modifier = Modifier
-            .padding(bottom = paddingValues.calculateBottomPadding())
+            .navigationBarsPadding()
             .fillMaxSize()
             .background(Red500),
         horizontalAlignment = Alignment.CenterHorizontally

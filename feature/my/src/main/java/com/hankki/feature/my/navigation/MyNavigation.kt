@@ -43,18 +43,17 @@ fun NavGraphBuilder.myNavGraph(
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
-    navigateToHome : () -> Unit
+    navigateToHome: () -> Unit
 ) {
     composable<My> {
         MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
     }
     composable<MyJogbo> {
-        MyJogboRoute(paddingValues, navigateUp, navigateToJogboDetail, navigateToNewJogbo)
+        MyJogboRoute(navigateUp, navigateToJogboDetail, navigateToNewJogbo)
     }
     composable<MyStore> { backStackEntry ->
         val type = backStackEntry.toRoute<MyStore>()
         MyStoreRoute(
-            paddingValues = paddingValues,
             type = type.type,
             navigateUp = navigateUp,
             navigateToDetail = navigateToStoreDetail
@@ -64,14 +63,13 @@ fun NavGraphBuilder.myNavGraph(
         val jogbo = backStackEntry.toRoute<MyJogboDetail>()
         MyJogboDetailRoute(
             jogbo.favoriteId,
-            paddingValues,
             navigateToDetail = navigateToStoreDetail,
             navigateUp = navigateUp,
             navigateToHome = navigateToHome
         )
     }
     composable<NewJogbo> {
-        NewJogboRoute(paddingValues, navigateUp)
+        NewJogboRoute(navigateUp)
     }
 }
 

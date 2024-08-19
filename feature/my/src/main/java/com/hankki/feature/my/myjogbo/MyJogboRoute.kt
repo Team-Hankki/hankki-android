@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -45,7 +47,6 @@ import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun MyJogboRoute(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
@@ -58,7 +59,6 @@ fun MyJogboRoute(
     }
 
     MyJogboScreen(
-        paddingValues = paddingValues,
         navigateUp = navigateUp,
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
@@ -81,7 +81,6 @@ fun MyJogboRoute(
 
 @Composable
 fun MyJogboScreen(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
@@ -106,7 +105,8 @@ fun MyJogboScreen(
 
     Column(
         modifier = Modifier
-            .padding(paddingValues)
+            .statusBarsPadding()
+            .navigationBarsPadding()
             .fillMaxSize()
             .background(White),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -211,7 +211,6 @@ fun MyJogboScreenPreview() {
             navigateUp = {},
             navigateToJogboDetail = { _ -> },
             navigateToNewJogbo = {},
-            paddingValues = PaddingValues(),
             state = UiState.Loading,
             updateEditMode = {},
             updateJogboSelectedState = { _, _ -> },

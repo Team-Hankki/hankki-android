@@ -2,12 +2,13 @@ package com.hankki.feature.my.newjogbo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +39,6 @@ import com.hankki.feature.my.component.NewJogboButton
 
 @Composable
 fun NewJogboRoute(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     newJogboViewModel: NewJogboViewModel = hiltViewModel()
 ) {
@@ -55,7 +55,6 @@ fun NewJogboRoute(
     }
 
     NewJogboScreen(
-        paddingValues = paddingValues,
         navigateUp = navigateUp,
         title = newJogboState.title,
         onTitleChange = newJogboViewModel::setTitle,
@@ -69,7 +68,6 @@ fun NewJogboRoute(
 
 @Composable
 fun NewJogboScreen(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     title: String,
     onTitleChange: (String) -> Unit,
@@ -84,8 +82,9 @@ fun NewJogboScreen(
 
     Column(
         modifier = modifier
-            .padding(paddingValues)
             .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
             .background(White)
             .addFocusCleaner(focusManager),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -157,7 +156,6 @@ fun NewJogboScreenPreview() {
 
     HankkijogboTheme {
         NewJogboScreen(
-            paddingValues = PaddingValues(),
             navigateUp = {},
             title = "",
             onTitleChange = {},

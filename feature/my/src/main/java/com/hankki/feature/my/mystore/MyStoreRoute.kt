@@ -3,8 +3,8 @@ package com.hankki.feature.my.mystore
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -44,7 +44,6 @@ import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun MyStoreRoute(
-    paddingValues: PaddingValues,
     type: String,
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
@@ -71,7 +70,6 @@ fun MyStoreRoute(
     }
 
     MyStoreScreen(
-        paddingValues = paddingValues,
         navigateUp = navigateUp,
         type = type,
         state = myStoreState.uiState,
@@ -82,7 +80,6 @@ fun MyStoreRoute(
 
 @Composable
 fun MyStoreScreen(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     type: String,
     state: EmptyUiState<PersistentList<MyStoreModel>>,
@@ -93,6 +90,7 @@ fun MyStoreScreen(
     Column(
         modifier = modifier
             .statusBarsPadding()
+            .navigationBarsPadding()
             .background(White)
             .fillMaxSize()
     ) {
@@ -182,7 +180,6 @@ fun MyStoreScreen(
 fun MyStoreScreenPreview() {
     HankkijogboTheme {
         MyStoreScreen(
-            paddingValues = PaddingValues(),
             navigateUp = {},
             type = "like",
             state = EmptyUiState.Empty,
