@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -272,13 +271,12 @@ fun StoreDetailScreen(
                 HankkiTopBar(
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_left_gray50),
+                            painter = painterResource(id = R.drawable.ic_arrow_left),
                             contentDescription = "뒤로가기",
                             modifier = Modifier
-                                .offset(x = 20.43.dp, y = 12.dp)
-                                .size(48.dp)
+                                .offset(x = 6.dp, y = 2.dp)
                                 .noRippleClickable(onClick = onNavigateUp),
-                            tint = Color.Unspecified
+                            tint = Gray50
                         )
                     }
                 )
