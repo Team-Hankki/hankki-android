@@ -26,7 +26,7 @@ fun HankkiStoreDetailCategoryChip(
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(14.dp))
             .background(containerColor)
             .padding(horizontal = 12.dp, vertical = 5.dp)
     ) {
