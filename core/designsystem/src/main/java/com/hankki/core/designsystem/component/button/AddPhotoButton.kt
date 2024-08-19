@@ -41,7 +41,7 @@ fun AddPhotoButton(
                 color = Gray200,
                 cornerRadiusDp = 10.dp
             )
-            .padding(14.dp),
+            .padding(17.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
