@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ fun HankkiCountTextField(
     placeholder: String,
     trailingIcon: Boolean,
     onValueChanged: (String) -> Unit,
+    resetTitle : Boolean,
     modifier: Modifier = Modifier
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -65,6 +67,12 @@ fun HankkiCountTextField(
     val borderWidth = when {
         isFocused -> FOCUSED_BORDER_RADIUS.dp
         else -> UNFOCUSED_BORDER_RADIUS.dp
+    }
+
+    LaunchedEffect(resetTitle) {
+        if (trailingIcon) {
+            textFieldValue = TextFieldValue(text = "")
+        }
     }
 
     Column(modifier = modifier.background(White)) {
@@ -223,7 +231,8 @@ fun HankkiCountTextFieldPreview() {
             valueLength = 0,
             placeholder = "성대생 추천 맛집 드려요",
             onValueChanged = {},
-            trailingIcon = false
+            trailingIcon = false,
+            resetTitle = false
         )
     }
 }
