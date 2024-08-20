@@ -17,9 +17,9 @@ fun MyJogboEntity.toMyJogboModel() = MyJogboModel(
 )
 
 fun transformImage(imageType: String): Int = when (imageType) {
-    "TYPE_ONE" -> R.drawable.img_list_0
-    "TYPE_TWO" -> R.drawable.img_list_1
-    "TYPE_THREE" -> R.drawable.img_list_2
-    else -> R.drawable.img_list_3
+    "TYPE_ONE" -> com.hankki.core.designsystem.R.drawable.ic_jogbo_type_one
+    "TYPE_TWO" -> com.hankki.core.designsystem.R.drawable.ic_jogbo_type_two
+    "TYPE_THREE" -> com.hankki.core.designsystem.R.drawable.ic_jogbo_type_three
+    else -> com.hankki.core.designsystem.R.drawable.ic_jogbo_type_four
 }
 

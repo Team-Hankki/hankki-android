@@ -1,5 +1,6 @@
 package com.hankki.feature.my.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,12 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
@@ -39,7 +40,7 @@ import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun StoreItem(
-    imageUrl: String,
+    imageUrl: String?,
     category: String,
     name: String,
     price: String,
@@ -61,7 +62,7 @@ fun StoreItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
-            model = imageUrl,
+            model = imageUrl ?: R.drawable.img_store_default,
             contentDescription = "Store Image",
             modifier = Modifier
                 .size(72.dp)
@@ -95,10 +96,11 @@ fun StoreItem(
             Spacer(modifier = Modifier.height(2.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(id = com.hankki.feature.my.R.drawable.ic_food_small),
+                Image(
+                    modifier = Modifier.width(16.dp),
+                    painter = painterResource(id = R.drawable.ic_food),
                     contentDescription = "icon",
-                    tint = Gray300
+                    colorFilter = ColorFilter.tint(Gray300)
                 )
 
                 Spacer(modifier = Modifier.width(3.dp))
@@ -111,18 +113,17 @@ fun StoreItem(
 
                 Spacer(modifier = Modifier.width(4.dp))
 
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.ic_ellipse),
                     contentDescription = "icon",
-                    tint = Gray300
                 )
 
                 Spacer(modifier = Modifier.width(2.dp))
 
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_heart),
-                    contentDescription = "icon",
-                    tint = Gray300
+                Image(
+                    modifier = Modifier.width(16.dp),
+                    painter = painterResource(id = R.drawable.ic_like_heart),
+                    contentDescription = "icon"
                 )
 
                 Spacer(modifier = Modifier.width(2.dp))
@@ -136,13 +137,13 @@ fun StoreItem(
         }
 
         if (isIconUsed) {
-            Icon(
+            Image(
                 painter = painterResource(id = R.drawable.ic_heart_filled),
                 contentDescription = "plus button",
                 modifier = Modifier
                     .size(52.dp)
                     .noRippleClickable(onClick = editSelected),
-                tint = if (isIconSelected) Red500 else Gray200
+                colorFilter = ColorFilter.tint(if (isIconSelected) Red500 else Gray200)
             )
         }
     }

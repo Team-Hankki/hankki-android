@@ -16,7 +16,7 @@ data class StoreDto(
         @SerialName("name")
         val name: String,
         @SerialName("imageUrl")
-        val imageUrl: String,
+        val imageUrl: String?,
         @SerialName("category")
         val category: String,
         @SerialName("lowestPrice")
@@ -25,6 +25,7 @@ data class StoreDto(
         val heartCount: Int,
     )
 }
+
 fun StoreDto.toEntity() = stores.map {
     StoreEntity(
         category = it.category,

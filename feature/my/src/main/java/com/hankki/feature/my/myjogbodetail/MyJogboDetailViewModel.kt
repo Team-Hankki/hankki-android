@@ -92,8 +92,7 @@ class MyJogboDetailViewModel @Inject constructor(
                 .onSuccess { userInformation ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
                         userInformation = UserInformationEntity(
-                            nickname = userInformation.nickname,
-                            profileImageUrl = ""
+                            nickname = userInformation.nickname
                         )
                     )
                 }

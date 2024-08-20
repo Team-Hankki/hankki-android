@@ -5,10 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -35,6 +35,8 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
+import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
@@ -44,8 +46,6 @@ import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
-import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
-import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.feature.my.component.JogboFolder
 import com.hankki.feature.my.component.MoveToHomeButton
 import com.hankki.feature.my.component.StoreItem
@@ -55,7 +55,6 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun MyJogboDetailRoute(
     favoriteId: Long,
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
@@ -81,7 +80,6 @@ fun MyJogboDetailRoute(
     }
 
     MyJogboDetailScreen(
-        paddingValues = paddingValues,
         navigateUp = navigateUp,
         jogboTitle = myJogboDetailState.myStoreItems.title,
         jogboChips = myJogboDetailState.myStoreItems.chips.toPersistentList(),
@@ -107,7 +105,6 @@ fun MyJogboDetailRoute(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyJogboDetailScreen(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     jogboTitle: String,
     jogboChips: PersistentList<String>,
@@ -136,7 +133,7 @@ fun MyJogboDetailScreen(
         DoubleButtonDialog(
             title = stringResource(R.string.delete_store),
             negativeButtonTitle = stringResource(R.string.go_back),
-            positiveButtonTitle = stringResource(id = R.string.delete),
+            positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = updateDeleteDialogState,
             onPositiveButtonClicked = {
                 deleteJogboStore(selectedStoreId)
@@ -146,7 +143,7 @@ fun MyJogboDetailScreen(
 
     Column(
         modifier = Modifier
-            .padding(bottom = paddingValues.calculateBottomPadding())
+            .navigationBarsPadding()
             .fillMaxSize()
             .background(Red500),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -232,7 +229,7 @@ fun MyJogboDetailScreen(
                         )
                         if (storeItems.data.indexOf(store) != storeItems.data.lastIndex) {
                             HorizontalDivider(
-                                modifier = Modifier.padding(vertical = 1.dp),
+                                modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
                                 thickness = 1.dp,
                                 color = Gray200
                             )

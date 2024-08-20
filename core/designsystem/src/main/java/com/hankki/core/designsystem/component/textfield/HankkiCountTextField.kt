@@ -29,10 +29,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER20_REGEX
+import com.hankki.core.designsystem.constant.FOCUSED_BORDER_RADIUS
+import com.hankki.core.designsystem.constant.UNFOCUSED_BORDER_RADIUS
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -54,8 +58,13 @@ fun HankkiCountTextField(
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = value)) }
 
     val borderColor = when {
-        isFocused -> Gray400
+        isFocused -> Gray600
         else -> Gray300
+    }
+
+    val borderWidth = when {
+        isFocused -> FOCUSED_BORDER_RADIUS.dp
+        else -> UNFOCUSED_BORDER_RADIUS.dp
     }
 
     Column(modifier = modifier.background(White)) {
@@ -71,18 +80,19 @@ fun HankkiCountTextField(
             value = textFieldValue,
             placeholder = placeholder,
             borderColor = borderColor,
+            borderWidth = borderWidth,
             textColor = Gray900,
             onFocusChanged = { focusState ->
                 isFocused = focusState
                 if (!trailingIcon) {
                     if (focusState) {
                         if (textFieldValue.text.isEmpty()) {
-                            textFieldValue = TextFieldValue(text = "#", selection = TextRange(1))
+                            textFieldValue = TextFieldValue("#", selection = TextRange(1))
                             onValueChanged("#")
                         }
                     } else {
                         if (textFieldValue.text == "#") {
-                            textFieldValue = TextFieldValue(text = "")
+                            textFieldValue = TextFieldValue("")
                             onValueChanged("")
                         }
                     }
@@ -99,6 +109,11 @@ fun HankkiCountTextField(
                         onValueChanged(textFieldValue.text)
                     } else {
                         var modifiedValue = newValue.text.replace(" ", "#")
+                        val cursorPosition = if (modifiedValue.isEmpty()) {
+                            1
+                        } else {
+                            newValue.selection.start.coerceAtLeast(1).coerceAtMost(modifiedValue.length)
+                        }
 
                         if (newValue.text.contains("# ") || newValue.text.contains(" #")) {
                             return@HankkiCountInnerTextField
@@ -115,7 +130,11 @@ fun HankkiCountTextField(
                         }
 
                         textFieldValue = newValue.copy(
-                            text = modifiedValue
+                            text = modifiedValue,
+                            selection = TextRange(
+                                start = cursorPosition,
+                                end = cursorPosition
+                            )
                         )
 
                         onValueChanged(modifiedValue)
@@ -140,6 +159,7 @@ fun HankkiCountInnerTextField(
     placeholder: String,
     onTextChanged: (TextFieldValue) -> Unit,
     borderColor: Color,
+    borderWidth: Dp,
     textColor: Color,
     onFocusChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -155,8 +175,8 @@ fun HankkiCountInnerTextField(
         value = value,
         onValueChange = onTextChanged,
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(10.dp))
+            .border(borderWidth, borderColor, RoundedCornerShape(10.dp))
             .background(backgroundColor)
             .padding(12.dp)
             .focusRequester(focusRequester)

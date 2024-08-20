@@ -2,12 +2,13 @@ package com.hankki.feature.my.newjogbo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.component.textfield.HankkiCountTextField
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray900
@@ -34,11 +36,9 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.NewJogboButton
 
 @Composable
 fun NewJogboRoute(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     newJogboViewModel: NewJogboViewModel = hiltViewModel()
 ) {
@@ -55,7 +55,6 @@ fun NewJogboRoute(
     }
 
     NewJogboScreen(
-        paddingValues = paddingValues,
         navigateUp = navigateUp,
         title = newJogboState.title,
         onTitleChange = newJogboViewModel::setTitle,
@@ -69,7 +68,6 @@ fun NewJogboRoute(
 
 @Composable
 fun NewJogboScreen(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     title: String,
     onTitleChange: (String) -> Unit,
@@ -84,8 +82,9 @@ fun NewJogboScreen(
 
     Column(
         modifier = modifier
-            .padding(paddingValues)
             .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
             .background(White)
             .addFocusCleaner(focusManager),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -120,7 +119,7 @@ fun NewJogboScreen(
                 title = stringResource(R.string.name_jogbo),
                 value = title,
                 valueLength = title.length,
-                placeholder = stringResource(R.string.recommend_store),
+                placeholder = stringResource(R.string.name_example),
                 onValueChanged = onTitleChange,
                 trailingIcon = true
             )
@@ -131,14 +130,14 @@ fun NewJogboScreen(
                 title = stringResource(R.string.think_jogbo),
                 value = tags,
                 valueLength = editTagsLength(tags),
-                placeholder = stringResource(R.string.jogbo_tags),
+                placeholder = stringResource(R.string.tag_example),
                 onValueChanged = onTagsChange,
                 trailingIcon = false
             )
 
             Spacer(modifier = Modifier.height(38.dp))
 
-            NewJogboButton(
+            HankkiMediumButton(
                 text = stringResource(R.string.make_jogbo),
                 onClick = createNewJogbo,
                 enabled = buttonEnabled,
@@ -157,7 +156,6 @@ fun NewJogboScreenPreview() {
 
     HankkijogboTheme {
         NewJogboScreen(
-            paddingValues = PaddingValues(),
             navigateUp = {},
             title = "",
             onTitleChange = {},

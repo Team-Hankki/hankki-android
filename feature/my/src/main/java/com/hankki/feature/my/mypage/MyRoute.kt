@@ -21,7 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,7 +39,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -108,7 +106,6 @@ fun MyRoute(
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.myModel.nickname,
-        userImage = myState.myModel.profileImageUrl,
         showDialog = myState.showDialog,
         showWebView = myViewModel::showWebView,
         updateDialog = myViewModel::updateDialogState,
@@ -123,7 +120,6 @@ fun MyScreen(
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
     userName: String,
-    userImage: String,
     showDialog: DialogState,
     showWebView: (String) -> Unit,
     updateDialog: (DialogState) -> Unit,
@@ -137,7 +133,7 @@ fun MyScreen(
             title = if (showDialog == DialogState.LOGOUT) stringResource(R.string.ask_logout) else stringResource(
                 R.string.disappear_jogbo
             ),
-            positiveButtonTitle = stringResource(id = R.string.go_back),
+            positiveButtonTitle = stringResource(id = R.string.maintain),
             negativeButtonTitle = if (showDialog == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
                 R.string.quit
             ),
@@ -173,11 +169,11 @@ fun MyScreen(
 
         Spacer(modifier = Modifier.height(23.dp))
 
-        AsyncImage(
+        Image(
             modifier = Modifier
                 .size(98.dp)
                 .clip(CircleShape),
-            model = userImage,
+            painter = painterResource(id = R.drawable.img_my_profile),
             contentDescription = stringResource(R.string.profile_image),
             contentScale = ContentScale.Crop
         )
@@ -230,7 +226,7 @@ fun MyScreen(
                 )
                 Spacer(modifier = Modifier.width(18.dp))
                 ButtonWithImageAndBorder(
-                    R.drawable.ic_good,
+                    com.hankki.core.designsystem.R.drawable.ic_good,
                     stringResource(R.string.description_store_like),
                     Modifier
                         .weight(1f)
@@ -264,10 +260,9 @@ fun MyScreen(
                     style = HankkiTheme.typography.body5,
                     color = Gray400,
                 )
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.ic_quit),
                     contentDescription = stringResource(id = R.string.quit),
-                    tint = Gray400,
                     modifier = Modifier.size(16.dp)
                 )
             }
@@ -285,7 +280,6 @@ fun MyScreenPreview() {
             navigateToMyJogbo = {},
             navigateToMyStore = {},
             userName = "",
-            userImage = "",
             showDialog = DialogState.CLOSED,
             updateDialog = {},
             showWebView = { _ -> },
