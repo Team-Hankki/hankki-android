@@ -81,10 +81,9 @@ class MyViewModel @Inject constructor(
     companion object {
         const val LIKE = "like"
         const val REPORT = "report"
-        const val FAQ = "FAQ"
+        const val TERMS_OF_USE = "terms_of_use"
         const val INQUIRY = "inquiry"
-        const val FAQ_PAGE =
-            "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023?pvs=4"
+        const val TERMS_OF_USE_PAGE = "https://tally.so/r/mO0oJY" //변경 필요
         const val INQUIRY_PAGE = "https://tally.so/r/mO0oJY"
     }
 }
