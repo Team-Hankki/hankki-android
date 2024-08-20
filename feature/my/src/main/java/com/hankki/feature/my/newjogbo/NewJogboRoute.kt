@@ -119,7 +119,7 @@ fun NewJogboScreen(
                 title = stringResource(R.string.name_jogbo),
                 value = title,
                 valueLength = title.length,
-                placeholder = stringResource(R.string.recommend_store),
+                placeholder = stringResource(R.string.name_example),
                 onValueChanged = onTitleChange,
                 trailingIcon = true
             )
@@ -130,7 +130,7 @@ fun NewJogboScreen(
                 title = stringResource(R.string.think_jogbo),
                 value = tags,
                 valueLength = editTagsLength(tags),
-                placeholder = stringResource(R.string.jogbo_tags),
+                placeholder = stringResource(R.string.tag_example),
                 onValueChanged = onTagsChange,
                 trailingIcon = false
             )
