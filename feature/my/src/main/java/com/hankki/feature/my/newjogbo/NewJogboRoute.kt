@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.component.textfield.HankkiCountTextField
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray900
@@ -35,7 +36,6 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.NewJogboButton
 
 @Composable
 fun NewJogboRoute(
@@ -137,7 +137,7 @@ fun NewJogboScreen(
 
             Spacer(modifier = Modifier.height(38.dp))
 
-            NewJogboButton(
+            HankkiMediumButton(
                 text = stringResource(R.string.make_jogbo),
                 onClick = createNewJogbo,
                 enabled = buttonEnabled,
