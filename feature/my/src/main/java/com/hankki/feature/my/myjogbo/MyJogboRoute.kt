@@ -136,7 +136,6 @@ fun MyJogboScreen(
                     style = HankkiTheme.typography.body1,
                     color = Gray700,
                     modifier = Modifier
-                        .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
                             if (editMode) noRippleClickable { updateToDialogState(true) }
