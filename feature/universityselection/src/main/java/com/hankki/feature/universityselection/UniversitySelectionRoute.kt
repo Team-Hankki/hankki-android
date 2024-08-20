@@ -29,7 +29,12 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
-import com.hankki.core.designsystem.theme.*
+import com.hankki.core.designsystem.component.layout.TopBlurLayout
+import com.hankki.core.designsystem.theme.Gray200
+import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray900
+import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import com.hankki.feature.universityselection.component.UniversityItem
 import kotlinx.collections.immutable.PersistentList
@@ -103,18 +108,15 @@ fun UniversitySelectionScreen(
         }
 
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 22.dp)
                     .padding(top = 12.dp)
-                    .padding(bottom = 154.dp),
-
-                ) {
+            ) {
                 itemsIndexed(universities) { index, university ->
-                    val isLastItem = index == universities.size - 1
                     UniversityItem(
                         university = university,
                         isSelected = selectedUniversity == university,
@@ -122,53 +124,59 @@ fun UniversitySelectionScreen(
                         modifier = Modifier.padding(
                             start = 8.dp,
                             top = 14.dp,
-                            bottom = if (isLastItem) 7.dp else 14.dp,
+                            bottom = 7.dp,
                         )
 
                     )
-                    if (!isLastItem) {
+                    if (index != universities.size - 1) {
+                        Spacer(modifier = Modifier.padding(bottom = 7.dp))
                         HorizontalDivider(thickness = 1.dp, color = Gray200)
                     }
                 }
+                item {
+                    BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
+                }
             }
 
-            BottomBlurLayout(
-                imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_top_middle,
+            TopBlurLayout(
                 modifier = Modifier.align(Alignment.TopCenter)
             )
 
-            BottomBlurLayout(
-                imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .noRippleClickable()
-                    .padding(horizontal = 22.dp)
+            Box(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                contentAlignment = Alignment.BottomCenter
             ) {
-                HankkiButton(
-                    text = stringResource(id = R.string.select),
-                    textStyle = HankkiTheme.typography.sub3,
-                    onClick = onPostSelectedUniversity,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    enabled = selectedUniversity != null
+                BottomBlurLayout(
+                    imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle,
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(14.dp))
-                Text(
-                    text = stringResource(id = R.string.no_university_looking),
-                    style = HankkiTheme.typography.caption1,
-                    color = Gray400,
-                    textDecoration = TextDecoration.Underline,
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .noRippleClickable(onClick = navigateHome)
-                )
+                        .fillMaxWidth()
+                        .padding(bottom = 31.dp)
+                ) {
+                    HankkiButton(
+                        text = stringResource(id = R.string.select),
+                        textStyle = HankkiTheme.typography.sub3,
+                        onClick = onPostSelectedUniversity,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 22.dp),
+                        enabled = selectedUniversity != null
+                    )
+                    Spacer(modifier = Modifier.height(14.dp))
 
-                Spacer(modifier = Modifier.height(31.dp))
+                    Text(
+                        text = stringResource(id = R.string.no_university_looking),
+                        style = HankkiTheme.typography.caption1,
+                        color = Gray400,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                            .noRippleClickable(onClick = navigateHome)
+                    )
+                }
             }
         }
     }
