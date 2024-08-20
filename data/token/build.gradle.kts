@@ -13,4 +13,6 @@ dependencies {
 
     //domain
     implementation(projects.domain.token)
+    implementation(libs.monitor)
+    implementation(libs.androidx.junit.ktx)
 }
