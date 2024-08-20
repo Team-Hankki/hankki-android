@@ -81,23 +81,27 @@ fun HankkiTextButton(
 }
 
 @Composable
-fun HankkiBlackButton(
+fun HankkiMediumButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     textStyle: TextStyle = TextStyle.Default,
+    backgroundColor: Color = if (enabled) Red500 else Red400,
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .run {
-                if (enabled) bounceClick(onClick = onClick)
+                if (enabled) bounceClick(
+                    radius = 16f,
+                    onClick = onClick
+                )
                 else this
             }
             .clip(RoundedCornerShape(16.dp))
-            .background(Gray800)
-            .padding(vertical = 15.dp, horizontal = 22.dp)
+            .background(backgroundColor)
+            .padding(vertical = 13.dp, horizontal = 38.dp)
     ) {
         Text(
             text = text,

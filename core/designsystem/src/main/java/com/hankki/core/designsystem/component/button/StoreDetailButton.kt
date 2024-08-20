@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.graphics.Color
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
@@ -30,16 +31,16 @@ fun StoreDetailMenuButton(
     onClick: () -> Unit,
     tailingIcon: @Composable () -> Unit = {},
     isSelected: Boolean = false,
-    borderColor: Color = if (isSelected) Red500 else Gray200
+    borderColor: Color = if (isSelected) Red500 else Gray100
 ) {
-
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
             .background(color = White)
             .noRippleClickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 10.5.dp)
+            .padding(start = 16.dp, end = 14.dp)
+            .padding(vertical = 10.5.dp)
     ) {
         Spacer(modifier = Modifier.height(11.dp))
         Row(

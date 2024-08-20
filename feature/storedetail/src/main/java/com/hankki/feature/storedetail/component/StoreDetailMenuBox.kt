@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -42,8 +41,14 @@ fun StoreDetailMenuBox(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(1.dp, RoundedCornerShape(10.dp))
-            .clip(RoundedCornerShape(10.dp))
+            .shadow(
+                elevation = 10.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = Gray900.copy(alpha = 0.5f),
+                ambientColor = Gray900.copy(alpha = 0.5f),
+                clip = false
+            )
+            .clip(RoundedCornerShape(20.dp))
             .background(White)
             .padding(horizontal = 28.dp, vertical = 32.dp)
             .wrapContentSize()
@@ -53,7 +58,6 @@ fun StoreDetailMenuBox(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-
             Text(
                 text = title,
                 style = HankkiTheme.typography.suitH1,
@@ -64,7 +68,7 @@ fun StoreDetailMenuBox(
             )
 
             Spacer(modifier = Modifier.width(8.dp))
-            HankkiCategoryChip(text = tag)
+            HankkiStoreDetailCategoryChip(text = tag)
         }
 
         Spacer(modifier = Modifier.padding(top = 30.dp))
@@ -73,9 +77,12 @@ fun StoreDetailMenuBox(
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
         ) {
-            menuItems.forEach { item ->
+            menuItems.forEachIndexed { index, item ->
                 StoreDetailItem(name = item.name, price = item.price.toString())
-                Spacer(modifier = Modifier.height(8.dp))
+
+                if (index != menuItems.lastIndex) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
 

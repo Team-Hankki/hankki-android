@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -36,6 +38,7 @@ fun LoginRoute(
     val viewModel: LoginViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val isButtonEnabled by viewModel.isButtonEnabled.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
         viewModel.loginSideEffects
@@ -51,7 +54,7 @@ fun LoginRoute(
                     }
 
                     is LoginSideEffect.LoginError -> {
-                        //LoginError 필요시 추가 동작
+                        // login error
                     }
 
                     is LoginSideEffect.StartKakaoTalkLogin -> {
@@ -70,6 +73,7 @@ fun LoginRoute(
     }
 
     LoginScreen(
+        isButtonEnabled = isButtonEnabled,
         onLoginClick = {
             viewModel.startKakaoLogin(
                 isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
@@ -81,6 +85,7 @@ fun LoginRoute(
 
 @Composable
 fun LoginScreen(
+    isButtonEnabled: Boolean,
     onLoginClick: () -> Unit
 ) {
     Box(
@@ -102,7 +107,7 @@ fun LoginScreen(
             Text(
                 text = stringResource(R.string.done_worry),
                 color = White,
-                style = HankkiTheme.typography.suitH1,
+                style = HankkiTheme.typography.sub1,
                 modifier = Modifier
                     .padding(start = 22.dp)
                     .align(Alignment.Start)
@@ -114,9 +119,14 @@ fun LoginScreen(
             painter = painterResource(id = R.drawable.btn_kakao),
             contentDescription = "Kakao Login Button",
             modifier = Modifier
-                .noRippleClickable(onClick = onLoginClick)
+                .noRippleClickable {
+                    if (isButtonEnabled) {
+                        onLoginClick()
+                    }
+                }
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp)
+                .padding(horizontal = 22.dp)
                 .navigationBarsPadding()
         )
     }

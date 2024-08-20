@@ -252,7 +252,7 @@ fun StoreDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .aspectRatio(1.5f),
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default),
                 error = painterResource(com.hankki.feature.storedetail.R.drawable.img_store_default)
             )
@@ -271,13 +271,12 @@ fun StoreDetailScreen(
                 HankkiTopBar(
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_left_gray50),
+                            painter = painterResource(id = R.drawable.ic_arrow_left),
                             contentDescription = "뒤로가기",
                             modifier = Modifier
-                                .offset(x = 16.dp, y = 12.dp)
-                                .size(48.dp)
+                                .offset(x = 6.dp, y = 2.dp)
                                 .noRippleClickable(onClick = onNavigateUp),
-                            tint = Color.Unspecified
+                            tint = Gray50
                         )
                     }
                 )
@@ -399,8 +398,9 @@ fun StoreDetailScreen(
                     textStyle = HankkiTheme.typography.sub3,
                     enabled = selectedIndex != -1
                 )
+
+                Spacer(modifier = Modifier.height(54.dp))
             }
         }
-
     }
 }
