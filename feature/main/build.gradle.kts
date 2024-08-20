@@ -17,8 +17,8 @@ dependencies {
     implementation(projects.feature.universityselection)
     implementation(projects.feature.storedetail)
 
-    //core
-    implementation(projects.core.datastore)
+    //domain
+    implementation(projects.domain.token)
 
     // others
     implementation(libs.androidx.core.splashscreen)

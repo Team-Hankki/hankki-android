@@ -3,6 +3,7 @@ package com.hankki.core.network
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import com.hankki.core.datastore.TokenDataStore
 import com.hankki.domain.reissuetoken.repository.ReissueTokenRepository
 import com.jakewharton.processphoenix.ProcessPhoenix
@@ -90,6 +91,7 @@ class OauthInterceptor @Inject constructor(
     private fun clearUserInfoAndRestart() {
         dataStore.clearInfo()
         Handler(Looper.getMainLooper()).post {
+            Toast.makeText(context, R.string.relogin_message, Toast.LENGTH_LONG).show()
             ProcessPhoenix.triggerRebirth(context)
         }
     }
