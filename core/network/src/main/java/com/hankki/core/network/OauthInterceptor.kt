@@ -3,8 +3,6 @@ package com.hankki.core.network
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.widget.TextView
 import android.widget.Toast
 import com.hankki.core.datastore.TokenDataStore
 import com.hankki.domain.reissuetoken.repository.ReissueTokenRepository
@@ -59,7 +57,6 @@ class OauthInterceptor @Inject constructor(
                 authRequest.newBuilder().addAuthorizationHeader().build()
             chain.proceed(newRequest)
         } else {
-            showReLoginMessage()
             clearUserInfoAndRestart()
             chain.proceed(authRequest.newBuilder().build())
         }
@@ -94,30 +91,10 @@ class OauthInterceptor @Inject constructor(
     private fun clearUserInfoAndRestart() {
         dataStore.clearInfo()
         Handler(Looper.getMainLooper()).post {
+            Toast.makeText(context, R.string.relogin_message, Toast.LENGTH_LONG).show()
             ProcessPhoenix.triggerRebirth(context)
         }
     }
-
-    private fun showReLoginMessage() {
-        Handler(Looper.getMainLooper()).post {
-            showCustomToast()
-        }
-    }
-
-    private fun showCustomToast() {
-        val inflater = LayoutInflater.from(context)
-        val layout = inflater.inflate(R.layout.custom_toast, null)
-
-        val text: TextView = layout.findViewById(R.id.toast_text)
-        text.setText(R.string.relogin_message)
-
-        Toast(context).apply {
-            duration = Toast.LENGTH_SHORT
-            setView(layout)
-            show()
-        }
-    }
-
 
     companion object {
         private const val TOKEN_EXPIRED = 401
