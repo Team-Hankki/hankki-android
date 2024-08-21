@@ -16,6 +16,7 @@ dependencies {
     //other
     implementation(libs.coil.compose)
     implementation(libs.jakewharton.process.phoenix)
+    implementation(libs.retrofit.core)
 }
 
 
