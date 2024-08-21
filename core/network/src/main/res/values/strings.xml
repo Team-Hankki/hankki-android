@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="relogin_message">로그인 유효기간이 만료되었어요. 재로그인 해주세요.</string>
+</resources>
