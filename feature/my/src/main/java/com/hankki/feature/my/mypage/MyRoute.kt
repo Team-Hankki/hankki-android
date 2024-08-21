@@ -51,12 +51,12 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.ButtonWithArrowIcon
 import com.hankki.feature.my.component.ButtonWithImageAndBorder
-import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ
-import com.hankki.feature.my.mypage.MyViewModel.Companion.FAQ_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE
+import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE_PAGE
 import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable
@@ -79,7 +79,7 @@ fun MyRoute(
             when (sideEffect) {
                 is MySideEffect.ShowWebView -> {
                     val url = when (sideEffect.type) {
-                        FAQ -> FAQ_PAGE
+                        TERMS_OF_USE -> TERMS_OF_USE_PAGE
                         INQUIRY -> INQUIRY_PAGE
                         else -> return@collect
                     }
@@ -234,7 +234,9 @@ fun MyScreen(
                 )
             }
 
-            ButtonWithArrowIcon(stringResource(R.string.faq), { showWebView(FAQ) })
+            ButtonWithArrowIcon(
+                stringResource(R.string.terms_of_use),
+                { showWebView(TERMS_OF_USE) })
 
             ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
 

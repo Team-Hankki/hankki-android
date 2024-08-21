@@ -36,4 +36,5 @@
     <string name="no_liked_store">아직 좋아요 누른 식당이 없어요</string>
     <string name="no_reported_store">아직 제보한 식당이 없어요</string>
     <string name="add_store_to_jogbo">에\n식당을 추가해보세요</string>
+    <string name="terms_of_use">약관 및 정책</string>
 </resources>
