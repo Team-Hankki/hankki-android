@@ -52,7 +52,8 @@ fun JogboFolder(
                 painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_my_store),
                 contentDescription = "store image",
                 modifier = Modifier
-                    .padding(top = 16.dp, start = 17.dp)
+                    .padding(top = 16.dp)
+                    .padding(start = 17.dp)
                     .size(45.dp),
             )
 
@@ -60,13 +61,17 @@ fun JogboFolder(
                 text = title,
                 color = Gray900,
                 style = HankkiTheme.typography.h2,
-                modifier = Modifier.padding(start = 22.dp, end = 50.dp, top = 11.dp),
+                modifier = Modifier
+                    .padding(start = 22.dp, end = 50.dp)
+                    .padding(top = 11.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
 
             LazyRow(
-                modifier = Modifier.padding(start = 20.dp),
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 items(chips) { chip ->
@@ -78,7 +83,8 @@ fun JogboFolder(
 
             Row(
                 modifier = Modifier
-                    .padding(start = 21.dp, end = 17.dp, bottom = 13.dp)
+                    .padding(start = 21.dp, end = 17.dp)
+                    .padding(bottom = 13.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically

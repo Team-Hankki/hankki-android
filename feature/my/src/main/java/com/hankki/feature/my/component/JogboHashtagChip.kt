@@ -8,18 +8,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
 fun JogboHashtagChip(chiptext: String) {
     Text(
         text = chiptext,
         modifier = Modifier
-            .padding(top = 8.dp)
             .clip(RoundedCornerShape(100.dp))
             .background(Gray100)
             .border(1.dp, Gray200, RoundedCornerShape(100.dp))
@@ -27,4 +28,12 @@ fun JogboHashtagChip(chiptext: String) {
         color = Gray500,
         style = HankkiTheme.typography.caption1
     )
+}
+
+@Composable
+@Preview
+fun JogboHashtagChipPreview(){
+    HankkijogboTheme {
+        JogboHashtagChip(chiptext = "해시태그")
+    }
 }
