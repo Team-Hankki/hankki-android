@@ -131,6 +131,10 @@ fun MyJogboScreen(
                 )
             },
             trailingIcon = {
+                val selectedJogbo = if (state is UiState.Success) {
+                    state.data.count { it.jogboSelected }
+                } else 0
+
                 Text(
                     text = if (editMode) stringResource(R.string.delete) else stringResource(R.string.edit),
                     style = HankkiTheme.typography.body1,
@@ -139,7 +143,7 @@ fun MyJogboScreen(
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
-                            if (editMode) noRippleClickable { updateToDialogState(true) }
+                            if (editMode && selectedJogbo > 0) noRippleClickable { updateToDialogState(true) }
                             else noRippleClickable(updateEditMode)
                         }
                 )
