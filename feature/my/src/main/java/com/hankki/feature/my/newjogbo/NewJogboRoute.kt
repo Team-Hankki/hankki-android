@@ -52,7 +52,7 @@ fun NewJogboRoute(
                 when (sideEffect) {
                     is NewJogboSideEffect.NavigateToNewJogbo -> navigateUp()
                     is NewJogboSideEffect.ShowErrorDialog -> {
-                        newJogboViewModel.updateErrorDialog(newJogboState.showErrorDialog)
+                        newJogboViewModel.updateErrorDialog(newJogboState.errorDialogState)
                         newJogboViewModel.resetTitle()
                     }
                 }
@@ -68,8 +68,8 @@ fun NewJogboRoute(
         buttonEnabled = newJogboState.isButtonEnabled,
         editTagsLength = newJogboViewModel::editTagsLength,
         createNewJogbo = newJogboViewModel::createNewJogbo,
-        errorDialogState = newJogboState.showErrorDialog,
-        updateErrorDialogState = { newJogboViewModel.updateErrorDialog(newJogboState.showErrorDialog) }
+        errorDialogState = newJogboState.errorDialogState,
+        updateErrorDialogState = { newJogboViewModel.updateErrorDialog(newJogboState.errorDialogState) }
     )
 }
 

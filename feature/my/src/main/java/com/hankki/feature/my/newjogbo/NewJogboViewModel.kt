@@ -73,7 +73,7 @@ class NewJogboViewModel @Inject constructor(
 
     fun updateErrorDialog(state: Boolean) {
         _newJogboState.value = _newJogboState.value.copy(
-            showErrorDialog = !state,
+            errorDialogState = !state,
         )
     }
 
