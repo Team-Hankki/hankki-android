@@ -67,6 +67,7 @@ import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
@@ -330,7 +331,7 @@ fun HomeScreen(
     }
 
     if (isOpenDialog) {
-        DoubleCenterButtonDialog(
+        DoubleButtonDialog(
             title = "설정 > 개인정보보호 >\n" +
                     "위치서비스와 설정 > 한끼족보에서\n" +
                     "위치 정보 접근을 모두 허용해 주세요.",
