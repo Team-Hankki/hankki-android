@@ -45,6 +45,7 @@ fun JogboFolder(
             .fillMaxWidth()
             .background(Red500)
             .padding(horizontal = 22.dp)
+            .padding(top = 16.dp, bottom = 23.dp)
             .paint(
                 painterResource(id = R.drawable.ic_my_jogbo_fold),
                 contentScale = ContentScale.FillWidth

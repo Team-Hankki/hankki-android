@@ -187,23 +187,11 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Success -> {
-                Spacer(
-                    modifier = Modifier
-                        .background(Red500)
-                        .height(16.dp)
-                )
-
                 JogboFolder(
                     title = jogboTitle,
                     chips = jogboChips,
                     userNickname = userNickname,
                     shareJogbo = updateShareDialogState
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .background(Red500)
-                        .height(23.dp)
                 )
 
                 LazyColumn(
@@ -254,23 +242,11 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Empty -> {
-                Spacer(
-                    modifier = Modifier
-                        .background(Red500)
-                        .height(16.dp)
-                )
-
                 JogboFolder(
                     title = jogboTitle,
                     chips = jogboChips,
                     userNickname = userNickname,
                     shareJogbo = updateShareDialogState
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .background(Red500)
-                        .height(23.dp)
                 )
 
                 EmptyViewWithButton(
