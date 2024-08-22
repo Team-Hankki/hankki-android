@@ -46,7 +46,7 @@ fun JogboFolder(
             .padding(horizontal = 22.dp)
             .padding(top = 16.dp, bottom = 23.dp)
             .paint(
-                painterResource(id = R.drawable.ic_my_jogbo_fold),
+                painterResource(id = R.drawable.img_folder),
                 contentScale = ContentScale.FillWidth
             )
     ) {
@@ -96,7 +96,7 @@ fun JogboFolder(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.img_user_image),
+                        painter = painterResource(id = R.drawable.img_user_hand),
                         contentDescription = "user image",
                         modifier = Modifier.size(26.dp)
                     )

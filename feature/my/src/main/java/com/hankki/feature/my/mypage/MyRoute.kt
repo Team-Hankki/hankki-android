@@ -173,8 +173,8 @@ fun MyScreen(
             modifier = Modifier
                 .size(98.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.img_my_profile),
-            contentDescription = stringResource(R.string.profile_image),
+            painter = painterResource(id = R.drawable.img_user_profile),
+            contentDescription = "profile_image",
             contentScale = ContentScale.Crop
         )
 

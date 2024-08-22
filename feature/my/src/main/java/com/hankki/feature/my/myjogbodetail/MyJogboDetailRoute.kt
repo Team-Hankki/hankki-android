@@ -87,7 +87,11 @@ fun MyJogboDetailRoute(
         shareDialogState = myJogboDetailState.shareDialogState,
         userNickname = myJogboDetailState.userInformation.nickname,
         updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(myJogboDetailState.shareDialogState) },
-        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialogState(myJogboDetailState.deleteDialogState) },
+        updateDeleteDialogState = {
+            myJogboDetailViewModel.updateDeleteDialogState(
+                myJogboDetailState.deleteDialogState
+            )
+        },
         deleteSelectedStore = { storeId ->
             myJogboDetailViewModel.deleteSelectedStore(
                 favoriteId,
@@ -130,7 +134,7 @@ fun MyJogboDetailScreen(
 
     if (deleteDialogState) {
         DoubleButtonDialog(
-            title = stringResource(R.string.delete_store),
+            title = stringResource(R.string.ask_delete_store),
             negativeButtonTitle = stringResource(R.string.go_back),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = updateDeleteDialogState,
@@ -168,7 +172,7 @@ fun MyJogboDetailScreen(
             },
             content = {
                 Text(
-                    text = stringResource(R.string.my_store_jogbo),
+                    text = stringResource(R.string.my_jogbo),
                     style = HankkiTheme.typography.sub3,
                     color = Gray900
                 )

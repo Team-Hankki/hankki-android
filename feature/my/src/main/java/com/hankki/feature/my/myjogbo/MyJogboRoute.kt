@@ -125,7 +125,7 @@ fun MyJogboScreen(
             },
             content = {
                 Text(
-                    text = stringResource(R.string.my_store_jogbo),
+                    text = stringResource(R.string.my_jogbo),
                     style = HankkiTheme.typography.sub3,
                     color = Gray900
                 )
@@ -143,7 +143,11 @@ fun MyJogboScreen(
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
-                            if (editMode && selectedJogbo > 0) noRippleClickable { updateDeleteDialogState(true) }
+                            if (editMode && selectedJogbo > 0) noRippleClickable {
+                                updateDeleteDialogState(
+                                    true
+                                )
+                            }
                             else noRippleClickable(updateEditModeState)
                         }
                 )
