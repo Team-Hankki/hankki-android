@@ -26,8 +26,7 @@ private fun LoadingScreen(
     content: @Composable BoxScope.() -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
         content()
