@@ -131,9 +131,7 @@ fun MyJogboScreen(
                 )
             },
             trailingIcon = {
-                val selectedJogbo = if (state is UiState.Success) {
-                    state.data.count { it.jogboSelected }
-                } else 0
+                val isSelectedJogboExists = (state is UiState.Success && state.data.any { it.jogboSelected })
 
                 Text(
                     text = if (editMode) stringResource(R.string.delete) else stringResource(R.string.edit),
@@ -143,7 +141,7 @@ fun MyJogboScreen(
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
-                            if (editMode && selectedJogbo > 0) noRippleClickable {
+                            if (editMode && isSelectedJogboExists) noRippleClickable {
                                 updateDeleteDialogState(
                                     true
                                 )
