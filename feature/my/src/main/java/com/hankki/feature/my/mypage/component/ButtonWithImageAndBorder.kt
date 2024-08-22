@@ -66,7 +66,7 @@ fun ButtonWithImageAndBorder(
 
 @Composable
 @Preview
-fun ButtonPrev() {
+fun ButtonWithImageAndBorderPreview() {
     HankkijogboTheme {
         ButtonWithImageAndBorder(
             image = R.drawable.ic_good,
