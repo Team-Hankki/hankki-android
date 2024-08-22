@@ -63,11 +63,13 @@ import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
@@ -195,7 +197,7 @@ fun HomeRoute(
         cameraPositionState = cameraPositionState,
         universityName = state.myUniversityModel.name ?: "전체",
         selectedStoreItem = state.selectedStoreItem,
-        storeItems = state.storeItems,
+        storeItemState = state.storeItems,
         jogboItems = state.jogboItems,
         markerItems = state.markerItems,
         categoryChipState = state.categoryChipState,
@@ -264,7 +266,7 @@ fun HomeScreen(
     cameraPositionState: CameraPositionState,
     universityName: String,
     selectedStoreItem: StoreItemModel,
-    storeItems: PersistentList<StoreItemModel>,
+    storeItemState: EmptyUiState<PersistentList<StoreItemModel>>,
     jogboItems: PersistentList<JogboResponseModel>,
     markerItems: PersistentList<PinModel>,
     categoryChipState: ChipState,
@@ -313,7 +315,7 @@ fun HomeScreen(
 
     LaunchedEffect(
         key1 = bottomSheetState.currentValue,
-        key2 = storeItems,
+        key2 = storeItemState,
         LocalLifecycleOwner.current
     ) {
         if (bottomSheetState.isCollapsed) {
@@ -504,41 +506,61 @@ fun HomeScreen(
                             )
                             Spacer(modifier = Modifier.height(20.dp))
 
-                            if (storeItems.isEmpty()) {
-                                Spacer(modifier = Modifier.height(27.dp))
-                                EmptyImageWithText(
-                                    text = "조건에 맞는 식당이 없어요",
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
+                            when (storeItemState) {
+                                EmptyUiState.Empty -> {
+                                    Spacer(modifier = Modifier.height(27.dp))
+                                    EmptyImageWithText(
+                                        text = "조건에 맞는 식당이 없어요",
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
 
-                                )
-                            } else {
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(White),
-                                    state = listState
-                                ) {
-                                    items(
-                                        items = storeItems,
-                                        key = { item -> item.id }
-                                    ) { item ->
-                                        StoreItem(
-                                            storeId = item.id,
-                                            storeImageUrl = item.imageUrl,
-                                            category = item.category,
-                                            storeName = item.name,
-                                            price = item.lowestPrice,
-                                            heartCount = item.heartCount,
-                                            onClickItem = navigateStoreDetail
-                                        ) {
-                                            controlMyJogboBottomSheet()
-                                            getJogboItems(item.id)
-                                            selectStoreItem(item)
-                                        }
+                                    )
+                                }
 
-                                        if (item == storeItems.last()) {
-                                            Spacer(modifier = Modifier.height(12.dp))
+                                EmptyUiState.Failure -> {
+                                    Spacer(modifier = Modifier.height(27.dp))
+                                    EmptyImageWithText(
+                                        text = "이런! 오류가 발생했어요",
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+
+                                    )
+                                }
+
+                                EmptyUiState.Loading -> {
+                                    Spacer(modifier = Modifier.height((height/3).dp))
+                                    HankkiLoadingScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
+                                }
+
+                                is EmptyUiState.Success -> {
+                                    val storeItems = storeItemState.data
+                                    LazyColumn(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(White),
+                                        state = listState
+                                    ) {
+                                        items(
+                                            items = storeItems,
+                                            key = { item -> item.id }
+                                        ) { item ->
+                                            StoreItem(
+                                                storeId = item.id,
+                                                storeImageUrl = item.imageUrl,
+                                                category = item.category,
+                                                storeName = item.name,
+                                                price = item.lowestPrice,
+                                                heartCount = item.heartCount,
+                                                onClickItem = navigateStoreDetail
+                                            ) {
+                                                controlMyJogboBottomSheet()
+                                                getJogboItems(item.id)
+                                                selectStoreItem(item)
+                                            }
+
+                                            if (item == storeItems.last()) {
+                                                Spacer(modifier = Modifier.height(12.dp))
+                                            }
                                         }
                                     }
                                 }

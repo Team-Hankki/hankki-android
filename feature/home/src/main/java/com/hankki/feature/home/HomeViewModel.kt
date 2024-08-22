@@ -2,6 +2,7 @@ package com.hankki.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.entity.response.CategoriesEntity
 import com.hankki.domain.home.entity.response.CategoryEntity
@@ -88,6 +89,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getStoreItems() {
         viewModelScope.launch {
+            _state.value = _state.value.copy(
+                storeItems = EmptyUiState.Loading
+            )
+
             homeRepository.getStores(
                 universityId = _state.value.myUniversityModel.id,
                 storeCategory = if (_state.value.categoryChipState is ChipState.Fixed) {
@@ -101,9 +106,21 @@ class HomeViewModel @Inject constructor(
                 } else null
             ).onSuccess { stores ->
                 _state.value = _state.value.copy(
-                    storeItems = stores.map { it.toModel() }.toPersistentList()
+                    storeItems = if (stores.isEmpty()) {
+                        EmptyUiState.Empty
+                    } else {
+                        EmptyUiState.Success(
+                            stores.map { it.toModel() }.toPersistentList()
+                        )
+                    }
                 )
-            }.onFailure(Timber::e)
+            }.onFailure { error ->
+                _state.value = _state.value.copy(
+                    storeItems = EmptyUiState.Failure
+                )
+
+                Timber.e(error)
+            }
         }
     }
 
