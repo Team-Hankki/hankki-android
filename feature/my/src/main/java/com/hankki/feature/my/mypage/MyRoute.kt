@@ -106,7 +106,7 @@ fun MyRoute(
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.myModel.nickname,
-        showDialog = myState.showDialog,
+        showDialog = myState.dialogSate,
         showWebView = myViewModel::showWebView,
         updateDialog = myViewModel::updateDialogState,
         onLogout = myViewModel::logout,
