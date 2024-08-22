@@ -200,6 +200,12 @@ fun MyJogboDetailScreen(
                     shareJogbo = updateShareDialogState
                 )
 
+                Spacer(
+                    modifier = Modifier
+                        .background(Red500)
+                        .height(23.dp)
+                )
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -259,6 +265,12 @@ fun MyJogboDetailScreen(
                     chips = jogboChips,
                     userNickname = userNickname,
                     shareJogbo = updateShareDialogState
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .background(Red500)
+                        .height(23.dp)
                 )
 
                 EmptyViewWithButton(

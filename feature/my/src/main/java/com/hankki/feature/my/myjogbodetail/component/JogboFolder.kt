@@ -21,13 +21,17 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.feature.my.R
+import com.hankki.feature.my.myjogbo.component.AddJogboItem
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun JogboFolder(
@@ -40,7 +44,6 @@ fun JogboFolder(
         modifier = Modifier
             .fillMaxWidth()
             .background(Red500)
-            .padding(bottom = 23.dp)
             .padding(horizontal = 22.dp)
             .paint(
                 painterResource(id = R.drawable.ic_my_jogbo_fold),
@@ -107,6 +110,18 @@ fun JogboFolder(
                 JogboShareButton(showShareDialog = shareJogbo)
             }
         }
+    }
+}
 
+@Composable
+@Preview
+fun JogboFolderPreview() {
+    HankkijogboTheme {
+        JogboFolder(
+            title = "족보 이름",
+            chips = persistentListOf("태그1","태그2"),
+            userNickname = "사용자 이름",
+            shareJogbo = {}
+        )
     }
 }
