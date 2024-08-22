@@ -49,8 +49,8 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.mypage.component.ButtonWithArrowIcon
-import com.hankki.feature.my.mypage.component.ButtonWithImageAndBorder
+import com.hankki.feature.my.mypage.component.ArrowIconButton
+import com.hankki.feature.my.mypage.component.ImageAndBorderButton
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
@@ -217,7 +217,7 @@ fun MyScreen(
             Spacer(modifier = Modifier.height(19.dp))
 
             Row {
-                ButtonWithImageAndBorder(
+                ImageAndBorderButton(
                     com.hankki.core.designsystem.R.drawable.ic_report,
                     stringResource(R.string.description_store_report),
                     Modifier
@@ -225,7 +225,7 @@ fun MyScreen(
                         .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
                 )
                 Spacer(modifier = Modifier.width(18.dp))
-                ButtonWithImageAndBorder(
+                ImageAndBorderButton(
                     com.hankki.core.designsystem.R.drawable.ic_good,
                     stringResource(R.string.description_store_like),
                     Modifier
@@ -234,13 +234,13 @@ fun MyScreen(
                 )
             }
 
-            ButtonWithArrowIcon(
+            ArrowIconButton(
                 stringResource(R.string.terms_of_use),
                 { showWebView(TERMS_OF_USE) })
 
-            ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
+            ArrowIconButton(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
 
-            ButtonWithArrowIcon(
+            ArrowIconButton(
                 stringResource(R.string.logout),
                 { updateDialog(DialogState.LOGOUT) })
 

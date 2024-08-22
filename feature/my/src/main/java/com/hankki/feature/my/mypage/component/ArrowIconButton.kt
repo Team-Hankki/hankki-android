@@ -20,7 +20,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
-fun ButtonWithArrowIcon(
+fun ArrowIconButton(
     itemTitle: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -48,8 +48,8 @@ fun ButtonWithArrowIcon(
 
 @Composable
 @Preview
-fun ButtonWithArrowIconPreview() {
+fun ArrowIconButtonPreview() {
     HankkijogboTheme {
-        ButtonWithArrowIcon(itemTitle = "title", onClick = {}, modifier = Modifier)
+        ArrowIconButton(itemTitle = "title", onClick = {}, modifier = Modifier)
     }
 }

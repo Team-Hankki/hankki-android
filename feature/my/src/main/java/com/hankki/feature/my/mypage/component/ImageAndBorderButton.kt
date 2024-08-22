@@ -28,7 +28,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
-fun ButtonWithImageAndBorder(
+fun ImageAndBorderButton(
     image: Int,
     description: String,
     modifier: Modifier = Modifier
@@ -66,9 +66,9 @@ fun ButtonWithImageAndBorder(
 
 @Composable
 @Preview
-fun ButtonWithImageAndBorderPreview() {
+fun ImageAndBorderButtonPreview() {
     HankkijogboTheme {
-        ButtonWithImageAndBorder(
+        ImageAndBorderButton(
             image = R.drawable.ic_good,
             description = "test",
             modifier = Modifier
