@@ -64,7 +64,7 @@ class NewJogboViewModel @Inject constructor(
             }.onFailure { error ->
                 Timber.e(error)
 
-                if (error is HttpException && error.code() == 409) {
+                if (error is HttpException && error.code() == DUPLICATE_NAME_ERROR) {
                     _newJogboSideEffect.emit(NewJogboSideEffect.ShowErrorDialog)
                 }
             }
@@ -81,5 +81,9 @@ class NewJogboViewModel @Inject constructor(
         _newJogboState.value = _newJogboState.value.copy(
             title = ""
         )
+    }
+
+    companion object {
+        private const val DUPLICATE_NAME_ERROR: Int = 409
     }
 }
