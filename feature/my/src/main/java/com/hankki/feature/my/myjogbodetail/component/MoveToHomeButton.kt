@@ -15,10 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.feature.my.R
 
 @Composable
@@ -46,3 +48,12 @@ fun MoveToHomeButton(
         )
     }
 }
+
+@Composable
+@Preview
+fun MoveToHomeButtonPreview() {
+    HankkijogboTheme {
+        MoveToHomeButton()
+    }
+}
+
