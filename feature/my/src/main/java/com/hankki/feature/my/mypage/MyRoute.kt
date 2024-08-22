@@ -49,8 +49,8 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.ButtonWithArrowIcon
-import com.hankki.feature.my.component.ButtonWithImageAndBorder
+import com.hankki.feature.my.mypage.component.ButtonWithArrowIcon
+import com.hankki.feature.my.mypage.component.ButtonWithImageAndBorder
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE

@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.myjogbo.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.myjogbodetail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

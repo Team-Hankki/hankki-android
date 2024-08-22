@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.myjogbo.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

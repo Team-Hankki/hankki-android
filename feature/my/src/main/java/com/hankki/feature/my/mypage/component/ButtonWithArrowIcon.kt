@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.mypage.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

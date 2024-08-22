@@ -39,8 +39,8 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.AddJogboItem
-import com.hankki.feature.my.component.JogboItem
+import com.hankki.feature.my.myjogbo.component.AddJogboItem
+import com.hankki.feature.my.myjogbo.component.JogboItem
 import com.hankki.feature.my.myjogbo.model.MyJogboModel
 import com.hankki.feature.my.myjogbo.model.transformImage
 import kotlinx.collections.immutable.PersistentList
