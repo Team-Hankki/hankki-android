@@ -57,12 +57,12 @@ interface MyService {
     )
 
     @POST("api/v1/stores/{id}/hearts")
-    suspend fun likeStore(
+    suspend fun postLikeStore(
         @Path("id") storeId: Long,
     ): BaseResponse<LikedStoreResponseDto>
 
     @DELETE("/api/v1/stores/{id}/hearts")
-    suspend fun unLikeStore(
+    suspend fun deleteLikeStore(
         @Path("id") storeId: Long,
     ): BaseResponse<LikedStoreResponseDto>
 }
