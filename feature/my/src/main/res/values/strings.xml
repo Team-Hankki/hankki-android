@@ -37,4 +37,6 @@
     <string name="no_reported_store">아직 제보한 식당이 없어요</string>
     <string name="add_store_to_jogbo">에\n식당을 추가해보세요</string>
     <string name="terms_of_use">약관 및 정책</string>
+    <string name="cannot_create_duplicated_name">동일이름 족보 생성 불가</string>
+    <string name="cannot_create_duplicated_jogbo_name">같은 이름의 족보는 생성할 수 없어요</string>
 </resources>

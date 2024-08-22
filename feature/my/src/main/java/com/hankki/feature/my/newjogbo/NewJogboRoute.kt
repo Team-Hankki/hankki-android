@@ -29,6 +29,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiMediumButton
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.textfield.HankkiCountTextField
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray900
@@ -50,6 +51,10 @@ fun NewJogboRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is NewJogboSideEffect.NavigateToNewJogbo -> navigateUp()
+                    is NewJogboSideEffect.ShowErrorDialog -> {
+                        newJogboViewModel.updateErrorDialog(newJogboState.showErrorDialog)
+                        newJogboViewModel.resetTitle()
+                    }
                 }
             }
     }
@@ -63,6 +68,8 @@ fun NewJogboRoute(
         buttonEnabled = newJogboState.isButtonEnabled,
         editTagsLength = newJogboViewModel::editTagsLength,
         createNewJogbo = newJogboViewModel::createNewJogbo,
+        errorDialogState = newJogboState.showErrorDialog,
+        updateErrorDialogState = { newJogboViewModel.updateErrorDialog(newJogboState.showErrorDialog) }
     )
 }
 
@@ -76,9 +83,20 @@ fun NewJogboScreen(
     editTagsLength: (String) -> Int,
     buttonEnabled: Boolean,
     createNewJogbo: () -> Unit,
+    errorDialogState: Boolean,
+    updateErrorDialogState: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
+
+    if (errorDialogState) {
+        SingleButtonDialog(
+            title = stringResource(R.string.cannot_create_duplicated_name),
+            description = stringResource(R.string.cannot_create_duplicated_jogbo_name),
+            buttonTitle = stringResource(R.string.check),
+            onConfirmation = updateErrorDialogState
+        )
+    }
 
     Column(
         modifier = modifier
@@ -121,7 +139,8 @@ fun NewJogboScreen(
                 valueLength = title.length,
                 placeholder = stringResource(R.string.name_example),
                 onValueChanged = onTitleChange,
-                trailingIcon = true
+                trailingIcon = true,
+                resetTitle = errorDialogState
             )
 
             Spacer(modifier = Modifier.height(33.dp))
@@ -132,7 +151,8 @@ fun NewJogboScreen(
                 valueLength = editTagsLength(tags),
                 placeholder = stringResource(R.string.tag_example),
                 onValueChanged = onTagsChange,
-                trailingIcon = false
+                trailingIcon = false,
+                resetTitle = errorDialogState
             )
 
             Spacer(modifier = Modifier.height(38.dp))
@@ -163,7 +183,9 @@ fun NewJogboScreenPreview() {
             onTagsChange = {},
             editTagsLength = dummyEditTagsLength,
             buttonEnabled = false,
-            createNewJogbo = {}
+            createNewJogbo = {},
+            errorDialogState = false,
+            updateErrorDialogState = {}
         )
     }
 }

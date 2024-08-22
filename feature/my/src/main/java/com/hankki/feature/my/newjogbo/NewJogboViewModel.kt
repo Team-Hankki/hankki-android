@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import retrofit2.HttpException
 
 @HiltViewModel
 class NewJogboViewModel @Inject constructor(
@@ -60,7 +61,29 @@ class NewJogboViewModel @Inject constructor(
                 )
             ).onSuccess {
                 _newJogboSideEffect.emit(NewJogboSideEffect.NavigateToNewJogbo)
-            }.onFailure(Timber::e)
+            }.onFailure { error ->
+                Timber.e(error)
+
+                if (error is HttpException && error.code() == DUPLICATE_NAME_ERROR) {
+                    _newJogboSideEffect.emit(NewJogboSideEffect.ShowErrorDialog)
+                }
+            }
         }
+    }
+
+    fun updateErrorDialog(state: Boolean) {
+        _newJogboState.value = _newJogboState.value.copy(
+            showErrorDialog = !state,
+        )
+    }
+
+    fun resetTitle() {
+        _newJogboState.value = _newJogboState.value.copy(
+            title = ""
+        )
+    }
+
+    companion object {
+        private const val DUPLICATE_NAME_ERROR: Int = 409
     }
 }
