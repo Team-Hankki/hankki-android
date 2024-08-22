@@ -18,8 +18,8 @@ data class MyJogboDetailState(
             Store(0, "", "", "", 0, 0)
         )
     ),
-    val storesUiState: EmptyUiState<PersistentList<Store>> = EmptyUiState.Loading,
-    var showDeleteDialog: Boolean = false,
-    var showShareDialog: Boolean = false,
+    val uiState: EmptyUiState<PersistentList<Store>> = EmptyUiState.Loading,
+    var deleteDialogState: Boolean = false,
+    var shareDialogState: Boolean = false,
     var selectedStoreId : Long = 0
 )

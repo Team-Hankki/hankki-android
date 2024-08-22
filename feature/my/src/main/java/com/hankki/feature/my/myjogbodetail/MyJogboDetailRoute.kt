@@ -73,7 +73,6 @@ fun MyJogboDetailRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
-
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                 }
             }
@@ -83,14 +82,14 @@ fun MyJogboDetailRoute(
         navigateUp = navigateUp,
         jogboTitle = myJogboDetailState.myStoreItems.title,
         jogboChips = myJogboDetailState.myStoreItems.chips.toPersistentList(),
-        storeItems = myJogboDetailState.storesUiState,
-        deleteDialogState = myJogboDetailState.showDeleteDialog,
-        shareDialogState = myJogboDetailState.showShareDialog,
+        state = myJogboDetailState.uiState,
+        deleteDialogState = myJogboDetailState.deleteDialogState,
+        shareDialogState = myJogboDetailState.shareDialogState,
         userNickname = myJogboDetailState.userInformation.nickname,
-        updateShareDialogState = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
-        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) },
-        deleteJogboStore = { storeId ->
-            myJogboDetailViewModel.deleteJogboStore(
+        updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(myJogboDetailState.shareDialogState) },
+        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialogState(myJogboDetailState.deleteDialogState) },
+        deleteSelectedStore = { storeId ->
+            myJogboDetailViewModel.deleteSelectedStore(
                 favoriteId,
                 storeId
             )
@@ -108,13 +107,13 @@ fun MyJogboDetailScreen(
     navigateUp: () -> Unit,
     jogboTitle: String,
     jogboChips: PersistentList<String>,
-    storeItems: EmptyUiState<PersistentList<Store>>,
+    state: EmptyUiState<PersistentList<Store>>,
     deleteDialogState: Boolean,
     shareDialogState: Boolean,
     userNickname: String,
     updateShareDialogState: () -> Unit,
     updateDeleteDialogState: () -> Unit,
-    deleteJogboStore: (Long) -> Unit,
+    deleteSelectedStore: (Long) -> Unit,
     selectedStoreId: Long,
     updateSelectedStoreId: (Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
@@ -136,7 +135,7 @@ fun MyJogboDetailScreen(
             positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = updateDeleteDialogState,
             onPositiveButtonClicked = {
-                deleteJogboStore(selectedStoreId)
+                deleteSelectedStore(selectedStoreId)
             }
         )
     }
@@ -153,6 +152,7 @@ fun MyJogboDetailScreen(
                 .statusBarsPadding()
                 .background(Red500)
         )
+
         HankkiTopBar(
             modifier = Modifier.background(Red500),
             leadingIcon = {
@@ -175,7 +175,7 @@ fun MyJogboDetailScreen(
             }
         )
 
-        when (storeItems) {
+        when (state) {
             is EmptyUiState.Loading -> {
                 Box(
                     modifier = Modifier
@@ -204,7 +204,7 @@ fun MyJogboDetailScreen(
                         Spacer(modifier = Modifier.height(4.dp))
                     }
 
-                    items(storeItems.data) { store ->
+                    items(state.data) { store ->
                         StoreItem(
                             imageUrl = store.imageUrl,
                             category = store.category,
@@ -221,7 +221,7 @@ fun MyJogboDetailScreen(
                                 }
                             )
                         )
-                        if (storeItems.data.indexOf(store) != storeItems.data.lastIndex) {
+                        if (state.data.indexOf(store) != state.data.lastIndex) {
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
                                 thickness = 1.dp,
@@ -232,6 +232,7 @@ fun MyJogboDetailScreen(
 
                     item {
                         Spacer(modifier = Modifier.height(20.dp))
+
                         MoveToHomeButton(
                             modifier = Modifier
                                 .padding(bottom = 30.dp)

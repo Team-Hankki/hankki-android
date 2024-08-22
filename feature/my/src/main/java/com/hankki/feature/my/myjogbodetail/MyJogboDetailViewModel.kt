@@ -31,37 +31,37 @@ class MyJogboDetailViewModel @Inject constructor(
 
     fun getJogboDetail(favoriteId: Long) {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            storesUiState = EmptyUiState.Loading
+            uiState = EmptyUiState.Loading
         )
         viewModelScope.launch {
             myRepository.getJogboDetail(favoriteId)
                 .onSuccess { jogbo ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
                         myStoreItems = jogbo,
-                        storesUiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(jogbo.stores.toPersistentList())
+                        uiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(jogbo.stores.toPersistentList())
                     )
                 }
                 .onFailure(Timber::e)
         }
     }
 
-    fun updateDeleteDialog(state: Boolean) {
+    fun updateDeleteDialogState(state: Boolean) {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            showDeleteDialog = !state
+            deleteDialogState = !state
         )
     }
 
-    fun updateShareDialog(state: Boolean) {
+    fun updateShareDialogState(state: Boolean) {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            showShareDialog = !state
+            shareDialogState = !state
         )
     }
 
-    fun deleteJogboStore(favoriteId:Long,storeId:Long){
+    fun deleteSelectedStore(favoriteId:Long, storeId:Long){
         viewModelScope.launch {
             myRepository.deleteJogboStore(favoriteId,storeId)
                 .onSuccess { jogbo ->
-                    updateDeleteDialog(true)
+                    updateDeleteDialogState(true)
                     getJogboDetail(favoriteId)
                 }
                 .onFailure(Timber::e)
