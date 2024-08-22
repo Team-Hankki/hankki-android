@@ -296,7 +296,7 @@ fun StoreDetailScreen(
                     StoreDetailMenuButton(
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = if (isLiked) R.drawable.ic_red_like else R.drawable.ic_like),
+                                painter = painterResource(id = if (isLiked) R.drawable.ic_red_like else com.hankki.feature.storedetail.R.drawable.ic_like),
                                 contentDescription = "좋아요 아이콘",
                                 tint = Color.Unspecified
                             )

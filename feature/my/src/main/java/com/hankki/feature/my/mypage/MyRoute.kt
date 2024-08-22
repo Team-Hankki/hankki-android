@@ -218,7 +218,7 @@ fun MyScreen(
 
             Row {
                 ButtonWithImageAndBorder(
-                    R.drawable.ic_report,
+                    com.hankki.core.designsystem.R.drawable.ic_report,
                     stringResource(R.string.description_store_report),
                     Modifier
                         .weight(1f)
