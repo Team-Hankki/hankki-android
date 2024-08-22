@@ -63,18 +63,18 @@ fun MyJogboRoute(
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
         state = myJogboState.uiState,
-        editMode = myJogboState.editMode,
-        updateEditMode = myJogboViewModel::updateMode,
+        editMode = myJogboState.editModeState,
+        updateEditModeState = myJogboViewModel::updateEditModeState,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
-        resetJogboState = myJogboViewModel::resetJogboState,
-        dialogState = myJogboState.showDialog,
-        updateToDialogState = myJogboViewModel::updateToDialogState,
-        deleteJogboItems = myJogboViewModel::deleteJogboStore
+        resetEditModeState = myJogboViewModel::resetEditModeState,
+        deleteDialogState = myJogboState.dialogState,
+        updateDeleteDialogState = myJogboViewModel::updateDeleteDialogState,
+        deleteSelectedJogbo = myJogboViewModel::deleteSelectedJogbo
     )
 
     BackOnPressed(
-        editMode = myJogboState.editMode,
-        resetJogboState = myJogboViewModel::resetJogboState,
+        editMode = myJogboState.editModeState,
+        resetJogboState = myJogboViewModel::resetEditModeState,
         navigateUp = navigateUp,
     )
 }
@@ -86,20 +86,20 @@ fun MyJogboScreen(
     navigateToNewJogbo: () -> Unit,
     state: UiState<PersistentList<MyJogboModel>>,
     editMode: Boolean = false,
-    updateEditMode: () -> Unit,
+    updateEditModeState: () -> Unit,
     updateJogboSelectedState: (Int, Boolean) -> Unit,
-    resetJogboState: () -> Unit,
-    dialogState: Boolean,
-    updateToDialogState: (Boolean) -> Unit,
-    deleteJogboItems: () -> Unit,
+    resetEditModeState: () -> Unit,
+    deleteDialogState: Boolean,
+    updateDeleteDialogState: (Boolean) -> Unit,
+    deleteSelectedJogbo: () -> Unit,
 ) {
-    if (dialogState) {
+    if (deleteDialogState) {
         DoubleButtonDialog(
             title = stringResource(R.string.ask_delete_jogbo),
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
-            onNegativeButtonClicked = { updateToDialogState(false) },
-            onPositiveButtonClicked = deleteJogboItems
+            onNegativeButtonClicked = { updateDeleteDialogState(false) },
+            onPositiveButtonClicked = deleteSelectedJogbo
         )
     }
 
@@ -119,7 +119,7 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 6.dp)
                         .size(44.dp)
-                        .noRippleClickable(if (editMode) resetJogboState else navigateUp),
+                        .noRippleClickable(if (editMode) resetEditModeState else navigateUp),
                     tint = Color.Unspecified
                 )
             },
@@ -143,8 +143,8 @@ fun MyJogboScreen(
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
-                            if (editMode && selectedJogbo > 0) noRippleClickable { updateToDialogState(true) }
-                            else noRippleClickable(updateEditMode)
+                            if (editMode && selectedJogbo > 0) noRippleClickable { updateDeleteDialogState(true) }
+                            else noRippleClickable(updateEditModeState)
                         }
                 )
             }
@@ -216,12 +216,12 @@ fun MyJogboScreenPreview() {
             navigateToJogboDetail = { _ -> },
             navigateToNewJogbo = {},
             state = UiState.Loading,
-            updateEditMode = {},
+            updateEditModeState = {},
             updateJogboSelectedState = { _, _ -> },
-            resetJogboState = {},
-            dialogState = false,
-            updateToDialogState = {},
-            deleteJogboItems = {}
+            resetEditModeState = {},
+            deleteDialogState = false,
+            updateDeleteDialogState = {},
+            deleteSelectedJogbo = {}
         )
     }
 }
