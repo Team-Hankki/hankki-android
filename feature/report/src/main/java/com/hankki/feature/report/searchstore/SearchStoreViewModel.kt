@@ -8,6 +8,7 @@ import com.hankki.domain.report.repository.ReportRepository
 import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -65,7 +66,7 @@ class SearchStoreViewModel @Inject constructor(
     fun setValue(value: String) {
         _value.value = value
         if (value.isBlank()) {
-            _state.value = _state.value.copy(uiState = EmptyUiState.Loading)
+            _state.value = _state.value.copy(uiState = EmptyUiState.Success(persistentListOf()))
         }
     }
 
@@ -79,14 +80,17 @@ class SearchStoreViewModel @Inject constructor(
 
     private fun getStores(search: String) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(uiState = EmptyUiState.Loading)
             reportRepository.getStoreLocation(search)
-                .onSuccess {
+                .onSuccess { stores ->
                     _state.value = _state.value.copy(
-                        uiState = if (it.isEmpty()) {
+                        uiState = if (stores.isEmpty()) {
                             EmptyUiState.Empty
                         } else {
                             EmptyUiState.Success(
-                                data = it.map { it.toModel() }.toPersistentList()
+                                data = stores.map { store ->
+                                    store.toModel()
+                                }.toPersistentList()
                             )
                         }
                     )

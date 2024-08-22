@@ -54,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -521,7 +522,7 @@ fun HomeScreen(
                                 EmptyUiState.Failure -> {
                                     Spacer(modifier = Modifier.height(27.dp))
                                     EmptyImageWithText(
-                                        text = "이런! 오류가 발생했어요",
+                                        text = stringResource(id = R.string.error_text),
                                         modifier = Modifier
                                             .align(Alignment.CenterHorizontally)
 

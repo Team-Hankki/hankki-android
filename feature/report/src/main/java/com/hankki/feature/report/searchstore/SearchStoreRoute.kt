@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,6 +37,8 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
+import com.hankki.core.designsystem.component.layout.EmptyView
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.textfield.HankkiSearchTextField
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -208,10 +211,15 @@ fun SearchStoreScreen(
                 }
 
                 EmptyUiState.Failure -> {
-                    // TODO: 오류 화면
+                    EmptyView(text = stringResource(R.string.error_text))
                 }
 
-                EmptyUiState.Loading -> {}
+                EmptyUiState.Loading -> {
+                    HankkiLoadingScreen(modifier = Modifier
+                        .fillMaxHeight(0.7f)
+                        .fillMaxWidth())
+                }
+
                 is EmptyUiState.Success -> LocationList(
                     selectedLocation = selectedLocation,
                     locations = state.data,
