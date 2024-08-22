@@ -6,4 +6,5 @@
     <string name="search_to_name">이름으로 검색</string>
     <string name="enable_under_eight_thousand_won">8천원 이하만 가능해요</string>">
     <string name="success_add_my_jogbo">나의 족보에 추가되었습니다.</string>
+    <string name="error_text">이런! 오류가 발생했어요!</string>
 </resources>
