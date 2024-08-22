@@ -103,7 +103,7 @@ fun JogboItem(
 
 @Composable
 @Preview
-fun ItemPreview() {
+fun JogboItemPreview() {
     val isSelected = remember { mutableStateOf(true) }
 
     HankkijogboTheme {
