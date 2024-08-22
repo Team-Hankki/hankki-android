@@ -58,8 +58,8 @@ fun AddJogboItem(
 
 @Composable
 @Preview
-fun ItemAddJogboPrev() {
+fun ItemAddJogboPreview() {
     HankkijogboTheme {
-        AddJogboItem(isEditMode = false)
+        AddJogboItem(isEditMode = true)
     }
 }
