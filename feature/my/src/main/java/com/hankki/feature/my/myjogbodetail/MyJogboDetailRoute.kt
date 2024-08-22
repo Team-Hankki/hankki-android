@@ -46,9 +46,9 @@ import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
+import com.hankki.feature.my.component.StoreItem
 import com.hankki.feature.my.myjogbodetail.component.JogboFolder
 import com.hankki.feature.my.myjogbodetail.component.MoveToHomeButton
-import com.hankki.feature.my.component.StoreItem
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 

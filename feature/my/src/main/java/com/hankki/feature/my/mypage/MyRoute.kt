@@ -49,14 +49,14 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.mypage.component.ArrowIconButton
-import com.hankki.feature.my.mypage.component.ImageAndBorderButton
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE_PAGE
+import com.hankki.feature.my.mypage.component.ArrowIconButton
+import com.hankki.feature.my.mypage.component.ImageAndBorderButton
 import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable
