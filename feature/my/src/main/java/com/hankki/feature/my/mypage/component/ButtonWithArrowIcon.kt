@@ -48,7 +48,7 @@ fun ButtonWithArrowIcon(
 
 @Composable
 @Preview
-fun ItemWithArrowPreview() {
+fun ButtonWithArrowIconPreview() {
     HankkijogboTheme {
         ButtonWithArrowIcon(itemTitle = "title", onClick = {}, modifier = Modifier)
     }
