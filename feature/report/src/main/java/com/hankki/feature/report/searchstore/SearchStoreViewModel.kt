@@ -45,6 +45,9 @@ class SearchStoreViewModel @Inject constructor(
         viewModelScope.launch {
             _value.debounce(DEBOUNCE_DURATION)
                 .collectLatest { debounced ->
+                    _state.value = _state.value.copy(
+                        selectedLocation = LocationModel()
+                    )
                     if (debounced.isNotBlank()) {
                         getStores(debounced)
                     }
@@ -109,7 +112,8 @@ class SearchStoreViewModel @Inject constructor(
                 ValidateStoreRequestEntity(
                     universityId = _state.value.universityId,
                     latitude = _state.value.selectedLocation.latitude.toDouble(),
-                    longitude = _state.value.selectedLocation.longitude.toDouble()
+                    longitude = _state.value.selectedLocation.longitude.toDouble(),
+                    storeName = _state.value.selectedLocation.location
                 )
             ).onSuccess { response ->
                 when {

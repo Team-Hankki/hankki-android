@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UniversitySelectionRequestDto(
     @SerialName("universityId")
-    val universityId: Long,
+    val universityId: Long?,
     @SerialName("name")
-    val name: String,
+    val name: String?,
     @SerialName("longitude")
     val longitude: Double,
     @SerialName("latitude")

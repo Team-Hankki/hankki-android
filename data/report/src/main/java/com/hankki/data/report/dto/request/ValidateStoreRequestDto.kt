@@ -11,11 +11,14 @@ data class ValidateStoreRequestDto(
     @SerialName("latitude")
     val latitude: Double,
     @SerialName("longitude")
-    val longitude: Double
+    val longitude: Double,
+    @SerialName("storeName")
+    val storeName: String
 )
 
 fun ValidateStoreRequestEntity.toDto() = ValidateStoreRequestDto(
     universityId = universityId,
     latitude = latitude,
-    longitude = longitude
+    longitude = longitude,
+    storeName = storeName
 )

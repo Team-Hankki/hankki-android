@@ -69,7 +69,6 @@ import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
-import com.hankki.core.designsystem.component.dialog.DoubleCenterButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
@@ -530,7 +529,7 @@ fun HomeScreen(
                                 }
 
                                 EmptyUiState.Loading -> {
-                                    Spacer(modifier = Modifier.height((height/3).dp))
+                                    Spacer(modifier = Modifier.height((height / 3).dp))
                                     HankkiLoadingScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
                                 }
 
