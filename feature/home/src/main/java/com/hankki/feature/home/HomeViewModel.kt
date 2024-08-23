@@ -44,10 +44,15 @@ class HomeViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         myUniversityModel = university.toModel()
                     )
-                    moveMap(
-                        state.value.myUniversityModel.latitude,
-                        state.value.myUniversityModel.longitude
-                    )
+
+                    if (state.value.myUniversityModel.id == null) {
+                        moveMyLocation()
+                    } else {
+                        moveMap(
+                            state.value.myUniversityModel.latitude,
+                            state.value.myUniversityModel.longitude
+                        )
+                    }
                     fetchData()
                 }.onFailure { error ->
                     if (state.value.myUniversityModel.id == null) {

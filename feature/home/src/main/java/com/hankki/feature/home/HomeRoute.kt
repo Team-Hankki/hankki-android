@@ -169,8 +169,8 @@ fun HomeRoute(
                         viewModel.moveMap(location.latitude, location.longitude)
                     }.addOnFailureListener {
                         viewModel.moveMap(
-                            state.myUniversityModel.latitude,
-                            state.myUniversityModel.longitude
+                            latitude = 37.583639,
+                            longitude = 127.0588564
                         )
                     }
                 }
