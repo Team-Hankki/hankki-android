@@ -7,12 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserInfoResponseDto(
     @SerialName("nickname")
-    val nickname: String,
-    @SerialName("profileImageUrl")
-    val profileImageUrl: String
+    val nickname: String
 ) {
     fun toEntity() = UserInfoResponseEntity(
-        nickname = nickname,
-        profileImageUrl = profileImageUrl
+        nickname = nickname
     )
 }

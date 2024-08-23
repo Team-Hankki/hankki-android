@@ -36,7 +36,7 @@ fun HankkiWhiteSnackBarWithButton(
     ) {
         Row(
             modifier = Modifier
-                .padding(14.dp)
+                .padding(vertical = 14.dp)
                 .padding(start = 22.dp, end = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

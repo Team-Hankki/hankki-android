@@ -153,19 +153,20 @@ fun RowFilterChip(
                         )
                         .clip(RoundedCornerShape(16.dp))
                         .background(White)
+                        .border(1.dp, Gray200, RoundedCornerShape(16.dp))
                         .padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     AsyncImage(
                         modifier = Modifier
-                            .size(38.dp)
+                            .size(48.dp)
                             .clip(RoundedCornerShape(8.dp)),
                         model = menu.imageUrl,
                         contentDescription = "image",
                         contentScale = ContentScale.Crop,
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
                         text = menu.name,

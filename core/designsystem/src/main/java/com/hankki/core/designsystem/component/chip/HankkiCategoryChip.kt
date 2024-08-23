@@ -29,7 +29,7 @@ fun HankkiCategoryChip(
         modifier = modifier
             .clip(RoundedCornerShape(100.dp))
             .background(containerColor)
-            .padding(horizontal = 8.dp, vertical = 3.dp)
+            .padding(horizontal = 8.dp, vertical = 1.5.dp)
     ) {
         Text(
             text = text,

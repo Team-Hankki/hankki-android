@@ -116,6 +116,10 @@ fun UniversitySelectionScreen(
                     .padding(horizontal = 22.dp)
                     .padding(top = 12.dp)
             ) {
+                item {
+                    Spacer(modifier = Modifier.height(2.dp))
+                }
+
                 itemsIndexed(universities) { index, university ->
                     UniversityItem(
                         university = university,
