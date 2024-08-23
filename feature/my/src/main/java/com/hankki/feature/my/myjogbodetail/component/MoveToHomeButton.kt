@@ -44,7 +44,7 @@ fun MoveToHomeButton(
         Text(
             text = stringResource(R.string.go_to_store),
             color = Gray500,
-            style = HankkiTheme.typography.body2,
+            style = HankkiTheme.typography.body3,
         )
     }
 }
