@@ -36,7 +36,7 @@ fun JogboFolder(
     title: String,
     chips: PersistentList<String>,
     userNickname: String,
-    shareJogboDialog: () -> Unit,
+    shareJogboDialogState: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -108,7 +108,7 @@ fun JogboFolder(
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
-                JogboShareButton(showShareDialog = shareJogboDialog)
+                JogboShareButton(showShareDialog = shareJogboDialogState)
             }
         }
     }
@@ -122,7 +122,7 @@ fun JogboFolderPreview() {
             title = "족보 이름",
             chips = persistentListOf("태그1","태그2"),
             userNickname = "사용자 이름",
-            shareJogboDialog = {}
+            shareJogboDialogState = {}
         )
     }
 }
