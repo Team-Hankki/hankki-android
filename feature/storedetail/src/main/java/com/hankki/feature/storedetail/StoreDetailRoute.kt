@@ -259,7 +259,7 @@ fun StoreDetailScreen(
 
             if (!isDefaultImage) {
                 Image(
-                    painter = painterResource(id = R.drawable.img_black_gradation_top),
+                    painter = painterResource(id = com.hankki.feature.storedetail.R.drawable.img_gradient_frame),
                     contentDescription = "black gradient",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.FillBounds
