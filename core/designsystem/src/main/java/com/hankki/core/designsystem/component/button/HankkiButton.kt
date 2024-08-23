@@ -16,10 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.bounceClick
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.Red400
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -101,7 +100,7 @@ fun HankkiMediumButton(
             }
             .clip(RoundedCornerShape(16.dp))
             .background(backgroundColor)
-            .padding(vertical = 13.dp, horizontal = 38.dp)
+            .padding(vertical = 15.dp, horizontal = 36.dp)
     ) {
         Text(
             text = text,
@@ -118,6 +117,7 @@ fun HankkiButtonPreview() {
         Column {
             HankkiButton(text = "로그아웃", onClick = {})
             HankkiTextButton(text = "돌아가기", onClick = {})
+            HankkiMediumButton(text = "확인", onClick = {})
         }
     }
 }
