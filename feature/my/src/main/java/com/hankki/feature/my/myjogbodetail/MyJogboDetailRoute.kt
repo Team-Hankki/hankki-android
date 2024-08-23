@@ -195,7 +195,7 @@ fun MyJogboDetailScreen(
                     title = jogboTitle,
                     chips = jogboChips,
                     userNickname = userNickname,
-                    shareJogbo = updateShareDialogState
+                    shareJogboDialog = updateShareDialogState
                 )
 
                 LazyColumn(
@@ -251,7 +251,7 @@ fun MyJogboDetailScreen(
                     title = jogboTitle,
                     chips = jogboChips,
                     userNickname = userNickname,
-                    shareJogbo = updateShareDialogState
+                    shareJogboDialog = updateShareDialogState
                 )
 
                 EmptyViewWithButton(
@@ -276,5 +276,11 @@ fun MyJogboDetailScreen(
 @Composable
 fun MyJogboDetailScreenPreview() {
     HankkijogboTheme {
+        MyJogboDetailRoute(
+            favoriteId = 1,
+            navigateUp = {},
+            navigateToDetail = {},
+            navigateToHome = {}
+        )
     }
 }
