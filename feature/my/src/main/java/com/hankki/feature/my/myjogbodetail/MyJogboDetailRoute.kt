@@ -46,9 +46,9 @@ import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.JogboFolder
-import com.hankki.feature.my.component.MoveToHomeButton
 import com.hankki.feature.my.component.StoreItem
+import com.hankki.feature.my.myjogbodetail.component.JogboFolder
+import com.hankki.feature.my.myjogbodetail.component.MoveToHomeButton
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -73,7 +73,6 @@ fun MyJogboDetailRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
-
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                 }
             }
@@ -83,14 +82,18 @@ fun MyJogboDetailRoute(
         navigateUp = navigateUp,
         jogboTitle = myJogboDetailState.myStoreItems.title,
         jogboChips = myJogboDetailState.myStoreItems.chips.toPersistentList(),
-        storeItems = myJogboDetailState.storesUiState,
-        deleteDialogState = myJogboDetailState.showDeleteDialog,
-        shareDialogState = myJogboDetailState.showShareDialog,
+        state = myJogboDetailState.uiState,
+        deleteDialogState = myJogboDetailState.deleteDialogState,
+        shareDialogState = myJogboDetailState.shareDialogState,
         userNickname = myJogboDetailState.userInformation.nickname,
-        updateShareDialogState = { myJogboDetailViewModel.updateShareDialog(myJogboDetailState.showShareDialog) },
-        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialog(myJogboDetailState.showDeleteDialog) },
-        deleteJogboStore = { storeId ->
-            myJogboDetailViewModel.deleteJogboStore(
+        updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(myJogboDetailState.shareDialogState) },
+        updateDeleteDialogState = {
+            myJogboDetailViewModel.updateDeleteDialogState(
+                myJogboDetailState.deleteDialogState
+            )
+        },
+        deleteSelectedStore = { storeId ->
+            myJogboDetailViewModel.deleteSelectedStore(
                 favoriteId,
                 storeId
             )
@@ -108,13 +111,13 @@ fun MyJogboDetailScreen(
     navigateUp: () -> Unit,
     jogboTitle: String,
     jogboChips: PersistentList<String>,
-    storeItems: EmptyUiState<PersistentList<Store>>,
+    state: EmptyUiState<PersistentList<Store>>,
     deleteDialogState: Boolean,
     shareDialogState: Boolean,
     userNickname: String,
     updateShareDialogState: () -> Unit,
     updateDeleteDialogState: () -> Unit,
-    deleteJogboStore: (Long) -> Unit,
+    deleteSelectedStore: (Long) -> Unit,
     selectedStoreId: Long,
     updateSelectedStoreId: (Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
@@ -131,12 +134,12 @@ fun MyJogboDetailScreen(
 
     if (deleteDialogState) {
         DoubleButtonDialog(
-            title = stringResource(R.string.delete_store),
+            title = stringResource(R.string.ask_delete_store),
             negativeButtonTitle = stringResource(R.string.go_back),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = updateDeleteDialogState,
             onPositiveButtonClicked = {
-                deleteJogboStore(selectedStoreId)
+                deleteSelectedStore(selectedStoreId)
             }
         )
     }
@@ -153,6 +156,7 @@ fun MyJogboDetailScreen(
                 .statusBarsPadding()
                 .background(Red500)
         )
+
         HankkiTopBar(
             modifier = Modifier.background(Red500),
             leadingIcon = {
@@ -168,14 +172,14 @@ fun MyJogboDetailScreen(
             },
             content = {
                 Text(
-                    text = stringResource(R.string.my_store_jogbo),
+                    text = stringResource(R.string.my_jogbo),
                     style = HankkiTheme.typography.sub3,
                     color = Gray900
                 )
             }
         )
 
-        when (storeItems) {
+        when (state) {
             is EmptyUiState.Loading -> {
                 Box(
                     modifier = Modifier
@@ -187,12 +191,6 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Success -> {
-                Spacer(
-                    modifier = Modifier
-                        .background(Red500)
-                        .height(16.dp)
-                )
-
                 JogboFolder(
                     title = jogboTitle,
                     chips = jogboChips,
@@ -210,7 +208,7 @@ fun MyJogboDetailScreen(
                         Spacer(modifier = Modifier.height(4.dp))
                     }
 
-                    items(storeItems.data) { store ->
+                    items(state.data) { store ->
                         StoreItem(
                             imageUrl = store.imageUrl,
                             category = store.category,
@@ -227,7 +225,7 @@ fun MyJogboDetailScreen(
                                 }
                             )
                         )
-                        if (storeItems.data.indexOf(store) != storeItems.data.lastIndex) {
+                        if (state.data.indexOf(store) != state.data.lastIndex) {
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
                                 thickness = 1.dp,
@@ -238,6 +236,7 @@ fun MyJogboDetailScreen(
 
                     item {
                         Spacer(modifier = Modifier.height(20.dp))
+
                         MoveToHomeButton(
                             modifier = Modifier
                                 .padding(bottom = 30.dp)
@@ -248,12 +247,6 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Empty -> {
-                Spacer(
-                    modifier = Modifier
-                        .background(Red500)
-                        .height(16.dp)
-                )
-
                 JogboFolder(
                     title = jogboTitle,
                     chips = jogboChips,

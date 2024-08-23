@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.myjogbodetail.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,10 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -39,5 +41,13 @@ fun JogboShareButton(
         Spacer(modifier = Modifier.width(2.dp))
 
         Text(text = "공유", style = HankkiTheme.typography.body4, color = White)
+    }
+}
+
+@Composable
+@Preview
+fun JogboShareButtonPreview() {
+    HankkijogboTheme {
+        JogboShareButton(showShareDialog = {})
     }
 }

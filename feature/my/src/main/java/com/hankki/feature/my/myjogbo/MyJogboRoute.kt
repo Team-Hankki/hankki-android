@@ -39,8 +39,8 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.AddJogboItem
-import com.hankki.feature.my.component.JogboItem
+import com.hankki.feature.my.myjogbo.component.AddJogboItem
+import com.hankki.feature.my.myjogbo.component.JogboItem
 import com.hankki.feature.my.myjogbo.model.MyJogboModel
 import com.hankki.feature.my.myjogbo.model.transformImage
 import kotlinx.collections.immutable.PersistentList
@@ -63,18 +63,18 @@ fun MyJogboRoute(
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
         state = myJogboState.uiState,
-        editMode = myJogboState.editMode,
-        updateEditMode = myJogboViewModel::updateMode,
+        editModeState = myJogboState.editModeState,
+        updateEditModeState = myJogboViewModel::updateEditModeState,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
-        resetJogboState = myJogboViewModel::resetJogboState,
-        dialogState = myJogboState.showDialog,
-        updateToDialogState = myJogboViewModel::updateToDialogState,
-        deleteJogboItems = myJogboViewModel::deleteJogboStore
+        resetEditModeState = myJogboViewModel::resetEditModeState,
+        deleteDialogState = myJogboState.dialogState,
+        updateDeleteDialogState = myJogboViewModel::updateDeleteDialogState,
+        deleteSelectedJogbo = myJogboViewModel::deleteSelectedJogbo
     )
 
     BackOnPressed(
-        editMode = myJogboState.editMode,
-        resetJogboState = myJogboViewModel::resetJogboState,
+        editMode = myJogboState.editModeState,
+        resetJogboState = myJogboViewModel::resetEditModeState,
         navigateUp = navigateUp,
     )
 }
@@ -85,21 +85,21 @@ fun MyJogboScreen(
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     state: UiState<PersistentList<MyJogboModel>>,
-    editMode: Boolean = false,
-    updateEditMode: () -> Unit,
+    editModeState: Boolean = false,
+    updateEditModeState: () -> Unit,
     updateJogboSelectedState: (Int, Boolean) -> Unit,
-    resetJogboState: () -> Unit,
-    dialogState: Boolean,
-    updateToDialogState: (Boolean) -> Unit,
-    deleteJogboItems: () -> Unit,
+    resetEditModeState: () -> Unit,
+    deleteDialogState: Boolean,
+    updateDeleteDialogState: (Boolean) -> Unit,
+    deleteSelectedJogbo: () -> Unit,
 ) {
-    if (dialogState) {
+    if (deleteDialogState) {
         DoubleButtonDialog(
             title = stringResource(R.string.ask_delete_jogbo),
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
-            onNegativeButtonClicked = { updateToDialogState(false) },
-            onPositiveButtonClicked = deleteJogboItems
+            onNegativeButtonClicked = { updateDeleteDialogState(false) },
+            onPositiveButtonClicked = deleteSelectedJogbo
         )
     }
 
@@ -119,28 +119,34 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 6.dp)
                         .size(44.dp)
-                        .noRippleClickable(if (editMode) resetJogboState else navigateUp),
+                        .noRippleClickable(if (editModeState) resetEditModeState else navigateUp),
                     tint = Color.Unspecified
                 )
             },
             content = {
                 Text(
-                    text = stringResource(R.string.my_store_jogbo),
+                    text = stringResource(R.string.my_jogbo),
                     style = HankkiTheme.typography.sub3,
                     color = Gray900
                 )
             },
             trailingIcon = {
+                val isSelectedJogboExists = (state is UiState.Success && state.data.any { it.jogboSelected })
+
                 Text(
-                    text = if (editMode) stringResource(R.string.delete) else stringResource(R.string.edit),
+                    text = if (editModeState) stringResource(R.string.delete) else stringResource(R.string.edit),
                     style = HankkiTheme.typography.body1,
                     color = Gray700,
                     modifier = Modifier
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
-                            if (editMode) noRippleClickable { updateToDialogState(true) }
-                            else noRippleClickable(updateEditMode)
+                            if (editModeState && isSelectedJogboExists) noRippleClickable {
+                                updateDeleteDialogState(
+                                    true
+                                )
+                            }
+                            else noRippleClickable(updateEditModeState)
                         }
                 )
             }
@@ -168,7 +174,7 @@ fun MyJogboScreen(
                 ) {
                     item {
                         AddJogboItem(
-                            isEditMode = editMode,
+                            isEditMode = editModeState,
                             onClick = navigateToNewJogbo
                         )
                     }
@@ -177,7 +183,7 @@ fun MyJogboScreen(
                             id = jogbo.jogboId,
                             title = jogbo.jogboName,
                             image = transformImage(jogbo.jogboImage),
-                            isEditMode = editMode,
+                            isEditMode = editModeState,
                             isSelected = jogbo.jogboSelected,
                             editJogbo = { updateJogboSelectedState(index, !jogbo.jogboSelected) },
                             navigateToJogboDetail = { navigateToJogboDetail(jogbo.jogboId) }
@@ -212,12 +218,12 @@ fun MyJogboScreenPreview() {
             navigateToJogboDetail = { _ -> },
             navigateToNewJogbo = {},
             state = UiState.Loading,
-            updateEditMode = {},
+            updateEditModeState = {},
             updateJogboSelectedState = { _, _ -> },
-            resetJogboState = {},
-            dialogState = false,
-            updateToDialogState = {},
-            deleteJogboItems = {}
+            resetEditModeState = {},
+            deleteDialogState = false,
+            updateDeleteDialogState = {},
+            deleteSelectedJogbo = {}
         )
     }
 }

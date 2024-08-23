@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.mypage.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
-fun ButtonWithArrowIcon(
+fun ArrowIconButton(
     itemTitle: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -48,8 +48,8 @@ fun ButtonWithArrowIcon(
 
 @Composable
 @Preview
-fun ItemWithArrowPreview() {
+fun ArrowIconButtonPreview() {
     HankkijogboTheme {
-        ButtonWithArrowIcon(itemTitle = "title", onClick = {}, modifier = Modifier)
+        ArrowIconButton(itemTitle = "title", onClick = {}, modifier = Modifier)
     }
 }

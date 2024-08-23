@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.mypage.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,11 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray50
@@ -28,7 +28,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
-fun ButtonWithImageAndBorder(
+fun ImageAndBorderButton(
     image: Int,
     description: String,
     modifier: Modifier = Modifier
@@ -66,10 +66,10 @@ fun ButtonWithImageAndBorder(
 
 @Composable
 @Preview
-fun ButtonPrev() {
+fun ImageAndBorderButtonPreview() {
     HankkijogboTheme {
-        ButtonWithImageAndBorder(
-            image = com.hankki.core.designsystem.R.drawable.ic_good,
+        ImageAndBorderButton(
+            image = R.drawable.ic_good,
             description = "test",
             modifier = Modifier
         )

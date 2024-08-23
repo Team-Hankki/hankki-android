@@ -48,7 +48,7 @@ class MyViewModel @Inject constructor(
 
     fun updateDialogState(state: DialogState) {
         _myState.value = _myState.value.copy(
-            showDialog = state
+            dialogSate = state
         )
     }
 

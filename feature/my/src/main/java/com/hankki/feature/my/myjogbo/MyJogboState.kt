@@ -5,7 +5,7 @@ import com.hankki.feature.my.myjogbo.model.MyJogboModel
 import kotlinx.collections.immutable.PersistentList
 
 data class MyJogboState(
-    val editMode: Boolean = false,
+    val editModeState: Boolean = false,
     val uiState: UiState<PersistentList<MyJogboModel>> = UiState.Loading,
-    var showDialog: Boolean = false,
+    var dialogState: Boolean = false,
 )

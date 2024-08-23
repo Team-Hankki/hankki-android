@@ -57,11 +57,11 @@ class MyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun likeStore(storeId: Long): Result<LikedStoreResponseEntity> = runCatching {
-        myDataSource.likeStore(storeId).data.toEntity()
+        myDataSource.postLikeStore(storeId).data.toEntity()
     }
 
     override suspend fun unLikeStore(storeId: Long): Result<LikedStoreResponseEntity> =
         runCatching {
-            myDataSource.unLikeStore(storeId).data.toEntity()
+            myDataSource.deleteLikeStore(storeId).data.toEntity()
         }
 }

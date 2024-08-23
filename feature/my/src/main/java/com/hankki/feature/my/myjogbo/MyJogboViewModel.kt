@@ -38,9 +38,9 @@ class MyJogboViewModel @Inject constructor(
         }
     }
 
-    fun updateMode() {
+    fun updateEditModeState() {
         _myJogboState.value = _myJogboState.value.copy(
-            editMode = !_myJogboState.value.editMode
+            editModeState = !_myJogboState.value.editModeState
         )
     }
 
@@ -62,7 +62,7 @@ class MyJogboViewModel @Inject constructor(
         }
     }
 
-    fun resetJogboState() {
+    fun resetEditModeState() {
         val currentState = _myJogboState.value.uiState
         if (currentState is UiState.Success) {
             val jogboItems = currentState.data
@@ -74,17 +74,17 @@ class MyJogboViewModel @Inject constructor(
                         }.toPersistentList()
                     )
                 )
-            updateMode()
+            updateEditModeState()
         }
     }
 
-    fun updateToDialogState(state: Boolean) {
+    fun updateDeleteDialogState(state: Boolean) {
         _myJogboState.value = _myJogboState.value.copy(
-            showDialog = state
+            dialogState = state
         )
     }
 
-    fun deleteJogboStore() {
+    fun deleteSelectedJogbo() {
         val currentState = _myJogboState.value.uiState
         if (currentState is UiState.Success) {
             val jogboItems = currentState.data
@@ -97,8 +97,8 @@ class MyJogboViewModel @Inject constructor(
                 myRepository.deleteJogboStores(deleteList)
                     .onSuccess {
                         _myJogboState.value = _myJogboState.value.copy(
-                            showDialog = false,
-                            editMode = false
+                            dialogState = false,
+                            editModeState = false
                         )
                         getMyJogboList()
                     }

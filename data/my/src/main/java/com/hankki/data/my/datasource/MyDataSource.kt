@@ -21,6 +21,6 @@ interface MyDataSource {
     suspend fun deleteWithdraw(): CreatedBaseResponse
     suspend fun deleteJogboStore(favoriteId: Long, storeId: Long)
     suspend fun deleteJogboStores(body: JogbosRequestDto)
-    suspend fun likeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
-    suspend fun unLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
+    suspend fun postLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
+    suspend fun deleteLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
 }

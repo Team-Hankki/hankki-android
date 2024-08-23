@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.myjogbo.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,8 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 
 @Composable
 fun JogboItemText(
@@ -32,4 +35,15 @@ fun JogboItemText(
         maxLines = 3,
         overflow = TextOverflow.Ellipsis
     )
+}
+
+@Composable
+@Preview
+fun JogboItemTextPreview() {
+    HankkijogboTheme {
+        JogboItemText(
+            text = "나의 족보",
+            color = Gray800
+        )
+    }
 }

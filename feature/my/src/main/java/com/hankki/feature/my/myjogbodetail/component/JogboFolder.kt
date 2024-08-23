@@ -1,4 +1,4 @@
-package com.hankki.feature.my.component
+package com.hankki.feature.my.myjogbodetail.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,13 +21,16 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.feature.my.R
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun JogboFolder(
@@ -40,10 +43,10 @@ fun JogboFolder(
         modifier = Modifier
             .fillMaxWidth()
             .background(Red500)
-            .padding(bottom = 23.dp)
             .padding(horizontal = 22.dp)
+            .padding(top = 16.dp, bottom = 23.dp)
             .paint(
-                painterResource(id = R.drawable.ic_my_jogbo_fold),
+                painterResource(id = R.drawable.img_folder),
                 contentScale = ContentScale.FillWidth
             )
     ) {
@@ -52,7 +55,8 @@ fun JogboFolder(
                 painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_my_store),
                 contentDescription = "store image",
                 modifier = Modifier
-                    .padding(top = 16.dp, start = 17.dp)
+                    .padding(top = 16.dp)
+                    .padding(start = 17.dp)
                     .size(45.dp),
             )
 
@@ -60,13 +64,17 @@ fun JogboFolder(
                 text = title,
                 color = Gray900,
                 style = HankkiTheme.typography.h2,
-                modifier = Modifier.padding(start = 22.dp, end = 50.dp, top = 11.dp),
+                modifier = Modifier
+                    .padding(start = 22.dp, end = 50.dp)
+                    .padding(top = 11.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
 
             LazyRow(
-                modifier = Modifier.padding(start = 20.dp),
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 items(chips) { chip ->
@@ -78,7 +86,8 @@ fun JogboFolder(
 
             Row(
                 modifier = Modifier
-                    .padding(start = 21.dp, end = 17.dp, bottom = 13.dp)
+                    .padding(start = 21.dp, end = 17.dp)
+                    .padding(bottom = 13.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -87,7 +96,7 @@ fun JogboFolder(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.img_user_image),
+                        painter = painterResource(id = R.drawable.img_user_hand),
                         contentDescription = "user image",
                         modifier = Modifier.size(26.dp)
                     )
@@ -101,6 +110,18 @@ fun JogboFolder(
                 JogboShareButton(showShareDialog = shareJogbo)
             }
         }
+    }
+}
 
+@Composable
+@Preview
+fun JogboFolderPreview() {
+    HankkijogboTheme {
+        JogboFolder(
+            title = "족보 이름",
+            chips = persistentListOf("태그1","태그2"),
+            userNickname = "사용자 이름",
+            shareJogbo = {}
+        )
     }
 }

@@ -49,14 +49,14 @@ import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.ButtonWithArrowIcon
-import com.hankki.feature.my.component.ButtonWithImageAndBorder
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY_PAGE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.LIKE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE_PAGE
+import com.hankki.feature.my.mypage.component.ArrowIconButton
+import com.hankki.feature.my.mypage.component.ImageAndBorderButton
 import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable
@@ -106,7 +106,7 @@ fun MyRoute(
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
         userName = myState.myModel.nickname,
-        showDialog = myState.showDialog,
+        showDialog = myState.dialogSate,
         showWebView = myViewModel::showWebView,
         updateDialog = myViewModel::updateDialogState,
         onLogout = myViewModel::logout,
@@ -173,8 +173,8 @@ fun MyScreen(
             modifier = Modifier
                 .size(98.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.img_my_profile),
-            contentDescription = stringResource(R.string.profile_image),
+            painter = painterResource(id = R.drawable.img_user_profile),
+            contentDescription = "profile_image",
             contentScale = ContentScale.Crop
         )
 
@@ -217,7 +217,7 @@ fun MyScreen(
             Spacer(modifier = Modifier.height(19.dp))
 
             Row {
-                ButtonWithImageAndBorder(
+                ImageAndBorderButton(
                     com.hankki.core.designsystem.R.drawable.ic_report,
                     stringResource(R.string.description_store_report),
                     Modifier
@@ -225,7 +225,7 @@ fun MyScreen(
                         .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
                 )
                 Spacer(modifier = Modifier.width(18.dp))
-                ButtonWithImageAndBorder(
+                ImageAndBorderButton(
                     com.hankki.core.designsystem.R.drawable.ic_good,
                     stringResource(R.string.description_store_like),
                     Modifier
@@ -234,13 +234,13 @@ fun MyScreen(
                 )
             }
 
-            ButtonWithArrowIcon(
+            ArrowIconButton(
                 stringResource(R.string.terms_of_use),
                 { showWebView(TERMS_OF_USE) })
 
-            ButtonWithArrowIcon(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
+            ArrowIconButton(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
 
-            ButtonWithArrowIcon(
+            ArrowIconButton(
                 stringResource(R.string.logout),
                 { updateDialog(DialogState.LOGOUT) })
 
