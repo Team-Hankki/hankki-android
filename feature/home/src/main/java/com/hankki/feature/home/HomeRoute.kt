@@ -196,7 +196,8 @@ fun HomeRoute(
         isOpenDialog = state.isOpenDialog,
         paddingValues = paddingValues,
         cameraPositionState = cameraPositionState,
-        universityName = state.myUniversityModel.name ?: "전체",
+        universityName = if (state.myUniversityModel.id == null) "전체" else state.myUniversityModel.name
+            ?: "전체",
         selectedStoreItem = state.selectedStoreItem,
         storeItemState = state.storeItems,
         jogboItems = state.jogboItems,
