@@ -63,7 +63,7 @@ fun MyJogboRoute(
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
         state = myJogboState.uiState,
-        editMode = myJogboState.editModeState,
+        editModeState = myJogboState.editModeState,
         updateEditModeState = myJogboViewModel::updateEditModeState,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
         resetEditModeState = myJogboViewModel::resetEditModeState,
@@ -85,7 +85,7 @@ fun MyJogboScreen(
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     state: UiState<PersistentList<MyJogboModel>>,
-    editMode: Boolean = false,
+    editModeState: Boolean = false,
     updateEditModeState: () -> Unit,
     updateJogboSelectedState: (Int, Boolean) -> Unit,
     resetEditModeState: () -> Unit,
@@ -119,7 +119,7 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 6.dp)
                         .size(44.dp)
-                        .noRippleClickable(if (editMode) resetEditModeState else navigateUp),
+                        .noRippleClickable(if (editModeState) resetEditModeState else navigateUp),
                     tint = Color.Unspecified
                 )
             },
@@ -134,14 +134,14 @@ fun MyJogboScreen(
                 val isSelectedJogboExists = (state is UiState.Success && state.data.any { it.jogboSelected })
 
                 Text(
-                    text = if (editMode) stringResource(R.string.delete) else stringResource(R.string.edit),
+                    text = if (editModeState) stringResource(R.string.delete) else stringResource(R.string.edit),
                     style = HankkiTheme.typography.body1,
                     color = Gray700,
                     modifier = Modifier
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
-                            if (editMode && isSelectedJogboExists) noRippleClickable {
+                            if (editModeState && isSelectedJogboExists) noRippleClickable {
                                 updateDeleteDialogState(
                                     true
                                 )
@@ -174,7 +174,7 @@ fun MyJogboScreen(
                 ) {
                     item {
                         AddJogboItem(
-                            isEditMode = editMode,
+                            isEditMode = editModeState,
                             onClick = navigateToNewJogbo
                         )
                     }
@@ -183,7 +183,7 @@ fun MyJogboScreen(
                             id = jogbo.jogboId,
                             title = jogbo.jogboName,
                             image = transformImage(jogbo.jogboImage),
-                            isEditMode = editMode,
+                            isEditMode = editModeState,
                             isSelected = jogbo.jogboSelected,
                             editJogbo = { updateJogboSelectedState(index, !jogbo.jogboSelected) },
                             navigateToJogboDetail = { navigateToJogboDetail(jogbo.jogboId) }
