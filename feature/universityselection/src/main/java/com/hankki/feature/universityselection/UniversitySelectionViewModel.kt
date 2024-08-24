@@ -80,7 +80,7 @@ class UniversitySelectionViewModel @Inject constructor(
     companion object {
         val DEFAULT_UNIVERSITY = UniversitySelectionEntity(
             id = null,
-            name = "대학없음",
+            name = "전체",
             latitude = 37.583639,
             longitude = 127.0588564
         )
