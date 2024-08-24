@@ -1,6 +1,5 @@
 package com.hankki.domain.storedetail.entity
 
 data class StoreDetailNicknameEntity(
-    val nickname: String,
-    val profileImageUrl: String
+    val nickname: String
 )
