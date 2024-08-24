@@ -69,9 +69,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchData() {
+    fun fetchData() {
         getStoreItems()
         getMarkerItems()
+    }
+
+    fun clearState() {
+        _state.value = HomeState()
     }
 
     fun moveMap(latitude: Double, longitude: Double) {
