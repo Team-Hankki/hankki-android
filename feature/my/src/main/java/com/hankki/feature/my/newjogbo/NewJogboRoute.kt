@@ -43,7 +43,7 @@ fun NewJogboRoute(
     navigateUp: () -> Unit,
     newJogboViewModel: NewJogboViewModel = hiltViewModel()
 ) {
-    val newJogboState by newJogboViewModel.newJogboState.collectAsStateWithLifecycle()
+    val state by newJogboViewModel.newJogboState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(newJogboViewModel.newJogboSideEffect, lifecycleOwner) {
@@ -52,7 +52,7 @@ fun NewJogboRoute(
                 when (sideEffect) {
                     is NewJogboSideEffect.NavigateToNewJogbo -> navigateUp()
                     is NewJogboSideEffect.ShowErrorDialog -> {
-                        newJogboViewModel.updateErrorDialog(newJogboState.errorDialogState)
+                        newJogboViewModel.updateErrorDialog(state.errorDialogState)
                         newJogboViewModel.resetTitle()
                     }
                 }
@@ -61,15 +61,15 @@ fun NewJogboRoute(
 
     NewJogboScreen(
         navigateUp = navigateUp,
-        title = newJogboState.title,
+        title = state.title,
         onTitleChange = newJogboViewModel::setTitle,
-        tags = newJogboState.tags,
+        tags = state.tags,
         onTagsChange = newJogboViewModel::setTags,
-        buttonEnabled = newJogboState.isButtonEnabled,
+        buttonEnabled = state.isButtonEnabled,
         editTagsLength = newJogboViewModel::editTagsLength,
         createNewJogbo = newJogboViewModel::createNewJogbo,
-        errorDialogState = newJogboState.errorDialogState,
-        updateErrorDialogState = { newJogboViewModel.updateErrorDialog(newJogboState.errorDialogState) }
+        errorDialogState = state.errorDialogState,
+        updateErrorDialogState = { newJogboViewModel.updateErrorDialog(state.errorDialogState) }
     )
 }
 

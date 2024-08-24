@@ -61,7 +61,7 @@ fun MyJogboDetailRoute(
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val myJogboDetailState by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
+    val state by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         myJogboDetailViewModel.getJogboDetail(favoriteId)
@@ -80,25 +80,16 @@ fun MyJogboDetailRoute(
 
     MyJogboDetailScreen(
         navigateUp = navigateUp,
-        jogboTitle = myJogboDetailState.myStoreItems.title,
-        jogboChips = myJogboDetailState.myStoreItems.chips.toPersistentList(),
-        state = myJogboDetailState.uiState,
-        deleteDialogState = myJogboDetailState.deleteDialogState,
-        shareDialogState = myJogboDetailState.shareDialogState,
-        userNickname = myJogboDetailState.userInformation.nickname,
-        updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(myJogboDetailState.shareDialogState) },
-        updateDeleteDialogState = {
-            myJogboDetailViewModel.updateDeleteDialogState(
-                myJogboDetailState.deleteDialogState
-            )
-        },
-        deleteSelectedStore = { storeId ->
-            myJogboDetailViewModel.deleteSelectedStore(
-                favoriteId,
-                storeId
-            )
-        },
-        selectedStoreId = myJogboDetailState.selectedStoreId,
+        jogboTitle = state.myStoreItems.title,
+        jogboChips = state.myStoreItems.chips.toPersistentList(),
+        state = state.uiState,
+        deleteDialogState = state.deleteDialogState,
+        shareDialogState = state.shareDialogState,
+        userNickname = state.userInformation.nickname,
+        updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(state.shareDialogState) },
+        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialogState(state.deleteDialogState) },
+        deleteSelectedStore = { storeId -> myJogboDetailViewModel.deleteSelectedStore(favoriteId, storeId) },
+        selectedStoreId = state.selectedStoreId,
         updateSelectedStoreId = myJogboDetailViewModel::updateSelectedStoreId,
         navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
         navigateToHome = myJogboDetailViewModel::navigateToHome
@@ -195,7 +186,7 @@ fun MyJogboDetailScreen(
                     title = jogboTitle,
                     chips = jogboChips,
                     userNickname = userNickname,
-                    shareJogbo = updateShareDialogState
+                    shareJogboDialogState = updateShareDialogState
                 )
 
                 LazyColumn(
@@ -251,7 +242,7 @@ fun MyJogboDetailScreen(
                     title = jogboTitle,
                     chips = jogboChips,
                     userNickname = userNickname,
-                    shareJogbo = updateShareDialogState
+                    shareJogboDialogState = updateShareDialogState
                 )
 
                 EmptyViewWithButton(
@@ -276,5 +267,11 @@ fun MyJogboDetailScreen(
 @Composable
 fun MyJogboDetailScreenPreview() {
     HankkijogboTheme {
+        MyJogboDetailRoute(
+            favoriteId = 1,
+            navigateUp = {},
+            navigateToDetail = {},
+            navigateToHome = {}
+        )
     }
 }

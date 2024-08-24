@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.hankki.core.designsystem.component.button.HankkiButton
+import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -65,7 +65,7 @@ fun SingleButtonDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                HankkiButton(
+                HankkiMediumButton(
                     text = buttonTitle,
                     onClick = onConfirmation,
                     enabled = true,

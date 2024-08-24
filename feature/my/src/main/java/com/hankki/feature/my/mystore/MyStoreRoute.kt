@@ -50,7 +50,7 @@ fun MyStoreRoute(
     myStoreViewModel: MyStoreViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val myStoreState by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
+    val state by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
     LaunchedEffect(type) {
         if (type == "like") {
@@ -72,7 +72,7 @@ fun MyStoreRoute(
     MyStoreScreen(
         navigateUp = navigateUp,
         type = type,
-        state = myStoreState.uiState,
+        state = state.uiState,
         updateStoreSelected = myStoreViewModel::updateStoreSelected,
         navigateToStoreDetail = myStoreViewModel::navigateToStoreDetail,
     )

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -37,7 +36,7 @@ fun JogboFolder(
     title: String,
     chips: PersistentList<String>,
     userNickname: String,
-    shareJogbo: () -> Unit,
+    shareJogboDialogState: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -50,7 +49,9 @@ fun JogboFolder(
                 contentScale = ContentScale.FillWidth
             )
     ) {
-        Column {
+        Column(
+            modifier = Modifier.matchParentSize()
+        ) {
             Image(
                 painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_my_store),
                 contentDescription = "store image",
@@ -82,7 +83,7 @@ fun JogboFolder(
                 }
             }
 
-            Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             Row(
                 modifier = Modifier
@@ -107,7 +108,7 @@ fun JogboFolder(
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
-                JogboShareButton(showShareDialog = shareJogbo)
+                JogboShareButton(showShareDialog = shareJogboDialogState)
             }
         }
     }
@@ -121,7 +122,7 @@ fun JogboFolderPreview() {
             title = "족보 이름",
             chips = persistentListOf("태그1","태그2"),
             userNickname = "사용자 이름",
-            shareJogbo = {}
+            shareJogboDialogState = {}
         )
     }
 }

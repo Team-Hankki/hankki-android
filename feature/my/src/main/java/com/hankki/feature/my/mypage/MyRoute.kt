@@ -67,7 +67,7 @@ fun MyRoute(
     myViewModel: MyViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val myState by myViewModel.myState.collectAsStateWithLifecycle()
+    val state by myViewModel.myState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     LaunchedEffect(true) {
@@ -105,8 +105,8 @@ fun MyRoute(
         paddingValues = paddingValues,
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
-        userName = myState.myModel.nickname,
-        showDialog = myState.dialogSate,
+        userName = state.myModel.nickname,
+        showDialog = state.dialogSate,
         showWebView = myViewModel::showWebView,
         updateDialog = myViewModel::updateDialogState,
         onLogout = myViewModel::logout,
