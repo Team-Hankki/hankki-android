@@ -195,7 +195,6 @@ fun HomeRoute(
 
     LaunchedEffect(key1 = Unit) { // 다른 화면 갔다와도 실행됨. 어카지.
         with(viewModel) {
-            clearState()
             getUniversityInformation()
         }
     }

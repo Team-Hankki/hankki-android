@@ -41,10 +41,17 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
+                    if (university.id == _state.value.myUniversityModel.id) {
+                        fetchData()
+                        return@launch
+                    }
+
+                    clearState()
+
                     _state.value = _state.value.copy(
                         myUniversityModel = university.toModel()
                     )
-
+                    fetchData()
                     if (state.value.myUniversityModel.id == null) {
                         moveMyLocation()
                     } else {
@@ -53,7 +60,6 @@ class HomeViewModel @Inject constructor(
                             state.value.myUniversityModel.longitude
                         )
                     }
-                    fetchData()
                 }.onFailure { error ->
                     if (state.value.myUniversityModel.id == null) {
                         moveMyLocation()
@@ -74,8 +80,14 @@ class HomeViewModel @Inject constructor(
         getMarkerItems()
     }
 
-    fun clearState() {
-        _state.value = HomeState()
+    private fun clearState() {
+        _state.value = _state.value.copy(
+            categoryChipState = ChipState.Unselected(),
+            priceChipState = ChipState.Unselected(),
+            sortChipState = ChipState.Unselected(),
+            isMainBottomSheetOpen = true,
+            selectedStoreItem = StoreItemModel()
+        )
     }
 
     fun moveMap(latitude: Double, longitude: Double) {
