@@ -26,7 +26,5 @@ interface StoreDetailDataSource {
 
     suspend fun getStoreDetailNickname(): BaseResponse<StoreDetailNicknameResponseDto>
 
-    suspend fun deleteStoreDetail(
-        storeId: Long,
-    )
+    suspend fun deleteStoreDetail(storeId: Long)
 }

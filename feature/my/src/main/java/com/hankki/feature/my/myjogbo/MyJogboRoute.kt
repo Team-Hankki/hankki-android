@@ -52,7 +52,7 @@ fun MyJogboRoute(
     navigateToNewJogbo: () -> Unit,
     myJogboViewModel: MyJogboViewModel = hiltViewModel(),
 ) {
-    val myJogboState by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
+    val state by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         myJogboViewModel.getMyJogboList()
@@ -62,18 +62,18 @@ fun MyJogboRoute(
         navigateUp = navigateUp,
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
-        state = myJogboState.uiState,
-        editModeState = myJogboState.editModeState,
+        state = state.uiState,
+        editModeState = state.editModeState,
         updateEditModeState = myJogboViewModel::updateEditModeState,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
         resetEditModeState = myJogboViewModel::resetEditModeState,
-        deleteDialogState = myJogboState.dialogState,
+        deleteDialogState = state.dialogState,
         updateDeleteDialogState = myJogboViewModel::updateDeleteDialogState,
         deleteSelectedJogbo = myJogboViewModel::deleteSelectedJogbo
     )
 
     BackOnPressed(
-        editMode = myJogboState.editModeState,
+        editMode = state.editModeState,
         resetJogboState = myJogboViewModel::resetEditModeState,
         navigateUp = navigateUp,
     )
