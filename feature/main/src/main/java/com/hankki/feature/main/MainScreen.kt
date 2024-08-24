@@ -216,13 +216,7 @@ internal fun MainScreen(
                             navigator.navigateToHome(navOptions)
                         },
                         navigateToStoreDetail = { storeId ->
-                            val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToStoreDetail(storeId, navOptions)
+                            navigator.navigateToStoreDetail(storeId)
                         },
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo,
                         onShowSnackBar = onShowWhiteSnackBarWithButton
