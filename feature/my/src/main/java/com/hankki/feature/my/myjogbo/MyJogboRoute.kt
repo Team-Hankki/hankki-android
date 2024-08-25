@@ -141,12 +141,15 @@ fun MyJogboScreen(
                         .padding(vertical = 12.dp, horizontal = 14.dp)
                         .padding(end = 9.dp)
                         .run {
-                            if (editModeState && isSelectedJogboExists) noRippleClickable {
-                                updateDeleteDialogState(
-                                    true
-                                )
+                            if (editModeState && isSelectedJogboExists) {
+                                noRippleClickable {
+                                    updateDeleteDialogState(true)
+                                }
+                            } else if (!editModeState) {
+                                noRippleClickable(updateEditModeState)
+                            } else {
+                                this
                             }
-                            else noRippleClickable(updateEditModeState)
                         }
                 )
             }
