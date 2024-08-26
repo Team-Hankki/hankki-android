@@ -69,7 +69,8 @@ fun MyJogboRoute(
         resetEditModeState = myJogboViewModel::resetEditModeState,
         deleteDialogState = state.dialogState,
         updateDeleteDialogState = myJogboViewModel::updateDeleteDialogState,
-        deleteSelectedJogbo = myJogboViewModel::deleteSelectedJogbo
+        deleteSelectedJogbo = myJogboViewModel::deleteSelectedJogbo,
+        buttonEnabledState = state.buttonEnabled
     )
 
     BackOnPressed(
@@ -85,13 +86,14 @@ fun MyJogboScreen(
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     state: UiState<PersistentList<MyJogboModel>>,
-    editModeState: Boolean = false,
+    editModeState: Boolean,
     updateEditModeState: () -> Unit,
     updateJogboSelectedState: (Int, Boolean) -> Unit,
     resetEditModeState: () -> Unit,
     deleteDialogState: Boolean,
     updateDeleteDialogState: (Boolean) -> Unit,
     deleteSelectedJogbo: () -> Unit,
+    buttonEnabledState: Boolean
 ) {
     if (deleteDialogState) {
         DoubleButtonDialog(
@@ -99,7 +101,7 @@ fun MyJogboScreen(
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = { updateDeleteDialogState(false) },
-            onPositiveButtonClicked = deleteSelectedJogbo
+            onPositiveButtonClicked = { if (buttonEnabledState) deleteSelectedJogbo() }
         )
     }
 
@@ -226,7 +228,9 @@ fun MyJogboScreenPreview() {
             resetEditModeState = {},
             deleteDialogState = false,
             updateDeleteDialogState = {},
-            deleteSelectedJogbo = {}
+            deleteSelectedJogbo = {},
+            buttonEnabledState = false,
+            editModeState = false
         )
     }
 }

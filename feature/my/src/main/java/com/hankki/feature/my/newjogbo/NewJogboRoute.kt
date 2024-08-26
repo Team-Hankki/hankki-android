@@ -65,7 +65,7 @@ fun NewJogboRoute(
         onTitleChange = newJogboViewModel::setTitle,
         tags = state.tags,
         onTagsChange = newJogboViewModel::setTags,
-        buttonEnabled = state.isButtonEnabled,
+        buttonEnabledState = state.buttonEnabled,
         editTagsLength = newJogboViewModel::editTagsLength,
         createNewJogbo = newJogboViewModel::createNewJogbo,
         errorDialogState = state.errorDialogState,
@@ -81,7 +81,7 @@ fun NewJogboScreen(
     tags: String,
     onTagsChange: (String) -> Unit,
     editTagsLength: (String) -> Int,
-    buttonEnabled: Boolean,
+    buttonEnabledState: Boolean,
     createNewJogbo: () -> Unit,
     errorDialogState: Boolean,
     updateErrorDialogState: () -> Unit,
@@ -160,7 +160,7 @@ fun NewJogboScreen(
             HankkiMediumButton(
                 text = stringResource(R.string.make_jogbo),
                 onClick = createNewJogbo,
-                enabled = buttonEnabled,
+                enabled = buttonEnabledState,
                 textStyle = HankkiTheme.typography.sub3,
             )
         }
@@ -182,7 +182,7 @@ fun NewJogboScreenPreview() {
             tags = "",
             onTagsChange = {},
             editTagsLength = dummyEditTagsLength,
-            buttonEnabled = false,
+            buttonEnabledState = false,
             createNewJogbo = {},
             errorDialogState = false,
             updateErrorDialogState = {}
