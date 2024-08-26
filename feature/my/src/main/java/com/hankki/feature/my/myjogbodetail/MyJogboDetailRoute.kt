@@ -118,7 +118,7 @@ fun MyJogboDetailScreen(
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
-        mutableDoubleStateOf(configuration.screenHeightDp * 0.12)
+        mutableDoubleStateOf(configuration.screenHeightDp * 0.09)
     }
 
     if (shareDialogState) {
