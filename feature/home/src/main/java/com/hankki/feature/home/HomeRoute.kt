@@ -44,6 +44,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -169,8 +170,8 @@ fun HomeRoute(
                         viewModel.moveMap(location.latitude, location.longitude)
                     }.addOnFailureListener {
                         viewModel.moveMap(
-                            state.myUniversityModel.latitude,
-                            state.myUniversityModel.longitude
+                            latitude = state.myUniversityModel.latitude,
+                            longitude = state.myUniversityModel.longitude
                         )
                     }
                 }
@@ -188,7 +189,13 @@ fun HomeRoute(
             state.priceChipState !is ChipState.Selected &&
             state.sortChipState !is ChipState.Selected
         ) {
-            viewModel.getUniversityInformation()
+            viewModel.fetchData()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) { // 다른 화면 갔다와도 실행됨. 어카지.
+        with(viewModel) {
+            getUniversityInformation()
         }
     }
 

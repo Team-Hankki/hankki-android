@@ -7,8 +7,8 @@ import com.hankki.domain.universityselection.entity.UniversitySelectionRequestEn
 import com.hankki.domain.universityselection.repository.UniversitySelectionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UniversitySelectionViewModel @Inject constructor(
-    private val universitySelectionRepository: UniversitySelectionRepository
+    private val universitySelectionRepository: UniversitySelectionRepository,
 ) : ViewModel() {
     private val _universitySelectionState = MutableStateFlow(UniversitySelectionState())
     val universitySelectionState: StateFlow<UniversitySelectionState> = _universitySelectionState
@@ -46,21 +46,43 @@ class UniversitySelectionViewModel @Inject constructor(
     }
 
     fun postUniversity() {
-        _universitySelectionState.value.selectedUniversity?.let { selectedUniversity ->
-            viewModelScope.launch {
-                universitySelectionRepository.postUniversitySelection(
-                    UniversitySelectionRequestEntity(
-                        universityId = selectedUniversity.id.toLong(),
-                        name = selectedUniversity.name,
-                        longitude = selectedUniversity.longitude,
-                        latitude = selectedUniversity.latitude
-                    )
-                ).onSuccess {
-                    _sideEffects.emit(UniversitySelectionSideEffect.PostSuccess)
-                }.onFailure {
-                    _sideEffects.emit(UniversitySelectionSideEffect.PostError(it))
+        val selectedUniversity = _universitySelectionState.value.selectedUniversity
+        viewModelScope.launch {
+            universitySelectionRepository.postUniversitySelection(
+                if (selectedUniversity == null) {
+                    with(DEFAULT_UNIVERSITY) {
+                        UniversitySelectionRequestEntity(
+                            universityId = id?.toLong(),
+                            name = name,
+                            longitude = longitude,
+                            latitude = latitude
+                        )
+                    }
+                } else {
+                    with(selectedUniversity) {
+                        UniversitySelectionRequestEntity(
+                            universityId = id?.toLong(),
+                            name = name,
+                            longitude = longitude,
+                            latitude = latitude
+                        )
+                    }
                 }
+            ).onSuccess {
+                _sideEffects.emit(UniversitySelectionSideEffect.PostSuccess)
+            }.onFailure {
+                _sideEffects.emit(UniversitySelectionSideEffect.PostError(it))
             }
         }
+
+    }
+
+    companion object {
+        val DEFAULT_UNIVERSITY = UniversitySelectionEntity(
+            id = null,
+            name = "전체",
+            latitude = 37.583639,
+            longitude = 127.0588564
+        )
     }
 }
