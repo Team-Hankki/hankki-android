@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -20,9 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -114,6 +116,11 @@ fun MyJogboDetailScreen(
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
 ) {
+    val configuration = LocalConfiguration.current
+    val height by rememberSaveable {
+        mutableDoubleStateOf(configuration.screenHeightDp * 0.12)
+    }
+
     if (shareDialogState) {
         SingleButtonDialog(
             title = stringResource(R.string.please_wait),
@@ -135,102 +142,100 @@ fun MyJogboDetailScreen(
         )
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .navigationBarsPadding()
             .fillMaxSize()
-            .background(Red500),
+            .background(White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(
-            modifier = Modifier
-                .statusBarsPadding()
-                .background(Red500)
-        )
-
-        HankkiTopBar(
-            modifier = Modifier.background(Red500),
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .padding(start = 6.dp)
-                        .size(44.dp)
-                        .noRippleClickable(onClick = navigateUp),
-                    tint = Color.Unspecified
-                )
-            },
-            content = {
-                Text(
-                    text = stringResource(R.string.my_jogbo),
-                    style = HankkiTheme.typography.sub3,
-                    color = Gray900
-                )
-            }
-        )
+        item {
+            HankkiTopBar(
+                modifier = Modifier
+                    .background(Red500)
+                    .statusBarsPadding(),
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .padding(start = 6.dp)
+                            .size(44.dp)
+                            .noRippleClickable(onClick = navigateUp),
+                        tint = Color.Unspecified
+                    )
+                },
+                content = {
+                    Text(
+                        text = stringResource(R.string.my_jogbo),
+                        style = HankkiTheme.typography.sub3,
+                        color = Gray900
+                    )
+                }
+            )
+        }
 
         when (state) {
             is EmptyUiState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(White)
-                ) {
-                    HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillParentMaxSize()
+                    ) {
+                        HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                    }
                 }
             }
 
             is EmptyUiState.Success -> {
-                JogboFolder(
-                    title = jogboTitle,
-                    chips = jogboChips,
-                    userNickname = userNickname,
-                    shareJogboDialogState = updateShareDialogState
-                )
+                item {
+                    JogboFolder(
+                        title = jogboTitle,
+                        chips = jogboChips,
+                        userNickname = userNickname,
+                        shareJogboDialogState = updateShareDialogState
+                    )
+                }
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(White),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item {
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
+                item {
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
 
-                    items(state.data) { store ->
-                        StoreItem(
-                            imageUrl = store.imageUrl,
-                            category = store.category,
-                            name = store.name,
-                            price = store.lowestPrice.toString(),
-                            heartCount = store.heartCount,
-                            isIconUsed = false,
-                            isIconSelected = false,
-                            modifier = Modifier.combinedClickable(
-                                onClick = { navigateToStoreDetail(store.id) },
-                                onLongClick = {
-                                    updateSelectedStoreId(store.id)
-                                    updateDeleteDialogState()
-                                }
-                            )
+                items(state.data) { store ->
+                    StoreItem(
+                        imageUrl = store.imageUrl,
+                        category = store.category,
+                        name = store.name,
+                        price = store.lowestPrice.toString(),
+                        heartCount = store.heartCount,
+                        isIconUsed = false,
+                        isIconSelected = false,
+                        modifier = Modifier.combinedClickable(
+                            onClick = { navigateToStoreDetail(store.id) },
+                            onLongClick = {
+                                updateSelectedStoreId(store.id)
+                                updateDeleteDialogState()
+                            }
                         )
-                        if (state.data.indexOf(store) != state.data.lastIndex) {
-                            HorizontalDivider(
-                                modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
-                                thickness = 1.dp,
-                                color = Gray200
-                            )
-                        }
+                    )
+                    if (state.data.indexOf(store) != state.data.lastIndex) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
+                            thickness = 1.dp,
+                            color = Gray200
+                        )
                     }
+                }
 
-                    item {
-                        Spacer(modifier = Modifier.height(20.dp))
-
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 20.dp, bottom = 30.dp),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
                         MoveToHomeButton(
                             modifier = Modifier
-                                .padding(bottom = 30.dp)
                                 .noRippleClickable(navigateToHome),
                         )
                     }
@@ -238,24 +243,28 @@ fun MyJogboDetailScreen(
             }
 
             is EmptyUiState.Empty -> {
-                JogboFolder(
-                    title = jogboTitle,
-                    chips = jogboChips,
-                    userNickname = userNickname,
-                    shareJogboDialogState = updateShareDialogState
-                )
+                item {
+                    JogboFolder(
+                        title = jogboTitle,
+                        chips = jogboChips,
+                        userNickname = userNickname,
+                        shareJogboDialogState = updateShareDialogState
+                    )
 
-                EmptyViewWithButton(
-                    text = stringResource(R.string.my_jogbo) +
-                            stringResource(R.string.add_store_to_jogbo),
-                    content = {
-                        MoveToHomeButton(
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .noRippleClickable(navigateToHome),
-                        )
-                    }
-                )
+                    Spacer(modifier = Modifier.height((height).dp))
+
+                    EmptyViewWithButton(
+                        text = stringResource(R.string.my_jogbo) +
+                                stringResource(R.string.add_store_to_jogbo),
+                        content = {
+                            MoveToHomeButton(
+                                modifier = Modifier
+                                    .padding(top = 20.dp)
+                                    .noRippleClickable(navigateToHome),
+                            )
+                        }
+                    )
+                }
             }
 
             is EmptyUiState.Failure -> {}

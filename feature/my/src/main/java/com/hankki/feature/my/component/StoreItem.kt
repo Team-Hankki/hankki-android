@@ -56,7 +56,6 @@ fun StoreItem(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clip(RoundedCornerShape(10.dp))
             .background(White)
             .padding(vertical = 16.dp, horizontal = 22.dp),
         verticalAlignment = Alignment.CenterVertically,
