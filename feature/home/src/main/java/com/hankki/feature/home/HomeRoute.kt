@@ -193,7 +193,7 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(key1 = Unit) { // 다른 화면 갔다와도 실행됨. 어카지.
+    LaunchedEffect(key1 = Unit) { // TODO: 다른 화면 갔다와도 실행됨. 어카지.
         with(viewModel) {
             getUniversityInformation()
         }
@@ -241,7 +241,6 @@ fun HomeRoute(
         selectSortChipItem = viewModel::selectSortChipItem,
         addNewJogbo = {
             navigateToAddNewJogbo()
-            // viewModel.controlMyJogboBottomSheet()
         },
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
