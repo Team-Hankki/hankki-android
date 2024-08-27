@@ -241,7 +241,7 @@ fun HomeRoute(
         selectSortChipItem = viewModel::selectSortChipItem,
         addNewJogbo = {
             navigateToAddNewJogbo()
-            viewModel.controlMyJogboBottomSheet()
+            // viewModel.controlMyJogboBottomSheet()
         },
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
@@ -350,6 +350,10 @@ fun HomeScreen(
     }
 
     if (isMyJogboBottomSheetOpen) {
+        LaunchedEffect(key1 = Unit) {
+            getJogboItems(selectedStoreItem.id)
+        }
+
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
@@ -561,9 +565,8 @@ fun HomeScreen(
                                                 heartCount = item.heartCount,
                                                 onClickItem = navigateStoreDetail
                                             ) {
-                                                controlMyJogboBottomSheet()
-                                                getJogboItems(item.id)
                                                 selectStoreItem(item)
+                                                controlMyJogboBottomSheet()
                                             }
 
                                             if (item == storeItems.last()) {
