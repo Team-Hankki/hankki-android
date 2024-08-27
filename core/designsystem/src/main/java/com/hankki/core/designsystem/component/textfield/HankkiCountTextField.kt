@@ -22,11 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,7 +55,7 @@ fun HankkiCountTextField(
     placeholder: String,
     trailingIcon: Boolean,
     onValueChanged: (String) -> Unit,
-    resetTitle : Boolean,
+    resetTitle: Boolean,
     modifier: Modifier = Modifier
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -120,7 +122,8 @@ fun HankkiCountTextField(
                         val cursorPosition = if (modifiedValue.isEmpty()) {
                             1
                         } else {
-                            newValue.selection.start.coerceAtLeast(1).coerceAtMost(modifiedValue.length)
+                            newValue.selection.start.coerceAtLeast(1)
+                                .coerceAtMost(modifiedValue.length)
                         }
 
                         if (newValue.text.contains("# ") || newValue.text.contains(" #")) {
@@ -178,6 +181,7 @@ fun HankkiCountInnerTextField(
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     BasicTextField(
         value = value,
@@ -195,10 +199,14 @@ fun HankkiCountInnerTextField(
         keyboardOptions = keyboardOptions,
         keyboardActions = KeyboardActions(
             onDone = {
-                focusManager.clearFocus()
+                if (!focusManager.moveFocus(FocusDirection.Down)) {
+                    focusManager.clearFocus()
+                }
             },
             onSearch = {
-                focusManager.clearFocus()
+                if (!focusManager.moveFocus(FocusDirection.Down)) {
+                    focusManager.clearFocus()
+                }
             }
         ),
         textStyle = HankkiTheme.typography.body1.copy(color = textColor),
