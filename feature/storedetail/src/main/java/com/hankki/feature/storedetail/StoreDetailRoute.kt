@@ -153,7 +153,7 @@ fun StoreDetailRoute(
         StoreDetailDialogState.MENU_EDIT -> {
             SingleButtonDialog(
                 title = "조금만 기다려주세요!",
-                description = "메뉴를 편집할 수 있도록 준비하고 있어요 :)",
+                description = "메뉴를 편집할 수 있도록 준비 중이에요:)",
                 buttonTitle = "확인",
                 onConfirmation = { viewModel.closeDialog() }
             )
