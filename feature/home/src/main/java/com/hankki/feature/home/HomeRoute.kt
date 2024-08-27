@@ -653,6 +653,6 @@ private fun closeBottomSheet(
 }
 
 private object MapConstants {
-    const val DEFAULT_ZOOM = 16.0
-    const val CAN_SEE_TITLE_ZOOM = 16.0
+    const val DEFAULT_ZOOM = 14.0
+    const val CAN_SEE_TITLE_ZOOM = 15.0
 }
