@@ -193,7 +193,7 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(key1 = Unit) { // 다른 화면 갔다와도 실행됨. 어카지.
+    LaunchedEffect(key1 = Unit) { // TODO: 다른 화면 갔다와도 실행됨. 어카지.
         with(viewModel) {
             getUniversityInformation()
         }
@@ -241,7 +241,6 @@ fun HomeRoute(
         selectSortChipItem = viewModel::selectSortChipItem,
         addNewJogbo = {
             navigateToAddNewJogbo()
-            viewModel.controlMyJogboBottomSheet()
         },
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
@@ -350,6 +349,10 @@ fun HomeScreen(
     }
 
     if (isMyJogboBottomSheetOpen) {
+        LaunchedEffect(key1 = Unit) {
+            getJogboItems(selectedStoreItem.id)
+        }
+
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
@@ -561,9 +564,8 @@ fun HomeScreen(
                                                 heartCount = item.heartCount,
                                                 onClickItem = navigateStoreDetail
                                             ) {
-                                                controlMyJogboBottomSheet()
-                                                getJogboItems(item.id)
                                                 selectStoreItem(item)
+                                                controlMyJogboBottomSheet()
                                             }
 
                                             if (item == storeItems.last()) {
@@ -650,6 +652,6 @@ private fun closeBottomSheet(
 }
 
 private object MapConstants {
-    const val DEFAULT_ZOOM = 16.0
-    const val CAN_SEE_TITLE_ZOOM = 16.0
+    const val DEFAULT_ZOOM = 14.0
+    const val CAN_SEE_TITLE_ZOOM = 15.0
 }
