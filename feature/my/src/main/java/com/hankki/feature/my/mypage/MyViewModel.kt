@@ -54,26 +54,30 @@ class MyViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
+            _mySideEffect.emit(MySideEffect.ShowLoading)
             runCatching {
                 myRepository.patchLogout()
             }.onSuccess {
                 tokenRepository.clearInfo()
+                _mySideEffect.emit(MySideEffect.HideLoading)
                 _mySideEffect.emit(MySideEffect.ShowLogoutSuccess)
             }.onFailure {
-                // Handle the error snackbar
+                _mySideEffect.emit(MySideEffect.HideLoading)
             }
         }
     }
 
     fun deleteWithdraw() {
         viewModelScope.launch {
+            _mySideEffect.emit(MySideEffect.ShowLoading)
             runCatching {
                 myRepository.deleteWithdraw()
             }.onSuccess {
                 tokenRepository.clearInfo()
+                _mySideEffect.emit(MySideEffect.HideLoading)
                 _mySideEffect.emit(MySideEffect.ShowDeleteWithdrawSuccess)
             }.onFailure {
-                // Handle the error snackbar
+                _mySideEffect.emit(MySideEffect.HideLoading)
             }
         }
     }
@@ -83,7 +87,8 @@ class MyViewModel @Inject constructor(
         const val REPORT = "report"
         const val TERMS_OF_USE = "terms_of_use"
         const val INQUIRY = "inquiry"
-        const val TERMS_OF_USE_PAGE = "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023"
+        const val TERMS_OF_USE_PAGE =
+            "https://fast-kilometer-dbf.notion.site/FAQ-bb4d74b681d14f4f91bbbcc829f6d023"
         const val INQUIRY_PAGE = "https://tally.so/r/mO0oJY"
     }
 }
