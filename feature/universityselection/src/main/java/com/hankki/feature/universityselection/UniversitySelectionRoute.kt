@@ -30,6 +30,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
@@ -46,7 +47,12 @@ fun UniversitySelectionRoute(
 ) {
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
+    val isUniversitySelected by universitySelectionViewModel.isUniversitySelected.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        universitySelectionViewModel.enterUniversitySelection()
+    }
 
     LaunchedEffect(universitySelectionViewModel.sideEffects, lifecycleOwner) {
         universitySelectionViewModel.sideEffects
@@ -67,11 +73,11 @@ fun UniversitySelectionRoute(
     UniversitySelectionScreen(
         universities = universitySelectionState.universities,
         selectedUniversity = universitySelectionState.selectedUniversity,
+        isUniversitySelected = isUniversitySelected,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
-        onPostSelectedUniversity = {
-            universitySelectionViewModel.postUniversity()
-        },
-        navigateHome = navigateToHome
+        onPostSelectedUniversity = { universitySelectionViewModel.postUniversity() },
+        navigateHome = navigateToHome,
+        isLoading = universitySelectionState.isLoading
     )
 }
 
@@ -79,9 +85,11 @@ fun UniversitySelectionRoute(
 fun UniversitySelectionScreen(
     universities: PersistentList<UniversitySelectionEntity>,
     selectedUniversity: UniversitySelectionEntity?,
+    isUniversitySelected: Boolean,
     onSelectUniversity: (UniversitySelectionEntity) -> Unit,
     onPostSelectedUniversity: () -> Unit,
     navigateHome: () -> Unit,
+    isLoading: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -110,35 +118,50 @@ fun UniversitySelectionScreen(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 22.dp)
-                    .padding(top = 12.dp)
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(2.dp))
-                }
-
-                itemsIndexed(universities) { index, university ->
-                    UniversityItem(
-                        university = university,
-                        isSelected = selectedUniversity == university,
-                        onSelectUniversity = { onSelectUniversity(university) },
-                        modifier = Modifier.padding(
-                            start = 8.dp,
-                            top = 14.dp,
-                            bottom = 7.dp,
-                        )
-
-                    )
-                    if (index != universities.size - 1) {
-                        Spacer(modifier = Modifier.padding(bottom = 7.dp))
-                        HorizontalDivider(thickness = 1.dp, color = Gray200)
+            when {
+                isLoading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(White)
+                    ) {
+                        HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
                     }
                 }
-                item {
-                    BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
+                universities.isNotEmpty() -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 22.dp)
+                            .padding(top = 12.dp)
+                    ) {
+                        item {
+                            Spacer(modifier = Modifier.height(2.dp))
+                        }
+
+                        itemsIndexed(universities) { index, university ->
+                            UniversityItem(
+                                university = university,
+                                isSelected = selectedUniversity == university,
+                                onSelectUniversity = { onSelectUniversity(university) },
+                                modifier = Modifier.padding(
+                                    start = 8.dp,
+                                    top = 14.dp,
+                                    bottom = 7.dp,
+                                )
+                            )
+                            if (index != universities.size - 1) {
+                                Spacer(modifier = Modifier.padding(bottom = 7.dp))
+                                HorizontalDivider(thickness = 1.dp, color = Gray200)
+                            }
+                        }
+                        item {
+                            BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
+                        }
+                    }
+                }
+                else -> {
+                    // 필요시 빈 상태나 에러 상태 처리
                 }
             }
 
@@ -168,7 +191,7 @@ fun UniversitySelectionScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 22.dp),
-                        enabled = selectedUniversity != null
+                        enabled = isUniversitySelected
                     )
                     Spacer(modifier = Modifier.height(14.dp))
 
