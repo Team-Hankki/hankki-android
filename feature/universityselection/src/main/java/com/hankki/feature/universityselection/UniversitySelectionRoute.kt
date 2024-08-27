@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
@@ -50,10 +51,6 @@ fun UniversitySelectionRoute(
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) {
-        universitySelectionViewModel.enterUniversitySelection()
-    }
-
     LaunchedEffect(universitySelectionViewModel.sideEffects, lifecycleOwner) {
         universitySelectionViewModel.sideEffects
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -71,23 +68,21 @@ fun UniversitySelectionRoute(
     }
 
     UniversitySelectionScreen(
-        universities = universitySelectionState.universities,
+        uiState = universitySelectionState.universities,
         selectedUniversity = universitySelectionState.selectedUniversity,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
-        onPostSelectedUniversity = { universitySelectionViewModel.postUniversity() },
-        navigateHome = navigateToHome,
-        isLoading = universitySelectionState.isLoading
+        onPostSelectedUniversity = universitySelectionViewModel::postUniversity,
+        navigateHome = navigateToHome
     )
 }
 
 @Composable
 fun UniversitySelectionScreen(
-    universities: PersistentList<UniversitySelectionEntity>,
+    uiState: UiState<PersistentList<UniversitySelectionEntity>>,
     selectedUniversity: UniversitySelectionEntity?,
     onSelectUniversity: (UniversitySelectionEntity) -> Unit,
     onPostSelectedUniversity: () -> Unit,
-    navigateHome: () -> Unit,
-    isLoading: Boolean
+    navigateHome: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -116,8 +111,8 @@ fun UniversitySelectionScreen(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            when {
-                isLoading -> {
+            when (uiState) {
+                UiState.Loading -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -126,7 +121,8 @@ fun UniversitySelectionScreen(
                         HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
                     }
                 }
-                universities.isNotEmpty() -> {
+
+                is UiState.Success -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
@@ -137,7 +133,7 @@ fun UniversitySelectionScreen(
                             Spacer(modifier = Modifier.height(2.dp))
                         }
 
-                        itemsIndexed(universities) { index, university ->
+                        itemsIndexed(uiState.data) { index, university ->
                             UniversityItem(
                                 university = university,
                                 isSelected = selectedUniversity == university,
@@ -148,7 +144,7 @@ fun UniversitySelectionScreen(
                                     bottom = 7.dp,
                                 )
                             )
-                            if (index != universities.size - 1) {
+                            if (index != uiState.data.size - 1) {
                                 Spacer(modifier = Modifier.padding(bottom = 7.dp))
                                 HorizontalDivider(thickness = 1.dp, color = Gray200)
                             }
@@ -158,6 +154,9 @@ fun UniversitySelectionScreen(
                         }
                     }
                 }
+
+                UiState.Failure -> {}
+
                 else -> {
                     // 필요시 빈 상태나 에러 상태 처리
                 }
