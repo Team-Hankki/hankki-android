@@ -1,6 +1,8 @@
 package com.hankki.feature.universityselection
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,7 +51,6 @@ fun UniversitySelectionRoute(
 ) {
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
-    val isUniversitySelected by universitySelectionViewModel.isUniversitySelected.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
@@ -73,7 +76,6 @@ fun UniversitySelectionRoute(
     UniversitySelectionScreen(
         universities = universitySelectionState.universities,
         selectedUniversity = universitySelectionState.selectedUniversity,
-        isUniversitySelected = isUniversitySelected,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
         onPostSelectedUniversity = { universitySelectionViewModel.postUniversity() },
         navigateHome = navigateToHome,
@@ -85,7 +87,6 @@ fun UniversitySelectionRoute(
 fun UniversitySelectionScreen(
     universities: PersistentList<UniversitySelectionEntity>,
     selectedUniversity: UniversitySelectionEntity?,
-    isUniversitySelected: Boolean,
     onSelectUniversity: (UniversitySelectionEntity) -> Unit,
     onPostSelectedUniversity: () -> Unit,
     navigateHome: () -> Unit,
@@ -170,12 +171,19 @@ fun UniversitySelectionScreen(
             )
 
             Box(
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 BottomBlurLayout(
                     imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            enabled = false
+                        ) {},
                 )
 
                 Column(
@@ -183,6 +191,7 @@ fun UniversitySelectionScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 31.dp)
+                        .zIndex(1f)
                 ) {
                     HankkiButton(
                         text = stringResource(id = R.string.select),
@@ -191,7 +200,7 @@ fun UniversitySelectionScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 22.dp),
-                        enabled = isUniversitySelected
+                        enabled = selectedUniversity != null
                     )
                     Spacer(modifier = Modifier.height(14.dp))
 
