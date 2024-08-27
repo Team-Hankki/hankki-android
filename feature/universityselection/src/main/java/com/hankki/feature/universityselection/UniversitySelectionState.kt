@@ -6,5 +6,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class UniversitySelectionState(
     val universities: PersistentList<UniversitySelectionEntity> = persistentListOf(),
-    val selectedUniversity: UniversitySelectionEntity? = null
+    val selectedUniversity: UniversitySelectionEntity? = null,
+    val isLoading: Boolean = false
 )
