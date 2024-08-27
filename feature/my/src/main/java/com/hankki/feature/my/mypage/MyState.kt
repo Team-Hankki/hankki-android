@@ -7,5 +7,5 @@ import com.hankki.feature.my.mypage.model.MyModel
 data class MyState(
     val myModel: MyModel = MyModel(),
     val dialogSate: DialogState = DialogState.CLOSED,
-    val showWebView: MutableState<String> = mutableStateOf("")
+    val showWebView: MutableState<String> = mutableStateOf(""),
 )
