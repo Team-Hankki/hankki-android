@@ -43,6 +43,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.layout.EmptyImageWithText
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
@@ -266,7 +267,14 @@ fun MyScreen(
         }
 
         is UiState.Failure -> {
-            // 오류 처리 UI
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyImageWithText(
+                    text = stringResource(id = com.hankki.core.designsystem.R.string.error_text)
+                )
+            }
         }
     }
 
