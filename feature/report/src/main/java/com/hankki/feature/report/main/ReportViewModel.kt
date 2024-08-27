@@ -206,4 +206,12 @@ class ReportViewModel @Inject constructor(
             _sideEffect.emit(ReportSideEffect.UniversityError)
         }
     }
+
+    fun controlErrorDialog() {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isShowErrorDialog = !state.value.isShowErrorDialog
+            )
+        }
+    }
 }
