@@ -156,10 +156,6 @@ fun UniversitySelectionScreen(
                 }
 
                 UiState.Failure -> {}
-
-                else -> {
-                    // 필요시 빈 상태나 에러 상태 처리
-                }
             }
 
             TopBlurLayout(
