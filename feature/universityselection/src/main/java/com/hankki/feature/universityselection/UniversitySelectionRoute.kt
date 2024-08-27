@@ -2,7 +2,6 @@ package com.hankki.feature.universityselection
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,13 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -179,11 +176,7 @@ fun UniversitySelectionScreen(
                     imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            enabled = false
-                        ) {},
+                        .clickable(enabled = false) {},
                 )
 
                 Column(
@@ -191,7 +184,6 @@ fun UniversitySelectionScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 31.dp)
-                        .zIndex(1f)
                 ) {
                     HankkiButton(
                         text = stringResource(id = R.string.select),
