@@ -15,7 +15,6 @@ import kotlinx.collections.immutable.persistentListOf
 data class HomeState(
     val isOpenDialog: Boolean = false,
     val myUniversityModel: UniversityModel = UniversityModel(
-        name = null,
         latitude = 37.583639,
         longitude = 127.0588564
     ),
