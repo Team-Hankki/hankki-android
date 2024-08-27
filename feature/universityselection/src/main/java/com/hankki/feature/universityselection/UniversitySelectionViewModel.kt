@@ -24,6 +24,9 @@ class UniversitySelectionViewModel @Inject constructor(
     private val _sideEffects = MutableSharedFlow<UniversitySelectionSideEffect>()
     val sideEffects = _sideEffects.asSharedFlow()
 
+    private val _isUniversitySelected = MutableStateFlow(false)
+    val isUniversitySelected: StateFlow<Boolean> = _isUniversitySelected
+
     init {
         loadUniversities()
     }
@@ -32,22 +35,34 @@ class UniversitySelectionViewModel @Inject constructor(
         viewModelScope.launch {
             universitySelectionRepository.getUniversitySelection().onSuccess { universities ->
                 _universitySelectionState.value = _universitySelectionState.value.copy(
-                    universities = universities.toPersistentList()
+                    universities = universities.toPersistentList(),
+                    selectedUniversity = null
                 )
+                _isUniversitySelected.value = false
             }.onFailure {
                 // Handle error
             }
         }
     }
 
+    fun enterUniversitySelection() {
+        _universitySelectionState.value = _universitySelectionState.value.copy(
+            selectedUniversity = null
+        )
+        _isUniversitySelected.value = false
+    }
+
+
     fun selectUniversity(university: UniversitySelectionEntity) {
         _universitySelectionState.value =
             _universitySelectionState.value.copy(selectedUniversity = university)
+        _isUniversitySelected.value = true
     }
 
     fun postUniversity() {
         _universitySelectionState.value.selectedUniversity?.let { selectedUniversity ->
             viewModelScope.launch {
+                _isUniversitySelected.value = false
                 universitySelectionRepository.postUniversitySelection(
                     UniversitySelectionRequestEntity(
                         universityId = selectedUniversity.id.toLong(),
