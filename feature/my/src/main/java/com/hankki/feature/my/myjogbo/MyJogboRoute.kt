@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
@@ -93,6 +95,8 @@ fun MyJogboScreen(
     updateDeleteDialogState: (Boolean) -> Unit,
     deleteSelectedJogbo: () -> Unit,
 ) {
+    val tracker = LocalTracker.current
+
     if (deleteDialogState) {
         DoubleButtonDialog(
             title = stringResource(R.string.ask_delete_jogbo),
@@ -175,7 +179,13 @@ fun MyJogboScreen(
                     item {
                         AddJogboItem(
                             isEditMode = editModeState,
-                            onClick = navigateToNewJogbo
+                            onClick = {
+                                tracker.track(
+                                    type = EventType.CREATE,
+                                    name = "Mypage_MyJokbo_NewJokbo"
+                                )
+                                navigateToNewJogbo()
+                            }
                         )
                     }
                     itemsIndexed(state.data) { index, jogbo ->

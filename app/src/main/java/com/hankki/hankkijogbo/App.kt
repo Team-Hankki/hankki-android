@@ -1,6 +1,7 @@
 package com.hankki.hankkijogbo
 
 import android.app.Application
+import com.hankki.hankkijogbo.BuildConfig.KAKAO_NATIVE_APP_KEY
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -19,6 +20,6 @@ class App : Application() {
     }
 
     private fun initKakaoSdk() {
-        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
+        KakaoSdk.init(this, KAKAO_NATIVE_APP_KEY)
     }
 }

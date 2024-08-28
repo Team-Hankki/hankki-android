@@ -64,7 +64,7 @@ fun StoreItem(
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Column(modifier = Modifier.wrapContentHeight()) {
+        Column(modifier = Modifier.wrapContentHeight().weight(1f)) {
             HankkiCategoryChip(text = category)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -106,8 +106,7 @@ fun StoreItem(
                 )
             }
         }
-
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(12.dp))
 
         Icon(
             painter = painterResource(id = R.drawable.ic_plus_btn_filled),

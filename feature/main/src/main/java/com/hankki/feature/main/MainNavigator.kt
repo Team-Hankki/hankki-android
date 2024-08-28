@@ -43,7 +43,7 @@ internal class MainNavigator(
 
     fun navigate(tab: MainTab) {
         when (tab) {
-            MainTab.HOME -> navController.navigateHome(
+            MainTab.Home -> navController.navigateHome(
                 navOptions = navOptions {
                     popUpTo<Home> {
                         inclusive = false
@@ -54,8 +54,8 @@ internal class MainNavigator(
                 }
             )
 
-            MainTab.REPORT -> navController.navigateToReport()
-            MainTab.MY -> navController.navigateMy(
+            MainTab.Report -> navController.navigateToReport()
+            MainTab.Mypage -> navController.navigateMy(
                 navOptions {
                     popUpTo<Home> {
                         inclusive = false

@@ -45,6 +45,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.animateScrollAroundItem
 import com.hankki.core.common.extension.noRippleClickable
@@ -89,6 +91,7 @@ fun ReportRoute(
     ) -> Unit,
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
+    val tracker = LocalTracker.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -108,11 +111,17 @@ fun ReportRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is ReportSideEffect.NavigateReportFinish -> navigateToReportFinish(
-                    sideEffect.count,
-                    sideEffect.storeName,
-                    sideEffect.storeId
-                )
+                is ReportSideEffect.NavigateReportFinish -> {
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "Report_Complete"
+                    )
+                    navigateToReportFinish(
+                        sideEffect.count,
+                        sideEffect.storeName,
+                        sideEffect.storeId
+                    )
+                }
 
                 ReportSideEffect.UniversityError -> navigateUp()
             }

@@ -39,6 +39,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -124,8 +126,9 @@ fun MyScreen(
     showWebView: (String) -> Unit,
     updateDialog: (DialogState) -> Unit,
     onLogout: () -> Unit,
-    onDeleteWithdraw: () -> Unit
+    onDeleteWithdraw: () -> Unit,
 ) {
+    val tracker = LocalTracker.current
     val scrollState = rememberScrollState()
 
     if (showDialog != DialogState.CLOSED) {
@@ -199,7 +202,13 @@ fun MyScreen(
                     )
                     .clip(RoundedCornerShape(12.dp))
                     .padding(start = 30.dp, end = 17.dp)
-                    .noRippleClickable(onClick = navigateToMyJogbo),
+                    .noRippleClickable {
+                        tracker.track(
+                            type = EventType.CLICK,
+                            name = "Mypage_MyJokbo"
+                        )
+                        navigateToMyJogbo()
+                    },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
