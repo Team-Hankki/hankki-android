@@ -50,13 +50,10 @@ fun StoreItem(
     modifier: Modifier = Modifier,
     editSelected: () -> Unit = {},
 ) {
-    val formattedPrice = price.formatPrice()
-
     Row(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clip(RoundedCornerShape(10.dp))
             .background(White)
             .padding(vertical = 16.dp, horizontal = 22.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -106,7 +103,7 @@ fun StoreItem(
                 Spacer(modifier = Modifier.width(3.dp))
 
                 Text(
-                    text = "${formattedPrice}원",
+                    text = "${price.formatPrice()}원",
                     style = HankkiTheme.typography.button1,
                     color = Gray500
                 )

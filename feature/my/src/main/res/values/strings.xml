@@ -13,7 +13,7 @@
 
     <!--my page-->
     <string name="my">MY</string>
-    <string name="message_user_name">%1$s 님\n한끼 잘 챙겨 드세요</string>
+    <string name="message_user_name">%1$s님\n한끼 잘 챙겨 드세요</string>
     <string name="description_store_report">내가 제보한 식당</string>
     <string name="description_store_like">좋아요 누른 식당</string>
     <string name="terms_of_use">약관 및 정책</string>

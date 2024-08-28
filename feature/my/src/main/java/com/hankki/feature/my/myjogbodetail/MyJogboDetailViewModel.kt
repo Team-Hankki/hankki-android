@@ -30,9 +30,6 @@ class MyJogboDetailViewModel @Inject constructor(
         get() = _mySideEffect.asSharedFlow()
 
     fun getJogboDetail(favoriteId: Long) {
-        _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            uiState = EmptyUiState.Loading
-        )
         viewModelScope.launch {
             myRepository.getJogboDetail(favoriteId)
                 .onSuccess { jogbo ->

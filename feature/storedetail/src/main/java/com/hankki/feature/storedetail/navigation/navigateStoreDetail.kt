@@ -17,7 +17,8 @@ fun NavGraphBuilder.storeDetailNavGraph(
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
     onShowSnackBar: (String, Long) -> Unit,
-) {
+    onShowTextSnackBar: (String) -> Unit,
+    ) {
     composable<StoreDetail> { backStackEntry ->
         val items = backStackEntry.toRoute<StoreDetail>()
         StoreDetailRoute(
@@ -25,6 +26,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
             navigateUp = navigateUp,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
             onShowSnackBar = onShowSnackBar,
+            onShowTextSnackBar = onShowTextSnackBar
         )
     }
 }

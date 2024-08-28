@@ -80,7 +80,8 @@ class MyJogboViewModel @Inject constructor(
 
     fun updateDeleteDialogState(state: Boolean) {
         _myJogboState.value = _myJogboState.value.copy(
-            dialogState = state
+            dialogState = state,
+            buttonEnabled = true
         )
     }
 
@@ -88,12 +89,11 @@ class MyJogboViewModel @Inject constructor(
         val currentState = _myJogboState.value.uiState
         if (currentState is UiState.Success) {
             val jogboItems = currentState.data
-            val deleteList = jogboItems.filter {
-                it.jogboSelected
-            }.map {
-                it.jogboId
-            }
+            val deleteList = jogboItems.filter { it.jogboSelected }.map { it.jogboId }
             viewModelScope.launch {
+                _myJogboState.value = _myJogboState.value.copy(
+                    buttonEnabled = false
+                )
                 myRepository.deleteJogboStores(deleteList)
                     .onSuccess {
                         _myJogboState.value = _myJogboState.value.copy(

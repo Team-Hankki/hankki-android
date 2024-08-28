@@ -42,7 +42,7 @@ class NewJogboViewModel @Inject constructor(
         val tagsList = tags.replace("#", "")
 
         _newJogboState.value = _newJogboState.value.copy(
-            isButtonEnabled = title.isNotEmpty() && tagsList.isNotEmpty()
+            buttonEnabled = title.isNotEmpty() && tagsList.isNotEmpty()
         )
     }
 
@@ -53,6 +53,9 @@ class NewJogboViewModel @Inject constructor(
 
     fun createNewJogbo() {
         viewModelScope.launch {
+            _newJogboState.value = _newJogboState.value.copy(
+                buttonEnabled = false
+            )
             myRepository.createNewJogbo(
                 NewJogboEntity(
                     title = _newJogboState.value.title,

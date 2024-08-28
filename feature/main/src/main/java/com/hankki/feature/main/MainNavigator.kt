@@ -15,6 +15,7 @@ import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateOnboarding
 import com.hankki.feature.main.splash.navigation.Splash
+import com.hankki.feature.my.navigation.MyJogboDetail
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
 import com.hankki.feature.my.navigation.navigateMyJogboDetail
@@ -143,7 +144,12 @@ internal class MainNavigator(
     }
 
     fun navigateToMyJogboDetail(favoriteId: Long) {
-        navController.navigateMyJogboDetail(favoriteId = favoriteId)
+        navController.navigateMyJogboDetail(favoriteId = favoriteId, navOptions = navOptions {
+            popUpTo<MyJogboDetail> {
+                saveState = true
+            }
+            restoreState = true
+        })
     }
 
     fun navigateToNewJogbo() {
