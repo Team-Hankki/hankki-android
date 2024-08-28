@@ -46,6 +46,7 @@ import com.hankki.core.designsystem.component.button.StoreDetailReportButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray50
@@ -107,7 +108,15 @@ fun StoreDetailRoute(
     }
 
     when (val state = storeState.storeDetail) {
-        is UiState.Loading -> {}
+        is UiState.Loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(White)
+            ) {
+                HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+            }
+        }
 
         is UiState.Success -> {
             val storeDetail = state.data
@@ -153,7 +162,7 @@ fun StoreDetailRoute(
         StoreDetailDialogState.MENU_EDIT -> {
             SingleButtonDialog(
                 title = "조금만 기다려주세요!",
-                description = "메뉴를 편집할 수 있도록 준비하고 있어요 :)",
+                description = "메뉴를 편집할 수 있도록 준비 중이에요:)",
                 buttonTitle = "확인",
                 onConfirmation = { viewModel.closeDialog() }
             )

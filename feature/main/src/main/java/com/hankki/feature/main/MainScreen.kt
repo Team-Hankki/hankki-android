@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -383,7 +384,7 @@ private fun MainBottomBar(
         exit = fadeOut() + slideOut { IntOffset(0, it.height) }
     ) {
         Column(
-            modifier = Modifier.shadow(24.dp).background(White)
+            modifier = Modifier.shadow(24.dp).background(White).clickable(enabled = false) {}
         ) {
             HorizontalDivider(
                 color = Gray100

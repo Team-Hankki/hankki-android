@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,7 +41,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.layout.EmptyImageWithText
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
@@ -57,6 +61,7 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE_PAGE
 import com.hankki.feature.my.mypage.component.ArrowIconButton
 import com.hankki.feature.my.mypage.component.ImageAndBorderButton
+import com.hankki.feature.my.mypage.model.MyModel
 import com.jakewharton.processphoenix.ProcessPhoenix
 
 @Composable
@@ -105,8 +110,7 @@ fun MyRoute(
         paddingValues = paddingValues,
         navigateToMyJogbo = navigateToJogbo,
         navigateToMyStore = navigateToStore,
-        userName = state.myModel.nickname,
-        showDialog = state.dialogSate,
+        state = state,
         showWebView = myViewModel::showWebView,
         updateDialog = myViewModel::updateDialogState,
         onLogout = myViewModel::logout,
@@ -119,8 +123,7 @@ fun MyScreen(
     paddingValues: PaddingValues,
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
-    userName: String,
-    showDialog: DialogState,
+    state: MyState,
     showWebView: (String) -> Unit,
     updateDialog: (DialogState) -> Unit,
     onLogout: () -> Unit,
@@ -128,150 +131,174 @@ fun MyScreen(
 ) {
     val scrollState = rememberScrollState()
 
-    if (showDialog != DialogState.CLOSED) {
+    when (state.uiState) {
+        UiState.Loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(White)
+            ) {
+                HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+            }
+        }
+
+        is UiState.Success -> {
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(White)
+                    .verticalScroll(scrollState),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                HankkiTopBar(
+                    content = {
+                        Text(
+                            text = stringResource(id = R.string.my),
+                            color = Gray900,
+                            style = HankkiTheme.typography.sub3
+                        )
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(23.dp))
+
+                Image(
+                    modifier = Modifier
+                        .size(98.dp)
+                        .clip(CircleShape),
+                    painter = painterResource(id = R.drawable.img_user_profile),
+                    contentDescription = "profile_image",
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                Text(
+                    text = stringResource(R.string.message_user_name, state.myModel.nickname),
+                    color = Gray900,
+                    style = HankkiTheme.typography.suitH2,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(19.dp))
+
+                Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                Red500,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .clip(RoundedCornerShape(12.dp))
+                            .padding(start = 30.dp, end = 17.dp)
+                            .noRippleClickable(onClick = navigateToMyJogbo),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.my_jogbo),
+                            style = HankkiTheme.typography.sub1,
+                            color = White,
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_my_graphic),
+                            contentDescription = "jogbo graphic",
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(19.dp))
+
+                    Row {
+                        ImageAndBorderButton(
+                            com.hankki.core.designsystem.R.drawable.ic_report,
+                            stringResource(R.string.description_store_report),
+                            Modifier
+                                .weight(1f)
+                                .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
+                        )
+                        Spacer(modifier = Modifier.width(18.dp))
+                        ImageAndBorderButton(
+                            com.hankki.core.designsystem.R.drawable.ic_good,
+                            stringResource(R.string.description_store_like),
+                            Modifier
+                                .weight(1f)
+                                .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
+                        )
+                    }
+
+                    ArrowIconButton(
+                        stringResource(R.string.terms_of_use),
+                        { showWebView(TERMS_OF_USE) })
+
+                    ArrowIconButton(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
+
+                    ArrowIconButton(
+                        stringResource(R.string.logout),
+                        { updateDialog(DialogState.LOGOUT) })
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp, bottom = 43.dp)
+                            .noRippleClickable(onClick = {}),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(
+                            text = stringResource(R.string.quit),
+                            modifier = Modifier
+                                .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
+                                .padding(top = 13.dp, bottom = 14.dp)
+                                .weight(1f),
+                            textAlign = TextAlign.End,
+                            style = HankkiTheme.typography.body5,
+                            color = Gray400,
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_quit),
+                            contentDescription = stringResource(id = R.string.quit),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        is UiState.Failure -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyImageWithText(
+                    text = stringResource(id = com.hankki.core.designsystem.R.string.error_text)
+                )
+            }
+        }
+    }
+
+    if (state.dialogSate != DialogState.CLOSED) {
         DoubleButtonDialog(
-            title = if (showDialog == DialogState.LOGOUT) stringResource(R.string.ask_logout) else stringResource(
+            title = if (state.dialogSate == DialogState.LOGOUT) stringResource(R.string.ask_logout) else stringResource(
                 R.string.disappear_jogbo
             ),
             positiveButtonTitle = stringResource(id = R.string.maintain),
-            negativeButtonTitle = if (showDialog == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
+            negativeButtonTitle = if (state.dialogSate == DialogState.LOGOUT) stringResource(id = R.string.logout) else stringResource(
                 R.string.quit
             ),
             onPositiveButtonClicked = { updateDialog(DialogState.CLOSED) },
             onNegativeButtonClicked = {
-                if (showDialog == DialogState.LOGOUT) {
+                if (state.dialogSate == DialogState.LOGOUT) {
                     onLogout()
-                } else if (showDialog == DialogState.QUIT) {
+                } else if (state.dialogSate == DialogState.QUIT) {
                     onDeleteWithdraw()
                 }
                 updateDialog(DialogState.CLOSED)
             }
         )
     }
-
-    Column(
-        modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize()
-            .background(White)
-            .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HankkiTopBar(
-            content = {
-                Text(
-                    text = stringResource(id = R.string.my),
-                    color = Gray900,
-                    style = HankkiTheme.typography.sub3
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(23.dp))
-
-        Image(
-            modifier = Modifier
-                .size(98.dp)
-                .clip(CircleShape),
-            painter = painterResource(id = R.drawable.img_user_profile),
-            contentDescription = "profile_image",
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.height(14.dp))
-
-        Text(
-            text = stringResource(R.string.message_user_name, userName),
-            color = Gray900,
-            style = HankkiTheme.typography.suitH2,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(19.dp))
-
-        Column(modifier = Modifier.padding(horizontal = 22.dp)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Red500,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .clip(RoundedCornerShape(12.dp))
-                    .padding(start = 30.dp, end = 17.dp)
-                    .noRippleClickable(onClick = navigateToMyJogbo),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = stringResource(R.string.my_jogbo),
-                    style = HankkiTheme.typography.sub1,
-                    color = White,
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.ic_my_graphic),
-                    contentDescription = "jogbo graphic",
-                )
-            }
-
-            Spacer(modifier = Modifier.height(19.dp))
-
-            Row {
-                ImageAndBorderButton(
-                    com.hankki.core.designsystem.R.drawable.ic_report,
-                    stringResource(R.string.description_store_report),
-                    Modifier
-                        .weight(1f)
-                        .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-                ImageAndBorderButton(
-                    com.hankki.core.designsystem.R.drawable.ic_good,
-                    stringResource(R.string.description_store_like),
-                    Modifier
-                        .weight(1f)
-                        .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
-                )
-            }
-
-            ArrowIconButton(
-                stringResource(R.string.terms_of_use),
-                { showWebView(TERMS_OF_USE) })
-
-            ArrowIconButton(stringResource(R.string.inquiry), { showWebView(INQUIRY) })
-
-            ArrowIconButton(
-                stringResource(R.string.logout),
-                { updateDialog(DialogState.LOGOUT) })
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp, bottom = 43.dp)
-                    .noRippleClickable(onClick = {}),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Text(
-                    text = stringResource(R.string.quit),
-                    modifier = Modifier
-                        .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
-                        .padding(top = 13.dp, bottom = 14.dp)
-                        .weight(1f),
-                    textAlign = TextAlign.End,
-                    style = HankkiTheme.typography.body5,
-                    color = Gray400,
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.ic_quit),
-                    contentDescription = stringResource(id = R.string.quit),
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-    }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -281,12 +308,14 @@ fun MyScreenPreview() {
             paddingValues = PaddingValues(),
             navigateToMyJogbo = {},
             navigateToMyStore = {},
-            userName = "",
-            showDialog = DialogState.CLOSED,
+            state = MyState(
+                myModel = MyModel(nickname = "John Doe"),
+                uiState = UiState.Success(MyModel(nickname = "John Doe"))
+            ),
             updateDialog = {},
             showWebView = { _ -> },
             onLogout = {},
-            onDeleteWithdraw = {}
+            onDeleteWithdraw = {},
         )
     }
 }
@@ -297,4 +326,3 @@ enum class DialogState {
     LOGOUT,
     QUIT
 }
-
