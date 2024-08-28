@@ -1,8 +1,8 @@
 [versions]
 accompanistSystemuicontroller = "0.17.0"
-compileSdk = "35"
+compileSdk = "34"
 minSdk = "28"
-targetSdk = "35"
+targetSdk = "34"
 versionName = "1.0.0"
 versionCode = "10000"
 
@@ -85,6 +85,9 @@ toolsCore = "1.0.0-alpha09"
 accompanist = "0.24.2-alpha"
 monitorVersion = "1.7.2"
 
+##Amplitude
+amplitudeVersion = "1.17.3"
+
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -155,6 +158,8 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
 
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
+
+amplitude = { group = "com.amplitude", name = "analytics-android", version.ref="amplitudeVersion" }
 
 jakewharton-process-phoenix= {group = "com.jakewharton", name = "process-phoenix", version.ref="phoenix"}
 androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
