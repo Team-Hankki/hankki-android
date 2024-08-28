@@ -148,7 +148,7 @@ fun MyJogboDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(White)
+            .background(Red500)
     ) {
         HankkiTopBar(
             modifier = Modifier
@@ -176,6 +176,7 @@ fun MyJogboDetailScreen(
 
         LazyColumn(
             modifier = Modifier
+                .background(White)
                 .navigationBarsPadding()
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
