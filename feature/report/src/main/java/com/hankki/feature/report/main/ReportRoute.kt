@@ -96,6 +96,8 @@ fun ReportRoute(
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 viewModel.selectImageUri(uri)
+            } else {
+                viewModel.controlErrorDialog()
             }
         }
 
@@ -123,6 +125,8 @@ fun ReportRoute(
         count = state.count,
         location = location,
         buttonEnabled = state.buttonEnabled,
+        isShowErrorDialog = state.isShowErrorDialog,
+        controlErrorDialog = viewModel::controlErrorDialog,
         navigateUp = navigateUp,
         categoryList = state.categoryList,
         selectedImageUri = state.selectedImageUri,
@@ -150,6 +154,7 @@ fun ReportScreen(
     count: Long,
     location: LocationModel,
     buttonEnabled: Boolean,
+    isShowErrorDialog: Boolean,
     navigateUp: () -> Unit,
     categoryList: PersistentList<CategoryEntity>,
     selectedImageUri: Uri?,
@@ -165,6 +170,7 @@ fun ReportScreen(
     addMenu: () -> Unit,
     deleteMenu: (Int) -> Unit,
     navigateSearchStore: () -> Unit = {},
+    controlErrorDialog: () -> Unit = {},
     submitReport: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -177,6 +183,15 @@ fun ReportScreen(
             title = "대학교를 먼저 선택해주세요",
             buttonTitle = "확인",
             onConfirmation = onDismissDialog
+        )
+    }
+
+    if (isShowErrorDialog) {
+        SingleButtonDialog(
+            title = "이미지를 불러올 수 없어요",
+            description = "갤러리에서 이미지를 다시 선택해주세요",
+            buttonTitle = "확인",
+            onConfirmation = controlErrorDialog
         )
     }
 
@@ -490,6 +505,7 @@ fun ReportScreenPreview() {
         ReportScreen(
             count = 1,
             buttonEnabled = false,
+            isShowErrorDialog = false,
             location = LocationModel(),
             navigateUp = {},
             categoryList = persistentListOf(),

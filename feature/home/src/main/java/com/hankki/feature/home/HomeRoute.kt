@@ -44,6 +44,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -169,8 +170,8 @@ fun HomeRoute(
                         viewModel.moveMap(location.latitude, location.longitude)
                     }.addOnFailureListener {
                         viewModel.moveMap(
-                            state.myUniversityModel.latitude,
-                            state.myUniversityModel.longitude
+                            latitude = state.myUniversityModel.latitude,
+                            longitude = state.myUniversityModel.longitude
                         )
                     }
                 }
@@ -188,7 +189,13 @@ fun HomeRoute(
             state.priceChipState !is ChipState.Selected &&
             state.sortChipState !is ChipState.Selected
         ) {
-            viewModel.getUniversityInformation()
+            viewModel.fetchData()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) { // TODO: 다른 화면 갔다와도 실행됨. 어카지.
+        with(viewModel) {
+            getUniversityInformation()
         }
     }
 
@@ -234,7 +241,6 @@ fun HomeRoute(
         selectSortChipItem = viewModel::selectSortChipItem,
         addNewJogbo = {
             navigateToAddNewJogbo()
-            viewModel.controlMyJogboBottomSheet()
         },
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
@@ -343,6 +349,10 @@ fun HomeScreen(
     }
 
     if (isMyJogboBottomSheetOpen) {
+        LaunchedEffect(key1 = Unit) {
+            getJogboItems(selectedStoreItem.id)
+        }
+
         HankkiStoreJogboBottomSheet(
             jogboItems = jogboItems,
             onDismissRequest = controlMyJogboBottomSheet,
@@ -554,9 +564,8 @@ fun HomeScreen(
                                                 heartCount = item.heartCount,
                                                 onClickItem = navigateStoreDetail
                                             ) {
-                                                controlMyJogboBottomSheet()
-                                                getJogboItems(item.id)
                                                 selectStoreItem(item)
+                                                controlMyJogboBottomSheet()
                                             }
 
                                             if (item == storeItems.last()) {
@@ -643,6 +652,6 @@ private fun closeBottomSheet(
 }
 
 private object MapConstants {
-    const val DEFAULT_ZOOM = 16.0
-    const val CAN_SEE_TITLE_ZOOM = 16.0
+    const val DEFAULT_ZOOM = 14.0
+    const val CAN_SEE_TITLE_ZOOM = 15.0
 }
