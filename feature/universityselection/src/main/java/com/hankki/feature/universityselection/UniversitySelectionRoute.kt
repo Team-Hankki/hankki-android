@@ -27,6 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.button.HankkiButton
@@ -47,6 +49,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun UniversitySelectionRoute(
     navigateToHome: () -> Unit
 ) {
+    val tracker = LocalTracker.current
+
     val universitySelectionViewModel: UniversitySelectionViewModel = hiltViewModel()
     val universitySelectionState by universitySelectionViewModel.universitySelectionState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -58,6 +62,13 @@ fun UniversitySelectionRoute(
                 when (sideEffect) {
                     is UniversitySelectionSideEffect.PostSuccess -> {
                         navigateToHome()
+                        tracker.track(
+                            type = EventType.CLICK,
+                            name = "UniversityChoice_AnyUniv",
+                            properties = mapOf(
+                                "university" to sideEffect.universityName
+                            )
+                        )
                     }
 
                     is UniversitySelectionSideEffect.PostError -> {

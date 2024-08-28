@@ -35,6 +35,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
@@ -68,6 +70,8 @@ fun StoreDetailRoute(
     onShowTextSnackBar: (String) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
+    val tracker = LocalTracker.current
+
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
     val sideEffectFlow = viewModel.sideEffects
@@ -137,7 +141,13 @@ fun StoreDetailRoute(
                 buttonLabels = storeState.buttonLabels,
                 onNavigateUp = navigateUp,
                 onShowSnackBar = onShowSnackBar,
-                onLikeClicked = { viewModel.toggleLike(storeId) },
+                onLikeClicked = {
+                    viewModel.toggleLike(storeId)
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_Like"
+                    )
+                },
                 onSelectIndex = { index ->
                     viewModel.updateSelectedIndex(index)
                 },
@@ -152,7 +162,13 @@ fun StoreDetailRoute(
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
                 },
-                onAddMenuClicked = { viewModel.showMenuEditDialog() },
+                onAddMenuClicked = {
+                    viewModel.showMenuEditDialog()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_MenuEdit"
+                    )
+                },
                 onReportClicked = {
                     viewModel.fetchNickname()
                     viewModel.showReportConfirmation()
@@ -325,9 +341,7 @@ fun StoreDetailScreen(
                                 modifier = Modifier.weight(1f, false)
                             )
                         },
-                        onClick = {
-                            onLikeClicked()
-                        }
+                        onClick = onLikeClicked
                     )
                 },
                 addMyJogboButton = {

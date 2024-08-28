@@ -44,7 +44,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -63,6 +62,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
@@ -305,6 +306,7 @@ fun HomeScreen(
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
     reposition: () -> Unit = {},
 ) {
+    val tracker = LocalTracker.current
     val localContextResource = LocalContext.current.resources
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState =
@@ -359,6 +361,10 @@ fun HomeScreen(
             addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
                 addStoreAtJogbo(jogboId, selectedStoreItem.id)
+                tracker.track(
+                    type = EventType.ADD,
+                    name = "Home_RestList_Jokbo"
+                )
                 onShowSnackBar(
                     localContextResource.getString(R.string.success_add_my_jogbo),
                     jogboId

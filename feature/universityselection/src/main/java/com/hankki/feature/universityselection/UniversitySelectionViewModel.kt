@@ -80,7 +80,7 @@ class UniversitySelectionViewModel @Inject constructor(
                     }
                 }
             ).onSuccess {
-                _sideEffects.emit(UniversitySelectionSideEffect.PostSuccess)
+                _sideEffects.emit(UniversitySelectionSideEffect.PostSuccess(selectedUniversity?.name))
             }.onFailure {
                 _sideEffects.emit(UniversitySelectionSideEffect.PostError(it))
             }

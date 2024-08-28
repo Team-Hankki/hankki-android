@@ -21,8 +21,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        manifestPlaceholders["naverClientId"] =
-            gradleLocalProperties(rootDir, providers).getProperty("naverClientId")
 
         buildConfigField(
             "String",
@@ -36,6 +34,15 @@ android {
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("debug")
+        }
+
+        debug {
+            manifestPlaceholders["naverClientId"] =
+                gradleLocalProperties(rootDir, providers).getProperty("naverDevClientId")
+        }
+        release {
+            manifestPlaceholders["naverClientId"] =
+                gradleLocalProperties(rootDir, providers).getProperty("naverProdClientId")
         }
     }
 
@@ -61,6 +68,7 @@ dependencies {
     // core
     implementation(projects.core.network)
     implementation(projects.core.datastore)
+    implementation(projects.core.common)
 
     // other dependencies
     implementation(libs.timber)
