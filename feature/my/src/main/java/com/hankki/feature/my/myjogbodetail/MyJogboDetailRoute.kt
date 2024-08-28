@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -121,6 +122,7 @@ fun MyJogboDetailScreen(
     val height by rememberSaveable {
         mutableDoubleStateOf(configuration.screenHeightDp * 0.09)
     }
+    val scrollState = rememberLazyListState()
 
     if (shareDialogState) {
         SingleButtonDialog(
@@ -176,7 +178,8 @@ fun MyJogboDetailScreen(
             modifier = Modifier
                 .navigationBarsPadding()
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = scrollState
         ) {
             when (state) {
                 is EmptyUiState.Loading -> {
