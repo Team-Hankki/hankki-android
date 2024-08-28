@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -48,8 +49,12 @@ class StoreDetailViewModel @Inject constructor(
             )
             storeDetailRepository.getStoreDetail(storeId).onSuccess {
                 setStoreDetail(it)
-            }.onFailure {
+            }.onFailure { error ->
                 _storeState.value = _storeState.value.copy(storeDetail = UiState.Failure)
+
+                if (error is HttpException && error.code() == DO_NOT_EXISTS_ERROR) {
+                    _sideEffects.emit(StoreDetailSideEffect.ShowTextSnackBar)
+                }
             }
         }
     }
@@ -173,5 +178,9 @@ class StoreDetailViewModel @Inject constructor(
                     Timber.e("Failed to delete store123: ${error.message}")
                 }
         }
+    }
+
+    companion object {
+        private const val DO_NOT_EXISTS_ERROR: Int = 404
     }
 }

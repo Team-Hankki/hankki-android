@@ -143,7 +143,7 @@ internal class MainNavigator(
     }
 
     fun navigateToMyJogboDetail(favoriteId: Long) {
-        navController.navigateMyJogboDetail(favoriteId = favoriteId)
+        navController.navigateMyJogboDetail(favoriteId = favoriteId, navOptions {  })
     }
 
     fun navigateToNewJogbo() {

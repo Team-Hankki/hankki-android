@@ -64,6 +64,7 @@ fun StoreDetailRoute(
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
     onShowSnackBar: (String, Long) -> Unit,
+    onShowTextSnackBar: (String) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
@@ -82,6 +83,10 @@ fun StoreDetailRoute(
             when (sideEffect) {
                 StoreDetailSideEffect.NavigateUp -> navigateUp()
                 StoreDetailSideEffect.NavigateToAddNewJogbo -> navigateToAddNewJogbo()
+                StoreDetailSideEffect.ShowTextSnackBar -> {
+                    onShowTextSnackBar("이미 삭제된 식당입니다 ")
+                    navigateUp()
+                }
             }
         }
     }
