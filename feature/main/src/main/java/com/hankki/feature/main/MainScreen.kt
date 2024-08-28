@@ -287,7 +287,8 @@ internal fun MainScreen(
                     storeDetailNavGraph(
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo,
-                        onShowSnackBar = onShowTextSnackBarWithButton
+                        onShowSnackBar = onShowTextSnackBarWithButton,
+                        onShowTextSnackBar = onShowErrorSnackBar
                     )
                 }
 
