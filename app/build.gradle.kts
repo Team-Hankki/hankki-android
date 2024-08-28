@@ -61,6 +61,7 @@ dependencies {
     // core
     implementation(projects.core.network)
     implementation(projects.core.datastore)
+    implementation(projects.core.common)
 
     // other dependencies
     implementation(libs.timber)

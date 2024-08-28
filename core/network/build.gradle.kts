@@ -17,17 +17,11 @@ android {
         debug {
             val devUrl = properties["hankkiDevUrl"] as? String ?: ""
             buildConfigField("String", "BASE_URL", devUrl)
-
-            val devAmplitude = properties["hankkiDevAmplitude"] as? String ?: ""
-            buildConfigField("String", "AMPLITUDE_KEY", devAmplitude)
         }
 
         release {
             val prodUrl = properties["hankkiProdUrl"] as? String ?: ""
             buildConfigField("String", "BASE_URL", prodUrl)
-
-            val prodAmplitude = properties["hankkiProdAmplitude"] as? String ?: ""
-            buildConfigField("String", "AMPLITUDE_KEY", prodAmplitude)
         }
     }
 
