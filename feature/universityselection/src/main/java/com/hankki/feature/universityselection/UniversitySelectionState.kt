@@ -1,10 +1,10 @@
 package com.hankki.feature.universityselection
 
+import com.hankki.core.common.utill.UiState
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 data class UniversitySelectionState(
-    val universities: PersistentList<UniversitySelectionEntity> = persistentListOf(),
-    val selectedUniversity: UniversitySelectionEntity? = null
+    val universities: UiState<PersistentList<UniversitySelectionEntity>> = UiState.Loading,
+    val selectedUniversity: UniversitySelectionEntity? = null,
 )

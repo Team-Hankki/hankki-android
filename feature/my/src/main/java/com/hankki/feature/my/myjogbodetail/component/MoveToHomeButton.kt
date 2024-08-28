@@ -30,7 +30,6 @@ fun MoveToHomeButton(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
-            .wrapContentSize()
             .background(Gray100)
             .padding(vertical = 10.dp)
             .padding(start = 12.dp, end = 15.dp),

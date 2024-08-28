@@ -1,6 +1,7 @@
 package com.hankki.feature.universityselection
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,16 +30,17 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
+import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
-import com.hankki.feature.universityselection.UniversitySelectionViewModel.Companion.DEFAULT_UNIVERSITY
 import com.hankki.feature.universityselection.component.UniversityItem
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.collectLatest
@@ -77,21 +79,21 @@ fun UniversitySelectionRoute(
     }
 
     UniversitySelectionScreen(
-        universities = universitySelectionState.universities,
+        uiState = universitySelectionState.universities,
         selectedUniversity = universitySelectionState.selectedUniversity,
         onSelectUniversity = { universitySelectionViewModel.selectUniversity(it) },
-        onPostSelectedUniversity = {
-            universitySelectionViewModel.postUniversity()
-        },
+        onPostSelectedUniversity = universitySelectionViewModel::postUniversity,
+        navigateHome = navigateToHome
     )
 }
 
 @Composable
 fun UniversitySelectionScreen(
-    universities: PersistentList<UniversitySelectionEntity>,
+    uiState: UiState<PersistentList<UniversitySelectionEntity>>,
     selectedUniversity: UniversitySelectionEntity?,
     onSelectUniversity: (UniversitySelectionEntity) -> Unit,
     onPostSelectedUniversity: () -> Unit,
+    navigateHome: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -120,36 +122,51 @@ fun UniversitySelectionScreen(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 22.dp)
-                    .padding(top = 12.dp)
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(2.dp))
-                }
-
-                itemsIndexed(universities) { index, university ->
-                    UniversityItem(
-                        university = university,
-                        isSelected = selectedUniversity == university,
-                        onSelectUniversity = { onSelectUniversity(university) },
-                        modifier = Modifier.padding(
-                            start = 8.dp,
-                            top = 14.dp,
-                            bottom = 7.dp,
-                        )
-
-                    )
-                    if (index != universities.size - 1) {
-                        Spacer(modifier = Modifier.padding(bottom = 7.dp))
-                        HorizontalDivider(thickness = 1.dp, color = Gray200)
+            when (uiState) {
+                UiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(White)
+                    ) {
+                        HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
                     }
                 }
-                item {
-                    BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
+
+                is UiState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 22.dp)
+                            .padding(top = 12.dp)
+                    ) {
+                        item {
+                            Spacer(modifier = Modifier.height(2.dp))
+                        }
+
+                        itemsIndexed(uiState.data) { index, university ->
+                            UniversityItem(
+                                university = university,
+                                isSelected = selectedUniversity == university,
+                                onSelectUniversity = { onSelectUniversity(university) },
+                                modifier = Modifier.padding(
+                                    start = 8.dp,
+                                    top = 14.dp,
+                                    bottom = 7.dp,
+                                )
+                            )
+                            if (index != uiState.data.size - 1) {
+                                Spacer(modifier = Modifier.padding(bottom = 7.dp))
+                                HorizontalDivider(thickness = 1.dp, color = Gray200)
+                            }
+                        }
+                        item {
+                            BottomBlurLayout(imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle)
+                        }
+                    }
                 }
+
+                UiState.Failure -> {}
             }
 
             TopBlurLayout(
@@ -157,12 +174,15 @@ fun UniversitySelectionScreen(
             )
 
             Box(
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 BottomBlurLayout(
                     imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(enabled = false) {},
                 )
 
                 Column(
@@ -188,10 +208,7 @@ fun UniversitySelectionScreen(
                         color = Gray400,
                         textDecoration = TextDecoration.Underline,
                         modifier = Modifier
-                            .noRippleClickable{
-                                onSelectUniversity(DEFAULT_UNIVERSITY)
-                                onPostSelectedUniversity()
-                            }
+                            .noRippleClickable(onClick = navigateHome)
                     )
                 }
             }

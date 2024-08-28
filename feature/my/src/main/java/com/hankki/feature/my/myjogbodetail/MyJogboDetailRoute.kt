@@ -14,15 +14,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -114,6 +118,12 @@ fun MyJogboDetailScreen(
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
 ) {
+    val configuration = LocalConfiguration.current
+    val height by rememberSaveable {
+        mutableDoubleStateOf(configuration.screenHeightDp * 0.09)
+    }
+    val scrollState = rememberLazyListState()
+
     if (shareDialogState) {
         SingleButtonDialog(
             title = stringResource(R.string.please_wait),
@@ -137,19 +147,13 @@ fun MyJogboDetailScreen(
 
     Column(
         modifier = Modifier
-            .navigationBarsPadding()
             .fillMaxSize()
-            .background(Red500),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(White)
     ) {
-        Spacer(
-            modifier = Modifier
-                .statusBarsPadding()
-                .background(Red500)
-        )
-
         HankkiTopBar(
-            modifier = Modifier.background(Red500),
+            modifier = Modifier
+                .background(Red500)
+                .statusBarsPadding(),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
@@ -170,31 +174,35 @@ fun MyJogboDetailScreen(
             }
         )
 
-        when (state) {
-            is EmptyUiState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(White)
-                ) {
-                    HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+        LazyColumn(
+            modifier = Modifier
+                .navigationBarsPadding()
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = scrollState
+        ) {
+            when (state) {
+                is EmptyUiState.Loading -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                        ) {
+                            HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                        }
+                    }
                 }
-            }
 
-            is EmptyUiState.Success -> {
-                JogboFolder(
-                    title = jogboTitle,
-                    chips = jogboChips,
-                    userNickname = userNickname,
-                    shareJogboDialogState = updateShareDialogState
-                )
+                is EmptyUiState.Success -> {
+                    item {
+                        JogboFolder(
+                            title = jogboTitle,
+                            chips = jogboChips,
+                            userNickname = userNickname,
+                            shareJogboDialogState = updateShareDialogState
+                        )
+                    }
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(White),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
                     item {
                         Spacer(modifier = Modifier.height(4.dp))
                     }
@@ -226,39 +234,47 @@ fun MyJogboDetailScreen(
                     }
 
                     item {
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        MoveToHomeButton(
+                        Box(
                             modifier = Modifier
-                                .padding(bottom = 30.dp)
-                                .noRippleClickable(navigateToHome),
+                                .fillMaxSize()
+                                .padding(top = 20.dp, bottom = 30.dp),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            MoveToHomeButton(
+                                modifier = Modifier
+                                    .noRippleClickable(navigateToHome),
+                            )
+                        }
+                    }
+                }
+
+                is EmptyUiState.Empty -> {
+                    item {
+                        JogboFolder(
+                            title = jogboTitle,
+                            chips = jogboChips,
+                            userNickname = userNickname,
+                            shareJogboDialogState = updateShareDialogState
+                        )
+
+                        Spacer(modifier = Modifier.height((height).dp))
+
+                        EmptyViewWithButton(
+                            text = stringResource(R.string.my_jogbo) +
+                                    stringResource(R.string.add_store_to_jogbo),
+                            content = {
+                                MoveToHomeButton(
+                                    modifier = Modifier
+                                        .padding(top = 20.dp)
+                                        .noRippleClickable(navigateToHome),
+                                )
+                            }
                         )
                     }
                 }
+
+                is EmptyUiState.Failure -> {}
             }
-
-            is EmptyUiState.Empty -> {
-                JogboFolder(
-                    title = jogboTitle,
-                    chips = jogboChips,
-                    userNickname = userNickname,
-                    shareJogboDialogState = updateShareDialogState
-                )
-
-                EmptyViewWithButton(
-                    text = stringResource(R.string.my_jogbo) +
-                            stringResource(R.string.add_store_to_jogbo),
-                    content = {
-                        MoveToHomeButton(
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .noRippleClickable(navigateToHome),
-                        )
-                    }
-                )
-            }
-
-            is EmptyUiState.Failure -> {}
         }
     }
 }

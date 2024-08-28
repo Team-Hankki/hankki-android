@@ -2,6 +2,7 @@ package com.hankki.feature.universityselection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hankki.core.common.utill.UiState
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
 import com.hankki.domain.universityselection.entity.UniversitySelectionRequestEntity
 import com.hankki.domain.universityselection.repository.UniversitySelectionRepository
@@ -30,12 +31,22 @@ class UniversitySelectionViewModel @Inject constructor(
 
     private fun loadUniversities() {
         viewModelScope.launch {
+            _universitySelectionState.value =
+                _universitySelectionState.value.copy(universities = UiState.Loading)
             universitySelectionRepository.getUniversitySelection().onSuccess { universities ->
-                _universitySelectionState.value = _universitySelectionState.value.copy(
-                    universities = universities.toPersistentList()
-                )
+                if (universities.isNotEmpty()) {
+                    _universitySelectionState.value = _universitySelectionState.value.copy(
+                        universities = UiState.Success(universities.toPersistentList())
+                    )
+                } else {
+                    _universitySelectionState.value = _universitySelectionState.value.copy(
+                        universities = UiState.Failure
+                    )
+                }
             }.onFailure {
-                // Handle error
+                _universitySelectionState.value = _universitySelectionState.value.copy(
+                    universities = UiState.Failure
+                )
             }
         }
     }
