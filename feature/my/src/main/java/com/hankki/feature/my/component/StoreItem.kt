@@ -75,7 +75,7 @@ fun StoreItem(
                 .weight(1f),
             verticalArrangement = Arrangement.Center
         ) {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = name,
                     style = HankkiTheme.typography.suitSub2,
