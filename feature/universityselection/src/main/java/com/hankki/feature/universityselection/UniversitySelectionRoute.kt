@@ -33,21 +33,22 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
-import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
+import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.universityselection.entity.UniversitySelectionEntity
+import com.hankki.feature.universityselection.UniversitySelectionViewModel.Companion.DEFAULT_UNIVERSITY
 import com.hankki.feature.universityselection.component.UniversityItem
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun UniversitySelectionRoute(
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     val tracker = LocalTracker.current
 
@@ -93,7 +94,7 @@ fun UniversitySelectionScreen(
     selectedUniversity: UniversitySelectionEntity?,
     onSelectUniversity: (UniversitySelectionEntity) -> Unit,
     onPostSelectedUniversity: () -> Unit,
-    navigateHome: () -> Unit
+    navigateHome: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -208,7 +209,10 @@ fun UniversitySelectionScreen(
                         color = Gray400,
                         textDecoration = TextDecoration.Underline,
                         modifier = Modifier
-                            .noRippleClickable(onClick = navigateHome)
+                            .noRippleClickable {
+                                onSelectUniversity(DEFAULT_UNIVERSITY)
+                                onPostSelectedUniversity()
+                            }
                     )
                 }
             }
