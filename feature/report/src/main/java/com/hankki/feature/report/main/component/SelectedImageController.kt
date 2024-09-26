@@ -72,7 +72,7 @@ fun SelectedImageController(
         ) {
             Text(
                 text = "바꾸기",
-                style = HankkiTheme.typography.body4,
+                style = HankkiTheme.typography.body5,
                 color = Gray700
             )
         }
