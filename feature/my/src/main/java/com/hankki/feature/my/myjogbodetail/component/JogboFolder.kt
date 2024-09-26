@@ -103,7 +103,7 @@ fun JogboFolder(
                     )
                     Text(
                         text = userNickname,
-                        style = HankkiTheme.typography.body5,
+                        style = HankkiTheme.typography.body6,
                         color = Gray600,
                         modifier = Modifier.padding(start = 8.dp)
                     )

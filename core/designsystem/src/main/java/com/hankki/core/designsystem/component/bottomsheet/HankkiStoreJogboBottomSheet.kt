@@ -188,7 +188,7 @@ fun AddNewJogboButton(
         Spacer(modifier = Modifier.width(18.dp))
         Text(
             text = stringResource(id = R.string.add_new_jogbo),
-            style = HankkiTheme.typography.body3,
+            style = HankkiTheme.typography.body4,
             color = Gray800
         )
     }
@@ -243,7 +243,7 @@ fun JogboItem(
         ) {
             Text(
                 text = title,
-                style = HankkiTheme.typography.body3,
+                style = HankkiTheme.typography.body4,
                 color = if (isReported) Gray300 else Gray800,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis

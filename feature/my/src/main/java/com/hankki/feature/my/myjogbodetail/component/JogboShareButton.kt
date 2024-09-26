@@ -40,7 +40,7 @@ fun JogboShareButton(
 
         Spacer(modifier = Modifier.width(2.dp))
 
-        Text(text = "공유", style = HankkiTheme.typography.body4, color = White)
+        Text(text = "공유", style = HankkiTheme.typography.body5, color = White)
     }
 }
 

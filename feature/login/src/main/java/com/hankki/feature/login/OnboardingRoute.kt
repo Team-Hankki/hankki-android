@@ -82,7 +82,7 @@ fun OnboardingScreen1(navController: NavHostController) {
             Text(
                 text = stringResource(R.string.skip),
                 color = Gray100,
-                style = HankkiTheme.typography.body4,
+                style = HankkiTheme.typography.body5,
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(top = 25.dp)
@@ -149,7 +149,7 @@ fun OnboardingScreen2(navController: NavHostController) {
             Text(
                 text = stringResource(R.string.skip),
                 color = Gray400,
-                style = HankkiTheme.typography.body4,
+                style = HankkiTheme.typography.body5,
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(top = 25.dp)
@@ -215,7 +215,7 @@ fun OnboardingScreen3(navController: NavHostController) {
             Text(
                 text = stringResource(R.string.skip),
                 color = Gray400,
-                style = HankkiTheme.typography.body4,
+                style = HankkiTheme.typography.body5,
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(top = 25.dp)
