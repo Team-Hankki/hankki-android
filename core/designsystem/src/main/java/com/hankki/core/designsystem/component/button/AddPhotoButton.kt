@@ -54,7 +54,7 @@ fun AddPhotoButton(
         Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = "대표 음식 이미지 첨부하기 (선택)",
-            style = HankkiTheme.typography.body4,
+            style = HankkiTheme.typography.body5,
             color = Gray500
         )
     }

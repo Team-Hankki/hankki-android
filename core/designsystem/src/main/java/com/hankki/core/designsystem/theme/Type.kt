@@ -37,11 +37,13 @@ class HankkiTypography internal constructor(
     suitSub2: TextStyle,
     suitSub3: TextStyle,
     body1: TextStyle,
+    body2: TextStyle,
     body3: TextStyle,
     body4: TextStyle,
     body5: TextStyle,
     body6: TextStyle,
-    body2: TextStyle,
+    body7: TextStyle,
+    body8: TextStyle,
     suitBody1: TextStyle,
     suitBody2: TextStyle,
     suitBody3: TextStyle,
@@ -85,6 +87,10 @@ class HankkiTypography internal constructor(
         private set
     var body6: TextStyle by mutableStateOf(body6)
         private set
+    var body7: TextStyle by mutableStateOf(body7)
+        private set
+    var body8: TextStyle by mutableStateOf(body8)
+        private set
     var suitBody1: TextStyle by mutableStateOf(suitBody1)
         private set
     var suitBody2: TextStyle by mutableStateOf(suitBody2)
@@ -120,6 +126,8 @@ class HankkiTypography internal constructor(
         body4: TextStyle = this.body4,
         body5: TextStyle = this.body5,
         body6: TextStyle = this.body6,
+        body7: TextStyle = this.body7,
+        body8: TextStyle = this.body8,
         suitBody1: TextStyle = this.suitBody1,
         suitBody2: TextStyle = this.suitBody2,
         suitBody3: TextStyle = this.suitBody3,
@@ -146,6 +154,8 @@ class HankkiTypography internal constructor(
         body4,
         body5,
         body6,
+        body7,
+        body8,
         suitBody1,
         suitBody2,
         suitBody3,
@@ -174,6 +184,8 @@ class HankkiTypography internal constructor(
         body4 = other.body4
         body5 = other.body5
         body6 = other.body6
+        body7 = other.body7
+        body8 = other.body8
         suitBody1 = other.suitBody1
         suitBody2 = other.suitBody2
         suitBody3 = other.suitBody3
@@ -277,30 +289,42 @@ fun hankkiTypography(): HankkiTypography {
             lineHeight = 24.sp
         ),
         body2 = hankkiTextStyle(
+            fontFamily = PretendardSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 15.sp,
+            lineHeight = 22.5.sp
+        ),
+        body3 = hankkiTextStyle(
             fontFamily = PretendardMedium,
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             lineHeight = 22.5.sp
         ),
-        body3 = hankkiTextStyle(
+        body4 = hankkiTextStyle(
             fontFamily = PretendardBold,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
-        body4 = hankkiTextStyle(
+        body5 = hankkiTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
-        body5 = hankkiTextStyle(
-            fontFamily = PretendardRegular,
-            fontWeight = FontWeight.Normal,
+        body6 = hankkiTextStyle(
+            fontFamily = PretendardMedium,
+            fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
-        body6 = hankkiTextStyle(
+        body7 = hankkiTextStyle(
+            fontFamily = PretendardSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 13.sp,
+            lineHeight = 19.5.sp
+        ),
+        body8 = hankkiTextStyle(
             fontFamily = PretendardMedium,
             fontWeight = FontWeight.Medium,
             fontSize = 13.sp,

@@ -273,7 +273,7 @@ fun MyScreen(
                                     .padding(top = 13.dp, bottom = 14.dp)
                                     .weight(1f),
                                 textAlign = TextAlign.End,
-                                style = HankkiTheme.typography.body5,
+                                style = HankkiTheme.typography.body6,
                                 color = Gray400,
                             )
                             Image(

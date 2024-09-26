@@ -30,7 +30,7 @@ fun HankkiTextSnackBar(message: String) {
             ) {
                 Text(
                     text = message,
-                    style = HankkiTheme.typography.body4,
+                    style = HankkiTheme.typography.body5,
                     color = Color.White
                 )
             }
