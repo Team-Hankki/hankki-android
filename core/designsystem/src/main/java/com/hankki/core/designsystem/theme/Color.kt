@@ -38,3 +38,6 @@ val Gray700 = Color(0xFF424242)
 val Gray800 = Color(0xFF303030)
 val Gray850 = Color(0xFF1F1F1F)
 val Gray900 = Color(0xFF111111)
+
+// Etc
+val ImageLine = Color(0x1A000000)
