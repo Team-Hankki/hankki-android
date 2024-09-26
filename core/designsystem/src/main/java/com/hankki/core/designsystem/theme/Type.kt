@@ -44,10 +44,13 @@ class HankkiTypography internal constructor(
     body2: TextStyle,
     suitBody1: TextStyle,
     suitBody2: TextStyle,
+    suitBody3: TextStyle,
+    suitBody4: TextStyle,
     button1: TextStyle,
     caption1: TextStyle,
     caption2: TextStyle,
-) {
+    suitCaption: TextStyle,
+    ) {
     var h1: TextStyle by mutableStateOf(h1)
         private set
     var h2: TextStyle by mutableStateOf(h2)
@@ -86,11 +89,17 @@ class HankkiTypography internal constructor(
         private set
     var suitBody2: TextStyle by mutableStateOf(suitBody2)
         private set
+    var suitBody3: TextStyle by mutableStateOf(suitBody3)
+        private set
+    var suitBody4: TextStyle by mutableStateOf(suitBody4)
+        private set
     var button1: TextStyle by mutableStateOf(button1)
         private set
     var caption1: TextStyle by mutableStateOf(caption1)
         private set
     var caption2: TextStyle by mutableStateOf(caption2)
+        private set
+    var suitCaption: TextStyle by mutableStateOf(suitCaption)
         private set
 
     fun copy(
@@ -113,10 +122,13 @@ class HankkiTypography internal constructor(
         body6: TextStyle = this.body6,
         suitBody1: TextStyle = this.suitBody1,
         suitBody2: TextStyle = this.suitBody2,
+        suitBody3: TextStyle = this.suitBody3,
+        suitBody4: TextStyle = this.suitBody4,
         button1: TextStyle = this.button1,
         caption1: TextStyle = this.caption1,
         caption2: TextStyle = this.caption2,
-    ): HankkiTypography = HankkiTypography(
+        suitCaption: TextStyle = this.suitCaption,
+        ): HankkiTypography = HankkiTypography(
         h1,
         h2,
         suitH1,
@@ -136,10 +148,13 @@ class HankkiTypography internal constructor(
         body6,
         suitBody1,
         suitBody2,
+        suitBody3,
+        suitBody4,
         button1,
         caption1,
-        caption2
-    )
+        caption2,
+        suitCaption,
+        )
 
     fun update(other: HankkiTypography) {
         h1 = other.h1
@@ -161,9 +176,12 @@ class HankkiTypography internal constructor(
         body6 = other.body6
         suitBody1 = other.suitBody1
         suitBody2 = other.suitBody2
+        suitBody3 = other.suitBody3
+        suitBody4 = other.suitBody4
         button1 = other.button1
         caption1 = other.caption1
         caption2 = other.caption2
+        suitCaption = other.suitCaption
     }
 }
 
@@ -300,6 +318,18 @@ fun hankkiTypography(): HankkiTypography {
             fontSize = 14.sp,
             lineHeight = 21.sp
         ),
+        suitBody3 = hankkiTextStyle(
+            fontFamily = SuiteSemiBold,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 14.sp,
+            lineHeight = 21.sp
+        ),
+        suitBody4 = hankkiTextStyle(
+            fontFamily = SuiteMedium,
+            fontWeight = FontWeight.Medium,
+            fontSize = 13.sp,
+            lineHeight = 19.5.sp
+        ),
         button1 = hankkiTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
@@ -317,6 +347,12 @@ fun hankkiTypography(): HankkiTypography {
             fontWeight = FontWeight.Normal,
             fontSize = 11.sp,
             lineHeight = 16.5.sp
-        )
+        ),
+        suitCaption = hankkiTextStyle(
+            fontFamily = SuiteBold,
+            fontWeight = FontWeight.Bold,
+            fontSize = 10.sp,
+            lineHeight = 15.sp
+        ),
     )
 }
