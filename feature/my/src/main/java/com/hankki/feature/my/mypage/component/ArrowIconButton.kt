@@ -35,7 +35,7 @@ fun ArrowIconButton(
     ) {
         Text(
             text = itemTitle,
-            style = HankkiTheme.typography.body4,
+            style = HankkiTheme.typography.body5,
             color = Gray900
         )
         Image(
