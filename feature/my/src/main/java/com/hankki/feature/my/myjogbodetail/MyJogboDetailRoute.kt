@@ -1,6 +1,7 @@
 package com.hankki.feature.my.myjogbodetail
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -16,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +25,6 @@ import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -155,14 +154,13 @@ fun MyJogboDetailScreen(
                 .background(Red500)
                 .statusBarsPadding(),
             leadingIcon = {
-                Icon(
-                    painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
+                Image(
+                    painter = painterResource(id = R.drawable.icon_back),
                     contentDescription = "Back",
                     modifier = Modifier
-                        .padding(start = 6.dp)
-                        .size(44.dp)
+                        .padding(start = 7.dp)
+                        .size(40.dp)
                         .noRippleClickable(onClick = navigateUp),
-                    tint = Color.Unspecified
                 )
             },
             content = {
