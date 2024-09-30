@@ -1,6 +1,7 @@
 package com.hankki.feature.my.myjogbo
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,14 +15,12 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -119,14 +118,13 @@ fun MyJogboScreen(
     ) {
         HankkiTopBar(
             leadingIcon = {
-                Icon(
-                    painter = painterResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
+                Image(
+                    painter = painterResource(id = R.drawable.icon_back),
                     contentDescription = "Back",
                     modifier = Modifier
-                        .padding(start = 6.dp)
-                        .size(44.dp)
+                        .padding(start = 7.dp)
+                        .size(40.dp)
                         .noRippleClickable(if (editModeState) resetEditModeState else navigateUp),
-                    tint = Color.Unspecified
                 )
             },
             content = {
@@ -137,7 +135,8 @@ fun MyJogboScreen(
                 )
             },
             trailingIcon = {
-                val isSelectedJogboExists = (state is UiState.Success && state.data.any { it.jogboSelected })
+                val isSelectedJogboExists =
+                    (state is UiState.Success && state.data.any { it.jogboSelected })
 
                 Text(
                     text = if (editModeState) stringResource(R.string.delete) else stringResource(R.string.edit),
