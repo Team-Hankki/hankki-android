@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -173,7 +172,7 @@ fun MyScreen(
                                 .size(62.dp)
                                 .clip(CircleShape),
                             painter = painterResource(id = R.drawable.img_user_profile),
-                            contentDescription = "profile_image",
+                            contentDescription = null,
                             contentScale = ContentScale.Crop
                         )
 
@@ -209,7 +208,7 @@ fun MyScreen(
                         IconButton(
                             modifier = Modifier.weight(1f),
                             image = R.drawable.ic_myjokbo,
-                            text = "나의 족보",
+                            text = stringResource(R.string.my_jogbo),
                             onclick = {
                                 tracker.track(
                                     type = EventType.CLICK,
@@ -224,7 +223,7 @@ fun MyScreen(
                         IconButton(
                             modifier = Modifier.weight(1f),
                             image = R.drawable.ic_newjaebo,
-                            text = "제보한 식당",
+                            text = stringResource(R.string.description_store_report),
                             onclick = {
                                 navigateToMyStore(REPORT)
                             }
@@ -235,7 +234,7 @@ fun MyScreen(
                         IconButton(
                             modifier = Modifier.weight(1f),
                             image = R.drawable.ic_myheart,
-                            text = "좋아요한 식당",
+                            text = stringResource(R.string.description_store_like),
                             onclick = {
                                 navigateToMyStore(LIKE)
                             }
