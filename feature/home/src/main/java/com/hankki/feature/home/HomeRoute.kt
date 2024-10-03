@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
@@ -72,6 +73,7 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
+import com.hankki.core.designsystem.component.layout.EmptyView
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.theme.Gray200
@@ -273,7 +275,7 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
-    selectedStoreItem: StoreItemModel,
+    selectedStoreItem: StoreItemModel?,
     storeItemState: EmptyUiState<PersistentList<StoreItemModel>>,
     jogboItems: PersistentList<JogboResponseModel>,
     markerItems: PersistentList<PinModel>,
@@ -352,7 +354,9 @@ fun HomeScreen(
 
     if (isMyJogboBottomSheetOpen) {
         LaunchedEffect(key1 = Unit) {
-            getJogboItems(selectedStoreItem.id)
+            if (selectedStoreItem != null) {
+                getJogboItems(selectedStoreItem.id)
+            }
         }
 
         HankkiStoreJogboBottomSheet(
@@ -360,7 +364,7 @@ fun HomeScreen(
             onDismissRequest = controlMyJogboBottomSheet,
             addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
-                addStoreAtJogbo(jogboId, selectedStoreItem.id)
+                addStoreAtJogbo(jogboId, selectedStoreItem?.id ?: 0L)
                 tracker.track(
                     type = EventType.ADD,
                     name = "Home_RestList_Jokbo"
@@ -425,73 +429,79 @@ fun HomeScreen(
                 }
             ) {
                 markerItems.forEach { marker ->
-                    Marker(
-                        state = MarkerState(
-                            position = LatLng(
-                                marker.latitude,
-                                marker.longitude
-                            )
-                        ),
-                        icon = OverlayImage.fromResource(R.drawable.ic_marker),
-                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
-                        onClick = {
-                            clickMarkerItem(marker.id)
-                            true
-                        }
-                    )
+                    Log.e("marker", "${selectedStoreItem == null}")
+                    if (selectedStoreItem == null || marker.id == selectedStoreItem.id) {
+                        Marker(
+                            state = MarkerState(
+                                position = LatLng(
+                                    marker.latitude,
+                                    marker.longitude
+                                )
+                            ),
+                            icon = OverlayImage.fromResource(R.drawable.ic_marker),
+                            captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
+                            onClick = {
+                                clickMarkerItem(marker.id)
+                                true
+                            }
+                        )
+                    }
                 }
             }
 
+
             Column {
-                FlowRow(
-                    modifier = Modifier.padding(
-                        start = 12.dp,
-                        end = 12.dp,
-                        top = 12.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    RowFilterChip(
-                        chipState = categoryChipState,
-                        defaultTitle = "종류",
-                        menus = categoryChipItems,
-                        onClickMenu = selectCategoryChipItem,
-                        onClickChip = {
-                            clickCategoryChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
+                if (selectedStoreItem != null) {
+                    FlowRow(
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = 12.dp,
+                            top = 12.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        RowFilterChip(
+                            chipState = categoryChipState,
+                            defaultTitle = "종류",
+                            menus = categoryChipItems,
+                            onClickMenu = selectCategoryChipItem,
+                            onClickChip = {
+                                clickCategoryChip()
+                                closeBottomSheet(
+                                    coroutineScope,
+                                    bottomSheetScaffoldState
+                                )
+                            }
+                        )
 
-                    DropdownFilterChip(
-                        chipState = priceChipState,
-                        defaultTitle = "가격대",
-                        menus = priceChipItems,
-                        onClickMenu = selectPriceChipItem,
-                        onClickChip = {
-                            clickPriceChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
+                        DropdownFilterChip(
+                            chipState = priceChipState,
+                            defaultTitle = "가격대",
+                            menus = priceChipItems,
+                            onClickMenu = selectPriceChipItem,
+                            onClickChip = {
+                                clickPriceChip()
+                                closeBottomSheet(
+                                    coroutineScope,
+                                    bottomSheetScaffoldState
+                                )
+                            }
+                        )
 
-                    DropdownFilterChip(
-                        chipState = sortChipState,
-                        defaultTitle = "정렬",
-                        menus = sortChipItems,
-                        onClickMenu = selectSortChipItem,
-                        onClickChip = {
-                            clickSortChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
+                        DropdownFilterChip(
+                            chipState = sortChipState,
+                            defaultTitle = "정렬",
+                            menus = sortChipItems,
+                            onClickMenu = selectSortChipItem,
+                            onClickChip = {
+                                clickSortChip()
+                                closeBottomSheet(
+                                    coroutineScope,
+                                    bottomSheetScaffoldState
+                                )
+                            }
+                        )
+                    }
                 }
 
                 BottomSheetScaffold(
@@ -622,21 +632,25 @@ fun HomeScreen(
                                     )
                                 }
 
-                                StoreItem(
-                                    storeId = selectedStoreItem.id,
-                                    storeImageUrl = selectedStoreItem.imageUrl,
-                                    category = selectedStoreItem.category,
-                                    storeName = selectedStoreItem.name,
-                                    price = selectedStoreItem.lowestPrice,
-                                    heartCount = selectedStoreItem.heartCount,
-                                    modifier = Modifier.padding(
-                                        horizontal = 22.dp,
-                                        vertical = 12.dp
-                                    ),
-                                    onClickItem = navigateStoreDetail
-                                ) {
-                                    controlMyJogboBottomSheet()
-                                    getJogboItems(selectedStoreItem.id)
+                                if (selectedStoreItem != null) {
+                                    StoreItem(
+                                        storeId = selectedStoreItem.id,
+                                        storeImageUrl = selectedStoreItem.imageUrl,
+                                        category = selectedStoreItem.category,
+                                        storeName = selectedStoreItem.name,
+                                        price = selectedStoreItem.lowestPrice,
+                                        heartCount = selectedStoreItem.heartCount,
+                                        modifier = Modifier.padding(
+                                            horizontal = 22.dp,
+                                            vertical = 12.dp
+                                        ),
+                                        onClickItem = navigateStoreDetail
+                                    ) {
+                                        controlMyJogboBottomSheet()
+                                        getJogboItems(selectedStoreItem.id)
+                                    }
+                                } else {
+                                    EmptyView("이런! 오류가 발생했어요!")
                                 }
                             }
                         }
