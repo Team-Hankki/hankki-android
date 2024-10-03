@@ -86,7 +86,7 @@ class HomeViewModel @Inject constructor(
             priceChipState = ChipState.Unselected(),
             sortChipState = ChipState.Unselected(),
             isMainBottomSheetOpen = true,
-            selectedStoreItem = StoreItemModel()
+            selectedStoreItem = null
         )
     }
 
@@ -205,7 +205,8 @@ class HomeViewModel @Inject constructor(
 
     fun clickMap() {
         _state.value = _state.value.copy(
-            isMainBottomSheetOpen = true
+            isMainBottomSheetOpen = true,
+            selectedStoreItem = null
         )
     }
 
