@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -458,6 +459,7 @@ fun HomeScreen(
                     }
                 }
             }
+
 
             Column {
                 AnimatedVisibility(
