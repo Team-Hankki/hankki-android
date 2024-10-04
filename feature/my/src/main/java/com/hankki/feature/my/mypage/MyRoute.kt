@@ -249,12 +249,12 @@ fun MyScreen(
                     Column(modifier = Modifier.padding(horizontal = 22.dp)) {
 
                         ArrowIconButton(
-                            stringResource(R.string.terms_of_use),
-                            { showWebView(TERMS_OF_USE) })
-
-                        ArrowIconButton(
                             stringResource(R.string.inquiry),
                             { showWebView(INQUIRY) })
+
+                        ArrowIconButton(
+                            stringResource(R.string.terms_of_use),
+                            { showWebView(TERMS_OF_USE) })
 
                         ArrowIconButton(
                             stringResource(R.string.logout),
