@@ -9,7 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
@@ -38,7 +39,7 @@ fun ArrowIconButton(
             color = Gray600
         )
         Image(
-            painterResource(id = R.drawable.ic_arrow_right),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
             contentDescription = "ic_arrow_right"
         )
     }
