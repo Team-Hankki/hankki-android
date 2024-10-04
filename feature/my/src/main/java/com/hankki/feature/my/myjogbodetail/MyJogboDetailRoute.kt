@@ -25,9 +25,10 @@ import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -91,7 +92,12 @@ fun MyJogboDetailRoute(
         userNickname = state.userInformation.nickname,
         updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(state.shareDialogState) },
         updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialogState(state.deleteDialogState) },
-        deleteSelectedStore = { storeId -> myJogboDetailViewModel.deleteSelectedStore(favoriteId, storeId) },
+        deleteSelectedStore = { storeId ->
+            myJogboDetailViewModel.deleteSelectedStore(
+                favoriteId,
+                storeId
+            )
+        },
         selectedStoreId = state.selectedStoreId,
         updateSelectedStoreId = myJogboDetailViewModel::updateSelectedStoreId,
         navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
@@ -155,7 +161,7 @@ fun MyJogboDetailScreen(
                 .statusBarsPadding(),
             leadingIcon = {
                 Image(
-                    painter = painterResource(id = R.drawable.icon_back),
+                    imageVector = ImageVector.vectorResource(R.drawable.icon_back),
                     contentDescription = "Back",
                     modifier = Modifier
                         .padding(start = 7.dp)
