@@ -203,7 +203,8 @@ fun MyScreen(
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Row(
-                        modifier = Modifier.padding(horizontal = 24.dp)
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
                         IconButton(
                             modifier = Modifier.weight(1f),
@@ -218,8 +219,6 @@ fun MyScreen(
                             }
                         )
 
-                        Spacer(modifier = Modifier.width(18.dp))
-
                         IconButton(
                             modifier = Modifier.weight(1f),
                             image = R.drawable.ic_newjaebo,
@@ -228,8 +227,6 @@ fun MyScreen(
                                 navigateToMyStore(REPORT)
                             }
                         )
-
-                        Spacer(modifier = Modifier.width(18.dp))
 
                         IconButton(
                             modifier = Modifier.weight(1f),
