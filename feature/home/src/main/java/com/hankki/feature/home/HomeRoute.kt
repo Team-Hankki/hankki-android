@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import android.view.Gravity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
@@ -78,6 +77,7 @@ import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
@@ -429,7 +429,6 @@ fun HomeScreen(
                 }
             ) {
                 markerItems.forEach { marker ->
-                    Log.e("marker", "${selectedStoreItem == null}")
                     if (selectedStoreItem == null || marker.id == selectedStoreItem.id) {
                         Marker(
                             state = MarkerState(
@@ -451,7 +450,7 @@ fun HomeScreen(
 
 
             Column {
-                if (selectedStoreItem != null) {
+                if (selectedStoreItem == null) {
                     FlowRow(
                         modifier = Modifier.padding(
                             start = 12.dp,
@@ -523,7 +522,7 @@ fun HomeScreen(
                                 .sizeIn(minHeight = height.dp),
                         ) {
                             Spacer(
-                                modifier = Modifier.height(8.dp)
+                                modifier = Modifier.height(10.dp)
                             )
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_drag_handle),
@@ -531,7 +530,7 @@ fun HomeScreen(
                                 tint = Gray200,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
 
                             when (storeItemState) {
                                 EmptyUiState.Empty -> {
@@ -561,6 +560,24 @@ fun HomeScreen(
 
                                 is EmptyUiState.Success -> {
                                     val storeItems = storeItemState.data
+
+                                    Row(
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    ) {
+                                        Text(
+                                            text = "${storeItems.size}개",
+                                            style = HankkiTheme.typography.body5,
+                                            color = Gray900,
+                                        )
+                                        Text(
+                                            text = "의 족보",
+                                            style = HankkiTheme.typography.body6,
+                                            color = Gray600,
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.height(5.dp))
+
                                     LazyColumn(
                                         modifier = Modifier
                                             .fillMaxWidth()
