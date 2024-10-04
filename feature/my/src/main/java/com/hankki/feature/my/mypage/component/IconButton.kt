@@ -1,5 +1,6 @@
 package com.hankki.feature.my.mypage.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +23,7 @@ import com.hankki.feature.my.R
 
 @Composable
 fun IconButton(
-    image: Int,
+    @DrawableRes image: Int,
     text: String,
     onclick: () -> Unit,
     modifier: Modifier = Modifier
