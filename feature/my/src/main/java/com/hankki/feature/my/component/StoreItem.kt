@@ -19,8 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -95,7 +96,7 @@ fun StoreItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     modifier = Modifier.width(16.dp),
-                    painter = painterResource(id = R.drawable.ic_food),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_food),
                     contentDescription = "icon",
                     colorFilter = ColorFilter.tint(Gray300)
                 )
@@ -111,7 +112,7 @@ fun StoreItem(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Image(
-                    painter = painterResource(id = R.drawable.ic_ellipse),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_ellipse),
                     contentDescription = "icon",
                 )
 
@@ -119,7 +120,7 @@ fun StoreItem(
 
                 Image(
                     modifier = Modifier.width(16.dp),
-                    painter = painterResource(id = R.drawable.ic_like_heart),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_like_heart),
                     contentDescription = "icon"
                 )
 
@@ -135,7 +136,7 @@ fun StoreItem(
 
         if (isIconUsed) {
             Image(
-                painter = painterResource(id = R.drawable.ic_heart_filled),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_heart_filled),
                 contentDescription = "plus button",
                 modifier = Modifier
                     .size(52.dp)
