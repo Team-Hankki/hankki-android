@@ -17,11 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,10 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,12 +46,12 @@ import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
-import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray50
+import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
 import com.hankki.feature.my.mypage.MyViewModel.Companion.INQUIRY
@@ -63,7 +61,7 @@ import com.hankki.feature.my.mypage.MyViewModel.Companion.REPORT
 import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE
 import com.hankki.feature.my.mypage.MyViewModel.Companion.TERMS_OF_USE_PAGE
 import com.hankki.feature.my.mypage.component.ArrowIconButton
-import com.hankki.feature.my.mypage.component.ImageAndBorderButton
+import com.hankki.feature.my.mypage.component.IconButton
 import com.hankki.feature.my.mypage.model.MyModel
 import com.jakewharton.processphoenix.ProcessPhoenix
 
@@ -154,130 +152,133 @@ fun MyScreen(
                     .background(White),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HankkiTopBar(
-                    content = {
-                        Text(
-                            text = stringResource(id = R.string.my),
-                            color = Gray900,
-                            style = HankkiTheme.typography.sub3
-                        )
-                    }
-                )
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.height(23.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
 
-                    Image(
+                    Row(
                         modifier = Modifier
-                            .size(98.dp)
-                            .clip(CircleShape),
-                        painter = painterResource(id = R.drawable.img_user_profile),
-                        contentDescription = "profile_image",
-                        contentScale = ContentScale.Crop
-                    )
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    Text(
-                        text = stringResource(
-                            R.string.message_user_name,
-                            state.myModel.nickname
-                        ),
-                        color = Gray900,
-                        style = HankkiTheme.typography.suitH2,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(19.dp))
-
-                    Column(modifier = Modifier.padding(horizontal = 22.dp)) {
-                        Row(
+                            .padding(start = 22.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Image(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    Red500,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                                .clip(RoundedCornerShape(12.dp))
-                                .padding(start = 30.dp, end = 17.dp)
-                                .noRippleClickable {
-                                    tracker.track(
-                                        type = EventType.CLICK,
-                                        name = "Mypage_MyJokbo"
-                                    )
-                                    navigateToMyJogbo()
-                                },
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                                .size(62.dp)
+                                .clip(CircleShape),
+                            imageVector = ImageVector.vectorResource(R.drawable.img_user_profile),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+
+                        Column(
+                            modifier = Modifier.padding(start = 14.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.my_jogbo),
-                                style = HankkiTheme.typography.sub1,
-                                color = White,
+                                text = stringResource(
+                                    R.string.message_user_name,
+                                    state.myModel.nickname
+                                ),
+                                color = Gray900,
+                                style = HankkiTheme.typography.suitH3,
+                                textAlign = TextAlign.Start
                             )
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_my_graphic),
-                                contentDescription = "jogbo graphic",
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(19.dp))
-
-                        Row {
-                            ImageAndBorderButton(
-                                com.hankki.core.designsystem.R.drawable.ic_report,
-                                stringResource(R.string.description_store_report),
-                                Modifier
-                                    .weight(1f)
-                                    .noRippleClickable(onClick = { navigateToMyStore(REPORT) }),
-                            )
-                            Spacer(modifier = Modifier.width(18.dp))
-                            ImageAndBorderButton(
-                                com.hankki.core.designsystem.R.drawable.ic_good,
-                                stringResource(R.string.description_store_like),
-                                Modifier
-                                    .weight(1f)
-                                    .noRippleClickable(onClick = { navigateToMyStore(LIKE) }),
+                            Text(
+                                text = stringResource(
+                                    R.string.message_user,
+                                    state.myModel.nickname
+                                ),
+                                color = Gray500,
+                                style = HankkiTheme.typography.suitBody4,
+                                textAlign = TextAlign.Start
                             )
                         }
+                    }
 
-                        ArrowIconButton(
-                            stringResource(R.string.terms_of_use),
-                            { showWebView(TERMS_OF_USE) })
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Row(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(18.dp)
+                    ) {
+                        IconButton(
+                            modifier = Modifier.weight(1f),
+                            image = R.drawable.ic_myjokbo,
+                            text = stringResource(R.string.my_jogbo),
+                            onclick = {
+                                tracker.track(
+                                    type = EventType.CLICK,
+                                    name = "Mypage_MyJokbo"
+                                )
+                                navigateToMyJogbo()
+                            }
+                        )
+
+                        IconButton(
+                            modifier = Modifier.weight(1f),
+                            image = R.drawable.ic_newjaebo,
+                            text = stringResource(R.string.description_store_report),
+                            onclick = {
+                                navigateToMyStore(REPORT)
+                            }
+                        )
+
+                        IconButton(
+                            modifier = Modifier.weight(1f),
+                            image = R.drawable.ic_myheart,
+                            text = stringResource(R.string.description_store_like),
+                            onclick = {
+                                navigateToMyStore(LIKE)
+                            }
+                        )
+                    }
+
+                    Spacer(
+                        modifier = Modifier
+                            .padding(top = 18.dp)
+                            .fillMaxWidth()
+                            .height(10.dp)
+                            .background(Gray50)
+                    )
+
+                    Column(modifier = Modifier.padding(horizontal = 22.dp)) {
 
                         ArrowIconButton(
                             stringResource(R.string.inquiry),
                             { showWebView(INQUIRY) })
 
                         ArrowIconButton(
+                            stringResource(R.string.terms_of_use),
+                            { showWebView(TERMS_OF_USE) })
+
+                        ArrowIconButton(
                             stringResource(R.string.logout),
                             { updateDialog(DialogState.LOGOUT) })
 
+                        Spacer(modifier = Modifier.height(4.dp))
+
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp, bottom = 43.dp)
-                                .noRippleClickable(onClick = {}),
+                            modifier = Modifier,
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.End
                         ) {
                             Text(
                                 text = stringResource(R.string.quit),
                                 modifier = Modifier
-                                    .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
                                     .padding(top = 13.dp, bottom = 14.dp)
+                                    .noRippleClickable(onClick = { updateDialog(DialogState.QUIT) })
                                     .weight(1f),
                                 textAlign = TextAlign.End,
                                 style = HankkiTheme.typography.body6,
                                 color = Gray400,
                             )
                             Image(
-                                painter = painterResource(id = R.drawable.ic_quit),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_quit),
                                 contentDescription = stringResource(id = R.string.quit),
                                 modifier = Modifier.size(16.dp)
                             )
