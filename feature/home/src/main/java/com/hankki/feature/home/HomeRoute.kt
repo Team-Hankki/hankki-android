@@ -13,7 +13,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -93,7 +92,6 @@ import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.R.drawable.ic_coin
 import com.hankki.feature.home.R.drawable.ic_empty_bowl
 import com.hankki.feature.home.R.drawable.ic_marker
-import com.hankki.feature.home.R.drawable.ic_university
 import com.hankki.feature.home.R.drawable.ic_sort
 import com.hankki.feature.home.R.drawable.ic_university
 import com.hankki.feature.home.component.DropdownFilterChip
