@@ -198,6 +198,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun clickedMainBottomSheetItem(id: Long) {
+        val item = _state.value.markerItems.find { it.id == id } ?: return
+
+        clickMarkerItem(id)
+        moveMap(item.latitude, item.longitude)
+    }
+
     fun selectStoreItem(storeItem: StoreItemModel) {
         _state.value = _state.value.copy(
             selectedStoreItem = storeItem
