@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.Color
 import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray600
+import com.hankki.core.designsystem.theme.Red100
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.core.designsystem.theme.Yellow300
 import com.hankki.core.designsystem.theme.Yellow500
@@ -48,10 +50,10 @@ data class ChipStyle(
         )
 
         val FIXED = ChipStyle(
-            containerColor = Yellow300,
-            borderColor = Yellow500,
-            labelColor = Gray600,
-            iconColor = Gray600
+            containerColor = Red100,
+            borderColor = Red500,
+            labelColor = Red500,
+            iconColor = Red500
         )
     }
 }

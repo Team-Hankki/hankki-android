@@ -85,7 +85,10 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
+import com.hankki.feature.home.R.drawable.ic_coin
+import com.hankki.feature.home.R.drawable.ic_empty_bowl
 import com.hankki.feature.home.R.drawable.ic_marker
+import com.hankki.feature.home.R.drawable.ic_sort
 import com.hankki.feature.home.component.DropdownFilterChip
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
@@ -454,7 +457,8 @@ fun HomeScreen(
                     ) {
                         RowFilterChip(
                             chipState = categoryChipState,
-                            defaultTitle = "종류",
+                            defaultTitle = "뭐 먹지",
+                            imageResource = ic_empty_bowl,
                             menus = categoryChipItems,
                             onClickMenu = selectCategoryChipItem,
                             onClickChip = {
@@ -468,7 +472,8 @@ fun HomeScreen(
 
                         DropdownFilterChip(
                             chipState = priceChipState,
-                            defaultTitle = "가격대",
+                            defaultTitle = "가격",
+                            imageResource = ic_coin,
                             menus = priceChipItems,
                             onClickMenu = selectPriceChipItem,
                             onClickChip = {
@@ -483,6 +488,7 @@ fun HomeScreen(
                         DropdownFilterChip(
                             chipState = sortChipState,
                             defaultTitle = "정렬",
+                            imageResource = ic_sort,
                             menus = sortChipItems,
                             onClickMenu = selectSortChipItem,
                             onClickChip = {
@@ -593,7 +599,6 @@ fun HomeScreen(
                                                         bottomSheetScaffoldState.bottomSheetState.collapse()
                                                         mainBottomSheetItemClicked(id)
                                                     }
-
                                                 }
                                             ) {
                                                 selectStoreItem(item)
