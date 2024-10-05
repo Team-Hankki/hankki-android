@@ -454,7 +454,6 @@ fun HomeScreen(
                 }
             }
 
-
             Column {
                 AnimatedVisibility(
                     visible = isMainBottomSheetOpen,
@@ -629,6 +628,7 @@ fun HomeScreen(
                                                         bottomSheetScaffoldState.bottomSheetState.collapse()
                                                         mainBottomSheetItemClicked(id)
                                                     }
+
                                                 }
                                             ) {
                                                 selectStoreItem(item)
