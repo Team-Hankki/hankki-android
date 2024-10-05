@@ -9,6 +9,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.view.Gravity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -44,6 +45,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -231,6 +233,7 @@ fun HomeRoute(
             }
         },
         selectStoreItem = viewModel::selectStoreItem,
+        mainBottomSheetItemClicked = viewModel::clickedMainBottomSheetItem,
         navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
         clickMarkerItem = viewModel::clickMarkerItem,
@@ -242,9 +245,7 @@ fun HomeRoute(
         selectPriceChipItem = viewModel::selectPriceChipItem,
         clickSortChip = viewModel::clickSortChip,
         selectSortChipItem = viewModel::selectSortChipItem,
-        addNewJogbo = {
-            navigateToAddNewJogbo()
-        },
+        addNewJogbo = navigateToAddNewJogbo,
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
     ) {
@@ -291,6 +292,7 @@ fun HomeScreen(
     dialogNegativeClicked: () -> Unit = {},
     dialogPositiveClicked: () -> Unit = {},
     selectStoreItem: (StoreItemModel) -> Unit = {},
+    mainBottomSheetItemClicked: (Long) -> Unit,
     navigateStoreDetail: (Long) -> Unit = {},
     navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
@@ -450,7 +452,9 @@ fun HomeScreen(
 
 
             Column {
-                if (selectedStoreItem == null) {
+                AnimatedVisibility(
+                    visible = isMainBottomSheetOpen,
+                ) {
                     FlowRow(
                         modifier = Modifier.padding(
                             start = 12.dp,
@@ -559,7 +563,7 @@ fun HomeScreen(
                                 }
 
                                 is EmptyUiState.Success -> {
-                                    val storeItems = storeItemState.data
+                                    val storeItems by remember { mutableStateOf(storeItemState.data) }
 
                                     Row(
                                         modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -595,7 +599,12 @@ fun HomeScreen(
                                                 storeName = item.name,
                                                 price = item.lowestPrice,
                                                 heartCount = item.heartCount,
-                                                onClickItem = navigateStoreDetail
+                                                onClickItem = { id ->
+                                                    coroutineScope.launch {
+                                                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                                                        mainBottomSheetItemClicked(id)
+                                                    }
+                                                }
                                             ) {
                                                 selectStoreItem(item)
                                                 controlMyJogboBottomSheet()
@@ -613,7 +622,7 @@ fun HomeScreen(
                     scaffoldState = bottomSheetScaffoldState,
                     sheetPeekHeight = animateDpAsState(
                         targetValue = if (isMainBottomSheetOpen) height.dp else 0.dp,
-                        animationSpec = tween(300),
+                        animationSpec = tween(durationMillis = 300),
                         label = ""
                     ).value,
                 ) {
