@@ -81,7 +81,7 @@ import com.hankki.core.designsystem.component.layout.EmptyView
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -400,7 +400,10 @@ fun HomeScreen(
                     Icon(
                         imageVector = ImageVector.vectorResource(id = ic_university),
                         contentDescription = "university",
-                        modifier = Modifier.size(18.dp).padding(horizontal = 2.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 2.dp)
+                            .size(18.dp),
+                        tint = Color.Unspecified
                     )
                     Text(
                         text = universityName,
@@ -408,9 +411,10 @@ fun HomeScreen(
                         color = Gray900
                     )
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_dropdown_btn),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_down_thick),
                         contentDescription = "button",
-                        tint = Gray300
+                        modifier = Modifier.size(16.dp),
+                        tint = Gray400
                     )
                 }
             },
