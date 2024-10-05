@@ -633,7 +633,6 @@ fun HomeScreen(
                                                         bottomSheetScaffoldState.bottomSheetState.collapse()
                                                         mainBottomSheetItemClicked(id)
                                                     }
-
                                                 }
                                             ) {
                                                 selectStoreItem(item)
