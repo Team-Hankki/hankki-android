@@ -1,5 +1,7 @@
 package com.hankki.feature.home.component
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.bounceClick
@@ -30,6 +34,7 @@ import com.hankki.feature.home.model.ChipState
 fun HankkiStateChip(
     chipState: ChipState,
     defaultTitle: String,
+    @DrawableRes imageResource: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     filterContent: @Composable ColumnScope.() -> Unit = {},
@@ -55,6 +60,14 @@ fun HankkiStateChip(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                if (chipState !is ChipState.Fixed) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(imageResource),
+                        contentDescription = "icon",
+                        modifier = Modifier.size(24.dp).padding(end = 4.dp),
+                    )
+                }
+
                 Text(
                     text = when (chipState) {
                         is ChipState.Selected -> defaultTitle
@@ -88,6 +101,7 @@ fun HankkiStateChip(
 fun CustomChipPreview() {
     HankkiStateChip(
         ChipState.Selected(),
-        "한식"
+        "한식",
+        R.drawable.ic_x,
     )
 }
