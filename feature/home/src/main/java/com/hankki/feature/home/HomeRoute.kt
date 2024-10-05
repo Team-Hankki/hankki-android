@@ -85,6 +85,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
+import com.hankki.feature.home.R.drawable.ic_marker
 import com.hankki.feature.home.component.DropdownFilterChip
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
@@ -428,7 +429,7 @@ fun HomeScreen(
                                     marker.longitude
                                 )
                             ),
-                            icon = OverlayImage.fromResource(R.drawable.ic_marker),
+                            icon = OverlayImage.fromResource(ic_marker),
                             captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
                             onClick = {
                                 clickMarkerItem(marker.id)
@@ -438,7 +439,6 @@ fun HomeScreen(
                     }
                 }
             }
-
 
             Column {
                 AnimatedVisibility(
@@ -593,6 +593,7 @@ fun HomeScreen(
                                                         bottomSheetScaffoldState.bottomSheetState.collapse()
                                                         mainBottomSheetItemClicked(id)
                                                     }
+
                                                 }
                                             ) {
                                                 selectStoreItem(item)
