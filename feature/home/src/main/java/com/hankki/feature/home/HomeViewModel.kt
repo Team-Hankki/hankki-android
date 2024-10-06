@@ -11,6 +11,7 @@ import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.HomeChips
 import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,7 +39,11 @@ class HomeViewModel @Inject constructor(
     val sideEffect: SharedFlow<HomeSideEffect>
         get() = _sideEffect.asSharedFlow()
 
-    fun getUniversityInformation() {
+    init {
+        getUniversityInformation()
+    }
+
+    private fun getUniversityInformation() {
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
@@ -51,27 +57,28 @@ class HomeViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         myUniversityModel = university.toModel()
                     )
+
                     fetchData(university.id)
-                    if (state.value.myUniversityModel.id == null) {
-                        moveMyLocation()
-                    } else {
-                        moveMap(
-                            university.latitude,
-                            university.longitude
-                        )
-                    }
+
+                    moveCameraWhenUniversityNull()
                 }.onFailure { error ->
-                    if (state.value.myUniversityModel.id == null) {
-                        moveMyLocation()
-                    } else {
-                        moveMap(
-                            state.value.myUniversityModel.latitude,
-                            state.value.myUniversityModel.longitude
-                        )
-                    }
                     fetchData()
+
+                    moveCameraWhenUniversityNull()
+
                     Timber.e(error)
                 }
+        }
+    }
+
+    private fun moveCameraWhenUniversityNull() {
+        if (state.value.myUniversityModel.id == null) {
+            moveMyLocation()
+        } else {
+            moveMap(
+                state.value.myUniversityModel.latitude,
+                state.value.myUniversityModel.longitude
+            )
         }
     }
 
@@ -244,6 +251,8 @@ class HomeViewModel @Inject constructor(
                         onSuccess(chips)
                     }.onFailure(Timber::e)
             }
+        } else if (newState is ChipState.Unselected) {
+            fetchData()
         }
     }
 
@@ -251,7 +260,7 @@ class HomeViewModel @Inject constructor(
         updateChipState(
             targetChipState = _state.value.categoryChipState,
             updateState = { _state.value = _state.value.copy(categoryChipState = it) },
-            fetchItems = { homeRepository.getCategories() },
+            fetchItems = homeRepository::getCategories,
         ) { chips ->
             _state.value = _state.value.copy(
                 categoryChipItems = chips.map { chip ->
@@ -270,7 +279,7 @@ class HomeViewModel @Inject constructor(
         updateChipState(
             targetChipState = _state.value.priceChipState,
             updateState = { _state.value = _state.value.copy(priceChipState = it) },
-            fetchItems = { homeRepository.getPriceCategories() }
+            fetchItems = homeRepository::getPriceCategories
         ) { chips ->
             _state.value = _state.value.copy(
                 priceChipItems = chips.map { chip ->
@@ -288,7 +297,7 @@ class HomeViewModel @Inject constructor(
         updateChipState(
             targetChipState = _state.value.sortChipState,
             updateState = { _state.value = _state.value.copy(sortChipState = it) },
-            fetchItems = { homeRepository.getSortCategories() }
+            fetchItems = homeRepository::getSortCategories
         ) { chips ->
             _state.value = _state.value.copy(
                 sortChipItems = chips.map { chip ->
@@ -302,19 +311,35 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun selectCategoryChipItem(item: String, tag: String) {
+    fun selectHomeChipItem(chip: HomeChips, item: String, tag: String) {
+        runBlocking {
+            when (chip) {
+                HomeChips.CATEGORY -> selectCategoryChipItem(item, tag)
+                HomeChips.SORT -> selectSortChipItem(item, tag)
+                HomeChips.PRICE -> selectPriceChipItem(item, tag)
+            }
+
+            fetchData()
+        }
+    }
+
+    private fun selectCategoryChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             categoryChipState = ChipState.Fixed(item, tag)
         )
+
+        fetchData()
     }
 
-    fun selectPriceChipItem(item: String, tag: String) {
+    private fun selectPriceChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             priceChipState = ChipState.Fixed(item, tag)
         )
+
+        fetchData()
     }
 
-    fun selectSortChipItem(item: String, tag: String) {
+    private fun selectSortChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             sortChipState = ChipState.Fixed(item, tag)
         )
