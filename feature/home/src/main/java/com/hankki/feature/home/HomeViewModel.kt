@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
                     if (university.id == _state.value.myUniversityModel.id) {
-                        fetchData()
+                        fetchData(university.id)
                         return@launch
                     }
 
@@ -51,13 +51,13 @@ class HomeViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         myUniversityModel = university.toModel()
                     )
-                    fetchData()
+                    fetchData(university.id)
                     if (state.value.myUniversityModel.id == null) {
                         moveMyLocation()
                     } else {
                         moveMap(
-                            state.value.myUniversityModel.latitude,
-                            state.value.myUniversityModel.longitude
+                            university.latitude,
+                            university.longitude
                         )
                     }
                 }.onFailure { error ->
@@ -75,9 +75,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchData() {
-        getStoreItems()
-        getMarkerItems()
+    fun fetchData(universityId: Long? = state.value.myUniversityModel.id) {
+        getStoreItems(universityId)
+        getMarkerItems(universityId)
     }
 
     private fun clearState() {
@@ -108,14 +108,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getStoreItems() {
+    private fun getStoreItems(universityId: Long?) {
         viewModelScope.launch {
             _state.value = _state.value.copy(
                 storeItems = EmptyUiState.Loading
             )
 
             homeRepository.getStores(
-                universityId = _state.value.myUniversityModel.id,
+                universityId = universityId,
                 storeCategory = if (_state.value.categoryChipState is ChipState.Fixed) {
                     (_state.value.categoryChipState as ChipState.Fixed).tag
                 } else null,
@@ -164,10 +164,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getMarkerItems() {
+    private fun getMarkerItems(universityId: Long?) {
         viewModelScope.launch {
             homeRepository.getStoresPins(
-                universityId = _state.value.myUniversityModel.id,
+                universityId = universityId,
                 storeCategory = if (_state.value.categoryChipState is ChipState.Fixed) {
                     (_state.value.categoryChipState as ChipState.Fixed).tag
                 } else null,
