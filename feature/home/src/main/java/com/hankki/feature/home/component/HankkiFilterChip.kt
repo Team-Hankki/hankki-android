@@ -136,7 +136,7 @@ fun RowFilterChip(
     modifier: Modifier = Modifier,
     menus: PersistentList<CategoryChipItem> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
-    onClickMenu: (String, String) -> Unit = { _, _ -> },
+    onClickMenu: (name: String, tag: String) -> Unit = { _, _ -> },
     onClickChip: () -> Unit = {},
 ) {
     HankkiFilterChip(

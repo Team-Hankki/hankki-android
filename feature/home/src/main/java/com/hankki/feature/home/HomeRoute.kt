@@ -101,6 +101,7 @@ import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.HomeChips
 import com.hankki.feature.home.model.PinModel
 import com.hankki.feature.home.model.StoreItemModel
 import com.naver.maps.geometry.LatLng
@@ -193,26 +194,6 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(
-        key1 = state.categoryChipState,
-        key2 = state.priceChipState,
-        key3 = state.sortChipState
-    ) {
-        if (
-            state.categoryChipState !is ChipState.Selected &&
-            state.priceChipState !is ChipState.Selected &&
-            state.sortChipState !is ChipState.Selected
-        ) {
-            viewModel.fetchData()
-        }
-    }
-
-    LaunchedEffect(key1 = Unit) { // TODO: 다른 화면 갔다와도 실행됨. 어카지.
-        with(viewModel) {
-            getUniversityInformation()
-        }
-    }
-
     HomeScreen(
         isOpenDialog = state.isOpenDialog,
         paddingValues = paddingValues,
@@ -249,11 +230,9 @@ fun HomeRoute(
         clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
         clearChipFocus = viewModel::clearChipFocus,
-        selectCategoryChipItem = viewModel::selectCategoryChipItem,
+        selectHomeChipItem = viewModel::selectHomeChipItem,
         clickPriceChip = viewModel::clickPriceChip,
-        selectPriceChipItem = viewModel::selectPriceChipItem,
         clickSortChip = viewModel::clickSortChip,
-        selectSortChipItem = viewModel::selectSortChipItem,
         addNewJogbo = navigateToAddNewJogbo,
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
@@ -309,11 +288,9 @@ fun HomeScreen(
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
     clearChipFocus: () -> Unit = {},
-    selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
+    selectHomeChipItem: (chip: HomeChips, name: String, tag: String) -> Unit = { _, _, _ -> },
     clickPriceChip: () -> Unit = {},
-    selectPriceChipItem: (String, String) -> Unit = { _, _ -> },
     clickSortChip: () -> Unit = {},
-    selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     getJogboItems: (Long) -> Unit = {},
     addNewJogbo: () -> Unit = {},
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
@@ -490,7 +467,13 @@ fun HomeScreen(
                             defaultTitle = "뭐 먹지",
                             imageResource = ic_empty_bowl,
                             menus = categoryChipItems,
-                            onClickMenu = selectCategoryChipItem,
+                            onClickMenu = { name, tag ->
+                                selectHomeChipItem(
+                                    HomeChips.CATEGORY,
+                                    name,
+                                    tag
+                                )
+                            },
                             onClickChip = {
                                 clickCategoryChip()
                                 closeBottomSheet(
@@ -505,7 +488,13 @@ fun HomeScreen(
                             defaultTitle = "가격",
                             imageResource = ic_coin,
                             menus = priceChipItems,
-                            onClickMenu = selectPriceChipItem,
+                            onClickMenu = { name, tag ->
+                                selectHomeChipItem(
+                                    HomeChips.PRICE,
+                                    name,
+                                    tag
+                                )
+                            },
                             onClickChip = {
                                 clickPriceChip()
                                 closeBottomSheet(
@@ -520,7 +509,13 @@ fun HomeScreen(
                             defaultTitle = "정렬",
                             imageResource = ic_sort,
                             menus = sortChipItems,
-                            onClickMenu = selectSortChipItem,
+                            onClickMenu = { name, tag ->
+                                selectHomeChipItem(
+                                    HomeChips.SORT,
+                                    name,
+                                    tag
+                                )
+                            },
                             onClickChip = {
                                 clickSortChip()
                                 closeBottomSheet(
