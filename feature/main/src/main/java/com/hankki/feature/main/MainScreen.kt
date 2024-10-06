@@ -29,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -53,8 +54,12 @@ import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
 import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
+import com.hankki.core.designsystem.theme.hankkiTypography
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.Login
@@ -431,7 +436,7 @@ private fun RowScope.MainBottomBarItem(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxHeight()
             .selectable(
@@ -441,7 +446,7 @@ private fun RowScope.MainBottomBarItem(
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onClick,
             ),
-        contentAlignment = Alignment.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             painter = painterResource(
@@ -453,6 +458,16 @@ private fun RowScope.MainBottomBarItem(
             ),
             contentDescription = tab.contentDescription,
             tint = Color.Unspecified,
+        )
+
+        Text(
+            text = tab.contentDescription,
+            style = HankkiTheme.typography.suitCaption,
+            color = if (selected) {
+                Red500
+            } else {
+                Gray400
+            }
         )
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -381,30 +382,35 @@ fun HomeScreen(
     ) {
         HankkiHeadTopBar(
             content = {
-                Row(
-                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Spacer(modifier = Modifier.padding(start = 16.dp))
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = ic_university),
-                        contentDescription = "university",
-                        modifier = Modifier
-                            .padding(horizontal = 2.dp)
-                            .size(18.dp),
-                        tint = Color.Unspecified
-                    )
-                    Text(
-                        text = universityName,
-                        style = HankkiTheme.typography.suitSub1,
-                        color = Gray900
-                    )
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_down_thick),
-                        contentDescription = "button",
-                        modifier = Modifier.size(16.dp),
-                        tint = Gray400
-                    )
+                Column {
+                    Spacer(modifier = Modifier.height(9.dp))
+                    Row(
+                        modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = ic_university),
+                            contentDescription = "university",
+                            modifier = Modifier
+                                .padding(horizontal = 2.dp)
+                                .size(18.dp),
+                            tint = Color.Unspecified
+                        )
+                        Text(
+                            text = universityName,
+                            style = HankkiTheme.typography.body5,
+                            color = Gray900
+                        )
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = com.hankki.feature.home.R.drawable.ic_arrow_down_16),
+                            contentDescription = "button",
+                            modifier = Modifier
+                                .padding(horizontal = 2.dp)
+                                .size(16.dp),
+                            tint = Gray400
+                        )
+                    }
                 }
             },
             modifier = Modifier.background(White)
