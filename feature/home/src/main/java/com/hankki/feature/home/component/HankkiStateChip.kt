@@ -1,7 +1,6 @@
 package com.hankki.feature.home.component
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,7 +54,7 @@ fun HankkiStateChip(
                     shape = RoundedCornerShape(16.dp)
                 )
                 .background(color = chipState.style.containerColor)
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp),
+                .padding(top = 6.dp, bottom = 6.dp, start = 8.dp, end = 5.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -63,10 +62,13 @@ fun HankkiStateChip(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (chipState !is ChipState.Fixed) {
-                    Image(
+                    Icon(
                         imageVector = ImageVector.vectorResource(imageResource),
                         contentDescription = "icon",
-                        modifier = Modifier.size(24.dp).padding(end = 4.dp),
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .size(16.dp),
+                        tint = Color.Unspecified
                     )
                 }
 
@@ -80,15 +82,15 @@ fun HankkiStateChip(
                     color = chipState.style.labelColor
                 )
                 Icon(
-                    painter = painterResource(
+                    imageVector = ImageVector.vectorResource(
                         id = when (chipState) {
-                            is ChipState.Selected -> R.drawable.ic_arrow_up
-                            is ChipState.Unselected -> R.drawable.ic_arrow_down
+                            is ChipState.Selected -> com.hankki.feature.home.R.drawable.ic_arrow_up_18
+                            is ChipState.Unselected -> com.hankki.feature.home.R.drawable.ic_arrow_down_18
                             is ChipState.Fixed -> R.drawable.ic_x
                         }
                     ),
                     contentDescription = "icon",
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(18.dp),
                     tint = chipState.style.iconColor
                 )
             }

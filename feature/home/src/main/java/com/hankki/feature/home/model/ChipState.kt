@@ -2,8 +2,10 @@ package com.hankki.feature.home.model
 
 import androidx.compose.ui.graphics.Color
 import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray600
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Red100
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
@@ -37,16 +39,16 @@ data class ChipStyle(
     companion object {
         val SELECTED = ChipStyle(
             containerColor = White,
-            borderColor = Gray300,
-            labelColor = Gray600,
-            iconColor = Gray600
+            borderColor = Color.Transparent,
+            labelColor = Gray800,
+            iconColor = Gray400
         )
 
         val UNSELECTED = ChipStyle(
             containerColor = White,
-            borderColor = Gray300,
-            labelColor = Gray500,
-            iconColor = Gray500
+            borderColor = Color.Transparent,
+            labelColor = Gray800,
+            iconColor = Gray400
         )
 
         val FIXED = ChipStyle(
