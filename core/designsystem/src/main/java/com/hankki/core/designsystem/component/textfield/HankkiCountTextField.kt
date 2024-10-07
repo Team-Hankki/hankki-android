@@ -40,7 +40,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 
-private const val TEXT_FIELD_LIMIT = 16
+private const val JOGBO_NAME_LIMIT = 18
 
 @Composable
 fun HankkiCountTextField(
@@ -106,7 +106,7 @@ fun HankkiCountTextField(
                 ) {
                     if (trailingIcon) {
                         textFieldValue = newValue.copy(
-                            text = newValue.text.take(TEXT_FIELD_LIMIT)
+                            text = newValue.text.take(JOGBO_NAME_LIMIT)
                         )
                         onValueChanged(textFieldValue.text)
                     } else {
@@ -147,7 +147,7 @@ fun HankkiCountTextField(
             trailingIcon = {
                 if (trailingIcon)
                     Text(
-                        text = "(${valueLength}/$TEXT_FIELD_LIMIT)",
+                        text = "(${valueLength}/$JOGBO_NAME_LIMIT)",
                         style = HankkiTheme.typography.body8,
                         color = trailingIconColor
                     )
