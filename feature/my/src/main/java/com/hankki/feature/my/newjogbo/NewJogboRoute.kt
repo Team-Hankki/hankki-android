@@ -36,7 +36,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
-import com.hankki.core.designsystem.component.button.HankkiLongButton
+import com.hankki.core.designsystem.component.button.HankkiExpandedButton
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.textfield.HankkiCountTextField
 import com.hankki.core.designsystem.theme.Gray400
@@ -181,7 +181,7 @@ fun NewJogboScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         if (isVisibleIme) {
-            HankkiLongButton(
+            HankkiExpandedButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .imePadding(),
