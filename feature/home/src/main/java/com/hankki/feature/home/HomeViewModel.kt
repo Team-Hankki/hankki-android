@@ -39,11 +39,7 @@ class HomeViewModel @Inject constructor(
     val sideEffect: SharedFlow<HomeSideEffect>
         get() = _sideEffect.asSharedFlow()
 
-    init {
-        getUniversityInformation()
-    }
-
-    private fun getUniversityInformation() {
+    fun getUniversityInformation() {
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
