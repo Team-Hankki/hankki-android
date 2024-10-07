@@ -1,5 +1,6 @@
 package com.hankki.feature.home.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.bounceClick
@@ -30,6 +34,7 @@ import com.hankki.feature.home.model.ChipState
 fun HankkiStateChip(
     chipState: ChipState,
     defaultTitle: String,
+    @DrawableRes imageResource: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     filterContent: @Composable ColumnScope.() -> Unit = {},
@@ -41,6 +46,7 @@ fun HankkiStateChip(
                     scaleDown = 0.88f,
                     onClick = onClick
                 )
+                .shadow(elevation = 6.dp, shape = RoundedCornerShape(16.dp))
                 .clip(RoundedCornerShape(16.dp))
                 .border(
                     width = 1.dp,
@@ -48,13 +54,24 @@ fun HankkiStateChip(
                     shape = RoundedCornerShape(16.dp)
                 )
                 .background(color = chipState.style.containerColor)
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 4.dp),
+                .padding(top = 6.dp, bottom = 6.dp, start = 8.dp, end = 5.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                if (chipState !is ChipState.Fixed) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(imageResource),
+                        contentDescription = "icon",
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .size(16.dp),
+                        tint = Color.Unspecified
+                    )
+                }
+
                 Text(
                     text = when (chipState) {
                         is ChipState.Selected -> defaultTitle
@@ -65,15 +82,15 @@ fun HankkiStateChip(
                     color = chipState.style.labelColor
                 )
                 Icon(
-                    painter = painterResource(
+                    imageVector = ImageVector.vectorResource(
                         id = when (chipState) {
-                            is ChipState.Selected -> R.drawable.ic_arrow_up
-                            is ChipState.Unselected -> R.drawable.ic_arrow_down
+                            is ChipState.Selected -> com.hankki.feature.home.R.drawable.ic_arrow_up_18
+                            is ChipState.Unselected -> com.hankki.feature.home.R.drawable.ic_arrow_down_18
                             is ChipState.Fixed -> R.drawable.ic_x
                         }
                     ),
                     contentDescription = "icon",
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(18.dp),
                     tint = chipState.style.iconColor
                 )
             }
@@ -88,6 +105,7 @@ fun HankkiStateChip(
 fun CustomChipPreview() {
     HankkiStateChip(
         ChipState.Selected(),
-        "한식"
+        "한식",
+        R.drawable.ic_x,
     )
 }

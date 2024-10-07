@@ -1,6 +1,7 @@
 package com.hankki.core.designsystem.component.topappbar
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -61,7 +62,7 @@ fun HankkiHeadTopBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp),
+            .defaultMinSize(minHeight = 42.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         content()

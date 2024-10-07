@@ -1,5 +1,6 @@
 package com.hankki.feature.home.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -37,6 +38,7 @@ import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
+import com.hankki.feature.home.R
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
@@ -47,6 +49,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun HankkiFilterChip(
     chipState: ChipState,
     defaultTitle: String,
+    @DrawableRes imageResource: Int,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
     onClickChip: () -> Unit = {},
@@ -56,6 +59,7 @@ fun HankkiFilterChip(
         modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
+        imageResource = imageResource,
         onClick = onClickChip
     ) {
         AnimatedVisibility(
@@ -75,6 +79,7 @@ fun HankkiFilterChip(
 fun DropdownFilterChip(
     chipState: ChipState,
     defaultTitle: String,
+    @DrawableRes imageResource: Int,
     modifier: Modifier = Modifier,
     menus: PersistentList<ChipItem> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
@@ -85,6 +90,7 @@ fun DropdownFilterChip(
         modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
+        imageResource = imageResource,
         onDismissRequest = onDismissRequest,
         onClickChip = onClickChip
     ) {
@@ -126,16 +132,18 @@ fun DropdownFilterChip(
 fun RowFilterChip(
     chipState: ChipState,
     defaultTitle: String,
+    @DrawableRes imageResource: Int,
     modifier: Modifier = Modifier,
     menus: PersistentList<CategoryChipItem> = persistentListOf(),
     onDismissRequest: () -> Unit = {},
-    onClickMenu: (String, String) -> Unit = { _, _ -> },
+    onClickMenu: (name: String, tag: String) -> Unit = { _, _ -> },
     onClickChip: () -> Unit = {},
 ) {
     HankkiFilterChip(
         modifier = modifier,
         chipState = chipState,
         defaultTitle = defaultTitle,
+        imageResource = imageResource,
         onDismissRequest = onDismissRequest,
         onClickChip = onClickChip
     ) {
@@ -189,6 +197,7 @@ fun RowFilterChipPreview() {
     RowFilterChip(
         chipState = ChipState.Selected(),
         defaultTitle = "전체",
+        imageResource = R.drawable.ic_coin,
         menus = persistentListOf(
             CategoryChipItem(
                 imageUrl = "https://picsum.photos/200/300",
