@@ -3,6 +3,7 @@ package com.hankki.core.designsystem.component.button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -111,12 +112,13 @@ fun HankkiMediumButton(
 }
 
 @Composable
-fun HankkiLongButton(
+fun HankkiExpandedButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     textStyle: TextStyle = TextStyle.Default,
+    textColor: Color = White,
     backgroundColor: Color = if (enabled) Red500 else Red400,
 ) {
     Box(
@@ -124,7 +126,6 @@ fun HankkiLongButton(
         modifier = modifier
             .run {
                 if (enabled) bounceClick(
-                    radius = 16f,
                     onClick = onClick
                 )
                 else this
@@ -135,7 +136,7 @@ fun HankkiLongButton(
         Text(
             text = text,
             style = textStyle,
-            color = White
+            color = textColor
         )
     }
 }
@@ -148,6 +149,7 @@ fun HankkiButtonPreview() {
             HankkiButton(text = "로그아웃", onClick = {})
             HankkiTextButton(text = "돌아가기", onClick = {})
             HankkiMediumButton(text = "확인", onClick = {})
+            HankkiExpandedButton(modifier = Modifier.fillMaxWidth(), text = "적용", onClick = {})
         }
     }
 }
