@@ -142,7 +142,7 @@ fun HankkiCountTextField(
                     }
                 }
             },
-            tailingIcon = {
+            trailingIcon = {
                 if (trailingIcon)
                     Text(
                         text = "(${valueLength}/$TEXT_FIELD_LIMIT)",
@@ -165,7 +165,7 @@ fun HankkiCountInnerTextField(
     modifier: Modifier = Modifier,
     backgroundColor: Color = White,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    tailingIcon: @Composable () -> Unit = {},
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -211,7 +211,7 @@ fun HankkiCountInnerTextField(
                             )
                         }
                     }
-                    tailingIcon()
+                    trailingIcon()
                 }
                 Spacer(Modifier.height(6.dp))
 
