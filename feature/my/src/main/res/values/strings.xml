@@ -29,14 +29,16 @@
     <string name="no_reported_store">아직 제보한 식당이 없어요</string>
 
     <!--new jogbo-->
-    <string name="new_store_jogbo">새로운 식당 족보</string>
-    <string name="name_jogbo">족보의 제목을 지어주세요</string>
-    <string name="name_example">한끼대학교 든든한 식당 모음</string>
-    <string name="think_jogbo">족보를 떠올리면?</string>
-    <string name="tag_example">#든든한 #한끼해장</string>
+    <string name="create_new_jogbo">새로운 식당 족보 만들기</string>
+    <string name="create_new_jogbo_description">족보의 제목을 짓고, 해시태그를 남겨\n새로운 족보를 만들수 있어요</string>
+    <string name="jogbo_name">족보 제목</string>
+    <string name="name_example">한식 맛집 모음</string>
+    <string name="jobgo_tag">족보 해시태그</string>
+    <string name="tag_example">#든든한 #가성비</string>
     <string name="make_jogbo">족보 만들기</string>
     <string name="cannot_create_duplicated_name">동일이름 족보 생성 불가</string>
     <string name="cannot_create_duplicated_jogbo_name">같은 이름의 족보는 생성할 수 없어요</string>
+    <string name="apply">적용</string>
 
     <!--common-->
     <string name="my_jogbo">나의 족보</string>
