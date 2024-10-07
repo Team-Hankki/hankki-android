@@ -110,6 +110,36 @@ fun HankkiMediumButton(
     }
 }
 
+@Composable
+fun HankkiLongButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    textStyle: TextStyle = TextStyle.Default,
+    backgroundColor: Color = if (enabled) Red500 else Red400,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .run {
+                if (enabled) bounceClick(
+                    radius = 16f,
+                    onClick = onClick
+                )
+                else this
+            }
+            .background(backgroundColor)
+            .padding(vertical = 15.dp)
+    ) {
+        Text(
+            text = text,
+            style = textStyle,
+            color = White
+        )
+    }
+}
+
 @Preview
 @Composable
 fun HankkiButtonPreview() {
