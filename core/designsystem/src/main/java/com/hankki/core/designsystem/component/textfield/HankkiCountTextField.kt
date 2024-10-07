@@ -55,16 +55,18 @@ fun HankkiCountTextField(
 ) {
     var isFocused by remember { mutableStateOf(false) }
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = value)) }
-
-    val underLineColor = when {
-        isFocused -> Gray500
-        else -> Gray200
-    }
+    var underLineColor by remember { mutableStateOf(Gray200) }
+    var trailingIconColor by remember { mutableStateOf(Gray300) }
 
     LaunchedEffect(resetTitle) {
         if (trailingIcon) {
             textFieldValue = TextFieldValue(text = "")
         }
+    }
+
+    LaunchedEffect(isFocused) {
+        underLineColor = if (isFocused) Gray500 else Gray200
+        trailingIconColor = if (isFocused) Gray500 else Gray300
     }
 
     Column(modifier = modifier.background(White)) {
@@ -147,7 +149,7 @@ fun HankkiCountTextField(
                     Text(
                         text = "(${valueLength}/$TEXT_FIELD_LIMIT)",
                         style = HankkiTheme.typography.body8,
-                        color = if (isFocused) Gray500 else Gray300
+                        color = trailingIconColor
                     )
             }
         )
@@ -199,9 +201,11 @@ fun HankkiCountInnerTextField(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 8.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp)
+                    ) {
                         innerTextField()
                         if (value.text.isEmpty()) {
                             Text(
