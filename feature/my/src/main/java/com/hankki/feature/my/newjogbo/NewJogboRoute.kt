@@ -46,7 +46,6 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.newjogbo.component.NewJogboLongButton
 
 @Composable
 fun NewJogboRoute(
