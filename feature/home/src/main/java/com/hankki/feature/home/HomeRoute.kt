@@ -163,6 +163,10 @@ fun HomeRoute(
         backPressedTime = System.currentTimeMillis()
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getUniversityInformation()
+    }
+
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
