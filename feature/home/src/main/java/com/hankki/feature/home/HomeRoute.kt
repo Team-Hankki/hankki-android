@@ -9,6 +9,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.view.Gravity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -26,7 +27,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -44,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -51,10 +55,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -72,15 +78,22 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyImageWithText
+import com.hankki.core.designsystem.component.layout.EmptyView
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
+import com.hankki.feature.home.R.drawable.ic_coin
+import com.hankki.feature.home.R.drawable.ic_empty_bowl
+import com.hankki.feature.home.R.drawable.ic_marker
+import com.hankki.feature.home.R.drawable.ic_sort
+import com.hankki.feature.home.R.drawable.ic_university
 import com.hankki.feature.home.component.DropdownFilterChip
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
@@ -88,6 +101,7 @@ import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.HomeChips
 import com.hankki.feature.home.model.PinModel
 import com.hankki.feature.home.model.StoreItemModel
 import com.naver.maps.geometry.LatLng
@@ -180,26 +194,6 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(
-        key1 = state.categoryChipState,
-        key2 = state.priceChipState,
-        key3 = state.sortChipState
-    ) {
-        if (
-            state.categoryChipState !is ChipState.Selected &&
-            state.priceChipState !is ChipState.Selected &&
-            state.sortChipState !is ChipState.Selected
-        ) {
-            viewModel.fetchData()
-        }
-    }
-
-    LaunchedEffect(key1 = Unit) { // TODO: 다른 화면 갔다와도 실행됨. 어카지.
-        with(viewModel) {
-            getUniversityInformation()
-        }
-    }
-
     HomeScreen(
         isOpenDialog = state.isOpenDialog,
         paddingValues = paddingValues,
@@ -229,20 +223,17 @@ fun HomeRoute(
             }
         },
         selectStoreItem = viewModel::selectStoreItem,
+        mainBottomSheetItemClicked = viewModel::clickedMainBottomSheetItem,
         navigateToUniversitySelection = navigateToUniversitySelection,
         controlMyJogboBottomSheet = viewModel::controlMyJogboBottomSheet,
         clickMarkerItem = viewModel::clickMarkerItem,
         clickMap = viewModel::clickMap,
         clickCategoryChip = viewModel::clickCategoryChip,
         clearChipFocus = viewModel::clearChipFocus,
-        selectCategoryChipItem = viewModel::selectCategoryChipItem,
+        selectHomeChipItem = viewModel::selectHomeChipItem,
         clickPriceChip = viewModel::clickPriceChip,
-        selectPriceChipItem = viewModel::selectPriceChipItem,
         clickSortChip = viewModel::clickSortChip,
-        selectSortChipItem = viewModel::selectSortChipItem,
-        addNewJogbo = {
-            navigateToAddNewJogbo()
-        },
+        addNewJogbo = navigateToAddNewJogbo,
         getJogboItems = viewModel::getJogboItems,
         addStoreAtJogbo = viewModel::addStoreAtJogbo,
     ) {
@@ -273,7 +264,7 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     cameraPositionState: CameraPositionState,
     universityName: String,
-    selectedStoreItem: StoreItemModel,
+    selectedStoreItem: StoreItemModel?,
     storeItemState: EmptyUiState<PersistentList<StoreItemModel>>,
     jogboItems: PersistentList<JogboResponseModel>,
     markerItems: PersistentList<PinModel>,
@@ -289,6 +280,7 @@ fun HomeScreen(
     dialogNegativeClicked: () -> Unit = {},
     dialogPositiveClicked: () -> Unit = {},
     selectStoreItem: (StoreItemModel) -> Unit = {},
+    mainBottomSheetItemClicked: (Long) -> Unit,
     navigateStoreDetail: (Long) -> Unit = {},
     navigateToUniversitySelection: () -> Unit = {},
     controlMyJogboBottomSheet: () -> Unit = {},
@@ -296,11 +288,9 @@ fun HomeScreen(
     clickMap: () -> Unit = {},
     clickCategoryChip: () -> Unit = {},
     clearChipFocus: () -> Unit = {},
-    selectCategoryChipItem: (String, String) -> Unit = { _, _ -> },
+    selectHomeChipItem: (chip: HomeChips, name: String, tag: String) -> Unit = { _, _, _ -> },
     clickPriceChip: () -> Unit = {},
-    selectPriceChipItem: (String, String) -> Unit = { _, _ -> },
     clickSortChip: () -> Unit = {},
-    selectSortChipItem: (String, String) -> Unit = { _, _ -> },
     getJogboItems: (Long) -> Unit = {},
     addNewJogbo: () -> Unit = {},
     addStoreAtJogbo: (Long, Long) -> Unit = { _, _ -> },
@@ -352,7 +342,9 @@ fun HomeScreen(
 
     if (isMyJogboBottomSheetOpen) {
         LaunchedEffect(key1 = Unit) {
-            getJogboItems(selectedStoreItem.id)
+            if (selectedStoreItem != null) {
+                getJogboItems(selectedStoreItem.id)
+            }
         }
 
         HankkiStoreJogboBottomSheet(
@@ -360,7 +352,7 @@ fun HomeScreen(
             onDismissRequest = controlMyJogboBottomSheet,
             addNewJogbo = addNewJogbo,
             onAddJogbo = { jogboId ->
-                addStoreAtJogbo(jogboId, selectedStoreItem.id)
+                addStoreAtJogbo(jogboId, selectedStoreItem?.id ?: 0L)
                 tracker.track(
                     type = EventType.ADD,
                     name = "Home_RestList_Jokbo"
@@ -378,21 +370,35 @@ fun HomeScreen(
     ) {
         HankkiHeadTopBar(
             content = {
-                Row(
-                    modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Spacer(modifier = Modifier.padding(start = 22.dp))
-                    Text(
-                        text = universityName,
-                        style = HankkiTheme.typography.suitSub1,
-                        color = Gray900
-                    )
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_dropdown_btn),
-                        contentDescription = "button",
-                        tint = Gray300
-                    )
+                Column {
+                    Spacer(modifier = Modifier.height(9.dp))
+                    Row(
+                        modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = ic_university),
+                            contentDescription = "university",
+                            modifier = Modifier
+                                .padding(horizontal = 2.dp)
+                                .size(18.dp),
+                            tint = Color.Unspecified
+                        )
+                        Text(
+                            text = universityName,
+                            style = HankkiTheme.typography.body5,
+                            color = Gray900
+                        )
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = com.hankki.feature.home.R.drawable.ic_arrow_down_16),
+                            contentDescription = "button",
+                            modifier = Modifier
+                                .padding(horizontal = 2.dp)
+                                .size(16.dp),
+                            tint = Gray400
+                        )
+                    }
                 }
             },
             modifier = Modifier.background(White)
@@ -425,73 +431,100 @@ fun HomeScreen(
                 }
             ) {
                 markerItems.forEach { marker ->
-                    Marker(
-                        state = MarkerState(
-                            position = LatLng(
-                                marker.latitude,
-                                marker.longitude
-                            )
-                        ),
-                        icon = OverlayImage.fromResource(R.drawable.ic_marker),
-                        captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
-                        onClick = {
-                            clickMarkerItem(marker.id)
-                            true
-                        }
-                    )
+                    if (selectedStoreItem == null || marker.id == selectedStoreItem.id) {
+                        Marker(
+                            state = MarkerState(
+                                position = LatLng(
+                                    marker.latitude,
+                                    marker.longitude
+                                )
+                            ),
+                            icon = OverlayImage.fromResource(ic_marker),
+                            captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
+                            onClick = {
+                                clickMarkerItem(marker.id)
+                                true
+                            }
+                        )
+                    }
                 }
             }
 
             Column {
-                FlowRow(
-                    modifier = Modifier.padding(
-                        start = 12.dp,
-                        end = 12.dp,
-                        top = 12.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                AnimatedVisibility(
+                    visible = isMainBottomSheetOpen,
                 ) {
-                    RowFilterChip(
-                        chipState = categoryChipState,
-                        defaultTitle = "종류",
-                        menus = categoryChipItems,
-                        onClickMenu = selectCategoryChipItem,
-                        onClickChip = {
-                            clickCategoryChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
+                    FlowRow(
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = 12.dp,
+                            top = 12.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        RowFilterChip(
+                            chipState = categoryChipState,
+                            defaultTitle = "뭐 먹지",
+                            imageResource = ic_empty_bowl,
+                            menus = categoryChipItems,
+                            onClickMenu = { name, tag ->
+                                selectHomeChipItem(
+                                    HomeChips.CATEGORY,
+                                    name,
+                                    tag
+                                )
+                            },
+                            onClickChip = {
+                                clickCategoryChip()
+                                closeBottomSheet(
+                                    coroutineScope,
+                                    bottomSheetScaffoldState
+                                )
+                            }
+                        )
 
-                    DropdownFilterChip(
-                        chipState = priceChipState,
-                        defaultTitle = "가격대",
-                        menus = priceChipItems,
-                        onClickMenu = selectPriceChipItem,
-                        onClickChip = {
-                            clickPriceChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
+                        DropdownFilterChip(
+                            chipState = priceChipState,
+                            defaultTitle = "가격",
+                            imageResource = ic_coin,
+                            menus = priceChipItems,
+                            onClickMenu = { name, tag ->
+                                selectHomeChipItem(
+                                    HomeChips.PRICE,
+                                    name,
+                                    tag
+                                )
+                            },
+                            onClickChip = {
+                                clickPriceChip()
+                                closeBottomSheet(
+                                    coroutineScope,
+                                    bottomSheetScaffoldState
+                                )
+                            }
+                        )
 
-                    DropdownFilterChip(
-                        chipState = sortChipState,
-                        defaultTitle = "정렬",
-                        menus = sortChipItems,
-                        onClickMenu = selectSortChipItem,
-                        onClickChip = {
-                            clickSortChip()
-                            closeBottomSheet(
-                                coroutineScope,
-                                bottomSheetScaffoldState
-                            )
-                        }
-                    )
+                        DropdownFilterChip(
+                            chipState = sortChipState,
+                            defaultTitle = "정렬",
+                            imageResource = ic_sort,
+                            menus = sortChipItems,
+                            onClickMenu = { name, tag ->
+                                selectHomeChipItem(
+                                    HomeChips.SORT,
+                                    name,
+                                    tag
+                                )
+                            },
+                            onClickChip = {
+                                clickSortChip()
+                                closeBottomSheet(
+                                    coroutineScope,
+                                    bottomSheetScaffoldState
+                                )
+                            }
+                        )
+                    }
                 }
 
                 BottomSheetScaffold(
@@ -513,7 +546,7 @@ fun HomeScreen(
                                 .sizeIn(minHeight = height.dp),
                         ) {
                             Spacer(
-                                modifier = Modifier.height(8.dp)
+                                modifier = Modifier.height(10.dp)
                             )
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_drag_handle),
@@ -521,7 +554,7 @@ fun HomeScreen(
                                 tint = Gray200,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
 
                             when (storeItemState) {
                                 EmptyUiState.Empty -> {
@@ -550,7 +583,25 @@ fun HomeScreen(
                                 }
 
                                 is EmptyUiState.Success -> {
-                                    val storeItems = storeItemState.data
+                                    val storeItems by remember { mutableStateOf(storeItemState.data) }
+
+                                    Row(
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    ) {
+                                        Text(
+                                            text = "${storeItems.size}개",
+                                            style = HankkiTheme.typography.body5,
+                                            color = Gray900,
+                                        )
+                                        Text(
+                                            text = "의 족보",
+                                            style = HankkiTheme.typography.body6,
+                                            color = Gray600,
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.height(5.dp))
+
                                     LazyColumn(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -568,7 +619,12 @@ fun HomeScreen(
                                                 storeName = item.name,
                                                 price = item.lowestPrice,
                                                 heartCount = item.heartCount,
-                                                onClickItem = navigateStoreDetail
+                                                onClickItem = { id ->
+                                                    coroutineScope.launch {
+                                                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                                                        mainBottomSheetItemClicked(id)
+                                                    }
+                                                }
                                             ) {
                                                 selectStoreItem(item)
                                                 controlMyJogboBottomSheet()
@@ -586,7 +642,7 @@ fun HomeScreen(
                     scaffoldState = bottomSheetScaffoldState,
                     sheetPeekHeight = animateDpAsState(
                         targetValue = if (isMainBottomSheetOpen) height.dp else 0.dp,
-                        animationSpec = tween(300),
+                        animationSpec = tween(durationMillis = 300),
                         label = ""
                     ).value,
                 ) {
@@ -622,21 +678,25 @@ fun HomeScreen(
                                     )
                                 }
 
-                                StoreItem(
-                                    storeId = selectedStoreItem.id,
-                                    storeImageUrl = selectedStoreItem.imageUrl,
-                                    category = selectedStoreItem.category,
-                                    storeName = selectedStoreItem.name,
-                                    price = selectedStoreItem.lowestPrice,
-                                    heartCount = selectedStoreItem.heartCount,
-                                    modifier = Modifier.padding(
-                                        horizontal = 22.dp,
-                                        vertical = 12.dp
-                                    ),
-                                    onClickItem = navigateStoreDetail
-                                ) {
-                                    controlMyJogboBottomSheet()
-                                    getJogboItems(selectedStoreItem.id)
+                                if (selectedStoreItem != null) {
+                                    StoreItem(
+                                        storeId = selectedStoreItem.id,
+                                        storeImageUrl = selectedStoreItem.imageUrl,
+                                        category = selectedStoreItem.category,
+                                        storeName = selectedStoreItem.name,
+                                        price = selectedStoreItem.lowestPrice,
+                                        heartCount = selectedStoreItem.heartCount,
+                                        modifier = Modifier.padding(
+                                            horizontal = 22.dp,
+                                            vertical = 12.dp
+                                        ),
+                                        onClickItem = navigateStoreDetail
+                                    ) {
+                                        controlMyJogboBottomSheet()
+                                        getJogboItems(selectedStoreItem.id)
+                                    }
+                                } else {
+                                    EmptyView("이런! 오류가 발생했어요!")
                                 }
                             }
                         }
