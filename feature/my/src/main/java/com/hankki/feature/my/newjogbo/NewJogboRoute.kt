@@ -2,9 +2,14 @@ package com.hankki.feature.my.newjogbo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,15 +35,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.button.HankkiMediumButton
+import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.textfield.HankkiCountTextField
-import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
+import com.hankki.feature.my.newjogbo.component.NewJogboLongButton
 
 @Composable
 fun NewJogboRoute(
@@ -74,6 +81,7 @@ fun NewJogboRoute(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NewJogboScreen(
     navigateUp: () -> Unit,
@@ -88,6 +96,7 @@ fun NewJogboScreen(
     updateErrorDialogState: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isVisibleIme = WindowInsets.isImeVisible
     val focusManager = LocalFocusManager.current
 
     if (errorDialogState) {
@@ -108,57 +117,86 @@ fun NewJogboScreen(
             .addFocusCleaner(focusManager),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HankkiTopBar(leadingIcon = {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = com.hankki.core.designsystem.R.drawable.ic_arrow_left),
-                contentDescription = "Back",
-                modifier = Modifier
-                    .padding(start = 6.dp)
-                    .size(44.dp)
-                    .noRippleClickable(onClick = navigateUp),
-                tint = Color.Unspecified
-            )
-        })
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.icon_back),
+            contentDescription = "Back",
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(top = 19.dp)
+                .padding(start = 10.dp)
+                .size(40.dp)
+                .noRippleClickable(onClick = navigateUp),
+            tint = Color.Unspecified
+        )
 
-        Column(
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(horizontal = 22.dp),
+            textAlign = TextAlign.Start,
+            text = stringResource(R.string.create_new_jogbo),
+            style = HankkiTheme.typography.suitH1,
+            color = Gray900
+        )
+
+        Text(
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(horizontal = 22.dp)
+                .padding(top = 10.dp),
+            textAlign = TextAlign.Start,
+            text = stringResource(R.string.create_new_jogbo_description),
+            style = HankkiTheme.typography.body6,
+            color = Gray400
+        )
+
+        Spacer(modifier = Modifier.height(36.dp))
+
+        HankkiCountTextField(
             modifier = Modifier.padding(horizontal = 22.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(46.dp))
+            title = stringResource(R.string.jogbo_name),
+            value = title,
+            valueLength = title.length,
+            placeholder = stringResource(R.string.name_example),
+            onValueChanged = onTitleChange,
+            trailingIcon = true,
+            resetTitle = errorDialogState
+        )
 
-            Text(
-                text = stringResource(R.string.new_store_jogbo),
-                style = HankkiTheme.typography.h1,
-                color = Gray900
+        Spacer(modifier = Modifier.height(22.dp))
+
+        HankkiCountTextField(
+            modifier = Modifier.padding(horizontal = 22.dp),
+            title = stringResource(R.string.jobgo_tag),
+            value = tags,
+            valueLength = editTagsLength(tags),
+            placeholder = stringResource(R.string.tag_example),
+            onValueChanged = onTagsChange,
+            trailingIcon = false,
+            resetTitle = errorDialogState
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        if (isVisibleIme) {
+            NewJogboLongButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding(),
+                text = stringResource(R.string.apply),
+                onClick = createNewJogbo,
+                enabled = buttonEnabledState,
+                textStyle = HankkiTheme.typography.sub3,
             )
 
-            Spacer(modifier = Modifier.height(58.dp))
-
-            HankkiCountTextField(
-                title = stringResource(R.string.name_jogbo),
-                value = title,
-                valueLength = title.length,
-                placeholder = stringResource(R.string.name_example),
-                onValueChanged = onTitleChange,
-                trailingIcon = true,
-                resetTitle = errorDialogState
-            )
-
-            Spacer(modifier = Modifier.height(33.dp))
-
-            HankkiCountTextField(
-                title = stringResource(R.string.think_jogbo),
-                value = tags,
-                valueLength = editTagsLength(tags),
-                placeholder = stringResource(R.string.tag_example),
-                onValueChanged = onTagsChange,
-                trailingIcon = false,
-                resetTitle = errorDialogState
-            )
-
-            Spacer(modifier = Modifier.height(38.dp))
-
-            HankkiMediumButton(
+        } else {
+            HankkiButton(
+                modifier = Modifier
+                    .padding(horizontal = 22.dp)
+                    .fillMaxWidth()
+                    .padding(bottom = 15.dp),
                 text = stringResource(R.string.make_jogbo),
                 onClick = createNewJogbo,
                 enabled = buttonEnabledState,
