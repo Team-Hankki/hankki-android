@@ -39,6 +39,7 @@ import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.HankkiExpandedButton
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.textfield.HankkiCountTextField
+import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -117,17 +118,20 @@ fun NewJogboScreen(
             .addFocusCleaner(focusManager),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.icon_back),
-            contentDescription = "Back",
+        HankkiTopBar(
             modifier = Modifier
-                .align(Alignment.Start)
                 .padding(top = 19.dp)
-                .padding(start = 10.dp)
-                .size(40.dp)
-                .noRippleClickable(onClick = navigateUp),
-            tint = Color.Unspecified
-        )
+                .height(40.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.icon_back),
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .noRippleClickable(onClick = navigateUp),
+                    tint = Color.Unspecified
+                )
+            })
 
         Spacer(modifier = Modifier.height(24.dp))
 
