@@ -1,11 +1,16 @@
 package com.hankki.feature.storedetail
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -18,11 +23,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
+import com.hankki.core.designsystem.component.button.HankkiExpandedButton
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray700
@@ -46,6 +55,7 @@ fun EditModRoute(
     var updatedPrice by remember { mutableStateOf(price) }
     var isPriceValid by remember { mutableStateOf(true) }
     var isMenuFocused by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     ModifyMenuScreen(
         menuName = menuName,
@@ -66,10 +76,12 @@ fun EditModRoute(
                 onNavigateUp()
             }
         },
-        onMenuFocused = { isFocused -> isMenuFocused = isFocused }
+        onMenuFocused = { isFocused -> isMenuFocused = isFocused },
+        focusManager = focusManager
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ModifyMenuScreen(
     menuName: String,
@@ -81,11 +93,20 @@ fun ModifyMenuScreen(
     isPriceValid: Boolean,
     onNavigateUp: () -> Unit,
     onSubmit: () -> Unit,
-    onMenuFocused: (Boolean) -> Unit
+    onMenuFocused: (Boolean) -> Unit,
+    focusManager: FocusManager
 ) {
+    val isVisibleIme = WindowInsets.isImeVisible
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                })
+            }
     ) {
         Spacer(modifier = Modifier.statusBarsPadding())
         HankkiTopBar(
@@ -154,22 +175,37 @@ fun ModifyMenuScreen(
         )
 
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "모두에게 보여지는 정보이니 신중하게 수정 부탁드려요",
-            style = HankkiTheme.typography.suitBody3,
-            color = Gray400,
-            modifier = Modifier
-                .padding(start = 36.dp, end = 35.dp, bottom = 12.dp)
-        )
-
-        HankkiButton(
-            text = "수정 완료",
-            onClick = onSubmit,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 22.dp)
-                .padding(bottom = 15.dp)
-                .navigationBarsPadding()
-        )
+        if (isVisibleIme) {
+            HankkiExpandedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding(),
+                text = "적용",
+                onClick = {
+                    focusManager.clearFocus()
+                },
+                enabled = isPriceValid,
+                textStyle = HankkiTheme.typography.sub3,
+            )
+        } else {
+            Text(
+                text = "모두에게 보여지는 정보이니 신중하게 수정 부탁드려요",
+                style = HankkiTheme.typography.suitBody3,
+                color = Gray400,
+                modifier = Modifier
+                    .padding(start = 36.dp, end = 35.dp, bottom = 12.dp)
+            )
+            HankkiButton(
+                modifier = Modifier
+                    .padding(horizontal = 22.dp)
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(bottom = 15.dp),
+                text = "수정 완료",
+                onClick = onSubmit,
+                enabled = isPriceValid,
+                textStyle = HankkiTheme.typography.sub3,
+            )
+        }
     }
 }
