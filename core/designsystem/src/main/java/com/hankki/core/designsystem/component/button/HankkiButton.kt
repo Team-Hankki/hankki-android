@@ -1,6 +1,8 @@
 package com.hankki.core.designsystem.component.button
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,6 +90,8 @@ fun HankkiMediumButton(
     enabled: Boolean = true,
     textStyle: TextStyle = TextStyle.Default,
     backgroundColor: Color = if (enabled) Red500 else Red400,
+    textColor: Color = White,
+    borderColor: Color = Color.Transparent
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -100,13 +104,14 @@ fun HankkiMediumButton(
                 else this
             }
             .clip(RoundedCornerShape(16.dp))
+            .border(BorderStroke(1.dp, borderColor), RoundedCornerShape(16.dp))
             .background(backgroundColor)
             .padding(vertical = 15.dp, horizontal = 36.dp)
     ) {
         Text(
             text = text,
             style = textStyle,
-            color = White
+            color = textColor
         )
     }
 }

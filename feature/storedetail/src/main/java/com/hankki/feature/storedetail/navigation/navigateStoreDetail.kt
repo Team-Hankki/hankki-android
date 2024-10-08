@@ -107,7 +107,6 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 }
                 navController.navigate("store_detail_route/$storeId", options)
             },
-
             onNavigateToEditMenu = {
                 val options = navOptions {
                     popUpTo(navController.graph.startDestinationId) {
@@ -116,7 +115,8 @@ fun NavGraphBuilder.storeDetailNavGraph(
                     launchSingleTop = true
                 }
                 navController.navigate("edit_menu_route/$storeId", options)
-            }
+            },
+            onNavigateUp = navigateUp
         )
     }
 

@@ -170,11 +170,23 @@ internal class MainNavigator(
     }
 
     fun navigateToEditMod(storeId: Long, menuId: Long, menuName: String, price: String) {
-        navController.navigate("edit_mod_route/$storeId/$menuId/$menuName/$price")
+        val options = navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+        navController.navigate("edit_mod_route/$storeId/$menuId/$menuName/$price", options)
     }
 
     fun navigateToEditSuccess(storeId: Long) {
-        navController.navigate("edit_mod_success_route/$storeId")
+        val options = navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+        navController.navigate("edit_mod_success_route/$storeId", options)
     }
 
 }
