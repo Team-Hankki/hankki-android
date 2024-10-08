@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
+import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray700
@@ -72,84 +73,98 @@ fun EditMenuScreen(
 ) {
     var selectedMenu by remember { mutableStateOf<MenuItem?>(null) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
-                .weight(0.9f)
+                .fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.statusBarsPadding())
-            HankkiTopBar(
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(com.hankki.core.designsystem.R.drawable.ic_arrow_left),
-                        contentDescription = "뒤로가기",
-                        modifier = Modifier
-                            .offset(x = 6.dp, y = 2.dp)
-                            .noRippleClickable(onClick = onNavigateUp),
-                        tint = Gray700
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.padding(top = 18.dp))
-            Text(
-                text = "어떤 메뉴를 편집할까요?",
-                style = HankkiTheme.typography.suitH2,
-                color = Gray900,
-                modifier = Modifier.padding(start = 22.dp)
-            )
-
-            when (storeDetailState) {
-                UiState.Loading -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(White)
-                    ) {
-                        HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
-                    }
-                }
-
-                is UiState.Success -> {
-                    menuItems.forEach { menuItem ->
-                        MenuItemComponent(
-                            menuItem = menuItem,
-                            selectedMenu = selectedMenu?.name,
-                            onMenuSelected = {
-                                selectedMenu = menuItem
-                                onMenuSelected(menuItem.name)
-                            }
+            Column(
+                modifier = Modifier
+                    .weight(0.9f)
+            ) {
+                Spacer(modifier = Modifier.statusBarsPadding())
+                HankkiTopBar(
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(com.hankki.core.designsystem.R.drawable.ic_arrow_left),
+                            contentDescription = "뒤로가기",
+                            modifier = Modifier
+                                .offset(x = 6.dp, y = 2.dp)
+                                .noRippleClickable(onClick = onNavigateUp),
+                            tint = Gray700
                         )
                     }
-                }
+                )
 
-                UiState.Failure -> {}
+                Spacer(modifier = Modifier.padding(top = 18.dp))
+                Text(
+                    text = "어떤 메뉴를 편집할까요?",
+                    style = HankkiTheme.typography.suitH2,
+                    color = Gray900,
+                    modifier = Modifier.padding(start = 22.dp)
+                )
+
+                when (storeDetailState) {
+                    UiState.Loading -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(White)
+                        ) {
+                            HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                        }
+                    }
+
+                    is UiState.Success -> {
+                        menuItems.forEach { menuItem ->
+                            MenuItemComponent(
+                                menuItem = menuItem,
+                                selectedMenu = selectedMenu?.name,
+                                onMenuSelected = {
+                                    selectedMenu = menuItem
+                                    onMenuSelected(menuItem.name)
+                                }
+                            )
+                        }
+                    }
+
+                    UiState.Failure -> {}
+                }
             }
+
+            SegmentedButton(
+                option1 = "삭제하기",
+                option2 = "수정하기",
+                onOptionSelected = { selectedOption ->
+                    if (selectedOption == "삭제하기") {
+                        onDeleteMenuClick()
+                    } else if (selectedOption == "수정하기") {
+                        selectedMenu?.let { menu ->
+                            onEditModClick(menu.id, menu.name, menu.price.toString())
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.0675f)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .navigationBarsPadding()
+            )
         }
 
-        SegmentedButton(
-            option1 = "삭제하기",
-            option2 = "수정하기",
-            onOptionSelected = { selectedOption ->
-                if (selectedOption == "삭제하기") {
-                    onDeleteMenuClick()
-                } else if (selectedOption == "수정하기") {
-                    selectedMenu?.let { menu ->
-                        onEditModClick(menu.id, menu.name, menu.price.toString())
-                    }
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.0675f)
-        )
-        Spacer(
-            modifier = Modifier
-                .padding(bottom = 15.dp)
-                .navigationBarsPadding()
-        )
+//        if (selectedMenu == null) {
+//            BottomBlurLayout(
+//                imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle,
+//                modifier = Modifier.align(Alignment.BottomCenter)
+//            )
+//        }
+
     }
 }

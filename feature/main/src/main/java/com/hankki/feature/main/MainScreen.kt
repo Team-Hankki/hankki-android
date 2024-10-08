@@ -59,7 +59,6 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
-import com.hankki.core.designsystem.theme.hankkiTypography
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.Login
@@ -293,13 +292,16 @@ internal fun MainScreen(
                         }
                     )
                     storeDetailNavGraph(
+                        navController = navigator.navController,
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo,
                         onShowSnackBar = onShowTextSnackBarWithButton,
                         onShowTextSnackBar = onShowErrorSnackBar,
-                        navigateToAddMenu = { storeId -> navigator.navigateToAddMenu(storeId) },
+                        navigateToAddMenu = { storeId -> navigator.navigateToEditMenu(storeId) },
                         navigateToEditMenu = { storeId-> navigator.navigateToEditMenu(storeId) },
-                        navigateToEditMod = { storeId, menuId, menuName, price -> navigator.navigateToEditMod(storeId, menuId, menuName, price) }
+                        navigateToEditMod = { storeId, menuId, menuName, price -> navigator.navigateToEditMod(storeId, menuId, menuName, price) },
+                        navigateToEditSuccess = { storeId -> navigator.navigateToEditSuccess(storeId) },
+                        navigateToStoreDetail = { storeId -> navigator.navigateToStoreDetail(storeId) }
                     )
                 }
 

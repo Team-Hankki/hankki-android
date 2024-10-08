@@ -165,17 +165,18 @@ internal class MainNavigator(
         currentDestination?.hasRoute(it::class) == true
     } && (currentTab?.showBottomSheet ?: true)
 
-    fun navigateToAddMenu(storeId: Long, navOptions: NavOptions? = null) {
-        navController.navigate("add_menu_route/$storeId", navOptions)
-    }
-
-    fun navigateToEditMenu(storeId: Long, navOptions: NavOptions? = null){
-        navController.navigate("modify_menu_route/$storeId", navOptions)
+    fun navigateToEditMenu(storeId: Long, navOptions: NavOptions? = null) {
+        navController.navigate("edit_menu_route/$storeId", navOptions)
     }
 
     fun navigateToEditMod(storeId: Long, menuId: Long, menuName: String, price: String) {
-        navController.navigate("modify_menu_route/$storeId/$menuId/$menuName/$price")
+        navController.navigate("edit_mod_route/$storeId/$menuId/$menuName/$price")
     }
+
+    fun navigateToEditSuccess(storeId: Long) {
+        navController.navigate("edit_mod_success_route/$storeId")
+    }
+
 }
 
 @Composable

@@ -99,7 +99,6 @@ fun HankkiModMenuField(
                         modifier = Modifier.weight(1f),
                         contentAlignment = Alignment.CenterEnd
                     ) {
-                        innerTextField()
                         if (menuValue.isEmpty() && isEditingMenu) {
                             Text(
                                 text = placeholder,
@@ -147,11 +146,19 @@ fun HankkiModPriceField(
     onPriceValueChange: (String) -> Unit,
     clearText: () -> Unit,
     isError: Boolean = false,
+    isFocused: Boolean,
     errorMessage: String = "유효하지 않은 가격입니다.",
-    warnRed: Color = WarnRed
+    warnRed: Color = WarnRed,
+    onPriceFocused: (Boolean) -> Unit
 ) {
     var isEditingPrice by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(isFocused) {
+        if (isFocused) {
+            focusRequester.requestFocus()
+        }
+    }
 
     val borderColor = when {
         isError -> warnRed
@@ -179,6 +186,7 @@ fun HankkiModPriceField(
                 .focusRequester(focusRequester)
                 .onFocusChanged { focusState ->
                     isEditingPrice = focusState.isFocused
+                    onPriceFocused(focusState.isFocused)
                 },
             textStyle = HankkiTheme.typography.body2.copy(
                 color = if (isError) warnRed else Gray850,

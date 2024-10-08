@@ -7,10 +7,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
 import com.hankki.feature.storedetail.EditMenuRoute
 import com.hankki.feature.storedetail.EditModRoute
+import com.hankki.feature.storedetail.EditModSucceedRoute
 import com.hankki.feature.storedetail.StoreDetailRoute
 import com.hankki.feature.storedetail.StoreDetailViewModel
 import kotlinx.serialization.Serializable
@@ -20,13 +22,16 @@ fun NavController.navigateStoreDetail(storeId: Long, navOptions: NavOptions?) {
 }
 
 fun NavGraphBuilder.storeDetailNavGraph(
+    navController: NavController,
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
     onShowSnackBar: (String, Long) -> Unit,
     onShowTextSnackBar: (String) -> Unit,
     navigateToAddMenu: (Long) -> Unit,
     navigateToEditMenu: (Long) -> Unit,
-    navigateToEditMod: (Long, Long, String, String) -> Unit
+    navigateToStoreDetail: (Long) -> Unit,
+    navigateToEditMod: (Long, Long, String, String) -> Unit,
+    navigateToEditSuccess: (Long) -> Unit
 ) {
     composable<StoreDetail> { backStackEntry ->
         val items = backStackEntry.toRoute<StoreDetail>()
@@ -42,7 +47,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
     }
 
     composable(
-        route = "add_menu_route/{storeId}",
+        route = "edit_menu_route/{storeId}",
         arguments = listOf(navArgument("storeId") { type = NavType.LongType })
     ) { backStackEntry ->
         val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
@@ -57,9 +62,8 @@ fun NavGraphBuilder.storeDetailNavGraph(
         )
     }
 
-
     composable(
-        route = "modify_menu_route/{storeId}/{menuId}/{menuName}/{price}",
+        route = "edit_mod_route/{storeId}/{menuId}/{menuName}/{price}",
         arguments = listOf(
             navArgument("storeId") { type = NavType.LongType },
             navArgument("menuId") { type = NavType.LongType },
@@ -81,11 +85,56 @@ fun NavGraphBuilder.storeDetailNavGraph(
             onNavigateUp = navigateUp,
             onMenuUpdated = { updatedMenuName, updatedPrice ->
                 viewModel.updateMenu(storeId, menuId, updatedMenuName, updatedPrice.toInt())
+                navigateToEditSuccess(storeId)
+            },
+            navigateToEditSuccess = navigateToEditSuccess
+        )
+    }
+
+    composable(
+        route = "edit_mod_success_route/{storeId}",
+        arguments = listOf(navArgument("storeId") { type = NavType.LongType })
+    ) { backStackEntry ->
+        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
+        EditModSucceedRoute(
+            storeId = storeId,
+            onNavigateToStoreDetailRoute = {
+                val options = navOptions {
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+                navController.navigate("store_detail_route/$storeId", options)
+            },
+
+            onNavigateToEditMenu = {
+                val options = navOptions {
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+                navController.navigate("edit_menu_route/$storeId", options)
             }
         )
     }
 
-
+    composable(
+        route = "store_detail_route/{storeId}",
+        arguments = listOf(navArgument("storeId") { type = NavType.LongType })
+    ) { backStackEntry ->
+        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
+        StoreDetailRoute(
+            storeId = storeId,
+            navigateUp = navigateUp,
+            navigateToAddNewJogbo = navigateToAddNewJogbo,
+            onShowSnackBar = onShowSnackBar,
+            onShowTextSnackBar = onShowTextSnackBar,
+            onAddMenuClick = { navigateToAddMenu(storeId) },
+            onEditMenuClick = { navigateToEditMenu(storeId) }
+        )
+    }
 }
 
 @Serializable
