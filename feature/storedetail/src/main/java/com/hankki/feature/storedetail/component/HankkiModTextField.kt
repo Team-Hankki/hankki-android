@@ -88,7 +88,7 @@ fun HankkiModMenuField(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = label,
-                        style = if (isFocused || menuValue.isNotEmpty()) {
+                        style = if (isEditingMenu) {
                             HankkiTheme.typography.body4.copy(color = Gray850)
                         } else {
                             HankkiTheme.typography.body5.copy(color = Gray500)
