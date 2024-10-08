@@ -47,7 +47,6 @@ import com.hankki.core.designsystem.component.button.StoreDetailMenuButton
 import com.hankki.core.designsystem.component.button.StoreDetailReportButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
-import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray400
@@ -69,6 +68,8 @@ fun StoreDetailRoute(
     onShowSnackBar: (String, Long) -> Unit,
     onShowTextSnackBar: (String) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
+    onAddMenuClick: (Long) -> Unit,
+    onEditMenuClick: (Long) -> Unit
 ) {
     val tracker = LocalTracker.current
 
@@ -151,7 +152,7 @@ fun StoreDetailRoute(
                 onSelectIndex = { index ->
                     viewModel.updateSelectedIndex(index)
                 },
-                isOpenBottomSheet = storeState.isOpenBottomSheet,
+                isOpenBottomSheet = storeState.isOpenJogboBottomSheet,
                 openBottomSheet = viewModel::controlMyJogboBottomSheet,
                 jogboItems = storeState.jogboItems,
                 addNewJogbo = {
@@ -162,17 +163,15 @@ fun StoreDetailRoute(
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
                 },
-                onAddMenuClicked = {
-                    viewModel.showMenuEditDialog()
-                    tracker.track(
-                        type = EventType.CLICK,
-                        name = "RestInfo_MenuEdit"
-                    )
-                },
                 onReportClicked = {
                     viewModel.fetchNickname()
                     viewModel.showReportConfirmation()
-                }
+                },
+                isOpenEditMenuBottomSheet = storeState.isOpenEditMenuBottomSheet,
+                openEditMenuBottomSheet = viewModel::controlEditMenuBottomSheet,
+                onDismissEditMenuBottomSheetRequest = viewModel::controlEditMenuBottomSheet,
+                onAddMenuClick = { onAddMenuClick(storeId) },
+                onEditMenuClick = { onEditMenuClick(storeId) },
             )
         }
 
@@ -180,15 +179,6 @@ fun StoreDetailRoute(
     }
 
     when (dialogState) {
-        StoreDetailDialogState.MENU_EDIT -> {
-            SingleButtonDialog(
-                title = "조금만 기다려주세요",
-                description = "메뉴를 편집할 수 있도록 준비 중이에요:)",
-                buttonTitle = "확인",
-                onConfirmation = { viewModel.closeDialog() }
-            )
-        }
-
         StoreDetailDialogState.REPORT_CONFIRMATION -> {
             DoubleButtonDialog(
                 title = "정말 제보하시겠어요?",
@@ -246,8 +236,12 @@ fun StoreDetailScreen(
     addNewJogbo: () -> Unit,
     onDismissBottomSheetRequest: () -> Unit,
     addStoreAtJogbo: (Long) -> Unit,
-    onAddMenuClicked: () -> Unit,
     onReportClicked: () -> Unit,
+    isOpenEditMenuBottomSheet: Boolean,
+    openEditMenuBottomSheet: () -> Unit,
+    onDismissEditMenuBottomSheetRequest: () -> Unit,
+    onAddMenuClick: () -> Unit,
+    onEditMenuClick: () -> Unit
 ) {
     val localContextResource = LocalContext.current.resources
 
@@ -263,6 +257,14 @@ fun StoreDetailScreen(
                     jogboId
                 )
             }
+        )
+    }
+
+    if (isOpenEditMenuBottomSheet) {
+        EditMenuBottomSheet(
+            onDismissRequest = onDismissEditMenuBottomSheetRequest,
+            onAddMenuClick = onAddMenuClick,
+            onEditMenuClick = onEditMenuClick
         )
     }
 
@@ -365,7 +367,7 @@ fun StoreDetailScreen(
                         }
                     )
                 },
-                onMenuEditClick = onAddMenuClicked
+                onMenuEditClick = openEditMenuBottomSheet
             )
 
             Spacer(modifier = Modifier.height(50.dp))
