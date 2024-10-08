@@ -164,6 +164,18 @@ internal class MainNavigator(
     fun shouldShowBottomBar() = MainTab.contains {
         currentDestination?.hasRoute(it::class) == true
     } && (currentTab?.showBottomSheet ?: true)
+
+    fun navigateToAddMenu(storeId: Long, navOptions: NavOptions? = null) {
+        navController.navigate("add_menu_route/$storeId", navOptions)
+    }
+
+    fun navigateToEditMenu(storeId: Long, navOptions: NavOptions? = null){
+        navController.navigate("modify_menu_route/$storeId", navOptions)
+    }
+
+    fun navigateToEditMod(storeId: Long, menuId: Long, menuName: String, price: String) {
+        navController.navigate("modify_menu_route/$storeId/$menuId/$menuName/$price")
+    }
 }
 
 @Composable
