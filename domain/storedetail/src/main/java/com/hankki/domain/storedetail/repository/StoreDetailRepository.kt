@@ -27,5 +27,7 @@ interface StoreDetailRepository {
 
     suspend fun deleteStoreDetail(storeId: Long) : Result<Unit>
 
-    suspend fun putUpdateMenu( storeId: Long, menuId: Long, request: MenuUpdateRequestEntity): Result<Unit>
+    suspend fun putUpdateMenu(storeId: Long, menuId: Long, request: MenuUpdateRequestEntity): Result<Unit>
+
+    suspend fun deleteMenuItem(storeId: Long, menuId: Long): Result<Unit>
 }

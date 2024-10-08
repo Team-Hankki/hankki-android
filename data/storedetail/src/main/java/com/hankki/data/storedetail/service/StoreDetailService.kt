@@ -57,4 +57,10 @@ interface StoreDetailService {
         @Path("menuId") menuId: Long,
         @Body request: MenuUpdateRequestDto
     ): CreatedBaseResponse
+
+    @DELETE("/api/v1/{storeId}/menus/{menuId}")
+    suspend fun deleteMenuItem(
+        @Path("storeId") storeId: Long,
+        @Path("menuId") menuId: Long,
+    ): CreatedBaseResponse
 }

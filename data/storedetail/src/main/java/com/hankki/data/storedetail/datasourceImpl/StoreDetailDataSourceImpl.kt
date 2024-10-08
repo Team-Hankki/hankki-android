@@ -43,4 +43,9 @@ class StoreDetailDataSourceImpl @Inject constructor(
 
     override suspend fun patchMenuUpdate(storeId: Long, menuId: Long, request: MenuUpdateRequestDto): CreatedBaseResponse =
         storeDetailService.patchMenuUpdate(storeId, menuId, request)
+
+    override suspend fun deleteMenuItem(storeId: Long, menuId: Long): CreatedBaseResponse =
+       storeDetailService.deleteMenuItem(storeId, menuId)
+
+
 }

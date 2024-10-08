@@ -30,4 +30,6 @@ interface StoreDetailDataSource {
     suspend fun deleteStoreDetail(storeId: Long)
 
     suspend fun patchMenuUpdate(storeId: Long, menuId: Long, request: MenuUpdateRequestDto): CreatedBaseResponse
+
+    suspend fun deleteMenuItem(storeId: Long, menuId: Long): CreatedBaseResponse
 }

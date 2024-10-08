@@ -203,6 +203,23 @@ class StoreDetailViewModel @Inject constructor(
         }
     }
 
+    var selectedMenuId: Long = -1
+
+    fun showDialog() {
+        _dialogState.value = StoreDetailDialogState.DELETE
+    }
+
+    fun deleteMenuItem(storeId: Long, menuId: Long) {
+        viewModelScope.launch {
+            storeDetailRepository.deleteMenuItem(storeId, menuId)
+                .onSuccess {
+                    Timber.d("Menu item deleted successfully")
+                }.onFailure { error ->
+                    Timber.e("Failed to delete menu item: ${error.message}")
+                }
+        }
+    }
+
     companion object {
         private const val DO_NOT_EXISTS_ERROR: Int = 404
     }

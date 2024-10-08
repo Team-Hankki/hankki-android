@@ -69,4 +69,9 @@ class StoreDetailRepositoryImpl @Inject constructor(
             storeDetailDataSource.patchMenuUpdate(storeId, menuId, request.toDto())
         }
     }
+
+    override suspend fun deleteMenuItem(storeId: Long, menuId: Long,): Result<Unit> =
+        runCatching {
+            storeDetailDataSource.deleteMenuItem(storeId, menuId)
+        }
 }

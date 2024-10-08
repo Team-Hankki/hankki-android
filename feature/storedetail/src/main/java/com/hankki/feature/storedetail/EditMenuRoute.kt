@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
-import com.hankki.core.designsystem.component.layout.BottomBlurLayout
+import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray700
@@ -34,6 +34,7 @@ import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.storedetail.entity.MenuItem
+import com.hankki.feature.storedetail.StoreDetailDialogState.*
 import com.hankki.feature.storedetail.component.MenuItemComponent
 import com.hankki.feature.storedetail.component.SegmentedButton
 
@@ -42,11 +43,12 @@ fun EditMenuRoute(
     storeId: Long,
     viewModel: StoreDetailViewModel = hiltViewModel(),
     onMenuSelected: (String) -> Unit,
-    onDeleteMenuClick: () -> Unit,
+    onDeleteMenuClick: (Long) -> Unit,
     onEditModClick: (Long, String, String) -> Unit,
     onNavigateUp: () -> Unit
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     LaunchedEffect(storeId) {
         viewModel.fetchStoreDetail(storeId)
@@ -56,10 +58,34 @@ fun EditMenuRoute(
         storeDetailState = storeState.storeDetail,
         menuItems = storeState.menuItems,
         onMenuSelected = onMenuSelected,
-        onDeleteMenuClick = onDeleteMenuClick,
+        onDeleteMenuClick = { menuId ->
+            viewModel.selectedMenuId = menuId
+            viewModel.showDialog()
+        },
         onEditModClick = onEditModClick,
-        onNavigateUp = onNavigateUp
+        onNavigateUp = onNavigateUp,
     )
+    HandleDialog(dialogState, viewModel, storeId)
+}
+
+@Composable
+fun HandleDialog(
+    dialogState: StoreDetailDialogState,
+    viewModel: StoreDetailViewModel,
+    storeId: Long,
+) {
+    if (dialogState == DELETE) {
+        DoubleButtonDialog(
+            title = "삭제하면 되돌릴 수 없어요\n그래도 삭제하시겠어요?",
+            negativeButtonTitle = "취소",
+            positiveButtonTitle = "삭제하기",
+            onNegativeButtonClicked = { viewModel.closeDialog() },
+            onPositiveButtonClicked = {
+                viewModel.deleteMenuItem(storeId, viewModel.selectedMenuId)
+                viewModel.closeDialog()
+            }
+        )
+    }
 }
 
 @Composable
@@ -67,23 +93,20 @@ fun EditMenuScreen(
     storeDetailState: UiState<Any>,
     menuItems: List<MenuItem>,
     onMenuSelected: (String) -> Unit,
-    onDeleteMenuClick: () -> Unit,
+    onDeleteMenuClick: (Long) -> Unit,
     onEditModClick: (Long, String, String) -> Unit,
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
 ) {
     var selectedMenu by remember { mutableStateOf<MenuItem?>(null) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
-                modifier = Modifier
-                    .weight(0.9f)
+                modifier = Modifier.weight(0.9f)
             ) {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 HankkiTopBar(
@@ -140,7 +163,9 @@ fun EditMenuScreen(
                 option2 = "수정하기",
                 onOptionSelected = { selectedOption ->
                     if (selectedOption == "삭제하기") {
-                        onDeleteMenuClick()
+                        selectedMenu?.let { menu ->
+                            onDeleteMenuClick(menu.id)
+                        }
                     } else if (selectedOption == "수정하기") {
                         selectedMenu?.let { menu ->
                             onEditModClick(menu.id, menu.name, menu.price.toString())
