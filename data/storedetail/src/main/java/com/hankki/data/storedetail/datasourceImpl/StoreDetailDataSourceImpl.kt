@@ -3,6 +3,7 @@ package com.hankki.data.storedetail.datasourceImpl
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.storedetail.datasource.StoreDetailDataSource
+import com.hankki.data.storedetail.request.MenuUpdateRequestDto
 import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
 import com.hankki.data.storedetail.response.StoreDetailNicknameResponseDto
@@ -39,4 +40,7 @@ class StoreDetailDataSourceImpl @Inject constructor(
 
     override suspend fun deleteStoreDetail(storeId: Long) =
         storeDetailService.deleteStoreDetail(storeId)
+
+    override suspend fun patchMenuUpdate(storeId: Long, menuId: Long, request: MenuUpdateRequestDto): CreatedBaseResponse =
+        storeDetailService.patchMenuUpdate(storeId, menuId, request)
 }

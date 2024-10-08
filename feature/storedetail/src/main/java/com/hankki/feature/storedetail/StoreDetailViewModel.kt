@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
+import com.hankki.domain.storedetail.entity.MenuUpdateRequestEntity
 import com.hankki.domain.storedetail.entity.StoreDetailHeartsResponseEntity
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
 import com.hankki.domain.storedetail.repository.StoreDetailRepository
@@ -33,6 +34,7 @@ class StoreDetailViewModel @Inject constructor(
             )
         )
     )
+
     val storeState: StateFlow<StoreDetailState> get() = _storeState.asStateFlow()
 
     private val _sideEffects = MutableSharedFlow<StoreDetailSideEffect>()
@@ -47,6 +49,7 @@ class StoreDetailViewModel @Inject constructor(
                 storeId = storeId,
                 storeDetail = UiState.Loading
             )
+
             storeDetailRepository.getStoreDetail(storeId).onSuccess {
                 setStoreDetail(it)
             }.onFailure { error ->
@@ -71,10 +74,12 @@ class StoreDetailViewModel @Inject constructor(
     }
 
     private fun setStoreDetail(storeDetail: StoreDetailResponseEntity) {
+        Timber.d("StoreDetail menus: ${storeDetail.menus}")
         _storeState.value = _storeState.value.copy(
             storeDetail = UiState.Success(storeDetail),
             isLiked = storeDetail.isLiked,
-            heartCount = storeDetail.heartCount
+            heartCount = storeDetail.heartCount,
+            menuItems = storeDetail.menus.toPersistentList()
         )
     }
 
@@ -110,9 +115,9 @@ class StoreDetailViewModel @Inject constructor(
 
     fun controlMyJogboBottomSheet() {
         _storeState.value = _storeState.value.copy(
-            isOpenBottomSheet = !_storeState.value.isOpenBottomSheet
+            isOpenJogboBottomSheet = !_storeState.value.isOpenJogboBottomSheet
         )
-        if (_storeState.value.isOpenBottomSheet) {
+        if (_storeState.value.isOpenJogboBottomSheet) {
             getJogboItems(_storeState.value.storeId)
         }
     }
@@ -161,10 +166,6 @@ class StoreDetailViewModel @Inject constructor(
         _dialogState.value = StoreDetailDialogState.REPORT
     }
 
-    fun showMenuEditDialog() {
-        _dialogState.value = StoreDetailDialogState.MENU_EDIT
-    }
-
     fun closeDialog() {
         _dialogState.value = StoreDetailDialogState.CLOSED
     }
@@ -177,6 +178,28 @@ class StoreDetailViewModel @Inject constructor(
                 }.onFailure { error ->
                     Timber.e("Failed to delete store123: ${error.message}")
                 }
+        }
+    }
+
+    fun controlEditMenuBottomSheet() {
+        _storeState.value = _storeState.value.copy(
+            isOpenEditMenuBottomSheet = !_storeState.value.isOpenEditMenuBottomSheet
+        )
+    }
+    fun updateMenu(storeId: Long, menuId: Long, updatedName: String, updatedPrice: Int) {
+        viewModelScope.launch {
+            try {
+                val menuUpdateRequest = MenuUpdateRequestEntity(name = updatedName, price = updatedPrice)
+                storeDetailRepository.putUpdateMenu(storeId, menuId, menuUpdateRequest)
+                    .onSuccess {
+                        Timber.d("Menu update 성공")
+                    }
+                    .onFailure {
+                        Timber.e("Menu update 실패: ${it.message}")
+                    }
+            } catch (e: Exception) {
+                Timber.e("Menu update 중 오류 발생: ${e.message}")
+            }
         }
     }
 

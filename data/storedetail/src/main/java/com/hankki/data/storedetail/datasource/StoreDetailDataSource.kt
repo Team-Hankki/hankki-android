@@ -2,6 +2,7 @@ package com.hankki.data.storedetail.datasource
 
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
+import com.hankki.data.storedetail.request.MenuUpdateRequestDto
 import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
 import com.hankki.data.storedetail.response.StoreDetailNicknameResponseDto
@@ -27,4 +28,6 @@ interface StoreDetailDataSource {
     suspend fun getStoreDetailNickname(): BaseResponse<StoreDetailNicknameResponseDto>
 
     suspend fun deleteStoreDetail(storeId: Long)
+
+    suspend fun patchMenuUpdate(storeId: Long, menuId: Long, request: MenuUpdateRequestDto): CreatedBaseResponse
 }

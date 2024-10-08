@@ -1,7 +1,9 @@
 package com.hankki.data.storedetail.repositoryImpl
 
 import com.hankki.data.storedetail.datasource.StoreDetailDataSource
+import com.hankki.data.storedetail.request.toDto
 import com.hankki.domain.storedetail.entity.JogboResponseEntity
+import com.hankki.domain.storedetail.entity.MenuUpdateRequestEntity
 import com.hankki.domain.storedetail.entity.StoreDetailHeartsResponseEntity
 import com.hankki.domain.storedetail.entity.StoreDetailNicknameEntity
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
@@ -57,4 +59,14 @@ class StoreDetailRepositoryImpl @Inject constructor(
         runCatching {
             storeDetailDataSource.deleteStoreDetail(storeId)
         }
+
+    override suspend fun putUpdateMenu(
+        storeId: Long,
+        menuId: Long,
+        request: MenuUpdateRequestEntity
+    ): Result<Unit> {
+        return runCatching {
+            storeDetailDataSource.patchMenuUpdate(storeId, menuId, request.toDto())
+        }
+    }
 }

@@ -10,6 +10,7 @@ data class StoreDetailResponseEntity(
 )
 
 data class MenuItem(
+    val id: Long,
     val name: String,
     val price: Int
 )
