@@ -14,10 +14,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -25,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
@@ -103,7 +107,17 @@ fun LoginScreen(
                 .align(Alignment.TopStart)
                 .fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.weight(0.16875f))
+            Spacer(modifier = Modifier.weight(0.1f))
+
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.logo),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .padding(start = 22.dp)
+            )
+
+            Spacer(modifier = Modifier.weight(0.0175f))
+
             Text(
                 text = stringResource(R.string.done_worry),
                 color = White,
@@ -112,7 +126,8 @@ fun LoginScreen(
                     .padding(start = 22.dp)
                     .align(Alignment.Start)
             )
-            Spacer(modifier = Modifier.weight(0.76375f))
+
+            Spacer(modifier = Modifier.weight(0.8825f))
         }
 
         Image(
@@ -147,5 +162,13 @@ private fun startKakaoWebLogin(
 ) {
     UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
         handleLogin(token, error)
+    }
+}
+
+@Composable
+@Preview
+fun LoginPreview() {
+    HankkijogboTheme {
+        LoginScreen(isButtonEnabled = true) { }
     }
 }
