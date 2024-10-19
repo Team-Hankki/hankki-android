@@ -82,6 +82,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReportRoute(
     location: LocationModel,
+    onShowTextSnackBar: (String) -> Unit,
     navigateUp: () -> Unit,
     navigateSearchStore: () -> Unit,
     navigateToReportFinish: (
@@ -126,6 +127,7 @@ fun ReportRoute(
                 }
 
                 ReportSideEffect.UniversityError -> navigateUp()
+                ReportSideEffect.ReportError -> onShowTextSnackBar("오류가 발생했어요. 다시 시도해주세요")
             }
         }
     }
