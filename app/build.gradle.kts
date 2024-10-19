@@ -32,10 +32,6 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
-
         debug {
             manifestPlaceholders["naverClientId"] =
                 gradleLocalProperties(rootDir, providers).getProperty("naverDevClientId")
