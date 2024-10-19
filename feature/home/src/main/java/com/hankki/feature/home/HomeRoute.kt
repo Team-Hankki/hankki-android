@@ -149,6 +149,10 @@ fun HomeRoute(
         backPressedTime = System.currentTimeMillis()
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getUniversityInformation()
+    }
+
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
@@ -168,6 +172,11 @@ fun HomeRoute(
 
                 is HomeSideEffect.MoveMyLocation -> {
                     focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                        if (location == null) {
+                            onShowTextSnackBar("위치 정보를 가져올 수 없습니다.")
+                            return@addOnSuccessListener
+                        }
+
                         viewModel.moveMap(location.latitude, location.longitude)
                     }.addOnFailureListener {
                         viewModel.moveMap(
@@ -177,26 +186,6 @@ fun HomeRoute(
                     }
                 }
             }
-        }
-    }
-
-    LaunchedEffect(
-        key1 = state.categoryChipState,
-        key2 = state.priceChipState,
-        key3 = state.sortChipState
-    ) {
-        if (
-            state.categoryChipState !is ChipState.Selected &&
-            state.priceChipState !is ChipState.Selected &&
-            state.sortChipState !is ChipState.Selected
-        ) {
-            viewModel.fetchData()
-        }
-    }
-
-    LaunchedEffect(key1 = Unit) { // TODO: 다른 화면 갔다와도 실행됨. 어카지.
-        with(viewModel) {
-            getUniversityInformation()
         }
     }
 
