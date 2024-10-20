@@ -95,7 +95,7 @@ fun ReportFinishCard(
                         }
                     ),
                     color = Red500,
-                    style = HankkiTheme.typography.body4,
+                    style = HankkiTheme.typography.body5,
                     modifier = Modifier
                 )
             }

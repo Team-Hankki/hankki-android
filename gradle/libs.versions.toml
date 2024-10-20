@@ -22,7 +22,7 @@ androidxCoreSplash = "1.0.1"
 ## Compose
 androidxComposeBom = "2024.05.00"
 androidxComposeCompiler = "1.5.14"
-androidxComposeNavigation = "2.8.0-beta04"
+androidxComposeNavigation = "2.8.0"
 androidxComposeMaterial3 = "1.2.1"
 androidxComposeMaterial = "1.6.8"
 

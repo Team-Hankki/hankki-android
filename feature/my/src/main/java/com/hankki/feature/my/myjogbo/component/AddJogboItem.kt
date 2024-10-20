@@ -11,9 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
@@ -46,9 +47,9 @@ fun AddJogboItem(
             color = White
         )
         Image(
-            painter =
-            if (isEditMode) painterResource(id = R.drawable.ic_add_jogbo_disable)
-            else painterResource(id = R.drawable.ic_add_jogbo),
+            imageVector =
+            if (isEditMode) ImageVector.vectorResource(id = R.drawable.ic_add_jogbo_disable)
+            else ImageVector.vectorResource(id = R.drawable.ic_add_jogbo),
             contentDescription = stringResource(id = R.string.add_new_jogbo_list),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop

@@ -90,7 +90,7 @@ class HomeViewModel @Inject constructor(
             priceChipState = ChipState.Unselected(),
             sortChipState = ChipState.Unselected(),
             isMainBottomSheetOpen = true,
-            selectedStoreItem = StoreItemModel()
+            selectedStoreItem = null
         )
     }
 
@@ -201,6 +201,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun clickedMainBottomSheetItem(id: Long) {
+        val item = _state.value.markerItems.find { it.id == id } ?: return
+
+        clickMarkerItem(id)
+        moveMap(item.latitude, item.longitude)
+    }
+
     fun selectStoreItem(storeItem: StoreItemModel) {
         _state.value = _state.value.copy(
             selectedStoreItem = storeItem
@@ -209,7 +216,8 @@ class HomeViewModel @Inject constructor(
 
     fun clickMap() {
         _state.value = _state.value.copy(
-            isMainBottomSheetOpen = true
+            isMainBottomSheetOpen = true,
+            selectedStoreItem = null
         )
     }
 
@@ -249,7 +257,7 @@ class HomeViewModel @Inject constructor(
         updateChipState(
             targetChipState = _state.value.categoryChipState,
             updateState = { _state.value = _state.value.copy(categoryChipState = it) },
-            fetchItems = { homeRepository.getCategories() },
+            fetchItems = homeRepository::getCategories,
         ) { chips ->
             _state.value = _state.value.copy(
                 categoryChipItems = chips.map { chip ->
@@ -268,7 +276,7 @@ class HomeViewModel @Inject constructor(
         updateChipState(
             targetChipState = _state.value.priceChipState,
             updateState = { _state.value = _state.value.copy(priceChipState = it) },
-            fetchItems = { homeRepository.getPriceCategories() }
+            fetchItems = homeRepository::getPriceCategories
         ) { chips ->
             _state.value = _state.value.copy(
                 priceChipItems = chips.map { chip ->
@@ -286,7 +294,7 @@ class HomeViewModel @Inject constructor(
         updateChipState(
             targetChipState = _state.value.sortChipState,
             updateState = { _state.value = _state.value.copy(sortChipState = it) },
-            fetchItems = { homeRepository.getSortCategories() }
+            fetchItems = homeRepository::getSortCategories
         ) { chips ->
             _state.value = _state.value.copy(
                 sortChipItems = chips.map { chip ->
@@ -316,12 +324,16 @@ class HomeViewModel @Inject constructor(
         _state.value = _state.value.copy(
             categoryChipState = ChipState.Fixed(item, tag)
         )
+
+        fetchData()
     }
 
     private fun selectPriceChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             priceChipState = ChipState.Fixed(item, tag)
         )
+
+        fetchData()
     }
 
     private fun selectSortChipItem(item: String, tag: String) {

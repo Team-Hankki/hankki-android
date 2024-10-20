@@ -1,17 +1,17 @@
 package com.hankki.core.designsystem.component.textfield
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,31 +21,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.utill.KOREAN_NUMBER_ENGLISH_SPECIAL_SPACE_UNDER20_REGEX
-import com.hankki.core.designsystem.constant.FOCUSED_BORDER_RADIUS
-import com.hankki.core.designsystem.constant.UNFOCUSED_BORDER_RADIUS
+import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray300
-import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray600
+import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 
-private const val TEXT_FIELD_LIMIT = 16
+private const val JOGBO_NAME_LIMIT = 18
 
 @Composable
 fun HankkiCountTextField(
@@ -60,16 +55,8 @@ fun HankkiCountTextField(
 ) {
     var isFocused by remember { mutableStateOf(false) }
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = value)) }
-
-    val borderColor = when {
-        isFocused -> Gray600
-        else -> Gray300
-    }
-
-    val borderWidth = when {
-        isFocused -> FOCUSED_BORDER_RADIUS.dp
-        else -> UNFOCUSED_BORDER_RADIUS.dp
-    }
+    var underLineColor by remember { mutableStateOf(Gray200) }
+    var trailingIconColor by remember { mutableStateOf(Gray300) }
 
     LaunchedEffect(resetTitle) {
         if (trailingIcon) {
@@ -77,20 +64,25 @@ fun HankkiCountTextField(
         }
     }
 
+    LaunchedEffect(isFocused) {
+        underLineColor = if (isFocused) Gray500 else Gray200
+        trailingIconColor = if (isFocused) Gray500 else Gray300
+    }
+
     Column(modifier = modifier.background(White)) {
         Text(
+            modifier = Modifier.padding(start = 8.dp),
             text = title,
-            style = HankkiTheme.typography.suitSub2,
-            color = Gray900
+            style = HankkiTheme.typography.body6,
+            color = Gray500
         )
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         HankkiCountInnerTextField(
             value = textFieldValue,
             placeholder = placeholder,
-            borderColor = borderColor,
-            borderWidth = borderWidth,
+            underLineColor = underLineColor,
             textColor = Gray900,
             onFocusChanged = { focusState ->
                 isFocused = focusState
@@ -114,7 +106,7 @@ fun HankkiCountTextField(
                 ) {
                     if (trailingIcon) {
                         textFieldValue = newValue.copy(
-                            text = newValue.text.take(TEXT_FIELD_LIMIT)
+                            text = newValue.text.take(JOGBO_NAME_LIMIT)
                         )
                         onValueChanged(textFieldValue.text)
                     } else {
@@ -152,12 +144,12 @@ fun HankkiCountTextField(
                     }
                 }
             },
-            tailingIcon = {
+            trailingIcon = {
                 if (trailingIcon)
                     Text(
-                        text = "(${valueLength}/$TEXT_FIELD_LIMIT)",
-                        style = HankkiTheme.typography.body4,
-                        color = Gray400
+                        text = "(${valueLength}/$JOGBO_NAME_LIMIT)",
+                        style = HankkiTheme.typography.body8,
+                        color = trailingIconColor
                     )
             }
         )
@@ -169,28 +161,22 @@ fun HankkiCountInnerTextField(
     value: TextFieldValue,
     placeholder: String,
     onTextChanged: (TextFieldValue) -> Unit,
-    borderColor: Color,
-    borderWidth: Dp,
+    underLineColor: Color,
     textColor: Color,
     onFocusChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = White,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    leadingIcon: @Composable () -> Unit = {},
-    tailingIcon: @Composable () -> Unit = {},
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     BasicTextField(
         value = value,
         onValueChange = onTextChanged,
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .border(borderWidth, borderColor, RoundedCornerShape(10.dp))
             .background(backgroundColor)
-            .padding(12.dp)
             .focusRequester(focusRequester)
             .onFocusChanged { focusState ->
                 onFocusChanged(focusState.isFocused)
@@ -209,22 +195,36 @@ fun HankkiCountInnerTextField(
                 }
             }
         ),
-        textStyle = HankkiTheme.typography.body1.copy(color = textColor),
+        textStyle = HankkiTheme.typography.sub2.copy(color = textColor),
         decorationBox = { innerTextField ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                leadingIcon()
-                Box(modifier = Modifier.weight(1f)) {
-                    innerTextField()
-                    if (value.text.isEmpty()) {
-                        Text(
-                            text = placeholder,
-                            color = Gray400,
-                            style = HankkiTheme.typography.body1
-                        )
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp)
+                    ) {
+                        innerTextField()
+                        if (value.text.isEmpty()) {
+                            Text(
+                                text = placeholder,
+                                color = Gray300,
+                                style = HankkiTheme.typography.sub2
+                            )
+                        }
                     }
+                    trailingIcon()
                 }
-                tailingIcon()
+                Spacer(Modifier.height(6.dp))
+
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = underLineColor
+                )
             }
+
         }
     )
 }
@@ -233,14 +233,26 @@ fun HankkiCountInnerTextField(
 @Preview
 fun HankkiCountTextFieldPreview() {
     HankkijogboTheme {
-        HankkiCountTextField(
-            title = "족보의 제목을 지어주세요",
-            value = "",
-            valueLength = 0,
-            placeholder = "성대생 추천 맛집 드려요",
-            onValueChanged = {},
-            trailingIcon = false,
-            resetTitle = false
-        )
+        Column {
+            HankkiCountTextField(
+                title = "족보 제목",
+                value = "",
+                valueLength = 0,
+                placeholder = "한식 맛집 모음",
+                onValueChanged = {},
+                trailingIcon = false,
+                resetTitle = false
+            )
+
+            HankkiCountTextField(
+                title = "족보 제목",
+                value = "",
+                valueLength = 0,
+                placeholder = "한식 맛집 모음",
+                onValueChanged = {},
+                trailingIcon = true,
+                resetTitle = false
+            )
+        }
     }
 }

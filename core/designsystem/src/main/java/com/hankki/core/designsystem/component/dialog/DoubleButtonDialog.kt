@@ -68,7 +68,7 @@ fun DoubleButtonDialog(
 
                     Text(
                         text = description,
-                        style = HankkiTheme.typography.body5,
+                        style = HankkiTheme.typography.body6,
                         color = Gray500,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()

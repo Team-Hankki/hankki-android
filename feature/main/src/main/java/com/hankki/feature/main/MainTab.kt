@@ -1,7 +1,6 @@
 package com.hankki.feature.main
 
 import androidx.compose.runtime.Composable
-import com.hankki.core.designsystem.R
 import com.hankki.core.navigation.MainTabRoute
 import com.hankki.core.navigation.Route
 import com.hankki.feature.my.navigation.My
@@ -12,7 +11,7 @@ internal enum class MainTab(
     val unselectedIconResource: Int,
     internal val contentDescription: String,
     val route: MainTabRoute,
-    val showBottomSheet: Boolean = true
+    val showBottomSheet: Boolean = true,
 ) {
     Home(
         selectedIconResource = R.drawable.ic_home_selected,
@@ -21,16 +20,16 @@ internal enum class MainTab(
         route = com.hankki.feature.home.navigation.Home
     ),
     Report(
-        selectedIconResource = R.drawable.ic_jaebo,
-        unselectedIconResource = R.drawable.ic_jaebo,
+        selectedIconResource = R.drawable.ic_jaebo_selected,
+        unselectedIconResource = R.drawable.ic_jaebo_unselected,
         contentDescription = "제보하기",
         route = Report(),
         false
     ),
     Mypage(
-        selectedIconResource = R.drawable.ic_my_selected,
-        unselectedIconResource = R.drawable.ic_my_unselected,
-        contentDescription = "마이페이지",
+        selectedIconResource = R.drawable.ic_profile_selected,
+        unselectedIconResource = R.drawable.ic_profile_unselected,
+        contentDescription = "마이",
         route = My
     );
 
