@@ -35,10 +35,14 @@ android {
         debug {
             manifestPlaceholders["naverClientId"] =
                 gradleLocalProperties(rootDir, providers).getProperty("naverDevClientId")
+
+            manifestPlaceholders["appName"] = "@string/dev_app_name"
         }
         release {
             manifestPlaceholders["naverClientId"] =
                 gradleLocalProperties(rootDir, providers).getProperty("naverProdClientId")
+
+            manifestPlaceholders["appName"] = "@string/app_name"
         }
     }
 
