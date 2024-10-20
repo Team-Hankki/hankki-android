@@ -37,12 +37,16 @@ android {
                 gradleLocalProperties(rootDir, providers).getProperty("naverDevClientId")
 
             manifestPlaceholders["appName"] = "@string/dev_app_name"
+            manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/dev_ic_launcher_round"
         }
         release {
             manifestPlaceholders["naverClientId"] =
                 gradleLocalProperties(rootDir, providers).getProperty("naverProdClientId")
 
             manifestPlaceholders["appName"] = "@string/app_name"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_round"
         }
     }
 
