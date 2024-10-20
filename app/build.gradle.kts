@@ -1,5 +1,6 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.hankki.build_logic.setNamespace
+import org.gradle.kotlin.dsl.resolver.SourceDistributionResolver.Companion.artifactType
 
 plugins {
     alias(libs.plugins.hankki.application)
@@ -31,8 +32,25 @@ android {
             gradleLocalProperties(rootDir, providers).getProperty("kakaoNative.AppKey")
     }
 
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = File("${project.rootDir.absolutePath}/keystore/debug.keystore")
+            storePassword = "android"
+        }
+        create("release") {
+            keyAlias = gradleLocalProperties(rootDir, providers).getProperty("keyAlias")
+            keyPassword = gradleLocalProperties(rootDir, providers).getProperty("keyPassword")
+            storeFile = File("${project.rootDir.absolutePath}/keystore/hankkiKeyStore")
+            storePassword = "hankkiandroid"
+        }
+    }
+
     buildTypes {
         debug {
+            applicationIdSuffix = ".debug"
+
             manifestPlaceholders["naverClientId"] =
                 gradleLocalProperties(rootDir, providers).getProperty("naverDevClientId")
 
@@ -40,7 +58,16 @@ android {
             manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
             manifestPlaceholders["roundAppIcon"] = "@mipmap/dev_ic_launcher_round"
         }
+
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            signingConfig = signingConfigs.getByName("release")
+
             manifestPlaceholders["naverClientId"] =
                 gradleLocalProperties(rootDir, providers).getProperty("naverProdClientId")
 
