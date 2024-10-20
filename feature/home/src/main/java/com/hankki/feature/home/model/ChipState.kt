@@ -55,3 +55,9 @@ data class ChipStyle(
         )
     }
 }
+
+enum class HomeChips() {
+    CATEGORY,
+    PRICE,
+    SORT,
+}

@@ -3,6 +3,7 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.entity.response.CategoriesEntity
 import com.hankki.domain.home.entity.response.CategoryEntity
@@ -11,6 +12,7 @@ import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
+import com.hankki.feature.home.model.HomeChips
 import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -237,6 +240,8 @@ class HomeViewModel @Inject constructor(
                         onSuccess(chips)
                     }.onFailure(Timber::e)
             }
+        } else if (newState is ChipState.Unselected) {
+            fetchData()
         }
     }
 
@@ -295,19 +300,31 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun selectCategoryChipItem(item: String, tag: String) {
+    fun selectHomeChipItem(chip: HomeChips, item: String, tag: String) {
+        runBlocking {
+            when (chip) {
+                HomeChips.CATEGORY -> selectCategoryChipItem(item, tag)
+                HomeChips.SORT -> selectSortChipItem(item, tag)
+                HomeChips.PRICE -> selectPriceChipItem(item, tag)
+            }
+
+            fetchData()
+        }
+    }
+
+    private fun selectCategoryChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             categoryChipState = ChipState.Fixed(item, tag)
         )
     }
 
-    fun selectPriceChipItem(item: String, tag: String) {
+    private fun selectPriceChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             priceChipState = ChipState.Fixed(item, tag)
         )
     }
 
-    fun selectSortChipItem(item: String, tag: String) {
+    private fun selectSortChipItem(item: String, tag: String) {
         _state.value = _state.value.copy(
             sortChipState = ChipState.Fixed(item, tag)
         )
@@ -324,7 +341,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.addStoreAtJogbo(favoriteId, storeId)
                 .onSuccess {
-
+                    _sideEffect.emit(HomeSideEffect.ShowSnackBar("나의 족보에 추가되었습니다.", favoriteId))
                 }.onFailure(Timber::e)
         }
     }
