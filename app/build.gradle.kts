@@ -1,10 +1,11 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.hankki.build_logic.setNamespace
-import org.gradle.kotlin.dsl.resolver.SourceDistributionResolver.Companion.artifactType
 
 plugins {
     alias(libs.plugins.hankki.application)
 }
+
+val properties = gradleLocalProperties(rootDir, providers)
 
 android {
     setNamespace("hankkijogbo")
@@ -26,10 +27,9 @@ android {
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",
-            gradleLocalProperties(rootDir, providers).getProperty("kakaoNativeAppKey"),
+            properties.getProperty("kakaoNativeAppKey"),
         )
-        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] =
-            gradleLocalProperties(rootDir, providers).getProperty("kakaoNative.AppKey")
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties.getProperty("kakaoNative.AppKey")
     }
 
     signingConfigs {
@@ -40,8 +40,8 @@ android {
             storePassword = "android"
         }
         create("release") {
-            keyAlias = gradleLocalProperties(rootDir, providers).getProperty("keyAlias")
-            keyPassword = gradleLocalProperties(rootDir, providers).getProperty("keyPassword")
+            keyAlias = properties.getProperty("keyAlias")
+            keyPassword = properties.getProperty("keyPassword")
             storeFile = File("${project.rootDir.absolutePath}/keystore/hankkiKeyStore")
             storePassword = "hankkiandroid"
         }
@@ -49,10 +49,10 @@ android {
 
     buildTypes {
         debug {
+            isDebuggable = true
             applicationIdSuffix = ".debug"
 
-            manifestPlaceholders["naverClientId"] =
-                gradleLocalProperties(rootDir, providers).getProperty("naverDevClientId")
+            manifestPlaceholders["naverClientId"] = properties.getProperty("naverDevClientId")
 
             manifestPlaceholders["appName"] = "@string/dev_app_name"
             manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
@@ -68,8 +68,7 @@ android {
             )
             signingConfig = signingConfigs.getByName("release")
 
-            manifestPlaceholders["naverClientId"] =
-                gradleLocalProperties(rootDir, providers).getProperty("naverProdClientId")
+            manifestPlaceholders["naverClientId"] = properties.getProperty("naverProdClientId")
 
             manifestPlaceholders["appName"] = "@string/app_name"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
