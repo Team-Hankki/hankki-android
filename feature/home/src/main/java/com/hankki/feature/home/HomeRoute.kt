@@ -366,10 +366,6 @@ fun HomeScreen(
                     type = EventType.ADD,
                     name = "Home_RestList_Jokbo"
                 )
-                onShowSnackBar(
-                    localContextResource.getString(R.string.success_add_my_jogbo),
-                    jogboId
-                )
             }
         )
     }

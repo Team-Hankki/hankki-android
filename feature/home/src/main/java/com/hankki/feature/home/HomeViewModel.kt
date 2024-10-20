@@ -3,6 +3,7 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.entity.response.CategoriesEntity
 import com.hankki.domain.home.entity.response.CategoryEntity
@@ -352,7 +353,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.addStoreAtJogbo(favoriteId, storeId)
                 .onSuccess {
-
+                    _sideEffect.emit(HomeSideEffect.ShowSnackBar("나의 족보에 추가되었습니다.", favoriteId))
                 }.onFailure(Timber::e)
         }
     }
