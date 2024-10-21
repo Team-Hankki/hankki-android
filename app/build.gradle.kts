@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.hankki.application)
 }
 
+val properties = gradleLocalProperties(rootDir, providers)
+
 android {
     setNamespace("hankkijogbo")
 
@@ -25,20 +27,52 @@ android {
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",
-            gradleLocalProperties(rootDir, providers).getProperty("kakaoNativeAppKey"),
+            properties.getProperty("kakaoNativeAppKey"),
         )
-        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] =
-            gradleLocalProperties(rootDir, providers).getProperty("kakaoNative.AppKey")
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties.getProperty("kakaoNative.AppKey")
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = File("${project.rootDir.absolutePath}/keystore/debug.keystore")
+            storePassword = "android"
+        }
+        create("release") {
+            keyAlias = properties.getProperty("keyAlias")
+            keyPassword = properties.getProperty("keyPassword")
+            storeFile = File("${project.rootDir.absolutePath}/keystore/hankkiKeyStore")
+            storePassword = "hankkiandroid"
+        }
     }
 
     buildTypes {
         debug {
-            manifestPlaceholders["naverClientId"] =
-                gradleLocalProperties(rootDir, providers).getProperty("naverDevClientId")
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+
+            manifestPlaceholders["naverClientId"] = properties.getProperty("naverDevClientId")
+
+            manifestPlaceholders["appName"] = "@string/dev_app_name"
+            manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/dev_ic_launcher_round"
         }
+
         release {
-            manifestPlaceholders["naverClientId"] =
-                gradleLocalProperties(rootDir, providers).getProperty("naverProdClientId")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            signingConfig = signingConfigs.getByName("release")
+
+            manifestPlaceholders["naverClientId"] = properties.getProperty("naverProdClientId")
+
+            manifestPlaceholders["appName"] = "@string/app_name"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_round"
         }
     }
 
