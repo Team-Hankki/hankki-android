@@ -44,8 +44,18 @@ class StoreDetailDataSourceImpl @Inject constructor(
     override suspend fun patchMenuUpdate(storeId: Long, menuId: Long, request: MenuUpdateRequestDto): CreatedBaseResponse =
         storeDetailService.patchMenuUpdate(storeId, menuId, request)
 
-    override suspend fun deleteMenuItem(storeId: Long, menuId: Long): CreatedBaseResponse =
-       storeDetailService.deleteMenuItem(storeId, menuId)
+    override suspend fun deleteMenuItem(storeId: Long, menuId: Long): Result<Unit> {
+        return try {
+            val response = storeDetailService.deleteMenuItem(storeId, menuId)
 
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Failed to delete menu item: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 }

@@ -189,7 +189,7 @@ fun ModifyMenuScreen(
             }
         )
 
-        Spacer(modifier = Modifier.padding(top = 12.dp))
+        Spacer(modifier = Modifier.padding(top = 4 .dp))
         HankkiModPriceField(
             label = "가격",
             priceValue = updatedPrice,

@@ -7,6 +7,7 @@ import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
 import com.hankki.data.storedetail.response.StoreDetailNicknameResponseDto
 import com.hankki.data.storedetail.response.StoreDetailResponseDto
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -62,5 +63,5 @@ interface StoreDetailService {
     suspend fun deleteMenuItem(
         @Path("storeId") storeId: Long,
         @Path("menuId") menuId: Long,
-    ): CreatedBaseResponse
+    ): Response<Unit>
 }

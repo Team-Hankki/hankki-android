@@ -31,5 +31,5 @@ interface StoreDetailDataSource {
 
     suspend fun patchMenuUpdate(storeId: Long, menuId: Long, request: MenuUpdateRequestDto): CreatedBaseResponse
 
-    suspend fun deleteMenuItem(storeId: Long, menuId: Long): CreatedBaseResponse
+    suspend fun deleteMenuItem(storeId: Long, menuId: Long): Result<Unit>
 }

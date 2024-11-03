@@ -59,7 +59,7 @@ fun HankkiModMenuField(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
@@ -73,7 +73,7 @@ fun HankkiModMenuField(
                     RoundedCornerShape(8.dp)
                 )
                 .background(Color.White)
-                .padding(12.dp)
+                .padding(horizontal = 12.dp, vertical = 14.dp)
                 .focusRequester(focusRequester)
                 .onFocusChanged { focusState ->
                     isEditingMenu = focusState.isFocused
@@ -169,7 +169,7 @@ fun HankkiModPriceField(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
@@ -182,7 +182,7 @@ fun HankkiModPriceField(
                     1.dp, borderColor, RoundedCornerShape(10.dp)
                 )
                 .background(Color.White)
-                .padding(12.dp)
+                .padding(horizontal = 12.dp, vertical = 14.dp)
                 .focusRequester(focusRequester)
                 .onFocusChanged { focusState ->
                     isEditingPrice = focusState.isFocused
