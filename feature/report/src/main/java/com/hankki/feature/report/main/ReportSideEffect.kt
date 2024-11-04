@@ -8,4 +8,6 @@ sealed class ReportSideEffect {
     ) : ReportSideEffect()
 
     data object UniversityError : ReportSideEffect()
+
+    data object ReportError : ReportSideEffect()
 }

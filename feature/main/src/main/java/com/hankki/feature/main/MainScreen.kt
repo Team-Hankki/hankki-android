@@ -226,7 +226,8 @@ internal fun MainScreen(
                             navigator.navigateToStoreDetail(storeId)
                         },
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo,
-                        onShowSnackBar = onShowWhiteSnackBarWithButton
+                        onShowSnackBar = onShowWhiteSnackBarWithButton,
+                        onShowTextSnackBar = onShowErrorSnackBar
                     )
                     myNavGraph(
                         paddingValues = paddingValue,

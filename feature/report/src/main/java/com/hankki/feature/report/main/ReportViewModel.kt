@@ -183,6 +183,7 @@ class ReportViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     buttonEnabled = true
                 )
+                _sideEffect.emit(ReportSideEffect.ReportError)
                 Timber.e(error)
             }
         }

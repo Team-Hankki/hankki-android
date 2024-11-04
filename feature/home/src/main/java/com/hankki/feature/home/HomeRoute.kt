@@ -186,6 +186,11 @@ fun HomeRoute(
 
                 is HomeSideEffect.MoveMyLocation -> {
                     focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                        if (location == null) {
+                            onShowTextSnackBar("위치 정보를 가져올 수 없습니다.")
+                            return@addOnSuccessListener
+                        }
+
                         viewModel.moveMap(location.latitude, location.longitude)
                     }.addOnFailureListener {
                         viewModel.moveMap(
@@ -360,10 +365,6 @@ fun HomeScreen(
                 tracker.track(
                     type = EventType.ADD,
                     name = "Home_RestList_Jokbo"
-                )
-                onShowSnackBar(
-                    localContextResource.getString(R.string.success_add_my_jogbo),
-                    jogboId
                 )
             }
         )
