@@ -27,6 +27,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
@@ -40,8 +41,8 @@ import com.hankki.feature.storedetail.R
 @Composable
 fun HankkiModMenuField(
     label: String,
-    menuValue: String,
-    onMenuValueChange: (String) -> Unit,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     clearText: () -> Unit,
     placeholder: String = "새로운 메뉴 이름",
     isFocused: Boolean,
@@ -63,8 +64,8 @@ fun HankkiModMenuField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
-            value = menuValue,
-            onValueChange = onMenuValueChange,
+            value = value,
+            onValueChange = onValueChange,
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
                 .border(
@@ -99,7 +100,7 @@ fun HankkiModMenuField(
                         modifier = Modifier.weight(1f),
                         contentAlignment = Alignment.CenterEnd
                     ) {
-                        if (menuValue.isEmpty() && isEditingMenu) {
+                        if (value.text.isEmpty() && isEditingMenu) {
                             Text(
                                 text = placeholder,
                                 color = Gray400,
@@ -110,9 +111,9 @@ fun HankkiModMenuField(
                             innerTextField()
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.padding(8.dp))
-                    if (menuValue.isNotEmpty() && isEditingMenu) {
+                    if (value.text.isNotEmpty() && isEditingMenu) {
                         Icon(
                             painter = painterResource(R.drawable.ic_cancel),
                             contentDescription = "Clear text",
@@ -142,8 +143,8 @@ fun HankkiModMenuField(
 @Composable
 fun HankkiModPriceField(
     label: String,
-    priceValue: String,
-    onPriceValueChange: (String) -> Unit,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     clearText: () -> Unit,
     isError: Boolean = false,
     isFocused: Boolean,
@@ -173,8 +174,8 @@ fun HankkiModPriceField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
-            value = priceValue,
-            onValueChange = onPriceValueChange,
+            value = value,
+            onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
