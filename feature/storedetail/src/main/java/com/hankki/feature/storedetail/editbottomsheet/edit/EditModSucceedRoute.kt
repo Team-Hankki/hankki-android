@@ -87,7 +87,7 @@ fun EditModSucceedScreen(
         )
         Box {
             Image(
-                painter = painterResource(id = R.drawable.img_edit),
+                painter = painterResource(id = R.drawable.img_edit_completed),
                 contentDescription = "Success",
                 modifier = Modifier
                     .fillMaxSize()

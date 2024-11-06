@@ -85,7 +85,7 @@ fun AddMenuSuccessScreen(
         )
         Box {
             Image(
-                painter = painterResource(id = R.drawable.img_edit),
+                painter = painterResource(id = R.drawable.img_add_completed),
                 contentDescription = "Success",
                 modifier = Modifier
                     .fillMaxSize()

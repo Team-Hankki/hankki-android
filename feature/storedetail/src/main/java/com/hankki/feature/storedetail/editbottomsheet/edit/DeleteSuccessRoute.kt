@@ -87,7 +87,7 @@ fun DeleteSuccessScreen(
         )
         Box {
             Image(
-                painter = painterResource(id = R.drawable.img_edit),
+                painter = painterResource(id = R.drawable.img_deleted_complete),
                 contentDescription = "Success",
                 modifier = Modifier
                     .fillMaxSize()
