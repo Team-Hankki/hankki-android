@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hankki.core.common.amplitude.EventType
@@ -58,6 +57,7 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
+import com.hankki.feature.storedetail.editbottomsheet.EditMenuBottomSheet
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -94,6 +94,7 @@ fun StoreDetailRoute(
                     onShowTextSnackBar("이미 삭제된 식당입니다 ")
                     navigateUp()
                 }
+                else -> {}
             }
         }
     }
