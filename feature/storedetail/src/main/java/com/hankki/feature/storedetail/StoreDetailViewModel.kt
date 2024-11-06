@@ -33,7 +33,10 @@ class StoreDetailViewModel @Inject constructor(
                 "식당이 사라졌어요",
                 "더이상 8,000원이하인 메뉴가 없어요",
                 "부적절한 제보에요"
-            )
+            ),
+            menuList = listOf(MenuUiState()),
+            buttonEnabled = false,
+            submittedMenuCount = 0
         )
     )
 
@@ -81,7 +84,7 @@ class StoreDetailViewModel @Inject constructor(
             storeDetail = UiState.Success(storeDetail),
             isLiked = storeDetail.isLiked,
             heartCount = storeDetail.heartCount,
-            menuItems = storeDetail.menus.toPersistentList()
+            menuItems = storeDetail.menus.toPersistentList(),
         )
     }
 
@@ -229,19 +232,11 @@ class StoreDetailViewModel @Inject constructor(
         }
     }
 
-    private val _storeDetailState = MutableStateFlow(
-        StoreDetailState(
-            menuList = listOf(MenuUiState()),
-            buttonEnabled = false
-        )
-    )
-    val storeDetailState = _storeDetailState.asStateFlow()
-
     fun changeMenuName(index: Int, name: String) {
-        val currentList = _storeDetailState.value.menuList.toMutableList()
+        val currentList = _storeState.value.menuList.toMutableList()
         if (index in currentList.indices) {
             currentList[index] = currentList[index].copy(name = name)
-            _storeDetailState.value = _storeDetailState.value.copy(
+            _storeState.value = _storeState.value.copy(
                 menuList = currentList,
                 buttonEnabled = validateInputs(currentList)
             )
@@ -249,14 +244,14 @@ class StoreDetailViewModel @Inject constructor(
     }
 
     fun changePrice(index: Int, price: String) {
-        val currentList = _storeDetailState.value.menuList.toMutableList()
+        val currentList = _storeState.value.menuList.toMutableList()
         if (index in currentList.indices) {
             val isPriceError = price.isNotBlank() && (price.toIntOrNull() == null || price.toIntOrNull() ?: 0 <= 0)
             currentList[index] = currentList[index].copy(
                 price = price,
                 isPriceError = isPriceError
             )
-            _storeDetailState.value = _storeDetailState.value.copy(
+            _storeState.value = _storeState.value.copy(
                 menuList = currentList,
                 buttonEnabled = validateInputs(currentList)
             )
@@ -264,10 +259,10 @@ class StoreDetailViewModel @Inject constructor(
     }
 
     fun deleteMenu(index: Int) {
-        val currentList = _storeDetailState.value.menuList.toMutableList()
+        val currentList = _storeState.value.menuList.toMutableList()
         if (index in currentList.indices && currentList.size > 1) {
             currentList.removeAt(index)
-            _storeDetailState.value = _storeDetailState.value.copy(
+            _storeState.value = _storeState.value.copy(
                 menuList = currentList,
                 buttonEnabled = validateInputs(currentList)
             )
@@ -275,9 +270,9 @@ class StoreDetailViewModel @Inject constructor(
     }
 
     fun addMenu() {
-        val currentList = _storeDetailState.value.menuList.toMutableList()
+        val currentList = _storeState.value.menuList.toMutableList()
         currentList.add(MenuUiState())
-        _storeDetailState.value = _storeDetailState.value.copy(
+        _storeState.value = _storeState.value.copy(
             menuList = currentList,
             buttonEnabled = validateInputs(currentList)
         )
@@ -306,7 +301,7 @@ class StoreDetailViewModel @Inject constructor(
                     return@launch
                 }
 
-                val menuList = _storeDetailState.value.menuList
+                val menuList = _storeState.value.menuList
                 val menuRequests = menuList.map { menu ->
                     StoreDetailMenuAddRequestEntity(
                         name = menu.name,
@@ -318,14 +313,15 @@ class StoreDetailViewModel @Inject constructor(
                     storeId = storeId,
                     menus = menuRequests
                 ).onSuccess {
-                    fetchStoreDetail(storeId)
+                    val count = menuList.size
+                    Timber.d("Updating submittedMenuCount to: $count")
+
                     _storeState.value = _storeState.value.copy(
-                        submittedMenuCount = menuList.size
-                    )
-                    _storeDetailState.value = _storeDetailState.value.copy(
+                        submittedMenuCount = count,
                         menuList = listOf(MenuUiState()),
                         buttonEnabled = false
                     )
+                    fetchStoreDetail(storeId)
                     _sideEffects.emit(StoreDetailSideEffect.MenuAddSuccess(storeId))
                 }.onFailure { error ->
                     _sideEffects.emit(StoreDetailSideEffect.MenuAddFailure(error.message ?: "메뉴 추가 실패"))

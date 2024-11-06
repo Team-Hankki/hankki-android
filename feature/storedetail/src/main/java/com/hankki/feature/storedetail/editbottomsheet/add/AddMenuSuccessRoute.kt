@@ -53,7 +53,6 @@ fun AddMenuSuccessScreen(
 ) {
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
 
-
     LaunchedEffect(Unit) {
         viewModel.fetchNickname()
     }
@@ -77,19 +76,19 @@ fun AddMenuSuccessScreen(
         )
 
         Spacer(modifier = Modifier.height(18.dp))
-        Text(
-            text = "${storeState.nickname}님이 말씀해주신\n메뉴 ${storeState.submittedMenuCount}개를 새로 추가했어요!",
-            style = HankkiTheme.typography.suitH2,
-            color = Gray850,
-            modifier = Modifier.padding(start = 22.dp)
-        )
+
         Box {
             Image(
                 painter = painterResource(id = R.drawable.img_add_completed),
-                contentDescription = "Success",
+                contentDescription = "Success"
+            )
+
+            Text(
+                text = "${storeState.nickname}님이 말씀해주신\n메뉴 ${storeState.submittedMenuCount}개를 새로 추가했어요!",
+                style = HankkiTheme.typography.suitH2,
+                color = Gray850,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .offset(y = (-80).dp)
+                    .padding(start = 22.dp)
             )
 
             Column(

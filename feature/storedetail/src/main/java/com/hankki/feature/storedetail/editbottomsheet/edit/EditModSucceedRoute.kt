@@ -79,19 +79,19 @@ fun EditModSucceedScreen(
         )
 
         Spacer(modifier = Modifier.height(18.dp))
-        Text(
-            text = "${storeState.nickname}님이 말씀해주신대로\n메뉴 정보를 수정했어요!",
-            style = HankkiTheme.typography.suitH2,
-            color = Gray850,
-            modifier = Modifier.padding(start = 22.dp)
-        )
         Box {
             Image(
                 painter = painterResource(id = R.drawable.img_edit_completed),
                 contentDescription = "Success",
                 modifier = Modifier
                     .fillMaxSize()
-                    .offset(y = (-80).dp)
+            )
+
+            Text(
+                text = "${storeState.nickname}님이 말씀해주신대로\n메뉴 정보를 수정했어요!",
+                style = HankkiTheme.typography.suitH2,
+                color = Gray850,
+                modifier = Modifier.padding(start = 22.dp)
             )
 
             Column(

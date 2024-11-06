@@ -46,7 +46,7 @@ fun AddMenuRoute(
     onNavigateToSuccess: (Long) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel()
 ) {
-    val state by viewModel.storeDetailState.collectAsStateWithLifecycle()
+    val state by viewModel.storeState.collectAsStateWithLifecycle()
     val sideEffectFlow = viewModel.sideEffects
 
     LaunchedEffect(Unit) {

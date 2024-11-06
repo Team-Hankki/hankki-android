@@ -91,7 +91,6 @@ fun DeleteSuccessScreen(
                 contentDescription = "Success",
                 modifier = Modifier
                     .fillMaxSize()
-                    .offset(y = (-80).dp)
             )
 
             Column(
