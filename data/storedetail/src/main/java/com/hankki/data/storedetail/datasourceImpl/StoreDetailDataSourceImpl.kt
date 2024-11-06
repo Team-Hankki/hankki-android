@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.storedetail.datasource.StoreDetailDataSource
 import com.hankki.data.storedetail.request.MenuUpdateRequestDto
+import com.hankki.data.storedetail.request.StoreDetailAddMenuRequestDto
 import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
 import com.hankki.data.storedetail.response.StoreDetailNicknameResponseDto
@@ -44,18 +45,12 @@ class StoreDetailDataSourceImpl @Inject constructor(
     override suspend fun patchMenuUpdate(storeId: Long, menuId: Long, request: MenuUpdateRequestDto): CreatedBaseResponse =
         storeDetailService.patchMenuUpdate(storeId, menuId, request)
 
-    override suspend fun deleteMenuItem(storeId: Long, menuId: Long): Result<Unit> {
-        return try {
-            val response = storeDetailService.deleteMenuItem(storeId, menuId)
+    override suspend fun deleteMenuItem(storeId: Long, menuId: Long) =
+         storeDetailService.deleteMenuItem(storeId, menuId)
 
-            if (response.isSuccessful) {
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception("Failed to delete menu item: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
+    override suspend fun postMenus(
+        storeId: Long,
+        menus: List<StoreDetailAddMenuRequestDto>
+    ): CreatedBaseResponse =
+        storeDetailService.postMenus(storeId, menus)
 }

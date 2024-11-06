@@ -5,9 +5,11 @@ import com.hankki.data.storedetail.request.toDto
 import com.hankki.domain.storedetail.entity.JogboResponseEntity
 import com.hankki.domain.storedetail.entity.MenuUpdateRequestEntity
 import com.hankki.domain.storedetail.entity.StoreDetailHeartsResponseEntity
+import com.hankki.domain.storedetail.entity.StoreDetailMenuAddRequestEntity
 import com.hankki.domain.storedetail.entity.StoreDetailNicknameEntity
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
 import com.hankki.domain.storedetail.repository.StoreDetailRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class StoreDetailRepositoryImpl @Inject constructor(
@@ -70,8 +72,25 @@ class StoreDetailRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteMenuItem(storeId: Long, menuId: Long,): Result<Unit> =
+    override suspend fun deleteMenuItem(storeId: Long, menuId: Long): Result<Unit> =
         runCatching {
             storeDetailDataSource.deleteMenuItem(storeId, menuId)
         }
+
+    override suspend fun postMenus(
+        storeId: Long,
+        menus: List<StoreDetailMenuAddRequestEntity>
+    ): Result<Unit> = runCatching {
+        Timber.d("Repository - postMenus 시작")
+        Timber.d("Repository - storeId: $storeId")
+        Timber.d("Repository - menus: $menus")
+
+        storeDetailDataSource.postMenus(
+            storeId = storeId,
+            menus = menus.map { it.toDto() }
+        ).also {
+            Timber.d("Repository - API 호출 완료: $it")
+        }
+    }
 }
+

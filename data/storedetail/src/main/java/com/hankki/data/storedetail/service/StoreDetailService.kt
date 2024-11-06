@@ -3,6 +3,7 @@ package com.hankki.data.storedetail.service
 import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.storedetail.request.MenuUpdateRequestDto
+import com.hankki.data.storedetail.request.StoreDetailAddMenuRequestDto
 import com.hankki.data.storedetail.response.FavoritesResponseDto
 import com.hankki.data.storedetail.response.StoreDetailHeartResponseDto
 import com.hankki.data.storedetail.response.StoreDetailNicknameResponseDto
@@ -63,5 +64,11 @@ interface StoreDetailService {
     suspend fun deleteMenuItem(
         @Path("storeId") storeId: Long,
         @Path("menuId") menuId: Long,
-    ): Response<Unit>
+    )
+
+    @POST("/api/v1/{storeId}/menus/bulk")
+    suspend fun postMenus(
+        @Path("storeId") storeId: Long,
+        @Body menus: List<StoreDetailAddMenuRequestDto>
+    ): CreatedBaseResponse
 }
