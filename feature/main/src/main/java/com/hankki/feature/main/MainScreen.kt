@@ -298,11 +298,9 @@ internal fun MainScreen(
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo,
                         onShowSnackBar = onShowTextSnackBarWithButton,
                         onShowTextSnackBar = onShowErrorSnackBar,
-                        navigateToAddMenu = { storeId -> navigator.navigateToEditMenu(storeId) },
-                        navigateToEditMenu = { storeId-> navigator.navigateToEditMenu(storeId) },
-                        navigateToEditMod = { storeId, menuId, menuName, price -> navigator.navigateToEditMod(storeId, menuId, menuName, price) },
-                        navigateToEditSuccess = { storeId -> navigator.navigateToEditSuccess(storeId) },
-                        navigateToStoreDetail = { storeId -> navigator.navigateToStoreDetail(storeId) }
+                        navigateToAddMenu = navigator::navigateToAddMenu,
+                        navigateToEditMenu = navigator::navigateToEditMenu,
+                        navigateToEditMod = navigator::navigateToEditMod,
                     )
                 }
 

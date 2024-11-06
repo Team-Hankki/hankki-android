@@ -25,6 +25,7 @@ import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.navigateToReport
 import com.hankki.feature.report.navigation.navigateToReportFinish
 import com.hankki.feature.report.navigation.navigateToSearchStore
+import com.hankki.feature.storedetail.navigation.StoreDetailScreen
 import com.hankki.feature.storedetail.navigation.navigateStoreDetail
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
@@ -165,10 +166,6 @@ internal class MainNavigator(
         currentDestination?.hasRoute(it::class) == true
     } && (currentTab?.showBottomSheet ?: true)
 
-    fun navigateToEditMenu(storeId: Long, navOptions: NavOptions? = null) {
-        navController.navigate("edit_menu_route/$storeId", navOptions)
-    }
-
     fun navigateToEditMod(storeId: Long, menuId: Long, menuName: String, price: String) {
         val options = navOptions {
             popUpTo(navController.graph.startDestinationId) {
@@ -187,6 +184,36 @@ internal class MainNavigator(
             launchSingleTop = true
         }
         navController.navigate("edit_mod_success_route/$storeId", options)
+    }
+
+    fun navigateToAddMenu(storeId: Long, navOptions: NavOptions? = null) {
+        val options = navOptions ?: navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = false
+            }
+            launchSingleTop = true
+        }
+        navController.navigate("add_menu_route/$storeId", options)
+    }
+
+    fun navigateToEditMenu(storeId: Long, navOptions: NavOptions? = null) {
+        val options = navOptions ?: navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = false
+            }
+            launchSingleTop = true
+        }
+        navController.navigate("edit_menu_route/$storeId", options)
+    }
+
+    fun navigateToDeleteSuccess(storeId: Long) {
+        val options = navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+        navController.navigate("delete_success_route/$storeId", options)
     }
 
 }
