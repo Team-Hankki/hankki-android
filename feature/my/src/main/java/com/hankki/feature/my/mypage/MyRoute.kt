@@ -317,7 +317,8 @@ fun MyScreen(
                     onDeleteWithdraw()
                 }
                 updateDialog(DialogState.CLOSED)
-            }
+            },
+            isAntiPattern = true
         )
     }
 }
