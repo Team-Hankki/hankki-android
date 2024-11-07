@@ -4,7 +4,7 @@ import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.domain.storedetail.entity.StoreDetailResponseEntity
-import com.hankki.feature.storedetail.editbottomsheet.add.MenuUiState
+import com.hankki.feature.storedetail.editbottomsheet.add.addmenu.MenuUiState
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -20,11 +20,8 @@ data class StoreDetailState(
     val nickname: String = "",
     val isOpenEditMenuBottomSheet: Boolean = false,
     val menuItems: PersistentList<MenuItem> = persistentListOf(),
-    val addMenuList: PersistentList<MenuUiState> = persistentListOf(MenuUiState()),
-    val isAddMenuBottomSheetOpen: Boolean = false,
-    val isAddMenuButtonEnabled: Boolean = false,
-    val deleteSuccess: Boolean = false,
     val menuList: List<MenuUiState> = listOf(MenuUiState()),
     val buttonEnabled: Boolean = false,
-    val submittedMenuCount: Int = 0
+    val submittedMenuCount: Int = 0,
+    val errorMessage: String = "",
 )

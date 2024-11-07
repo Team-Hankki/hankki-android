@@ -4,5 +4,4 @@ enum class StoreDetailDialogState {
     CLOSED,
     REPORT_CONFIRMATION,
     REPORT,
-    DELETE,
 }

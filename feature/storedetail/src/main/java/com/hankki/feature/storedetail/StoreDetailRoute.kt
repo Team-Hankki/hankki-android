@@ -94,7 +94,6 @@ fun StoreDetailRoute(
                     onShowTextSnackBar("이미 삭제된 식당입니다 ")
                     navigateUp()
                 }
-                else -> {}
             }
         }
     }
@@ -228,20 +227,20 @@ fun StoreDetailScreen(
     imageUrl: String?,
     selectedIndex: Int,
     buttonLabels: PersistentList<String>,
-    onShowSnackBar: (String, Long) -> Unit,
     onNavigateUp: () -> Unit,
+    onShowSnackBar: (String, Long) -> Unit,
     onLikeClicked: () -> Unit,
     onSelectIndex: (Int) -> Unit,
     isOpenBottomSheet: Boolean,
     openBottomSheet: () -> Unit,
-    jogboItems: PersistentList<JogboResponseModel>,
-    addNewJogbo: () -> Unit,
     onDismissBottomSheetRequest: () -> Unit,
-    addStoreAtJogbo: (Long) -> Unit,
-    onReportClicked: () -> Unit,
     isOpenEditMenuBottomSheet: Boolean,
     openEditMenuBottomSheet: () -> Unit,
     onDismissEditMenuBottomSheetRequest: () -> Unit,
+    jogboItems: PersistentList<JogboResponseModel>,
+    addNewJogbo: () -> Unit,
+    addStoreAtJogbo: (Long) -> Unit,
+    onReportClicked: () -> Unit,
     onAddMenuClick: () -> Unit,
     onEditMenuClick: () -> Unit
 ) {
