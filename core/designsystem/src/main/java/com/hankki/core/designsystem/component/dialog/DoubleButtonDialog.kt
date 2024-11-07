@@ -32,13 +32,14 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun DoubleButtonDialog(
     title: String,
-    description: String? = null,
     negativeButtonTitle: String,
     positiveButtonTitle: String,
     onNegativeButtonClicked: () -> Unit,
     onPositiveButtonClicked: () -> Unit,
+    description: String? = null,
+    isAntiPattern: Boolean = false
 ) {
-    Dialog(onDismissRequest = onNegativeButtonClicked) {
+    Dialog(onDismissRequest = if (isAntiPattern) onPositiveButtonClicked else onNegativeButtonClicked) {
         Card(
             shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(
