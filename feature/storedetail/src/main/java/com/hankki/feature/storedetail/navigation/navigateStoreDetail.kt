@@ -1,32 +1,53 @@
 package com.hankki.feature.storedetail.navigation
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
-import com.hankki.feature.storedetail.editbottomsheet.add.AddMenuRoute
-import com.hankki.feature.storedetail.editbottomsheet.edit.EditMenuRoute
-import com.hankki.feature.storedetail.editbottomsheet.edit.EditModRoute
-import com.hankki.feature.storedetail.editbottomsheet.edit.EditModSucceedRoute
 import com.hankki.feature.storedetail.StoreDetailRoute
-import com.hankki.feature.storedetail.StoreDetailViewModel
-import com.hankki.feature.storedetail.editbottomsheet.add.AddMenuSuccessRoute
-import com.hankki.feature.storedetail.editbottomsheet.edit.DeleteSuccessRoute
+import com.hankki.feature.storedetail.editbottomsheet.add.addmenu.AddMenuRoute
+import com.hankki.feature.storedetail.editbottomsheet.add.addsuccess.AddMenuSuccessRoute
+import com.hankki.feature.storedetail.editbottomsheet.edit.delete.DeleteSuccessRoute
+import com.hankki.feature.storedetail.editbottomsheet.edit.editmenu.EditMenuRoute
+import com.hankki.feature.storedetail.editbottomsheet.edit.mod.EditModRoute
+import com.hankki.feature.storedetail.editbottomsheet.edit.mod.ModSucceedRoute
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class StoreDetail(
-    val storeId: Long,
-) : MainTabRoute
-
-fun NavController.navigateStoreDetail(storeId: Long, navOptions: NavOptions?) {
+fun NavController.navigateStoreDetail(storeId: Long, navOptions: NavOptions? = null) {
     navigate(StoreDetail(storeId = storeId), navOptions)
+}
+
+fun NavController.navigateAddMenu(storeId: Long, navOptions: NavOptions? = null) {
+    navigate(AddMenu(storeId = storeId), navOptions)
+}
+
+fun NavController.navigateAddMenuSuccess(storeId: Long,  submittedMenuCount: Int, navOptions: NavOptions? = null) {
+    navigate(AddMenuSuccess(storeId = storeId, submittedMenuCount = submittedMenuCount), navOptions)
+}
+
+fun NavController.navigateEditMenu(storeId: Long, navOptions: NavOptions? = null) {
+    navigate(EditMenu(storeId = storeId), navOptions)
+}
+
+fun NavController.navigateEditMod(
+    storeId: Long,
+    menuId: Long,
+    menuName: String,
+    price: String,
+    navOptions: NavOptions? = null
+) {
+    navigate(EditMod(storeId, menuId, menuName, price), navOptions)
+}
+
+fun NavController.navigateEditModSuccess(storeId: Long, navOptions: NavOptions? = null) {
+    navigate(EditModSuccess(storeId = storeId), navOptions)
+}
+
+fun NavController.navigateDeleteSuccess(storeId: Long, navOptions: NavOptions? = null) {
+    navigate(DeleteSuccess(storeId = storeId), navOptions)
 }
 
 fun NavGraphBuilder.storeDetailNavGraph(
@@ -37,15 +58,12 @@ fun NavGraphBuilder.storeDetailNavGraph(
     onShowTextSnackBar: (String) -> Unit,
     navigateToAddMenu: (Long) -> Unit,
     navigateToEditMenu: (Long) -> Unit,
-    navigateToEditMod: (Long, Long, String, String) -> Unit,
 ) {
-    // Store Detail
     composable<StoreDetail> { backStackEntry ->
         val items = backStackEntry.toRoute<StoreDetail>()
         StoreDetailRoute(
             storeId = items.storeId,
-            navigateUp = {
-            },
+            navigateUp = navigateUp,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
             onShowSnackBar = onShowSnackBar,
             onShowTextSnackBar = onShowTextSnackBar,
@@ -54,265 +72,156 @@ fun NavGraphBuilder.storeDetailNavGraph(
         )
     }
 
-    // Add Menu
-    composable(
-        route = StoreDetailScreen.AddMenu.route,
-        arguments = listOf(navArgument("storeId") { type = NavType.LongType })
-    ) { backStackEntry ->
-        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
+    composable<AddMenu> { backStackEntry ->
+        val items = backStackEntry.toRoute<AddMenu>()
         AddMenuRoute(
-            storeId = storeId,
+            storeId = items.storeId,
             onNavigateUp = navigateUp,
-            onNavigateToSuccess = { successStoreId ->
-                navController.navigate(
-                    StoreDetailScreen.AddMenuSuccess.route.replace(
-                        "{storeId}",
-                        successStoreId.toString()
-                    )
-                ) {
-                    popUpTo(
-                        StoreDetailScreen.Detail.route.replace(
-                            "{storeId}",
-                            successStoreId.toString()
-                        )
-                    ) {
-                        inclusive = false
+            onNavigateToSuccess = { menuCount ->
+                navController.navigateAddMenuSuccess(
+                    items.storeId,
+                    submittedMenuCount = menuCount,
+                    navOptions {
+                        popUpTo(StoreDetail(items.storeId)) { inclusive = false }
                     }
-                }
+                )
             }
         )
     }
 
-    // Edit Menu
-    composable(
-        route = StoreDetailScreen.EditMenu.route,
-        arguments = listOf(navArgument("storeId") { type = NavType.LongType })
-    ) { backStackEntry ->
-        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
+    composable<EditMenu> { backStackEntry ->
+        val items = backStackEntry.toRoute<EditMenu>()
         EditMenuRoute(
-            storeId = storeId,
+            storeId = items.storeId,
             onNavigateUp = navigateUp,
-            onMenuSelected = { /* Handle Menu Selection */ },
+            onMenuSelected = { /*  */ },
             onEditModClick = { menuId, menuName, price ->
-                navigateToEditMod(storeId, menuId, menuName, price)
+                navController.navigateEditMod(
+                    storeId = items.storeId,
+                    menuId = menuId,
+                    menuName = menuName,
+                    price = price
+                )
             },
             onNavigateToDeleteSuccess = { successStoreId ->
-                navController.navigate(
-                    StoreDetailScreen.DeleteSuccess.route.replace(
-                        "{storeId}",
-                        successStoreId.toString()
-                    )
-                ) {
-                    popUpTo(
-                        StoreDetailScreen.Detail.route.replace(
-                            "{storeId}",
-                            successStoreId.toString()
-                        )
-                    ) {
-                        inclusive = false
-                    }
-                }
+                navController.navigateDeleteSuccess(successStoreId, navOptions {
+                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
+                })
             }
         )
     }
 
-    // Edit Mod
-    composable(
-        route = StoreDetailScreen.EditMod.route,
-        arguments = listOf(
-            navArgument("storeId") { type = NavType.LongType },
-            navArgument("menuId") { type = NavType.LongType },
-            navArgument("menuName") { type = NavType.StringType },
-            navArgument("price") { type = NavType.StringType }
-        )
-    ) { backStackEntry ->
-        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
-        val menuId = backStackEntry.arguments?.getLong("menuId") ?: 0L
-        val menuName = backStackEntry.arguments?.getString("menuName") ?: ""
-        val price = backStackEntry.arguments?.getString("price") ?: ""
-        val viewModel: StoreDetailViewModel = hiltViewModel()
+    composable<EditMod> { backStackEntry ->
+        val items = backStackEntry.toRoute<EditMod>()
 
         EditModRoute(
-            storeId = storeId,
-            menuId = menuId,
-            menuName = menuName,
-            price = price,
+            storeId = items.storeId,
+            menuId = items.menuId,
+            menuName = items.menuName,
+            price = items.price,
             onNavigateUp = {
-                navController.navigateStoreDetail(
-                    storeId = storeId,
-                    navOptions = navOptions {
-                        popUpTo("home") {
-                            inclusive = false
-                        }
-                    }
-                )
+                navController.navigateStoreDetail(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             },
-            onMenuUpdated = { updatedMenuName, updatedPrice ->
-                viewModel.updateMenu(storeId, menuId, updatedMenuName, updatedPrice.toInt())
-                navController.navigate(
-                    StoreDetailScreen.EditModSuccess.route.replace(
-                        "{storeId}",
-                        storeId.toString()
-                    )
-                ) {
-                    popUpTo(
-                        StoreDetailScreen.Detail.route.replace(
-                            "{storeId}",
-                            storeId.toString()
-                        )
-                    ) {
-                        inclusive = false
-                    }
-                }
+            onNavigateToEditSuccess = { successStoreId ->
+                navController.navigateEditModSuccess(successStoreId, navOptions {
+                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
+                })
             },
-            navigateToEditSuccess = { successStoreId ->
-                navController.navigate(
-                    StoreDetailScreen.EditModSuccess.route.replace(
-                        "{storeId}",
-                        successStoreId.toString()
-                    )
-                ) {
-                    popUpTo(
-                        StoreDetailScreen.Detail.route.replace(
-                            "{storeId}",
-                            successStoreId.toString()
-                        )
-                    ) {
-                        inclusive = false
-                    }
-                }
+            onNavigateToDeleteSuccess = { successStoreId ->
+                navController.navigateDeleteSuccess(successStoreId, navOptions {
+                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
+                })
             }
         )
     }
 
-    // Edit Success
-    composable(
-        route = StoreDetailScreen.EditModSuccess.route,
-        arguments = listOf(navArgument("storeId") { type = NavType.LongType })
-    ) { backStackEntry ->
-        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
-        EditModSucceedRoute(
+    composable<EditModSuccess> { backStackEntry ->
+        val items = backStackEntry.toRoute<EditModSuccess>()
+        ModSucceedRoute(
             onNavigateToStoreDetailRoute = {
-                navController.navigateStoreDetail(
-                    storeId = storeId,
-                    navOptions = navOptions {
-                        popUpTo("home") {
-                            inclusive = false
-                        }
-                    }
-                )
+                navController.navigateStoreDetail(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             },
             onNavigateToEditMenu = {
-                navController.navigate(
-                    StoreDetailScreen.EditMenu.route.replace(
-                        "{storeId}",
-                        storeId.toString()
-                    )
-                ) {
-                    popUpTo(
-                        StoreDetailScreen.Detail.route.replace(
-                            "{storeId}",
-                            storeId.toString()
-                        )
-                    ) {
-                        inclusive = false
-                    }
-                }
+                navController.navigateEditMenu(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             },
             onNavigateUp = {
-                navController.navigateStoreDetail(
-                    storeId = storeId,
-                    navOptions = navOptions {
-                        popUpTo("home") {
-                            inclusive = false
-                        }
-                    }
-                )
+                navController.navigateStoreDetail(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             }
         )
     }
 
-    // Delete Success
-    composable(
-        route = StoreDetailScreen.DeleteSuccess.route,
-        arguments = listOf(navArgument("storeId") { type = NavType.LongType })
-    ) { backStackEntry ->
-        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
+    composable<DeleteSuccess> { backStackEntry ->
+        val items = backStackEntry.toRoute<DeleteSuccess>()
         DeleteSuccessRoute(
             onNavigateToStoreDetailRoute = {
-                navController.navigateStoreDetail(
-                    storeId = storeId,
-                    navOptions = navOptions {
-                        popUpTo("home") {
-                            inclusive = false
-                        }
-                    }
-                )
+                navController.navigateStoreDetail(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             },
             onNavigateToEditMenu = {
-                navController.navigate(
-                    StoreDetailScreen.EditMenu.route.replace(
-                        "{storeId}",
-                        storeId.toString()
-                    )
-                ) {
-                    popUpTo(
-                        StoreDetailScreen.Detail.route.replace(
-                            "{storeId}",
-                            storeId.toString()
-                        )
-                    ) {
-                        inclusive = false
-                    }
-                }
+                navController.navigateEditMenu(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             },
             onNavigateUp = {
-                navController.navigateStoreDetail(
-                    storeId = storeId,
-                    navOptions = navOptions {
-                        popUpTo("home") {
-                            inclusive = false
-                        }
-                    }
-                )
+                navController.navigateStoreDetail(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             }
         )
     }
 
-    // AddMenuSuccess
-    composable(
-        route = StoreDetailScreen.AddMenuSuccess.route,
-        arguments = listOf(navArgument("storeId") { type = NavType.LongType })
-    ) { backStackEntry ->
-        val storeId = backStackEntry.arguments?.getLong("storeId") ?: 0L
+    composable<AddMenuSuccess> { backStackEntry ->
+        val items = backStackEntry.toRoute<AddMenuSuccess>()
         AddMenuSuccessRoute(
+            submittedMenuCount = items.submittedMenuCount,
             onNavigateToStoreDetailRoute = {
-                navController.navigateStoreDetail(
-                    storeId = storeId,
-                    navOptions = navOptions {
-                        popUpTo("home") {
-                            inclusive = false
-                        }
-                    }
-                )
+                navController.navigateStoreDetail(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             },
             onNavigateToAddMenu = {
-                navController.navigate(
-                    StoreDetailScreen.AddMenu.route.replace(
-                        "{storeId}",
-                        storeId.toString()
-                    )
-                ) {
-                    popUpTo(
-                        StoreDetailScreen.Detail.route.replace(
-                            "{storeId}",
-                            storeId.toString()
-                        )
-                    ) {
-                        inclusive = false
-                    }
-                }
+                navController.navigateAddMenu(items.storeId, navOptions {
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                })
             }
         )
     }
 }
+
+@Serializable
+data class StoreDetail(val storeId: Long) : MainTabRoute
+
+@Serializable
+data class AddMenu(val storeId: Long) : MainTabRoute
+
+@Serializable
+data class AddMenuSuccess(
+    val storeId: Long,
+    val submittedMenuCount: Int
+) : MainTabRoute
+
+@Serializable
+data class EditMenu(val storeId: Long) : MainTabRoute
+
+@Serializable
+data class EditMod(
+    val storeId: Long,
+    val menuId: Long,
+    val menuName: String,
+    val price: String
+) : MainTabRoute
+
+@Serializable
+data class EditModSuccess(val storeId: Long) : MainTabRoute
+
+@Serializable
+data class DeleteSuccess(val storeId: Long) : MainTabRoute

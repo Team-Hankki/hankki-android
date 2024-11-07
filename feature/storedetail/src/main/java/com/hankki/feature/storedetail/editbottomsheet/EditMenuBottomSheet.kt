@@ -44,11 +44,11 @@ fun EditMenuBottomSheet(
     onAddMenuClick: () -> Unit = {},
     onEditMenuClick: () -> Unit = {}
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
-        onDismissRequest = { onDismissRequest() },
+        onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         containerColor = Gray50,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -56,8 +56,7 @@ fun EditMenuBottomSheet(
             Spacer(modifier = Modifier.height(16.dp))
         },
     ) {
-        Column()
-        {
+        Column {
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = "어떻게 편집할까요?",
