@@ -81,16 +81,10 @@ class StoreDetailRepositoryImpl @Inject constructor(
         storeId: Long,
         menus: List<StoreDetailMenuAddRequestEntity>
     ): Result<Unit> = runCatching {
-        Timber.d("Repository - postMenus 시작")
-        Timber.d("Repository - storeId: $storeId")
-        Timber.d("Repository - menus: $menus")
-
         storeDetailDataSource.postMenus(
             storeId = storeId,
             menus = menus.map { it.toDto() }
-        ).also {
-            Timber.d("Repository - API 호출 완료: $it")
-        }
+        )
     }
 }
 
