@@ -3,6 +3,8 @@ package com.hankki.feature.storedetail.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +28,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,7 +43,150 @@ import com.hankki.core.designsystem.theme.WarnRed
 import com.hankki.feature.storedetail.R
 
 @Composable
+private fun HankkiBaseField(
+    modifier: Modifier,
+    label: String,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    clearText: () -> Unit,
+    isFocused: Boolean,
+    onFocusChanged: (Boolean) -> Unit,
+    placeholder: String = "",
+    suffix: String = "",
+    isError: Boolean = false,
+    errorMessage: String = "",
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    textColor: Color = Gray850,
+    borderColor: Color = Gray500,
+    content: (@Composable BoxScope.() -> Unit)? = null
+) {
+    var isEditing by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(isFocused) {
+        if (isFocused) {
+            focusRequester.requestFocus()
+        }
+    }
+
+    Column {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .border(
+                        1.dp,
+                        when {
+                            isError -> WarnRed
+                            isEditing -> borderColor
+                            else -> Color.Transparent
+                        },
+                        RoundedCornerShape(8.dp)
+                    )
+                    .background(Color.White)
+                    .padding(horizontal = 12.dp, vertical = 14.dp)
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isEditing = focusState.isFocused
+                        onFocusChanged(focusState.isFocused)
+                    },
+                textStyle = HankkiTheme.typography.body2.copy(
+                    color = if (isError) WarnRed else textColor,
+                    textAlign = TextAlign.End
+                ),
+                singleLine = true,
+                keyboardOptions = keyboardOptions,
+                decorationBox = { innerTextField ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = label,
+                            style = if (isEditing) {
+                                HankkiTheme.typography.body4.copy(color = Gray850)
+                            } else {
+                                HankkiTheme.typography.body5.copy(color = Gray500)
+                            },
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            if (value.text.isEmpty() && isEditing && placeholder.isNotEmpty()) {
+                                Text(
+                                    text = placeholder,
+                                    color = Gray400,
+                                    style = HankkiTheme.typography.body2,
+                                    textAlign = TextAlign.End
+                                )
+                            }
+                            content?.invoke(this) ?: innerTextField()
+                        }
+
+                        if (suffix.isNotEmpty()) {
+                            Text(
+                                text = suffix,
+                                style = HankkiTheme.typography.body2.copy(color = Gray850)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        if (isEditing) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
+                                contentDescription = "Clear text",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .noRippleClickable(clearText),
+                                tint = Color.Unspecified
+                            )
+                        } else {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_bg_edit),
+                                contentDescription = "Edit text",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .noRippleClickable {
+                                        focusRequester.requestFocus()
+                                        isEditing = true
+                                    },
+                                tint = Color.Unspecified
+                            )
+                        }
+                    }
+                }
+            )
+        }
+
+        if (isError) {
+            Text(
+                text = errorMessage,
+                color = WarnRed,
+                style = HankkiTheme.typography.caption1,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
+                textAlign = TextAlign.End
+            )
+        }
+    }
+}
+
+@Composable
 fun HankkiModMenuField(
+    modifier: Modifier,
     label: String,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
@@ -48,100 +195,21 @@ fun HankkiModMenuField(
     isFocused: Boolean,
     onMenuFocused: (Boolean) -> Unit
 ) {
-    var isEditingMenu by remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
-
-    LaunchedEffect(isFocused) {
-        if (isFocused) {
-            focusRequester.requestFocus()
-        }
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .border(
-                    1.dp,
-                    if (isFocused) Gray500 else Transparent,
-                    RoundedCornerShape(8.dp)
-                )
-                .background(Color.White)
-                .padding(horizontal = 12.dp, vertical = 14.dp)
-                .focusRequester(focusRequester)
-                .onFocusChanged { focusState ->
-                    isEditingMenu = focusState.isFocused
-                    onMenuFocused(focusState.isFocused)
-                },
-            textStyle = HankkiTheme.typography.body2.copy(
-                color = Gray850,
-                textAlign = TextAlign.End
-            ),
-            singleLine = true,
-            decorationBox = { innerTextField ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = label,
-                        style = if (isEditingMenu) {
-                            HankkiTheme.typography.body4.copy(color = Gray850)
-                        } else {
-                            HankkiTheme.typography.body5.copy(color = Gray500)
-                        },
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        if (value.text.isEmpty() && isEditingMenu) {
-                            Text(
-                                text = placeholder,
-                                color = Gray400,
-                                style = HankkiTheme.typography.body2,
-                                textAlign = TextAlign.End
-                            )
-                        } else {
-                            innerTextField()
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    if (value.text.isNotEmpty() && isEditingMenu) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_cancel),
-                            contentDescription = "Clear text",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .noRippleClickable(clearText),
-                            tint = Color.Unspecified
-                        )
-                    } else {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_bg_edit),
-                            contentDescription = "Edit text",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .noRippleClickable {
-                                    onMenuFocused(true)
-                                },
-                            tint = Color.Unspecified
-                        )
-                    }
-                }
-            }
-        )
-    }
+    HankkiBaseField(
+        modifier = modifier,
+        label = label,
+        value = value,
+        onValueChange = onValueChange,
+        clearText = clearText,
+        placeholder = placeholder,
+        isFocused = isFocused,
+        onFocusChanged = onMenuFocused
+    )
 }
 
 @Composable
 fun HankkiModPriceField(
+    modifier: Modifier,
     label: String,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
@@ -149,116 +217,23 @@ fun HankkiModPriceField(
     isError: Boolean = false,
     isFocused: Boolean,
     errorMessage: String = "유효하지 않은 가격입니다.",
-    warnRed: Color = WarnRed,
     onPriceFocused: (Boolean) -> Unit
 ) {
-    var isEditingPrice by remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
-
-    LaunchedEffect(isFocused) {
-        if (isFocused) {
-            focusRequester.requestFocus()
-        }
-    }
-
-    val borderColor = when {
-        isError -> warnRed
-        isEditingPrice -> Gray500
-        else -> Transparent
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(10.dp))
-                .border(
-                    1.dp, borderColor, RoundedCornerShape(10.dp)
-                )
-                .background(Color.White)
-                .padding(horizontal = 12.dp, vertical = 14.dp)
-                .focusRequester(focusRequester)
-                .onFocusChanged { focusState ->
-                    isEditingPrice = focusState.isFocused
-                    onPriceFocused(focusState.isFocused)
-                },
-            textStyle = HankkiTheme.typography.body2.copy(
-                color = if (isError) warnRed else Gray850,
-                textAlign = TextAlign.End
-            ),
-            singleLine = true,
-            decorationBox = { innerTextField ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = label,
-                        style = if (isEditingPrice) {
-                            HankkiTheme.typography.body4.copy(color = Gray850)
-                        } else {
-                            HankkiTheme.typography.body5.copy(color = Gray500)
-                        },
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        innerTextField()
-                    }
-
-                    Text(
-                        text = "원",
-                        style = HankkiTheme.typography.body2.copy(color = Gray850)
-                    )
-
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    if (isEditingPrice) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_cancel),
-                            contentDescription = "Clear text",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .noRippleClickable(clearText),
-                            tint = Color.Unspecified
-                        )
-                    } else {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_bg_edit),
-                            contentDescription = "Edit text",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .noRippleClickable {
-                                    focusRequester.requestFocus()
-                                    isEditingPrice = true
-                                },
-                            tint = Color.Unspecified
-                        )
-                    }
-                }
+    HankkiBaseField(
+        modifier = modifier,
+        label = label,
+        value = value,
+        onValueChange = { newValue ->
+            if (newValue.text.isEmpty() || newValue.text.all { it.isDigit() }) {
+                onValueChange(newValue)
             }
-        )
-    }
-
-    if (isError) {
-        Text(
-            text = errorMessage,
-            color = warnRed,
-            style = HankkiTheme.typography.caption1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp),
-            textAlign = TextAlign.End
-        )
-    }
+        },
+        clearText = clearText,
+        isFocused = isFocused,
+        onFocusChanged = onPriceFocused,
+        isError = isError,
+        errorMessage = errorMessage,
+        suffix = "원",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
+    )
 }

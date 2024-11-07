@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.formatPrice
 import com.hankki.core.common.extension.noRippleClickable
@@ -27,13 +29,14 @@ import com.hankki.domain.storedetail.entity.MenuItem
 fun MenuItemComponent(
     menuItem: MenuItem,
     selectedMenu: String?,
-    onMenuSelected: (String) -> Unit
+    onMenuSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val isSelected = selectedMenu == menuItem.name
     val backgroundColor = if (isSelected) Red100 else Transparent
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(backgroundColor)
             .padding(vertical = 18.5.dp, horizontal = 22.dp)
@@ -43,7 +46,7 @@ fun MenuItemComponent(
     ) {
         Row {
             Icon(
-                painter = painterResource(
+                imageVector = ImageVector.vectorResource(
                     id = if (isSelected) com.hankki.core.designsystem.R.drawable.ic_btn_radio_check
                     else com.hankki.core.designsystem.R.drawable.ic_btn_radio_uncheck
                 ),
