@@ -300,7 +300,6 @@ internal fun MainScreen(
                         onShowTextSnackBar = onShowErrorSnackBar,
                         navigateToAddMenu = navigator::navigateToAddMenu,
                         navigateToEditMenu = navigator::navigateToEditMenu,
-                        navigateToEditMod = navigator::navigateToEditMod,
                     )
                 }
 

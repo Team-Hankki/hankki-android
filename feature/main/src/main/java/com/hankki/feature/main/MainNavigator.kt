@@ -25,7 +25,11 @@ import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.navigateToReport
 import com.hankki.feature.report.navigation.navigateToReportFinish
 import com.hankki.feature.report.navigation.navigateToSearchStore
-import com.hankki.feature.storedetail.navigation.StoreDetailScreen
+import com.hankki.feature.storedetail.navigation.navigateAddMenu
+import com.hankki.feature.storedetail.navigation.navigateDeleteSuccess
+import com.hankki.feature.storedetail.navigation.navigateEditMenu
+import com.hankki.feature.storedetail.navigation.navigateEditMod
+import com.hankki.feature.storedetail.navigation.navigateEditModSuccess
 import com.hankki.feature.storedetail.navigation.navigateStoreDetail
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
@@ -167,23 +171,31 @@ internal class MainNavigator(
     } && (currentTab?.showBottomSheet ?: true)
 
     fun navigateToEditMod(storeId: Long, menuId: Long, menuName: String, price: String) {
-        val options = navOptions {
-            popUpTo(navController.graph.startDestinationId) {
-                inclusive = true
+        navController.navigateEditMod(
+            storeId = storeId,
+            menuId = menuId,
+            menuName = menuName,
+            price = price,
+            navOptions {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                launchSingleTop = true
             }
-            launchSingleTop = true
-        }
-        navController.navigate("edit_mod_route/$storeId/$menuId/$menuName/$price", options)
+        )
     }
 
+
     fun navigateToEditSuccess(storeId: Long) {
-        val options = navOptions {
-            popUpTo(navController.graph.startDestinationId) {
-                inclusive = true
+        navController.navigateEditModSuccess(
+            storeId = storeId,
+            navOptions {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                launchSingleTop = true
             }
-            launchSingleTop = true
-        }
-        navController.navigate("edit_mod_success_route/$storeId", options)
+        )
     }
 
     fun navigateToAddMenu(storeId: Long, navOptions: NavOptions? = null) {
@@ -193,7 +205,7 @@ internal class MainNavigator(
             }
             launchSingleTop = true
         }
-        navController.navigate("add_menu_route/$storeId", options)
+        navController.navigateAddMenu(storeId, options)
     }
 
     fun navigateToEditMenu(storeId: Long, navOptions: NavOptions? = null) {
@@ -203,17 +215,20 @@ internal class MainNavigator(
             }
             launchSingleTop = true
         }
-        navController.navigate("edit_menu_route/$storeId", options)
+        navController.navigateEditMenu(storeId, options)
     }
 
+
     fun navigateToDeleteSuccess(storeId: Long) {
-        val options = navOptions {
-            popUpTo(navController.graph.startDestinationId) {
-                inclusive = true
+        navController.navigateDeleteSuccess(
+            storeId = storeId,
+            navOptions {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                launchSingleTop = true
             }
-            launchSingleTop = true
-        }
-        navController.navigate("delete_success_route/$storeId", options)
+        )
     }
 
 }
