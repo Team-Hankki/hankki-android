@@ -87,6 +87,8 @@ fun EditModRoute(
         onNavigateUp = onNavigateUp,
         onMenuNameChanged = viewModel::updateMenuName,
         onPriceChanged = viewModel::updatePrice,
+        onMenuFocusChanged = viewModel::updateMenuFieldFocus,
+        onPriceFocusChanged = viewModel::updatePriceFieldFocus,
         onSubmit = {
             coroutineScope.launch {
                 viewModel.submitMenu()
@@ -124,6 +126,8 @@ fun ModifyMenuScreen(
     onNavigateUp: () -> Unit,
     onMenuNameChanged: (TextFieldValue) -> Unit,
     onPriceChanged: (TextFieldValue) -> Unit,
+    onMenuFocusChanged: (Boolean) -> Unit,
+    onPriceFocusChanged: (Boolean) -> Unit,
     onSubmit: () -> Unit,
     onShowDeleteDialog: () -> Unit
 ) {
@@ -186,7 +190,7 @@ fun ModifyMenuScreen(
                 onValueChange = onMenuNameChanged,
                 placeholder = "새로운 메뉴 이름",
                 isFocused = false,
-                onMenuFocused = { /* Focus 상태가 변경될 때 호출 */ },
+                onMenuFocused = onMenuFocusChanged,
                 clearText = { onMenuNameChanged(TextFieldValue("")) }
             )
 
@@ -200,7 +204,7 @@ fun ModifyMenuScreen(
                 isError = !uiState.isPriceValid,
                 errorMessage = "가격은 8000원 이하만 제보가능해요",
                 isFocused = false,
-                onPriceFocused = { /* Focus 상태가 변경될 때 호출 */ },
+                onPriceFocused = onPriceFocusChanged,
                 clearText = { onPriceChanged(TextFieldValue("")) }
             )
 

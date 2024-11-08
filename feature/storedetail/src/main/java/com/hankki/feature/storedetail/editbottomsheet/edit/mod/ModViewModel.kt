@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -91,6 +92,24 @@ class ModViewModel @Inject constructor(
                 .onFailure { error ->
                     _sideEffect.emit(ModSideEffect.MenuAddFailure(error.message ?: "Unknown error"))
                 }
+        }
+    }
+
+    fun updateMenuFieldFocus(focused: Boolean) {
+        _uiState.update { state ->
+            state.copy(
+                isMenuFieldFocused = focused,
+                isPriceFieldFocused = if (focused) false else state.isPriceFieldFocused
+            )
+        }
+    }
+
+    fun updatePriceFieldFocus(focused: Boolean) {
+        _uiState.update { state ->
+            state.copy(
+                isPriceFieldFocused = focused,
+                isMenuFieldFocused = if (focused) false else state.isMenuFieldFocused
+            )
         }
     }
 

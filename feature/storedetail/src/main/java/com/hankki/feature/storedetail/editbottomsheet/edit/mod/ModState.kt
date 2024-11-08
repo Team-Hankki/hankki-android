@@ -8,5 +8,7 @@ data class ModState(
     val isPriceValid: Boolean = true,
     val isOverPriceLimit: Boolean = false,
     val showRestoreMenuNameButton: Boolean = false,
-    val showRestorePriceButton: Boolean = false
+    val showRestorePriceButton: Boolean = false,
+    val isMenuFieldFocused: Boolean = false,
+    val isPriceFieldFocused: Boolean = false
 )
