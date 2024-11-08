@@ -1,7 +1,6 @@
 package com.hankki.feature.storedetail.editbottomsheet.edit.mod
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -111,6 +110,7 @@ fun EditModRoute(
                 }
             )
         }
+
         else -> {}
     }
 }
@@ -225,7 +225,8 @@ fun ModifyMenuScreen(
 
                 if (uiState.isOverPriceLimit) {
                     PriceWarningMessage(
-                        onDeleteClick = onShowDeleteDialog
+                        onDeleteClick = onShowDeleteDialog,
+                        onDismissClick = { onPriceChanged(TextFieldValue("")) }
                     )
                 }
 
