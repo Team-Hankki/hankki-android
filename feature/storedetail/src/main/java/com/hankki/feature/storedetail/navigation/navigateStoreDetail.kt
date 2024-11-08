@@ -142,17 +142,17 @@ fun NavGraphBuilder.storeDetailNavGraph(
         ModSucceedRoute(
             onNavigateToStoreDetailRoute = {
                 navController.navigateStoreDetail(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             },
             onNavigateToEditMenu = {
                 navController.navigateEditMenu(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             },
             onNavigateUp = {
                 navController.navigateStoreDetail(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             }
         )
@@ -163,17 +163,17 @@ fun NavGraphBuilder.storeDetailNavGraph(
         DeleteSuccessRoute(
             onNavigateToStoreDetailRoute = {
                 navController.navigateStoreDetail(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             },
             onNavigateToEditMenu = {
                 navController.navigateEditMenu(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             },
             onNavigateUp = {
                 navController.navigateStoreDetail(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             }
         )
@@ -185,12 +185,12 @@ fun NavGraphBuilder.storeDetailNavGraph(
             submittedMenuCount = items.submittedMenuCount,
             onNavigateToStoreDetailRoute = {
                 navController.navigateStoreDetail(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             },
             onNavigateToAddMenu = {
                 navController.navigateAddMenu(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             }
         )
