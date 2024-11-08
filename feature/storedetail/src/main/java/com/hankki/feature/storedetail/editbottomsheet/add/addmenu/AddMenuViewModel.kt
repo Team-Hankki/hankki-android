@@ -55,11 +55,17 @@ class AddMenuViewModel @Inject constructor(
         }
     }
 
+    private fun isValidPrice(price: String): Boolean {
+        return price.toIntOrNull()?.let { numericPrice ->
+            numericPrice in 1..8000
+        } ?: false
+    }
+
     private fun handlePriceChange(index: Int, price: String) {
         val currentList = _addMenuState.value.menuList
         if (index in currentList.indices) {
-            val isPriceError =
-                price.isNotBlank() && (price.toIntOrNull() == null || (price.toIntOrNull() ?: 0) <= 0)
+            val isPriceError = price.isNotBlank() && !isValidPrice(price)
+
             val updatedList = currentList.toPersistentList().set(
                 index,
                 currentList[index].copy(price = price, isPriceError = isPriceError)
@@ -70,6 +76,15 @@ class AddMenuViewModel @Inject constructor(
                     buttonEnabled = validateInputs(updatedList)
                 )
             }
+        }
+    }
+
+    private fun validateInputs(menuList: List<MenuUiState>): Boolean {
+        return menuList.all { menu ->
+            menu.name.isNotBlank() &&
+                    menu.price.isNotBlank() &&
+                    !menu.isPriceError &&
+                   isValidPrice(menu.price)
         }
     }
 
@@ -134,16 +149,6 @@ class AddMenuViewModel @Inject constructor(
     private fun handleBackClick() {
         viewModelScope.launch {
             emitSideEffect(AddMenuSideEffect.NavigateBack)
-        }
-    }
-
-    private fun validateInputs(menuList: List<MenuUiState>): Boolean {
-        return menuList.all { menu ->
-            menu.name.isNotBlank() &&
-                    menu.price.isNotBlank() &&
-                    !menu.isPriceError &&
-                    menu.price.toIntOrNull() != null &&
-                    menu.price.toIntOrNull()!! > 0
         }
     }
 

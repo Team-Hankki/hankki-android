@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,10 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red500
@@ -66,21 +62,9 @@ private fun AddMenuSuccessScreen(
             .fillMaxSize()
             .statusBarsPadding()
     ) {
-        HankkiTopBar(
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(com.hankki.core.designsystem.R.drawable.ic_arrow_left),
-                    contentDescription = "뒤로가기",
-                    modifier = Modifier
-                        .offset(x = 6.dp, y = 2.dp)
-                        .noRippleClickable(onClick = onNavigateToStoreDetailRoute),
-                    tint = Gray700
-                )
-            }
-        )
+        HankkiTopBar()
 
         Spacer(modifier = Modifier.height(18.dp))
-
         Box {
             Image(
                 painter = painterResource(id = R.drawable.img_add_completed),
