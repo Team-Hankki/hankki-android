@@ -78,7 +78,7 @@ class ModViewModel @Inject constructor(
                     }
             }
         } else {
-            _sideEffect.emit(ModSideEffect.MenuAddFailure("Price must be below 8000"))
+            _sideEffect.emit(ModSideEffect.MenuAddFailure("8000이하만 입력 가능"))
         }
     }
 
@@ -101,6 +101,4 @@ class ModViewModel @Inject constructor(
     fun showDeleteDialog() {
         _dialogState.value = ModDialogState.DELETE
     }
-
-
 }

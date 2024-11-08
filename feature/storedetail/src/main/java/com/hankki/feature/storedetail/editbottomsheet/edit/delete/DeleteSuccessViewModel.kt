@@ -50,10 +50,4 @@ class DeleteSuccessViewModel @Inject constructor(
             _sideEffect.send(DeleteSuccessSideEffect.NavigateToStoreDetail)
         }
     }
-
-    fun navigateUp() {
-        viewModelScope.launch {
-            _sideEffect.send(DeleteSuccessSideEffect.NavigateUp)
-        }
-    }
 }

@@ -194,7 +194,7 @@ fun ModifyMenuScreen(
 
             HankkiModPriceField(
                 modifier = Modifier.fillMaxWidth(),
-                label = "가격",
+                label = "메뉴 가격",
                 value = uiState.priceFieldValue,
                 onValueChange = onPriceChanged,
                 isError = !uiState.isPriceValid,

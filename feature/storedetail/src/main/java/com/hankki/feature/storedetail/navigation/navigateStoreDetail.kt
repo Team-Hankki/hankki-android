@@ -149,11 +149,6 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 navController.navigateEditMenu(items.storeId, navOptions {
                     popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
-            },
-            onNavigateUp = {
-                navController.navigateStoreDetail(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
-                })
             }
         )
     }
@@ -168,11 +163,6 @@ fun NavGraphBuilder.storeDetailNavGraph(
             },
             onNavigateToEditMenu = {
                 navController.navigateEditMenu(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
-                })
-            },
-            onNavigateUp = {
-                navController.navigateStoreDetail(items.storeId, navOptions {
                     popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
             }
