@@ -13,7 +13,7 @@ import com.hankki.feature.storedetail.editbottomsheet.add.addsuccess.AddMenuSucc
 import com.hankki.feature.storedetail.editbottomsheet.edit.delete.DeleteSuccessRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.editmenu.EditMenuRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.mod.EditModRoute
-import com.hankki.feature.storedetail.editbottomsheet.edit.mod.ModSucceedRoute
+import com.hankki.feature.storedetail.editbottomsheet.edit.mod.ModSuccessRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateStoreDetail(storeId: Long, navOptions: NavOptions? = null) {
@@ -139,7 +139,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
 
     composable<EditModSuccess> { backStackEntry ->
         val items = backStackEntry.toRoute<EditModSuccess>()
-        ModSucceedRoute(
+        ModSuccessRoute(
             onNavigateToStoreDetailRoute = {
                 navController.navigateStoreDetail(items.storeId, navOptions {
                     popUpTo(StoreDetail(items.storeId)) { inclusive = true }

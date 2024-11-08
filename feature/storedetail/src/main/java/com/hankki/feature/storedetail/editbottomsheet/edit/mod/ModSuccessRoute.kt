@@ -30,12 +30,12 @@ import com.hankki.feature.storedetail.R
 import com.hankki.feature.storedetail.StoreDetailViewModel
 
 @Composable
-fun ModSucceedRoute(
+fun ModSuccessRoute(
     viewModel: StoreDetailViewModel = hiltViewModel(),
     onNavigateToEditMenu: () -> Unit,
     onNavigateToStoreDetailRoute: () -> Unit,
 ) {
-    ModSucceedScreen(
+    ModSuccessScreen(
         viewModel = viewModel,
         onNavigateToEditMenu = onNavigateToEditMenu,
         onNavigateToStoreDetailRoute = onNavigateToStoreDetailRoute,
@@ -43,7 +43,7 @@ fun ModSucceedRoute(
 }
 
 @Composable
-fun ModSucceedScreen(
+fun ModSuccessScreen(
     viewModel: StoreDetailViewModel,
     onNavigateToEditMenu: () -> Unit,
     onNavigateToStoreDetailRoute: () -> Unit,
