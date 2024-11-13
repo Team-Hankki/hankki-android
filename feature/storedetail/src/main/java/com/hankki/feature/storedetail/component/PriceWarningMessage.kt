@@ -40,11 +40,11 @@ fun PriceWarningMessage(
             .border(
                 width = 1.dp,
                 color = Gray200,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(12.dp)
             )
             .background(
                 color = Gray50,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(12.dp)
             )
             .padding(
                 start = 24.dp,
@@ -65,7 +65,7 @@ fun PriceWarningMessage(
             )
             Text(
                 text = "8천원을 넘는 메뉴는 삭제를 추천해요",
-                style = HankkiTheme.typography.body5,
+                style = HankkiTheme.typography.body6,
                 color = Gray850
             )
         }
@@ -82,7 +82,7 @@ fun PriceWarningMessage(
             ) {
                 Text(
                     text = "삭제하기",
-                    style = HankkiTheme.typography.body3,
+                    style = HankkiTheme.typography.body8,
                     color = White,
                     modifier = Modifier.padding(
                         horizontal = 8.dp,
