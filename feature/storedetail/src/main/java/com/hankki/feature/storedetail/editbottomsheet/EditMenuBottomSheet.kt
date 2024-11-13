@@ -34,6 +34,7 @@ import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.storedetail.R
 import kotlinx.coroutines.launch
 
@@ -50,10 +51,10 @@ fun EditMenuBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
-        containerColor = Gray50,
+        containerColor = White,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         dragHandle = {
-            Spacer(modifier = Modifier.height(16.dp))
+//            Spacer(modifier = Modifier.height(16.dp))
         },
     ) {
         Column {
@@ -70,7 +71,7 @@ fun EditMenuBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp, bottom = 32.dp),
+                    .padding(bottom = 32.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 CardItem(
@@ -120,7 +121,7 @@ fun CardItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, Gray200, RoundedCornerShape(16.dp))
+            .border(1.dp, Gray200, RoundedCornerShape(20.dp))
             .noRippleClickable(onClick = onClick)
     ) {
         Image(
@@ -147,7 +148,7 @@ fun CardItem(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = text,
-                style = HankkiTheme.typography.suitH3,
+                style = HankkiTheme.typography.suitSub3,
                 color = Gray800
             )
         }
