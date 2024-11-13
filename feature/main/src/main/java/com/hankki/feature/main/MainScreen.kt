@@ -297,7 +297,7 @@ internal fun MainScreen(
                         navigateUp = navigator::navigateUpIfNotHome,
                         navigateToAddNewJogbo = navigator::navigateToNewJogbo,
                         onShowSnackBar = onShowTextSnackBarWithButton,
-                        onShowTextSnackBar = onShowErrorSnackBar,
+                        onShowErrorSnackBar = onShowErrorSnackBar,
                         navigateToAddMenu = navigator::navigateToAddMenu,
                         navigateToEditMenu = navigator::navigateToEditMenu,
                     )
