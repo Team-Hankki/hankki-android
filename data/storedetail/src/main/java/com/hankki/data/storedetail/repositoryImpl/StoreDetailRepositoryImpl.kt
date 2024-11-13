@@ -72,10 +72,11 @@ class StoreDetailRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteMenuItem(storeId: Long, menuId: Long): Result<Unit> =
-        runCatching {
+    override suspend fun deleteMenuItem(storeId: Long, menuId: Long): Result<Unit> {
+        return runCatching {
             storeDetailDataSource.deleteMenuItem(storeId, menuId)
         }
+    }
 
     override suspend fun postMenus(
         storeId: Long,
