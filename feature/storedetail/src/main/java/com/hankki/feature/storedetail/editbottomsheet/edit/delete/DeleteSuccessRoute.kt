@@ -32,6 +32,7 @@ fun DeleteSuccessRoute(
     viewModel: DeleteSuccessViewModel = hiltViewModel(),
     onNavigateToEditMenu: () -> Unit,
     onNavigateToStoreDetailRoute: () -> Unit,
+    onShowErrorSnackBar: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sideEffectFlow = viewModel.sideEffect
@@ -41,14 +42,17 @@ fun DeleteSuccessRoute(
             when (sideEffect) {
                 DeleteSuccessSideEffect.NavigateToEditMenu -> onNavigateToEditMenu()
                 DeleteSuccessSideEffect.NavigateToStoreDetail -> onNavigateToStoreDetailRoute()
+                is DeleteSuccessSideEffect.ShowError -> {
+                    onShowErrorSnackBar(sideEffect.message)
+                }
             }
         }
     }
 
     DeleteSuccessScreen(
         nickname = uiState.nickname,
-        onNavigateToEditMenu = { viewModel.navigateToEditMenu() },
-        onNavigateToStoreDetailRoute = { viewModel.navigateToStoreDetail() },
+        onNavigateToEditMenu = viewModel::navigateToEditMenu,
+        onNavigateToStoreDetailRoute = viewModel::navigateToStoreDetail
     )
 }
 
@@ -89,7 +93,7 @@ fun DeleteSuccessScreen(
 
                 HankkiMediumButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "다른 메뉴도 삭제하기",
+                    text = "다른 메뉴도 수정하기",
                     onClick = onNavigateToEditMenu,
                     enabled = true,
                     backgroundColor = White,
@@ -97,7 +101,7 @@ fun DeleteSuccessScreen(
                     textColor = Red500,
                     borderColor = Red500
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 HankkiMediumButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "완료",
