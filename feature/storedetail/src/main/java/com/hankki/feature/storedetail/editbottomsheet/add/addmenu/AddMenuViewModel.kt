@@ -35,10 +35,10 @@ class AddMenuViewModel @Inject constructor(
         when (event) {
             is AddMenuEvent.OnMenuNameChange -> handleMenuNameChange(event.index, event.name)
             is AddMenuEvent.OnPriceChange -> handlePriceChange(event.index, event.price)
-            is AddMenuEvent.OnDeleteMenu -> handleDeleteMenu(event.index)
-            AddMenuEvent.OnAddMenu -> handleAddMenu()
-            AddMenuEvent.OnSubmit -> handleSubmitMenus()
-            AddMenuEvent.OnBackClick -> handleBackClick()
+            is AddMenuEvent.OnDeleteMenu -> deleteMenu(event.index)
+            AddMenuEvent.OnAddMenu -> addMenu()
+            AddMenuEvent.OnSubmit -> submitMenus()
+            AddMenuEvent.OnBackClick -> backClick()
         }
     }
 
@@ -88,7 +88,7 @@ class AddMenuViewModel @Inject constructor(
         }
     }
 
-    private fun handleDeleteMenu(index: Int) {
+    private fun deleteMenu(index: Int) {
         val currentList = _addMenuState.value.menuList
         if (index in currentList.indices && currentList.size > 1) {
             val updatedList = currentList.toPersistentList().removeAt(index)
@@ -101,7 +101,7 @@ class AddMenuViewModel @Inject constructor(
         }
     }
 
-    private fun handleAddMenu() {
+    private fun addMenu() {
         val currentList = _addMenuState.value.menuList
         val updatedList = currentList.toPersistentList().add(MenuUiState())
         _addMenuState.update { state ->
@@ -112,7 +112,7 @@ class AddMenuViewModel @Inject constructor(
         }
     }
 
-    private fun handleSubmitMenus() {
+    private fun submitMenus() {
         viewModelScope.launch {
             val storeId = _addMenuState.value.storeId
             if (storeId <= 0) {
@@ -141,12 +141,12 @@ class AddMenuViewModel @Inject constructor(
                 emitSideEffect(AddMenuSideEffect.NavigateToSuccess)
             }.onFailure { error ->
                 Timber.e(error)
-                emitSideEffect(AddMenuSideEffect.ShowError(error.message ?: "메뉴 추가 실패"))
+                emitSideEffect(AddMenuSideEffect.ShowError(error.message ?: "메뉴 추가에 실패하였습니다. 다시 시도해 주세요."))
             }
         }
     }
 
-    private fun handleBackClick() {
+    private fun backClick() {
         viewModelScope.launch {
             emitSideEffect(AddMenuSideEffect.NavigateBack)
         }

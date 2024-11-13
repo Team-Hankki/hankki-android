@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ fun AddMenuRoute(
     storeId: Long,
     onNavigateUp: () -> Unit,
     onNavigateToSuccess: (Int) -> Unit,
+    onShowErrorSnackBar: (String) -> Unit,
     viewModel: AddMenuViewModel = hiltViewModel()
 ) {
     val state by viewModel.addMenuState.collectAsStateWithLifecycle()
@@ -44,7 +46,7 @@ fun AddMenuRoute(
                 AddMenuSideEffect.NavigateToSuccess -> onNavigateToSuccess(state.menuList.size)
                 AddMenuSideEffect.NavigateBack -> onNavigateUp()
                 is AddMenuSideEffect.ShowError -> {
-                    // Handle error state
+                    onShowErrorSnackBar(sideEffect.message)
                 }
             }
         }
@@ -54,8 +56,22 @@ fun AddMenuRoute(
         menuList = state.menuList,
         buttonEnabled = state.buttonEnabled,
         onNavigateUp = { viewModel.onEvent(AddMenuEvent.OnBackClick) },
-        onMenuNameChange = { index, name -> viewModel.onEvent(AddMenuEvent.OnMenuNameChange(index, name)) },
-        onPriceChange = { index, price -> viewModel.onEvent(AddMenuEvent.OnPriceChange(index, price)) },
+        onMenuNameChange = { index, name ->
+            viewModel.onEvent(
+                AddMenuEvent.OnMenuNameChange(
+                    index,
+                    name
+                )
+            )
+        },
+        onPriceChange = { index, price ->
+            viewModel.onEvent(
+                AddMenuEvent.OnPriceChange(
+                    index,
+                    price
+                )
+            )
+        },
         onDeleteMenu = { index -> viewModel.onEvent(AddMenuEvent.OnDeleteMenu(index)) },
         onAddMenu = { viewModel.onEvent(AddMenuEvent.OnAddMenu) },
         onSubmit = { viewModel.onEvent(AddMenuEvent.OnSubmit) }
@@ -73,12 +89,16 @@ private fun AddMenuScreen(
     onAddMenu: () -> Unit,
     onSubmit: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(White)
             .statusBarsPadding()
+            .imePadding()
             .navigationBarsPadding()
+            .noRippleClickable { focusManager.clearFocus() }
     ) {
         HankkiTopBar(
             leadingIcon = {
@@ -106,73 +126,75 @@ private fun AddMenuScreen(
             )
 
             Spacer(modifier = Modifier.height(34.dp))
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(bottom = 8.dp)
-            ) {
-                items(
-                    count = menuList.size,
-                    key = { index -> index }
-                ) { index ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
+            Box(modifier = Modifier.weight(1f)) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(
+                        count = menuList.size,
+                        key = { index -> index }
+                    ) { index ->
                         Row(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
-                            HankkiMenuTextField(
-                                value = menuList[index].name,
-                                onTextChanged = { onMenuNameChange(index, it) },
-                                modifier = Modifier.fillMaxWidth(0.55f)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            HankkiPriceTextField(
-                                value = menuList[index].price,
-                                onTextChanged = { onPriceChange(index, it) },
-                                isError = menuList[index].isPriceError,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(3.dp))
+                            Row(
+                                modifier = Modifier.weight(1f),
+                            ) {
+                                HankkiMenuTextField(
+                                    value = menuList[index].name,
+                                    onTextChanged = { onMenuNameChange(index, it) },
+                                    modifier = Modifier.fillMaxWidth(0.55f)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                HankkiPriceTextField(
+                                    value = menuList[index].price,
+                                    onTextChanged = { onPriceChange(index, it) },
+                                    isError = menuList[index].isPriceError,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(3.dp))
 
-                        Column {
-                            Text(
-                                text = "",
-                                style = HankkiTheme.typography.body8,
-                                color = Color.Transparent
-                            )
-                            Spacer(modifier = Modifier.height(11.dp))
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = com.hankki.core.designsystem.R.drawable.ic_circle_x),
-                                contentDescription = "delete",
-                                tint = Gray300,
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .noRippleClickable { onDeleteMenu(index) }
-                            )
+                            Column {
+                                Text(
+                                    text = "",
+                                    style = HankkiTheme.typography.body8,
+                                    color = Color.Transparent
+                                )
+                                Spacer(modifier = Modifier.height(11.dp))
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = com.hankki.core.designsystem.R.drawable.ic_circle_x),
+                                    contentDescription = "delete",
+                                    tint = Gray300,
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .noRippleClickable { onDeleteMenu(index) }
+                                )
+                            }
                         }
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
 
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Row(
-                        modifier = Modifier.noRippleClickable(onClick = onAddMenu),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = com.hankki.core.designsystem.R.drawable.ic_add_circle_dark_plus),
-                            contentDescription = "plus",
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "메뉴추가하기",
-                            style = HankkiTheme.typography.body3,
-                            color = Gray400
-                        )
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            modifier = Modifier.noRippleClickable(onClick = onAddMenu),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = com.hankki.core.designsystem.R.drawable.ic_add_circle_dark_plus),
+                                contentDescription = "plus",
+                                tint = Color.Unspecified,
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "메뉴 추가하기",
+                                style = HankkiTheme.typography.body3,
+                                color = Gray400
+                            )
+                        }
                     }
                 }
             }
