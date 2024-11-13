@@ -31,12 +31,18 @@ import com.hankki.feature.storedetail.StoreDetailViewModel
 
 @Composable
 fun ModSuccessRoute(
-    viewModel: StoreDetailViewModel = hiltViewModel(),
     onNavigateToEditMenu: () -> Unit,
     onNavigateToStoreDetailRoute: () -> Unit,
 ) {
+    val viewModel: StoreDetailViewModel = hiltViewModel()
+    val storeState by viewModel.storeState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchNickname()
+    }
+
     ModSuccessScreen(
-        viewModel = viewModel,
+        nickname = storeState.nickname,
         onNavigateToEditMenu = onNavigateToEditMenu,
         onNavigateToStoreDetailRoute = onNavigateToStoreDetailRoute,
     )
@@ -44,16 +50,10 @@ fun ModSuccessRoute(
 
 @Composable
 fun ModSuccessScreen(
-    viewModel: StoreDetailViewModel,
+    nickname: String,
     onNavigateToEditMenu: () -> Unit,
-    onNavigateToStoreDetailRoute: () -> Unit,
+    onNavigateToStoreDetailRoute: () -> Unit
 ) {
-    val storeState by viewModel.storeState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchNickname()
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +71,7 @@ fun ModSuccessScreen(
             )
 
             Text(
-                text = "${storeState.nickname}님이 말씀해주신대로\n메뉴 정보를 수정했어요!",
+                text = "${nickname}님이 말씀해주신대로\n메뉴 정보를 수정했어요!",
                 style = HankkiTheme.typography.suitH2,
                 color = Gray850,
                 modifier = Modifier.padding(start = 22.dp)
@@ -96,7 +96,7 @@ fun ModSuccessScreen(
                     textColor = Red500,
                     borderColor = Red500
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 HankkiMediumButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "완료",

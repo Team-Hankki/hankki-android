@@ -25,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,7 +47,7 @@ import com.hankki.feature.storedetail.component.RollbackButton
 import kotlinx.coroutines.launch
 
 @Composable
-fun EditModRoute(
+fun ModRoute(
     storeId: Long,
     menuId: Long,
     menuName: String,
@@ -124,8 +123,8 @@ fun ModifyMenuScreen(
     menuName: String,
     price: String,
     onNavigateUp: () -> Unit,
-    onMenuNameChanged: (TextFieldValue) -> Unit,
-    onPriceChanged: (TextFieldValue) -> Unit,
+    onMenuNameChanged: (String) -> Unit,
+    onPriceChanged: (String) -> Unit,
     onMenuFocusChanged: (Boolean) -> Unit,
     onPriceFocusChanged: (Boolean) -> Unit,
     onSubmit: () -> Unit,
@@ -133,14 +132,12 @@ fun ModifyMenuScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val isVisibleIme = WindowInsets.isImeVisible
-    val isSubmitEnabled = uiState.menuNameFieldValue.text.isNotBlank() &&
-            uiState.priceFieldValue.text.isNotBlank() &&
-            uiState.isPriceValid
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(White)
+            .noRippleClickable { focusManager.clearFocus() }
     ) {
         Column(
             modifier = Modifier
@@ -186,12 +183,19 @@ fun ModifyMenuScreen(
             HankkiModMenuField(
                 modifier = Modifier.fillMaxWidth(),
                 label = "메뉴 이름",
-                value = uiState.menuNameFieldValue,
+                value = uiState.menuName,
                 onValueChange = onMenuNameChanged,
                 placeholder = "새로운 메뉴 이름",
-                isFocused = false,
-                onMenuFocused = onMenuFocusChanged,
-                clearText = { onMenuNameChanged(TextFieldValue("")) }
+                isFocused = uiState.isMenuFieldFocused,
+                onMenuFocused = { focused ->
+                    if (focused) {
+                        onPriceFocusChanged(false)
+                    }
+                    onMenuFocusChanged(focused)
+                },
+                clearText = {
+                    onMenuNameChanged("")
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -199,38 +203,51 @@ fun ModifyMenuScreen(
             HankkiModPriceField(
                 modifier = Modifier.fillMaxWidth(),
                 label = "메뉴 가격",
-                value = uiState.priceFieldValue,
+                value = uiState.price,
                 onValueChange = onPriceChanged,
                 isError = !uiState.isPriceValid,
-                errorMessage = "가격은 8000원 이하만 제보가능해요",
-                isFocused = false,
-                onPriceFocused = onPriceFocusChanged,
-                clearText = { onPriceChanged(TextFieldValue("")) }
+                errorMessage = "8000원 이하만 제보 가능해요",
+                isFocused = uiState.isPriceFieldFocused,
+                onPriceFocused = { focused ->
+                    if (focused) {
+                        onMenuFocusChanged(false)
+                    }
+                    onPriceFocusChanged(focused)
+                },
+                clearText = {
+                    onPriceChanged("")
+                }
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
             if (isVisibleIme) {
-                if (uiState.menuNameFieldValue.text != menuName && uiState.showRestoreMenuNameButton) {
+                if (uiState.menuName != menuName &&
+                    uiState.showRestoreMenuNameButton &&
+                    uiState.isMenuFieldFocused
+                ) {
                     RollbackButton(
                         text = "기존 메뉴이름 입력",
-                        onClick = { onMenuNameChanged(TextFieldValue(menuName)) }
+                        onClick = { onMenuNameChanged(menuName) }
                     )
                     Spacer(modifier = Modifier.padding(top = 16.dp))
                 }
 
-                if (uiState.priceFieldValue.text != price && uiState.showRestorePriceButton) {
+                if (uiState.price != price &&
+                    uiState.showRestorePriceButton &&
+                    uiState.isPriceFieldFocused
+                ) {
                     RollbackButton(
                         text = "기존 메뉴가격 입력",
-                        onClick = { onPriceChanged(TextFieldValue(price)) }
+                        onClick = { onPriceChanged(price) }
                     )
                     Spacer(modifier = Modifier.padding(top = 16.dp))
                 }
 
-                if (uiState.isOverPriceLimit) {
+                if (uiState.isOverPriceLimit && uiState.isPriceFieldFocused) {
                     PriceWarningMessage(
                         onDeleteClick = onShowDeleteDialog,
-                        onDismissClick = { onPriceChanged(TextFieldValue("")) }
+                        onDismissClick = {  }
                     )
                 }
 
@@ -238,16 +255,16 @@ fun ModifyMenuScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .imePadding(),
-                    text = "적용",
+                    text = "수정 완료",
                     onClick = {
-                        if (isSubmitEnabled) {
+                        if (uiState.isSubmitEnabled) {
                             focusManager.clearFocus()
                             onSubmit()
                         }
                     },
-                    enabled = isSubmitEnabled,
+                    enabled = uiState.isSubmitEnabled,
                     textStyle = HankkiTheme.typography.sub3,
-                    backgroundColor = if (isSubmitEnabled) Red500 else Red400
+                    backgroundColor = if (uiState.isSubmitEnabled) Red500 else Red400
                 )
             } else {
                 Text(
@@ -265,10 +282,15 @@ fun ModifyMenuScreen(
                         .navigationBarsPadding()
                         .padding(bottom = 15.dp),
                     text = "수정 완료",
-                    onClick = onSubmit,
-                    enabled = isSubmitEnabled,
+                    onClick = {
+                        if (uiState.isSubmitEnabled) {
+                            focusManager.clearFocus()
+                            onSubmit()
+                        }
+                    },
+                    enabled = uiState.isSubmitEnabled,
                     textStyle = HankkiTheme.typography.sub3,
-                    backgroundColor = if (isSubmitEnabled) Red500 else Red400
+                    backgroundColor = if (uiState.isSubmitEnabled) Red500 else Red400
                 )
             }
         }

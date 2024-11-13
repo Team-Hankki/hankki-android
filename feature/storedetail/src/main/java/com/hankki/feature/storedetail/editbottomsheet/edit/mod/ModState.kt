@@ -1,14 +1,13 @@
 package com.hankki.feature.storedetail.editbottomsheet.edit.mod
 
-import androidx.compose.ui.text.input.TextFieldValue
-
 data class ModState(
-    val menuNameFieldValue: TextFieldValue = TextFieldValue(),
-    val priceFieldValue: TextFieldValue = TextFieldValue(),
+    val menuName: String = "",
+    val price: String = "",
     val isPriceValid: Boolean = true,
     val isOverPriceLimit: Boolean = false,
     val showRestoreMenuNameButton: Boolean = false,
     val showRestorePriceButton: Boolean = false,
     val isMenuFieldFocused: Boolean = false,
-    val isPriceFieldFocused: Boolean = false
+    val isPriceFieldFocused: Boolean = false,
+    val isSubmitEnabled: Boolean = false
 )

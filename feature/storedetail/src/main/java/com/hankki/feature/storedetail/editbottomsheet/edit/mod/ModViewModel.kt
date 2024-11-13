@@ -1,7 +1,5 @@
 package com.hankki.feature.storedetail.editbottomsheet.edit.mod
 
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.domain.storedetail.entity.MenuUpdateRequestEntity
@@ -29,50 +27,65 @@ class ModViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<ModSideEffect>()
     val sideEffect: SharedFlow<ModSideEffect> = _sideEffect
 
-    var storeId: Long = -1
-    private var menuId: Long = -1
+    private var _currentStoreId: Long = -1
+    private var _currentMenuId: Long = -1
 
-    fun initialize(storeId: Long, menuId: Long, menuName: String, price: String) {
-        this.storeId = storeId
-        this.menuId = menuId
+    private var originalMenuName: String = ""
+    private var originalPrice: String = ""
+
+    fun initialize(newStoreId: Long, newMenuId: Long, menuName: String, price: String) {
+        this._currentStoreId = newStoreId
+        this._currentMenuId = newMenuId
+        originalMenuName = menuName
+        originalPrice = price
+
         _uiState.value = ModState(
-            menuNameFieldValue = TextFieldValue(menuName, selection = TextRange(menuName.length)),
-            priceFieldValue = TextFieldValue(price, selection = TextRange(price.length)),
+            menuName = menuName,
+            price = price,
             isPriceValid = price.toIntOrNull()?.let { it < 8000 } ?: false,
-            isOverPriceLimit = price.toIntOrNull()?.let { it >= 8000 } ?: false
+            isOverPriceLimit = price.toIntOrNull()?.let { it >= 8000 } ?: false,
+            showRestoreMenuNameButton = false,
+            showRestorePriceButton = false,
+            isSubmitEnabled = false
         )
     }
 
-    fun updateMenuName(newValue: TextFieldValue) {
-        _uiState.value = _uiState.value.copy(
-            menuNameFieldValue = newValue,
-            showRestoreMenuNameButton = newValue.text != _uiState.value.menuNameFieldValue.text
-        )
+    fun updateMenuName(newValue: String) {
+        _uiState.update { state ->
+            state.copy(
+                menuName = newValue,
+                showRestoreMenuNameButton = newValue != originalMenuName,
+                isSubmitEnabled = newValue.isNotBlank() && (newValue != originalMenuName || state.price != originalPrice)
+            )
+        }
     }
 
-    fun updatePrice(newValue: TextFieldValue) {
-        val priceInt = newValue.text.toIntOrNull()
-        _uiState.value = _uiState.value.copy(
-            priceFieldValue = newValue,
-            isOverPriceLimit = priceInt?.let { it >= 8000 } == true,
-            isPriceValid = priceInt != null && priceInt < 8000,
-            showRestorePriceButton = newValue.text != _uiState.value.priceFieldValue.text
-        )
+    fun updatePrice(newValue: String) {
+        val priceInt = newValue.toIntOrNull()
+        _uiState.update { state ->
+            state.copy(
+                price = newValue,
+                isPriceValid = priceInt != null && priceInt < 8000,
+                isOverPriceLimit = priceInt?.let { it >= 8000 } == true,
+                showRestorePriceButton = newValue != originalPrice,
+                isSubmitEnabled = newValue.isNotBlank() && (state.menuName != originalMenuName || newValue != originalPrice)
+            )
+        }
     }
 
     suspend fun submitMenu() {
         val uiState = _uiState.value
-        val parsedPrice = uiState.priceFieldValue.text.toIntOrNull()
+        val parsedPrice = uiState.price.toIntOrNull()
 
         if (parsedPrice != null && parsedPrice < 8000 && uiState.isPriceValid) {
             viewModelScope.launch {
                 val menuUpdateRequest = MenuUpdateRequestEntity(
-                    name = uiState.menuNameFieldValue.text,
+                    name = uiState.menuName,
                     price = parsedPrice
                 )
-                storeDetailRepository.putUpdateMenu(storeId, menuId, menuUpdateRequest)
+                storeDetailRepository.putUpdateMenu(_currentStoreId, _currentMenuId, menuUpdateRequest)
                     .onSuccess {
-                        _sideEffect.emit(ModSideEffect.NavigateToEditSuccess(storeId))
+                        _sideEffect.emit(ModSideEffect.NavigateToEditSuccess(_currentStoreId))
                     }
                     .onFailure { error ->
                         _sideEffect.emit(ModSideEffect.MenuAddFailure(error.message ?: "Unknown error"))
@@ -85,9 +98,9 @@ class ModViewModel @Inject constructor(
 
     fun deleteMenu() {
         viewModelScope.launch {
-            storeDetailRepository.deleteMenuItem(storeId, menuId)
+            storeDetailRepository.deleteMenuItem(_currentStoreId, _currentMenuId)
                 .onSuccess {
-                    _sideEffect.emit(ModSideEffect.NavigateToDeleteSuccess(storeId))
+                    _sideEffect.emit(ModSideEffect.NavigateToDeleteSuccess(_currentStoreId))
                 }
                 .onFailure { error ->
                     _sideEffect.emit(ModSideEffect.MenuAddFailure(error.message ?: "Unknown error"))
