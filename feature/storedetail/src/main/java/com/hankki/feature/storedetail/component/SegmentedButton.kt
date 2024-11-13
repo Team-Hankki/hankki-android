@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -26,15 +25,16 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red400
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
+import com.hankki.core.designsystem.theme.devider_red
 import com.hankki.feature.storedetail.R
 
 @Composable
 fun SegmentedButton(
-    modifier: Modifier = Modifier,
     option1: String,
     option2: String,
-    enabled: Boolean = true,
     onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Box(modifier = modifier) {
         Row(
@@ -81,7 +81,7 @@ fun SegmentedButton(
                     .width(1.dp)
                     .fillMaxHeight()
                     .padding(vertical = 15.dp)
-                    .background(Color(0x1A9B331C))
+                    .background(devider_red)
             )
 
             Row(
