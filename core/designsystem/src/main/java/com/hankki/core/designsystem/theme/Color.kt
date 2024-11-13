@@ -41,3 +41,4 @@ val Gray900 = Color(0xFF111111)
 
 // Etc
 val ImageLine = Color(0x1A000000)
+val devider_red = Color(0xFFE14D2D)
