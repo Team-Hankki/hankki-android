@@ -97,7 +97,7 @@ private fun AddMenuSuccessScreen(
                     textColor = Red500,
                     borderColor = Red500
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 HankkiMediumButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "완료",
