@@ -28,7 +28,7 @@ fun ArrowIconButton(
     Row(
         modifier
             .fillMaxWidth()
-            .padding(vertical = 18.dp)
+            .padding(vertical = 19.5.dp)
             .noRippleClickable(onClick = onClick),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
