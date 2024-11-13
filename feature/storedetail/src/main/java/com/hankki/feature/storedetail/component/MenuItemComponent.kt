@@ -57,13 +57,13 @@ fun MenuItemComponent(
             Spacer(modifier = Modifier.padding(start = 13.dp))
             Text(
                 text = menuItem.name,
-                style = HankkiTheme.typography.body3,
+                style = if (selectedMenu == menuItem.name) HankkiTheme.typography.body2 else HankkiTheme.typography.body3,
                 color = if (selectedMenu == menuItem.name) Red500 else Gray700
             )
         }
         Text(
             text = "${menuItem.price.toString().formatPrice()}원",
-            style = HankkiTheme.typography.body3,
+            style = if (selectedMenu == menuItem.name) HankkiTheme.typography.body2 else HankkiTheme.typography.body3,
             color = if (selectedMenu == menuItem.name) Red500 else Gray700
         )
     }
