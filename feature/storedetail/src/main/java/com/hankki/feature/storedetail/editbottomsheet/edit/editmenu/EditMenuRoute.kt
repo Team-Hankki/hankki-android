@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,9 +63,10 @@ fun EditMenuRoute(
                     onNavigateToDeleteSuccess(effect.storeId)
                     viewModel.resetDeleteSuccess()
                 }
+
                 is EditMenuSideEffect.NavigateBack -> onNavigateUp()
                 is EditMenuSideEffect.ShowSnackbar -> {
-                   //메세지
+                    //메세지
                 }
             }
         }
@@ -85,6 +87,7 @@ fun EditMenuRoute(
                 }
             )
         }
+
         else -> {}
     }
 
@@ -108,16 +111,20 @@ fun EditMenuScreen(
     onEditModClick: (Long, String, String) -> Unit,
     onNavigateUp: () -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(White)
+            .noRippleClickable { focusManager.clearFocus() }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
+                .noRippleClickable { focusManager.clearFocus() },
         ) {
             HankkiTopBar(
                 leadingIcon = {
@@ -147,60 +154,76 @@ fun EditMenuScreen(
                         )
                     }
                 }
-                else -> {
-                    Text(
-                        text = "어떤 메뉴를 편집할까요?",
-                        style = HankkiTheme.typography.suitH2,
-                        color = Gray900,
-                        modifier = Modifier.padding(start = 22.dp)
-                    )
-                    Spacer(modifier = Modifier.height(34.dp))
+                else -> EditMenuContent(
+                    state = state,
+                    onMenuSelected = onMenuSelected,
+                    onDeleteMenuClick = onDeleteMenuClick,
+                    onEditModClick = onEditModClick,
+                )
+            }
+        }
+    }
+}
 
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                            .padding(bottom = 80.dp)
-                    ) {
-                        itemsIndexed(state.menuItems) { _, menuItem ->
-                            MenuItemComponent(
-                                menuItem = menuItem,
-                                selectedMenu = state.selectedMenuItem?.name,
-                                onMenuSelected = { onMenuSelected(menuItem) }
-                            )
+@Composable
+private fun EditMenuContent(
+    state: EditMenuState,
+    onMenuSelected: (MenuItem) -> Unit,
+    onDeleteMenuClick: () -> Unit,
+    onEditModClick: (Long, String, String) -> Unit,
+) {
+    Column {
+        Spacer(modifier = Modifier.height(18.dp))
+        Text(
+            text = "어떤 메뉴를 편집할까요?",
+            style = HankkiTheme.typography.suitH2,
+            color = Gray900,
+            modifier = Modifier.padding(start = 22.dp)
+        )
+        Spacer(modifier = Modifier.height(34.dp))
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
+                .padding(bottom = 80.dp)
+        ) {
+            itemsIndexed(state.menuItems) { _, menuItem ->
+                MenuItemComponent(
+                    menuItem = menuItem,
+                    selectedMenu = state.selectedMenuItem?.name,
+                    onMenuSelected = { onMenuSelected(menuItem) }
+                )
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.12f)
+                .height(80.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            BottomBlurLayout(
+                imageBlur = R.drawable.edit_blur,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            SegmentedButton(
+                option1 = "삭제하기",
+                option2 = "수정하기",
+                enabled = state.selectedMenuItem != null,
+                onOptionSelected = { selectedOption ->
+                    state.selectedMenuItem?.let { menu ->
+                        if (selectedOption == "삭제하기") {
+                            onDeleteMenuClick()
+                        } else {
+                            onEditModClick(menu.id, menu.name, menu.price.toString())
                         }
                     }
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(0.12f)
-                            .height(80.dp),
-                        contentAlignment = Alignment.BottomCenter
-                    ) {
-                        BottomBlurLayout(
-                            imageBlur = R.drawable.edit_blur,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        SegmentedButton(
-                            option1 = "삭제하기",
-                            option2 = "수정하기",
-                            enabled = state.selectedMenuItem != null,
-                            onOptionSelected = { selectedOption ->
-                                state.selectedMenuItem?.let { menu ->
-                                    if (selectedOption == "삭제하기") {
-                                        onDeleteMenuClick()
-                                    } else {
-                                        onEditModClick(menu.id, menu.name, menu.price.toString())
-                                    }
-                                }
-                            },
-                            modifier = Modifier.padding(bottom = 15.dp)
-                        )
-                    }
-                }
-            }
+                },
+                modifier = Modifier.padding(bottom = 15.dp)
+            )
         }
     }
 }
