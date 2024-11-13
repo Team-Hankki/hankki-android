@@ -29,7 +29,7 @@ fun RollbackButton(
     ) {
         Text(
             text = text,
-            style = HankkiTheme.typography.body6,
+            style = HankkiTheme.typography.body7,
             color = Gray600,
             modifier = Modifier
                 .background(Gray100, shape = RoundedCornerShape(8.dp))
