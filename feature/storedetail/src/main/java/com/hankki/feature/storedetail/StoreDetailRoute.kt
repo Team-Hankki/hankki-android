@@ -67,7 +67,7 @@ fun StoreDetailRoute(
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
     onShowSnackBar: (String, Long) -> Unit,
-    onShowTextSnackBar: (String) -> Unit,
+    onShowErrorSnackBar: (String) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
     onAddMenuClick: (Long) -> Unit,
     onEditMenuClick: (Long) -> Unit
@@ -91,7 +91,7 @@ fun StoreDetailRoute(
                 StoreDetailSideEffect.NavigateUp -> navigateUp()
                 StoreDetailSideEffect.NavigateToAddNewJogbo -> navigateToAddNewJogbo()
                 StoreDetailSideEffect.ShowTextSnackBar -> {
-                    onShowTextSnackBar("이미 삭제된 식당입니다 ")
+                    onShowErrorSnackBar("이미 삭제된 식당입니다 ")
                     navigateUp()
                 }
             }

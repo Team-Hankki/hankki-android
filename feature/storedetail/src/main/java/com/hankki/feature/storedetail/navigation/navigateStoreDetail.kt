@@ -12,7 +12,7 @@ import com.hankki.feature.storedetail.editbottomsheet.add.addmenu.AddMenuRoute
 import com.hankki.feature.storedetail.editbottomsheet.add.addsuccess.AddMenuSuccessRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.delete.DeleteSuccessRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.editmenu.EditMenuRoute
-import com.hankki.feature.storedetail.editbottomsheet.edit.mod.EditModRoute
+import com.hankki.feature.storedetail.editbottomsheet.edit.mod.ModRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.mod.ModSuccessRoute
 import kotlinx.serialization.Serializable
 
@@ -55,7 +55,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
     onShowSnackBar: (String, Long) -> Unit,
-    onShowTextSnackBar: (String) -> Unit,
+    onShowErrorSnackBar: (String) -> Unit,
     navigateToAddMenu: (Long) -> Unit,
     navigateToEditMenu: (Long) -> Unit,
 ) {
@@ -66,7 +66,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
             navigateUp = navigateUp,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
             onShowSnackBar = onShowSnackBar,
-            onShowTextSnackBar = onShowTextSnackBar,
+            onShowErrorSnackBar = onShowErrorSnackBar,
             onAddMenuClick = { navigateToAddMenu(items.storeId) },
             onEditMenuClick = { navigateToEditMenu(items.storeId) }
         )
@@ -85,7 +85,8 @@ fun NavGraphBuilder.storeDetailNavGraph(
                         popUpTo(StoreDetail(items.storeId)) { inclusive = false }
                     }
                 )
-            }
+            },
+            onShowErrorSnackBar = onShowErrorSnackBar,
         )
     }
 
@@ -114,7 +115,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
     composable<EditMod> { backStackEntry ->
         val items = backStackEntry.toRoute<EditMod>()
 
-        EditModRoute(
+        ModRoute(
             storeId = items.storeId,
             menuId = items.menuId,
             menuName = items.menuName,
@@ -165,7 +166,8 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 navController.navigateEditMenu(items.storeId, navOptions {
                     popUpTo(StoreDetail(items.storeId)) { inclusive = true }
                 })
-            }
+            },
+            onShowErrorSnackBar = onShowErrorSnackBar,
         )
     }
 
