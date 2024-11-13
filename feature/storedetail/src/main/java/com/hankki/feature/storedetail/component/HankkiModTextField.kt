@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,12 +25,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -46,8 +50,8 @@ import com.hankki.feature.storedetail.R
 private fun HankkiBaseField(
     modifier: Modifier,
     label: String,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     clearText: () -> Unit,
     isFocused: Boolean,
     onFocusChanged: (Boolean) -> Unit,
@@ -58,14 +62,26 @@ private fun HankkiBaseField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     textColor: Color = Gray850,
     borderColor: Color = Gray500,
-    content: (@Composable BoxScope.() -> Unit)? = null
+    content: (@Composable BoxScope.() -> Unit)? = null,
+    focusManager: FocusManager
 ) {
     var isEditing by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
+    var textFieldValue by remember {
+        mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
+    }
+
+    LaunchedEffect(value) {
+        if (textFieldValue.text != value) {
+            textFieldValue = TextFieldValue(text = value, selection = TextRange(value.length))
+        }
+    }
+
     LaunchedEffect(isFocused) {
         if (isFocused) {
             focusRequester.requestFocus()
+            textFieldValue = textFieldValue.copy(selection = TextRange(value.length))
         }
     }
 
@@ -77,8 +93,11 @@ private fun HankkiBaseField(
             verticalAlignment = Alignment.CenterVertically
         ) {
             BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
+                value = textFieldValue,
+                onValueChange = { newValue ->
+                    textFieldValue = newValue
+                    onValueChange(newValue.text)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
@@ -104,6 +123,9 @@ private fun HankkiBaseField(
                 ),
                 singleLine = true,
                 keyboardOptions = keyboardOptions,
+                keyboardActions = KeyboardActions(
+                    onDone = { focusManager.clearFocus() }
+                ),
                 decorationBox = { innerTextField ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -124,7 +146,7 @@ private fun HankkiBaseField(
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.CenterEnd
                         ) {
-                            if (value.text.isEmpty() && isEditing && placeholder.isNotEmpty()) {
+                            if (value.isEmpty() && isEditing && placeholder.isNotEmpty()) {
                                 Text(
                                     text = placeholder,
                                     color = Gray400,
@@ -177,7 +199,7 @@ private fun HankkiBaseField(
                 style = HankkiTheme.typography.caption1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 16.dp),
+                    .padding(top = 8.dp, end = 16.dp),
                 textAlign = TextAlign.End
             )
         }
@@ -188,13 +210,15 @@ private fun HankkiBaseField(
 fun HankkiModMenuField(
     modifier: Modifier,
     label: String,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     clearText: () -> Unit,
     placeholder: String = "새로운 메뉴 이름",
     isFocused: Boolean,
     onMenuFocused: (Boolean) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     HankkiBaseField(
         modifier = modifier,
         label = label,
@@ -203,7 +227,8 @@ fun HankkiModMenuField(
         clearText = clearText,
         placeholder = placeholder,
         isFocused = isFocused,
-        onFocusChanged = onMenuFocused
+        onFocusChanged = onMenuFocused,
+        focusManager = focusManager
     )
 }
 
@@ -211,20 +236,22 @@ fun HankkiModMenuField(
 fun HankkiModPriceField(
     modifier: Modifier,
     label: String,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     clearText: () -> Unit,
     isError: Boolean = false,
     isFocused: Boolean,
     errorMessage: String = "유효하지 않은 가격입니다.",
     onPriceFocused: (Boolean) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     HankkiBaseField(
         modifier = modifier,
         label = label,
         value = value,
         onValueChange = { newValue ->
-            if (newValue.text.isEmpty() || newValue.text.all { it.isDigit() }) {
+            if (newValue.isEmpty() || newValue.all { it.isDigit() }) {
                 onValueChange(newValue)
             }
         },
@@ -234,6 +261,7 @@ fun HankkiModPriceField(
         isError = isError,
         errorMessage = errorMessage,
         suffix = "원",
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        focusManager = focusManager
     )
 }
