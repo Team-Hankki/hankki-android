@@ -305,6 +305,7 @@ fun ReportScreen(
                                 name = menu.name,
                                 price = menu.price,
                                 isPriceError = menu.isPriceError,
+                                showDeleteButton = menuList.size > 1,
                                 onMenuChange = { menuName ->
                                     changeMenuName(index, menuName)
                                 },
@@ -441,6 +442,7 @@ fun MenuWithPriceInputComponent(
     name: String,
     price: String,
     isPriceError: Boolean,
+    showDeleteButton: Boolean = true,
     onMenuChange: (String) -> Unit,
     onPriceChange: (String) -> Unit,
     deleteMenu: () -> Unit,
@@ -467,26 +469,29 @@ fun MenuWithPriceInputComponent(
         }
         Spacer(modifier = Modifier.width(3.dp))
 
-        Column {
-            Text(
-                text = "",
-                style = HankkiTheme.typography.body8,
-                color = Color.Transparent
-            )
-
-            Spacer(modifier = Modifier.height(11.dp))
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_circle_x),
-                contentDescription = "delete",
-                tint = Gray300,
-                modifier = Modifier
-                    .size(32.dp)
-                    .noRippleClickable(onClick = deleteMenu)
-            )
+        Box(modifier = Modifier.width(32.dp)) {
+            if (showDeleteButton) {
+                Column {
+                    Text(
+                        text = "",
+                        style = HankkiTheme.typography.body8,
+                        color = Color.Transparent
+                    )
+                    Spacer(modifier = Modifier.height(11.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_circle_x),
+                        contentDescription = "delete",
+                        tint = Gray300,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .noRippleClickable(onClick = deleteMenu)
+                    )
+                }
+            }
         }
     }
 }
+
 
 @Composable
 fun AddMenuButton(onClick: () -> Unit) {
