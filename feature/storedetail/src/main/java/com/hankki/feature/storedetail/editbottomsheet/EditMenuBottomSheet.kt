@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -53,9 +52,7 @@ fun EditMenuBottomSheet(
         sheetState = sheetState,
         containerColor = White,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        dragHandle = {
-//            Spacer(modifier = Modifier.height(16.dp))
-        },
+        dragHandle = { },
     ) {
         Column {
             Spacer(modifier = Modifier.height(24.dp))
@@ -122,6 +119,7 @@ fun CardItem(
         modifier = modifier
             .fillMaxWidth()
             .border(1.dp, Gray200, RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(20.dp))
             .noRippleClickable(onClick = onClick)
     ) {
         Image(
@@ -129,7 +127,7 @@ fun CardItem(
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(20.dp)),
             contentScale = ContentScale.Crop
         )
 
