@@ -57,7 +57,7 @@ fun SegmentedButton(
                             Modifier
                         }
                     )
-                    .padding(vertical = 10.dp),
+                    .padding(vertical = 15.5.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -96,7 +96,7 @@ fun SegmentedButton(
                             Modifier
                         }
                     )
-                    .padding(vertical = 10.dp),
+                    .padding(vertical = 15.5.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
