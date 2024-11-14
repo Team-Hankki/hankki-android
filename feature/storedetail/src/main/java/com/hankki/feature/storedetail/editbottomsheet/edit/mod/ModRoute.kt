@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -93,7 +94,8 @@ fun ModRoute(
                 viewModel.submitMenu()
             }
         },
-        onShowDeleteDialog = viewModel::showDeleteDialog
+        onShowDeleteDialog = viewModel::showDeleteDialog,
+        onShowModCompleteDialog = viewModel::onShowModCompleteDialog
     )
 
     when (dialogState) {
@@ -107,6 +109,23 @@ fun ModRoute(
                 },
                 onPositiveButtonClicked = {
                     viewModel.deleteMenu()
+                    viewModel.closeDialog()
+                }
+            )
+        }
+
+        ModDialogState.MOD_COMPLETE -> {
+            DoubleButtonDialog(
+                title = "메뉴를 모두 수정하셨나요?",
+                negativeButtonTitle = "돌아가기",
+                positiveButtonTitle = "수정완료",
+                onNegativeButtonClicked = {
+                    viewModel.closeDialog()
+                },
+                onPositiveButtonClicked = {
+                    coroutineScope.launch {
+                        viewModel.submitMenu()
+                    }
                     viewModel.closeDialog()
                 }
             )
@@ -128,7 +147,8 @@ fun ModifyMenuScreen(
     onMenuFocusChanged: (Boolean) -> Unit,
     onPriceFocusChanged: (Boolean) -> Unit,
     onSubmit: () -> Unit,
-    onShowDeleteDialog: () -> Unit
+    onShowDeleteDialog: () -> Unit,
+    onShowModCompleteDialog: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isVisibleIme = WindowInsets.isImeVisible
@@ -247,7 +267,7 @@ fun ModifyMenuScreen(
                 if (uiState.isOverPriceLimit && uiState.isPriceFieldFocused) {
                     PriceWarningMessage(
                         onDeleteClick = onShowDeleteDialog,
-                        onDismissClick = {  }
+                        onDismissClick = { onPriceChanged("") }
                     )
                 }
 
@@ -256,12 +276,7 @@ fun ModifyMenuScreen(
                         .fillMaxWidth()
                         .imePadding(),
                     text = "수정 완료",
-                    onClick = {
-                        if (uiState.isSubmitEnabled) {
-                            focusManager.clearFocus()
-                            onSubmit()
-                        }
-                    },
+                    onClick = onShowModCompleteDialog,
                     enabled = uiState.isSubmitEnabled,
                     textStyle = HankkiTheme.typography.sub3,
                     backgroundColor = if (uiState.isSubmitEnabled) Red500 else Red400
@@ -272,7 +287,10 @@ fun ModifyMenuScreen(
                     style = HankkiTheme.typography.suitBody3,
                     color = Gray400,
                     modifier = Modifier
-                        .padding(start = 36.dp, end = 35.dp, bottom = 12.dp)
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp)
+                        .padding(horizontal = 16.dp),
+                    textAlign = TextAlign.Center
                 )
 
                 HankkiMediumButton(

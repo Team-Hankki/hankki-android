@@ -9,5 +9,5 @@ data class ModState(
     val showRestorePriceButton: Boolean = false,
     val isMenuFieldFocused: Boolean = false,
     val isPriceFieldFocused: Boolean = false,
-    val isSubmitEnabled: Boolean = false
+    val isSubmitEnabled: Boolean = false,
 )
