@@ -10,6 +10,7 @@ import com.hankki.core.navigation.MainTabRoute
 import com.hankki.feature.storedetail.StoreDetailRoute
 import com.hankki.feature.storedetail.editbottomsheet.add.addmenu.AddMenuRoute
 import com.hankki.feature.storedetail.editbottomsheet.add.addsuccess.AddMenuSuccessRoute
+import com.hankki.feature.storedetail.editbottomsheet.edit.delete.DeleteSuccessLastRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.delete.DeleteSuccessRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.editmenu.EditMenuRoute
 import com.hankki.feature.storedetail.editbottomsheet.edit.mod.ModRoute
@@ -50,6 +51,10 @@ fun NavController.navigateDeleteSuccess(storeId: Long, navOptions: NavOptions? =
     navigate(DeleteSuccess(storeId = storeId), navOptions)
 }
 
+fun NavController.navigateDeleteSuccessLast(storeId: Long, navOptions: NavOptions? = null) {
+    navigate(DeleteSuccessLast(storeId = storeId), navOptions)
+}
+
 fun NavGraphBuilder.storeDetailNavGraph(
     navController: NavController,
     navigateUp: () -> Unit,
@@ -58,6 +63,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
     onShowErrorSnackBar: (String) -> Unit,
     navigateToAddMenu: (Long) -> Unit,
     navigateToEditMenu: (Long) -> Unit,
+    navigateToHome: () -> Unit
 ) {
     composable<StoreDetail> { backStackEntry ->
         val items = backStackEntry.toRoute<StoreDetail>()
@@ -108,13 +114,17 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 navController.navigateDeleteSuccess(successStoreId, navOptions {
                     popUpTo(StoreDetail(successStoreId)) { inclusive = false }
                 })
+            },
+            onNavigateToDeleteSuccessLast = { successStoreId ->
+                navController.navigateDeleteSuccessLast(successStoreId, navOptions {
+                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
+                })
             }
         )
     }
 
     composable<EditMod> { backStackEntry ->
         val items = backStackEntry.toRoute<EditMod>()
-
         ModRoute(
             storeId = items.storeId,
             menuId = items.menuId,
@@ -134,7 +144,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 navController.navigateDeleteSuccess(successStoreId, navOptions {
                     popUpTo(StoreDetail(successStoreId)) { inclusive = false }
                 })
-            }
+            },
         )
     }
 
@@ -148,7 +158,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
             },
             onNavigateToEditMenu = {
                 navController.navigateEditMenu(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
                 })
             }
         )
@@ -164,10 +174,19 @@ fun NavGraphBuilder.storeDetailNavGraph(
             },
             onNavigateToEditMenu = {
                 navController.navigateEditMenu(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
                 })
             },
             onShowErrorSnackBar = onShowErrorSnackBar,
+        )
+    }
+
+    composable<DeleteSuccessLast> {
+        DeleteSuccessLastRoute(
+            onNavigateToHome = {
+                navigateToHome()
+            },
+            onShowErrorSnackBar = onShowErrorSnackBar
         )
     }
 
@@ -182,7 +201,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
             },
             onNavigateToAddMenu = {
                 navController.navigateAddMenu(items.storeId, navOptions {
-                    popUpTo(StoreDetail(items.storeId)) { inclusive = true }
+                    popUpTo(StoreDetail(items.storeId)) { inclusive = false }
                 })
             }
         )
@@ -217,3 +236,6 @@ data class EditModSuccess(val storeId: Long) : MainTabRoute
 
 @Serializable
 data class DeleteSuccess(val storeId: Long) : MainTabRoute
+
+@Serializable
+data class DeleteSuccessLast(val storeId: Long) : MainTabRoute
