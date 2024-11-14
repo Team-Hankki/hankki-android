@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.WarnRed
@@ -60,7 +61,7 @@ private fun HankkiBaseField(
     isError: Boolean = false,
     errorMessage: String = "",
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    textColor: Color = Gray850,
+    textColor: Color = Gray800,
     borderColor: Color = Gray500,
     content: (@Composable BoxScope.() -> Unit)? = null,
     focusManager: FocusManager
@@ -117,7 +118,7 @@ private fun HankkiBaseField(
                         isEditing = focusState.isFocused
                         onFocusChanged(focusState.isFocused)
                     },
-                textStyle = HankkiTheme.typography.body2.copy(
+                textStyle = HankkiTheme.typography.body3.copy(
                     color = if (isError) WarnRed else textColor,
                     textAlign = TextAlign.End
                 ),
@@ -133,10 +134,10 @@ private fun HankkiBaseField(
                     ) {
                         Text(
                             text = label,
-                            style = if (isEditing) {
-                                HankkiTheme.typography.body4.copy(color = Gray850)
+                            style = if (isFocused) {
+                                HankkiTheme.typography.body5.copy(color = Gray850)
                             } else {
-                                HankkiTheme.typography.body5.copy(color = Gray500)
+                                HankkiTheme.typography.body6.copy(color = Gray500)
                             },
                             modifier = Modifier.padding(end = 8.dp)
                         )
@@ -160,7 +161,7 @@ private fun HankkiBaseField(
                         if (suffix.isNotEmpty()) {
                             Text(
                                 text = suffix,
-                                style = HankkiTheme.typography.body2.copy(color = Gray850)
+                                style = HankkiTheme.typography.body3.copy(color = Gray850)
                             )
                         }
 
@@ -242,7 +243,7 @@ fun HankkiModPriceField(
     isError: Boolean = false,
     isFocused: Boolean,
     errorMessage: String = "유효하지 않은 가격입니다.",
-    onPriceFocused: (Boolean) -> Unit
+    onPriceFocused: (Boolean) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
