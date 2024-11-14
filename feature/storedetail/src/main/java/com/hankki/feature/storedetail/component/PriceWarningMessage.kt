@@ -40,11 +40,11 @@ fun PriceWarningMessage(
             .border(
                 width = 1.dp,
                 color = Gray200,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             )
             .background(
                 color = Gray50,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             )
             .padding(
                 start = 24.dp,
