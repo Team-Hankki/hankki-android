@@ -93,7 +93,7 @@ fun DeleteSuccessScreen(
 
                 HankkiMediumButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "다른 메뉴도 수정하기",
+                    text = "다른 메뉴도 편집하기",
                     onClick = onNavigateToEditMenu,
                     enabled = true,
                     backgroundColor = White,
