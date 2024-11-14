@@ -132,13 +132,13 @@ class AddMenuViewModel @Inject constructor(
                 storeId = storeId,
                 menus = menuRequests
             ).onSuccess {
+                emitSideEffect(AddMenuSideEffect.NavigateToSuccess)
                 _addMenuState.update { state ->
                     state.copy(
                         menuList = persistentListOf(MenuUiState()),
                         buttonEnabled = false
                     )
                 }
-                emitSideEffect(AddMenuSideEffect.NavigateToSuccess)
             }.onFailure { error ->
                 Timber.e(error)
                 emitSideEffect(AddMenuSideEffect.ShowError(error.message ?: "메뉴 추가에 실패하였습니다. 다시 시도해 주세요."))

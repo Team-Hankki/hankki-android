@@ -157,21 +157,25 @@ private fun AddMenuScreen(
                             }
                             Spacer(modifier = Modifier.width(3.dp))
 
-                            Column {
-                                Text(
-                                    text = "",
-                                    style = HankkiTheme.typography.body8,
-                                    color = Color.Transparent
-                                )
-                                Spacer(modifier = Modifier.height(11.dp))
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = com.hankki.core.designsystem.R.drawable.ic_circle_x),
-                                    contentDescription = "delete",
-                                    tint = Gray300,
-                                    modifier = Modifier
-                                        .size(32.dp)
-                                        .noRippleClickable { onDeleteMenu(index) }
-                                )
+                            Box(modifier = Modifier.width(32.dp)) {
+                                if (menuList.size > 1) {
+                                    Column {
+                                        Text(
+                                            text = "",
+                                            style = HankkiTheme.typography.body8,
+                                            color = Color.Transparent
+                                        )
+                                        Spacer(modifier = Modifier.height(11.dp))
+                                        Icon(
+                                            imageVector = ImageVector.vectorResource(id = com.hankki.core.designsystem.R.drawable.ic_circle_x),
+                                            contentDescription = "delete",
+                                            tint = Gray300,
+                                            modifier = Modifier
+                                                .size(32.dp)
+                                                .noRippleClickable { onDeleteMenu(index) }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
