@@ -300,6 +300,15 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                         navigateToAddMenu = navigator::navigateToAddMenu,
                         navigateToEditMenu = navigator::navigateToEditMenu,
+                        navigateToHome = {
+                            val navOptions = navOptions {
+                                popUpTo<Home> {
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                            }
+                            navigator.navigateToHome(navOptions)
+                        }
                     )
                 }
 
