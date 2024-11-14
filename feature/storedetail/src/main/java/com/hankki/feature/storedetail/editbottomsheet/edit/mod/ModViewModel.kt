@@ -133,4 +133,8 @@ class ModViewModel @Inject constructor(
     fun showDeleteDialog() {
         _dialogState.value = ModDialogState.DELETE
     }
+
+    fun onShowModCompleteDialog() {
+        _dialogState.value = ModDialogState.MOD_COMPLETE
+    }
 }
