@@ -10,4 +10,7 @@ data class EditMenuState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val deleteSuccess: Boolean = false
-)
+) {
+    val menuItemsCount: Int
+        get() = menuItems.size
+}

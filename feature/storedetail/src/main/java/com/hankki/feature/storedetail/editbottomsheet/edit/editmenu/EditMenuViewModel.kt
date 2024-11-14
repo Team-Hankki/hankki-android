@@ -32,7 +32,11 @@ class EditMenuViewModel @Inject constructor(
 
 
     fun showDeleteDialog() {
-        _dialogState.value = EditMenuDialogState.DELETE
+        _dialogState.value = if (_uiState.value.menuItemsCount <= 1) {
+            EditMenuDialogState.LAST_MENU_DELETE
+        } else {
+            EditMenuDialogState.DELETE
+        }
     }
 
     fun closeDialog() {
@@ -85,7 +89,11 @@ class EditMenuViewModel @Inject constructor(
                                 .toPersistentList()
                         )
                     }
-                    _sideEffect.send(EditMenuSideEffect.NavigateToDeleteSuccess(storeId))
+                    if (_uiState.value.menuItemsCount == 0) {
+                        _sideEffect.send(EditMenuSideEffect.NavigateToDeleteSuccessLast(storeId))
+                    } else {
+                        _sideEffect.send(EditMenuSideEffect.NavigateToDeleteSuccess(storeId))
+                    }
                 }
                 .onFailure { error ->
                     _uiState.update {

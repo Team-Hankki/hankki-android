@@ -47,7 +47,8 @@ fun EditMenuRoute(
     onMenuSelected: (String) -> Unit,
     onEditModClick: (Long, String, String) -> Unit,
     onNavigateUp: () -> Unit,
-    onNavigateToDeleteSuccess: (Long) -> Unit
+    onNavigateToDeleteSuccess: (Long) -> Unit,
+    onNavigateToDeleteSuccessLast: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
@@ -63,7 +64,10 @@ fun EditMenuRoute(
                     onNavigateToDeleteSuccess(effect.storeId)
                     viewModel.resetDeleteSuccess()
                 }
-
+                is EditMenuSideEffect.NavigateToDeleteSuccessLast -> {
+                    onNavigateToDeleteSuccessLast(effect.storeId)
+                    viewModel.resetDeleteSuccess()
+                }
                 is EditMenuSideEffect.NavigateBack -> onNavigateUp()
                 is EditMenuSideEffect.ShowSnackbar -> {
                     //메세지
@@ -76,6 +80,21 @@ fun EditMenuRoute(
         EditMenuDialogState.DELETE -> {
             DoubleButtonDialog(
                 title = "삭제하시면 되돌릴 수 없어요\n그래도 삭제하시겠어요?",
+                negativeButtonTitle = "취소",
+                positiveButtonTitle = "삭제하기",
+                onNegativeButtonClicked = {
+                    viewModel.closeDialog()
+                },
+                onPositiveButtonClicked = {
+                    viewModel.deleteMenuItem(storeId)
+                    viewModel.closeDialog()
+                }
+            )
+        }
+
+        EditMenuDialogState.LAST_MENU_DELETE -> {
+            DoubleButtonDialog(
+                title = "메뉴를 모두 삭제하면 식당이 삭제돼요. 그래도 삭제하시겠어요?",
                 negativeButtonTitle = "취소",
                 positiveButtonTitle = "삭제하기",
                 onNegativeButtonClicked = {
@@ -157,22 +176,58 @@ fun EditMenuScreen(
                 else -> EditMenuContent(
                     state = state,
                     onMenuSelected = onMenuSelected,
-                    onDeleteMenuClick = onDeleteMenuClick,
-                    onEditModClick = onEditModClick,
+                )
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            BottomBlurLayout(
+                imageBlur = R.drawable.edit_blur,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(bottom = 16.dp)
+            ) {
+                SegmentedButton(
+                    option1 = "삭제하기",
+                    option2 = "수정하기",
+                    enabled = state.selectedMenuItem != null,
+                    onOptionSelected = { selectedOption ->
+                        state.selectedMenuItem?.let { menu ->
+                            if (selectedOption == "삭제하기") {
+                                onDeleteMenuClick()
+                            } else {
+                                onEditModClick(menu.id, menu.name, menu.price.toString())
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .height(54.dp)
                 )
             }
         }
     }
 }
 
+
 @Composable
 private fun EditMenuContent(
     state: EditMenuState,
     onMenuSelected: (MenuItem) -> Unit,
-    onDeleteMenuClick: () -> Unit,
-    onEditModClick: (Long, String, String) -> Unit,
 ) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Spacer(modifier = Modifier.height(18.dp))
         Text(
             text = "어떤 메뉴를 편집할까요?",
@@ -182,48 +237,19 @@ private fun EditMenuContent(
         )
         Spacer(modifier = Modifier.height(34.dp))
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-                .padding(bottom = 80.dp)
-        ) {
-            itemsIndexed(state.menuItems) { _, menuItem ->
-                MenuItemComponent(
-                    menuItem = menuItem,
-                    selectedMenu = state.selectedMenuItem?.name,
-                    onMenuSelected = { onMenuSelected(menuItem) }
-                )
+        Box(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                itemsIndexed(state.menuItems) { _, menuItem ->
+                    MenuItemComponent(
+                        menuItem = menuItem,
+                        selectedMenu = state.selectedMenuItem?.name,
+                        onMenuSelected = { onMenuSelected(menuItem) }
+                    )
+                }
             }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.12f)
-                .height(80.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            BottomBlurLayout(
-                imageBlur = R.drawable.edit_blur,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            SegmentedButton(
-                option1 = "삭제하기",
-                option2 = "수정하기",
-                enabled = state.selectedMenuItem != null,
-                onOptionSelected = { selectedOption ->
-                    state.selectedMenuItem?.let { menu ->
-                        if (selectedOption == "삭제하기") {
-                            onDeleteMenuClick()
-                        } else {
-                            onEditModClick(menu.id, menu.name, menu.price.toString())
-                        }
-                    }
-                },
-                modifier = Modifier.padding(bottom = 15.dp)
-            )
         }
     }
 }
+
