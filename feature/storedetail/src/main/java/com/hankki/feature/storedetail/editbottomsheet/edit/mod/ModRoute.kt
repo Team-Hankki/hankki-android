@@ -95,15 +95,16 @@ fun ModRoute(
             }
         },
         onShowDeleteDialog = viewModel::showDeleteDialog,
-        onShowModCompleteDialog = viewModel::onShowModCompleteDialog
+        onShowModCompleteDialog = viewModel::onShowModCompleteDialog,
+        hidePriceWarning = viewModel::hidePriceWarning
     )
 
     when (dialogState) {
         ModDialogState.DELETE -> {
             DoubleButtonDialog(
-                title = "삭제하시면 되돌릴 수 없어요\n그래도 삭제하시겠어요?",
-                negativeButtonTitle = "취소",
-                positiveButtonTitle = "삭제하기",
+                title = "메뉴가 1개 있어요\n메뉴를 삭제하면 식당이 삭제돼요",
+                negativeButtonTitle = "돌아가기",
+                positiveButtonTitle = "식당 삭제",
                 onNegativeButtonClicked = {
                     viewModel.closeDialog()
                 },
@@ -148,7 +149,8 @@ fun ModifyMenuScreen(
     onPriceFocusChanged: (Boolean) -> Unit,
     onSubmit: () -> Unit,
     onShowDeleteDialog: () -> Unit,
-    onShowModCompleteDialog: () -> Unit
+    onShowModCompleteDialog: () -> Unit,
+    hidePriceWarning: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isVisibleIme = WindowInsets.isImeVisible
@@ -241,46 +243,51 @@ fun ModifyMenuScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
+
             if (isVisibleIme) {
-                if (uiState.menuName != menuName &&
-                    uiState.showRestoreMenuNameButton &&
-                    uiState.isMenuFieldFocused
+                if (uiState.isOverPriceLimit &&
+                    uiState.isPriceFieldFocused &&
+                    uiState.isPriceWarningVisible
                 ) {
-                    RollbackButton(
-                        text = "기존 메뉴이름 입력",
-                        onClick = { onMenuNameChanged(menuName) }
-                    )
-                    Spacer(modifier = Modifier.padding(top = 16.dp))
-                }
-
-                if (uiState.price != price &&
-                    uiState.showRestorePriceButton &&
-                    uiState.isPriceFieldFocused
-                ) {
-                    RollbackButton(
-                        text = "기존 메뉴가격 입력",
-                        onClick = { onPriceChanged(price) }
-                    )
-                    Spacer(modifier = Modifier.padding(top = 16.dp))
-                }
-
-                if (uiState.isOverPriceLimit && uiState.isPriceFieldFocused) {
                     PriceWarningMessage(
+                        isVisible = true,
                         onDeleteClick = onShowDeleteDialog,
-                        onDismissClick = { onPriceChanged("") }
+                        onDismissClick = hidePriceWarning
+                    )
+                } else {
+                    if (uiState.menuName != menuName &&
+                        uiState.showRestoreMenuNameButton &&
+                        uiState.isMenuFieldFocused
+                    ) {
+                        RollbackButton(
+                            text = "기존 메뉴이름 입력",
+                            onClick = { onMenuNameChanged(menuName) }
+                        )
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                    }
+
+                    if (uiState.price != price &&
+                        uiState.showRestorePriceButton &&
+                        uiState.isPriceFieldFocused
+                    ) {
+                        RollbackButton(
+                            text = "기존 메뉴가격 입력",
+                            onClick = { onPriceChanged(price) }
+                        )
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                    }
+
+                    HankkiExpandedButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .imePadding(),
+                        text = "수정 완료",
+                        onClick = onShowModCompleteDialog,
+                        enabled = uiState.isSubmitEnabled,
+                        textStyle = HankkiTheme.typography.sub3,
+                        backgroundColor = if (uiState.isSubmitEnabled) Red500 else Red400
                     )
                 }
-
-                HankkiExpandedButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .imePadding(),
-                    text = "수정 완료",
-                    onClick = onShowModCompleteDialog,
-                    enabled = uiState.isSubmitEnabled,
-                    textStyle = HankkiTheme.typography.sub3,
-                    backgroundColor = if (uiState.isSubmitEnabled) Red500 else Red400
-                )
             } else {
                 Text(
                     text = "모두에게 보여지는 정보이니 신중하게 수정 부탁드려요",
@@ -300,12 +307,7 @@ fun ModifyMenuScreen(
                         .navigationBarsPadding()
                         .padding(bottom = 15.dp),
                     text = "수정 완료",
-                    onClick = {
-                        if (uiState.isSubmitEnabled) {
-                            focusManager.clearFocus()
-                            onSubmit()
-                        }
-                    },
+                    onClick = onShowModCompleteDialog,
                     enabled = uiState.isSubmitEnabled,
                     textStyle = HankkiTheme.typography.sub3,
                     backgroundColor = if (uiState.isSubmitEnabled) Red500 else Red400
