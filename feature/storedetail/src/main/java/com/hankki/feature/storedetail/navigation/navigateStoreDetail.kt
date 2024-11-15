@@ -101,7 +101,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
         EditMenuRoute(
             storeId = items.storeId,
             onNavigateUp = navigateUp,
-            onMenuSelected = { /*  */ },
+            onMenuSelected = { },
             onEditModClick = { menuId, menuName, price ->
                 navController.navigateEditMod(
                     storeId = items.storeId,
@@ -183,9 +183,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
 
     composable<DeleteSuccessLast> {
         DeleteSuccessLastRoute(
-            onNavigateToHome = {
-                navigateToHome()
-            },
+            onNavigateToHome = navigateToHome,
             onShowErrorSnackBar = onShowErrorSnackBar
         )
     }
