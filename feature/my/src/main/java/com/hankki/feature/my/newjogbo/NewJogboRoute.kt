@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -189,7 +188,7 @@ fun NewJogboScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .imePadding(),
-                text = stringResource(R.string.apply),
+                text = stringResource(R.string.make_jogbo),
                 onClick = createNewJogbo,
                 enabled = buttonEnabledState,
                 textStyle = HankkiTheme.typography.sub3,
