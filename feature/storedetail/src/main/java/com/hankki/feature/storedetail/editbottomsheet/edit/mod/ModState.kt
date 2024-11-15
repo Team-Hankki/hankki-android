@@ -10,4 +10,5 @@ data class ModState(
     val isMenuFieldFocused: Boolean = false,
     val isPriceFieldFocused: Boolean = false,
     val isSubmitEnabled: Boolean = false,
+    val isPriceWarningVisible: Boolean = true,
 )
