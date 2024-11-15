@@ -30,6 +30,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
+import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.Gray900
@@ -94,9 +95,9 @@ fun EditMenuRoute(
 
         EditMenuDialogState.LAST_MENU_DELETE -> {
             DoubleButtonDialog(
-                title = "메뉴를 모두 삭제하면 식당이 삭제돼요. 그래도 삭제하시겠어요?",
-                negativeButtonTitle = "취소",
-                positiveButtonTitle = "삭제하기",
+                title = "메뉴가 1개 있어요\n메뉴를 삭제하면 식당이 삭제돼요",
+                negativeButtonTitle = "돌아가기",
+                positiveButtonTitle = "식당 삭제",
                 onNegativeButtonClicked = {
                     viewModel.closeDialog()
                 },
@@ -212,7 +213,7 @@ fun EditMenuScreen(
                         }
                     },
                     modifier = Modifier
-                        .height(54.dp)
+                        .height(58.dp)
                 )
             }
         }
@@ -239,16 +240,30 @@ private fun EditMenuContent(
 
         Box(modifier = Modifier.weight(1f)) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
-                itemsIndexed(state.menuItems) { _, menuItem ->
+                itemsIndexed(state.menuItems) { index, menuItem ->
                     MenuItemComponent(
                         menuItem = menuItem,
                         selectedMenu = state.selectedMenuItem?.name,
-                        onMenuSelected = { onMenuSelected(menuItem) }
+                        onMenuSelected = { onMenuSelected(menuItem) },
+                        modifier = Modifier.then(
+                            if (index == state.menuItems.size - 1) {
+                                Modifier.padding(bottom = 90.dp)
+                            } else {
+                                Modifier
+                            }
+                        )
                     )
                 }
             }
+
+            TopBlurLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+            )
         }
     }
 }
