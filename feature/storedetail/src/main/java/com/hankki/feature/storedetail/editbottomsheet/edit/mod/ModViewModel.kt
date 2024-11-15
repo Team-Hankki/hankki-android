@@ -61,15 +61,24 @@ class ModViewModel @Inject constructor(
     }
 
     fun updatePrice(newValue: String) {
-        val priceInt = newValue.toIntOrNull()
+        val priceStr = newValue.filter { it.isDigit() }
+        val isOverLimit = when {
+            priceStr.isEmpty() -> false
+            priceStr.length > 4 -> true
+            else -> priceStr.toLongOrNull()?.let { it >= 8000 } ?: false
+        }
+
         _uiState.update { state ->
-            state.copy(
-                price = newValue,
-                isPriceValid = priceInt != null && priceInt < 8000,
-                isOverPriceLimit = priceInt?.let { it >= 8000 } == true,
-                showRestorePriceButton = newValue != originalPrice,
-                isSubmitEnabled = newValue.isNotBlank() && (state.menuName != originalMenuName || newValue != originalPrice)
+            val newState = state.copy(
+                price = priceStr,
+                isPriceValid = !isOverLimit,
+                isOverPriceLimit = isOverLimit,
+                showRestorePriceButton = priceStr != originalPrice,
+                isSubmitEnabled = priceStr.isNotBlank() && (state.menuName != originalMenuName || priceStr != originalPrice),
+                isPriceWarningVisible = isOverLimit
             )
+
+            newState
         }
     }
 
@@ -136,5 +145,11 @@ class ModViewModel @Inject constructor(
 
     fun onShowModCompleteDialog() {
         _dialogState.value = ModDialogState.MOD_COMPLETE
+    }
+
+    fun hidePriceWarning() {
+        _uiState.update { currentState ->
+            currentState.copy(isPriceWarningVisible = false)
+        }
     }
 }
