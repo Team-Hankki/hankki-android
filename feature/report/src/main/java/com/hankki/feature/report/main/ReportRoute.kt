@@ -492,7 +492,6 @@ fun MenuWithPriceInputComponent(
     }
 }
 
-
 @Composable
 fun AddMenuButton(onClick: () -> Unit) {
     Row(
