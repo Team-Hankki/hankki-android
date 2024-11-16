@@ -97,11 +97,11 @@ class ModViewModel @Inject constructor(
                         _sideEffect.emit(ModSideEffect.NavigateToEditSuccess(_currentStoreId))
                     }
                     .onFailure { error ->
-                        _sideEffect.emit(ModSideEffect.MenuAddFailure(error.message ?: "Unknown error"))
+                        _sideEffect.emit(ModSideEffect.ShowSnackbar(error.message ?: "Unknown error"))
                     }
             }
         } else {
-            _sideEffect.emit(ModSideEffect.MenuAddFailure("8000이하만 입력 가능"))
+            _sideEffect.emit(ModSideEffect.ShowSnackbar("8000이하만 입력 가능"))
         }
     }
 
@@ -112,7 +112,7 @@ class ModViewModel @Inject constructor(
                     _sideEffect.emit(ModSideEffect.NavigateToDeleteSuccess(_currentStoreId))
                 }
                 .onFailure { error ->
-                    _sideEffect.emit(ModSideEffect.MenuAddFailure(error.message ?: "Unknown error"))
+                    _sideEffect.emit(ModSideEffect.ShowSnackbar(error.message ?: "Unknown error"))
                 }
         }
     }

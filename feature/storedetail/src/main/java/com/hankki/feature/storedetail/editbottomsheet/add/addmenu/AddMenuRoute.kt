@@ -55,10 +55,10 @@ fun AddMenuRoute(
     AddMenuScreen(
         menuList = state.menuList,
         buttonEnabled = state.buttonEnabled,
-        onNavigateUp = { viewModel.onEvent(AddMenuEvent.OnBackClick) },
+        onNavigateUp = { viewModel.onEvent(AddMenuIntent.OnBackClick) },
         onMenuNameChange = { index, name ->
             viewModel.onEvent(
-                AddMenuEvent.OnMenuNameChange(
+                AddMenuIntent.OnMenuNameChange(
                     index,
                     name
                 )
@@ -66,15 +66,15 @@ fun AddMenuRoute(
         },
         onPriceChange = { index, price ->
             viewModel.onEvent(
-                AddMenuEvent.OnPriceChange(
+                AddMenuIntent.OnPriceChange(
                     index,
                     price
                 )
             )
         },
-        onDeleteMenu = { index -> viewModel.onEvent(AddMenuEvent.OnDeleteMenu(index)) },
-        onAddMenu = { viewModel.onEvent(AddMenuEvent.OnAddMenu) },
-        onSubmit = { viewModel.onEvent(AddMenuEvent.OnSubmit) }
+        onDeleteMenu = { index -> viewModel.onEvent(AddMenuIntent.OnDeleteMenu(index)) },
+        onAddMenu = { viewModel.onEvent(AddMenuIntent.OnAddMenu) },
+        onSubmit = { viewModel.onEvent(AddMenuIntent.OnSubmit) }
     )
 }
 

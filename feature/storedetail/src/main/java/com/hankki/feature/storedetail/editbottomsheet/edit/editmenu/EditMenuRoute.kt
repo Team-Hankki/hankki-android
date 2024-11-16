@@ -49,7 +49,8 @@ fun EditMenuRoute(
     onEditModClick: (Long, String, String) -> Unit,
     onNavigateUp: () -> Unit,
     onNavigateToDeleteSuccess: (Long) -> Unit,
-    onNavigateToDeleteSuccessLast: (Long) -> Unit
+    onNavigateToDeleteSuccessLast: (Long) -> Unit,
+    onShowErrorSnackBar: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
@@ -59,19 +60,19 @@ fun EditMenuRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { effect ->
-            when (effect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
                 is EditMenuSideEffect.NavigateToDeleteSuccess -> {
-                    onNavigateToDeleteSuccess(effect.storeId)
+                    onNavigateToDeleteSuccess(sideEffect.storeId)
                     viewModel.resetDeleteSuccess()
                 }
                 is EditMenuSideEffect.NavigateToDeleteSuccessLast -> {
-                    onNavigateToDeleteSuccessLast(effect.storeId)
+                    onNavigateToDeleteSuccessLast(sideEffect.storeId)
                     viewModel.resetDeleteSuccess()
                 }
                 is EditMenuSideEffect.NavigateBack -> onNavigateUp()
                 is EditMenuSideEffect.ShowSnackbar -> {
-                    //메세지
+                    onShowErrorSnackBar(sideEffect.message)
                 }
             }
         }

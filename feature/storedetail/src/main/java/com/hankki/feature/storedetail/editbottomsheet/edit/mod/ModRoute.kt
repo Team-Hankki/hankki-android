@@ -57,6 +57,7 @@ fun ModRoute(
     onNavigateUp: () -> Unit,
     onNavigateToEditSuccess: (Long) -> Unit,
     onNavigateToDeleteSuccess: (Long) -> Unit,
+    onShowErrorSnackBar: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sideEffectFlow = viewModel.sideEffect
@@ -73,8 +74,8 @@ fun ModRoute(
                 is ModSideEffect.NavigateToEditSuccess -> onNavigateToEditSuccess(sideEffect.storeId)
                 is ModSideEffect.NavigateToDeleteSuccess -> onNavigateToDeleteSuccess(sideEffect.storeId)
                 ModSideEffect.NavigateUp -> onNavigateUp()
-                is ModSideEffect.MenuAddFailure -> {
-                    // Handle error
+                is ModSideEffect.ShowSnackbar -> {
+                    onShowErrorSnackBar(sideEffect.message)
                 }
             }
         }

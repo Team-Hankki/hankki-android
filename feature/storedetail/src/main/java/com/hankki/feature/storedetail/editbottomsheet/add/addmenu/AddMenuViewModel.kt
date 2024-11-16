@@ -31,14 +31,14 @@ class AddMenuViewModel @Inject constructor(
         _addMenuState.update { it.copy(storeId = storeId) }
     }
 
-    fun onEvent(event: AddMenuEvent) {
+    fun onEvent(event: AddMenuIntent) {
         when (event) {
-            is AddMenuEvent.OnMenuNameChange -> handleMenuNameChange(event.index, event.name)
-            is AddMenuEvent.OnPriceChange -> handlePriceChange(event.index, event.price)
-            is AddMenuEvent.OnDeleteMenu -> deleteMenu(event.index)
-            AddMenuEvent.OnAddMenu -> addMenu()
-            AddMenuEvent.OnSubmit -> submitMenus()
-            AddMenuEvent.OnBackClick -> backClick()
+            is AddMenuIntent.OnMenuNameChange -> handleMenuNameChange(event.index, event.name)
+            is AddMenuIntent.OnPriceChange -> handlePriceChange(event.index, event.price)
+            is AddMenuIntent.OnDeleteMenu -> deleteMenu(event.index)
+            AddMenuIntent.OnAddMenu -> addMenu()
+            AddMenuIntent.OnSubmit -> submitMenus()
+            AddMenuIntent.OnBackClick -> backClick()
         }
     }
 

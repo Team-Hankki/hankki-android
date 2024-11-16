@@ -25,7 +25,11 @@ fun NavController.navigateAddMenu(storeId: Long, navOptions: NavOptions? = null)
     navigate(AddMenu(storeId = storeId), navOptions)
 }
 
-fun NavController.navigateAddMenuSuccess(storeId: Long,  submittedMenuCount: Int, navOptions: NavOptions? = null) {
+fun NavController.navigateAddMenuSuccess(
+    storeId: Long,
+    submittedMenuCount: Int,
+    navOptions: NavOptions? = null
+) {
     navigate(AddMenuSuccess(storeId = storeId, submittedMenuCount = submittedMenuCount), navOptions)
 }
 
@@ -119,7 +123,8 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 navController.navigateDeleteSuccessLast(successStoreId, navOptions {
                     popUpTo(StoreDetail(successStoreId)) { inclusive = false }
                 })
-            }
+            },
+            onShowErrorSnackBar = onShowErrorSnackBar,
         )
     }
 
@@ -145,6 +150,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
                     popUpTo(StoreDetail(successStoreId)) { inclusive = false }
                 })
             },
+            onShowErrorSnackBar = onShowErrorSnackBar,
         )
     }
 
