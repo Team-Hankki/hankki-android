@@ -55,7 +55,7 @@ fun EditMenuRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(storeId) {
+    LaunchedEffect(Unit) {
         viewModel.fetchMenuItems(storeId)
     }
 
