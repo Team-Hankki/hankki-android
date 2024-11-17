@@ -25,6 +25,11 @@ import com.hankki.feature.report.model.LocationModel
 import com.hankki.feature.report.navigation.navigateToReport
 import com.hankki.feature.report.navigation.navigateToReportFinish
 import com.hankki.feature.report.navigation.navigateToSearchStore
+import com.hankki.feature.storedetail.navigation.navigateAddMenu
+import com.hankki.feature.storedetail.navigation.navigateDeleteSuccess
+import com.hankki.feature.storedetail.navigation.navigateEditMenu
+import com.hankki.feature.storedetail.navigation.navigateEditMod
+import com.hankki.feature.storedetail.navigation.navigateEditModSuccess
 import com.hankki.feature.storedetail.navigation.navigateStoreDetail
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
@@ -164,6 +169,68 @@ internal class MainNavigator(
     fun shouldShowBottomBar() = MainTab.contains {
         currentDestination?.hasRoute(it::class) == true
     } && (currentTab?.showBottomSheet ?: true)
+
+    fun navigateToEditMod(storeId: Long, menuId: Long, menuName: String, price: String) {
+        navController.navigateEditMod(
+            storeId = storeId,
+            menuId = menuId,
+            menuName = menuName,
+            price = price,
+            navOptions {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        )
+    }
+
+
+    fun navigateToEditSuccess(storeId: Long) {
+        navController.navigateEditModSuccess(
+            storeId = storeId,
+            navOptions {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        )
+    }
+
+    fun navigateToAddMenu(storeId: Long, navOptions: NavOptions? = null) {
+        val options = navOptions ?: navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = false
+            }
+            launchSingleTop = true
+        }
+        navController.navigateAddMenu(storeId, options)
+    }
+
+    fun navigateToEditMenu(storeId: Long, navOptions: NavOptions? = null) {
+        val options = navOptions ?: navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = false
+            }
+            launchSingleTop = true
+        }
+        navController.navigateEditMenu(storeId, options)
+    }
+
+
+    fun navigateToDeleteSuccess(storeId: Long) {
+        navController.navigateDeleteSuccess(
+            storeId = storeId,
+            navOptions {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        )
+    }
+
 }
 
 @Composable

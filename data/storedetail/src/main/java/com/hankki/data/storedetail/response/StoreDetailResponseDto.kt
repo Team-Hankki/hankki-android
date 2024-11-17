@@ -32,12 +32,15 @@ data class StoreDetailResponseDto(
 
 @Serializable
 data class MenuItemDto(
+    @SerialName("id")
+    val id: Long,
     @SerialName("name")
     val name: String,
     @SerialName("price")
     val price: Int
 ) {
     fun toMenuItem() = MenuItem(
+        id = id,
         name = name,
         price = price
     )

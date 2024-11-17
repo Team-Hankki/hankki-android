@@ -38,7 +38,6 @@
     <string name="make_jogbo">족보 만들기</string>
     <string name="cannot_create_duplicated_name">동일이름 족보 생성 불가</string>
     <string name="cannot_create_duplicated_jogbo_name">같은 이름의 족보는 생성할 수 없어요</string>
-    <string name="apply">적용</string>
 
     <!--common-->
     <string name="my_jogbo">나의 족보</string>
