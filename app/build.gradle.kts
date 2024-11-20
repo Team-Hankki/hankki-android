@@ -43,7 +43,7 @@ android {
             keyAlias = properties.getProperty("keyAlias")
             keyPassword = properties.getProperty("keyPassword")
             storeFile = File("${project.rootDir.absolutePath}/keystore/hankkiKeyStore")
-            storePassword = "hankkiandroid"
+            storePassword = properties.getProperty("storePassword")
         }
     }
 
