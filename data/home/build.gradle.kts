@@ -9,7 +9,10 @@ android {
 }
 
 dependencies {
+    // domain
     implementation(projects.domain.home)
+
+    // others
     implementation(libs.androidx.monitor)
     implementation(libs.androidx.junit.ktx)
 }
