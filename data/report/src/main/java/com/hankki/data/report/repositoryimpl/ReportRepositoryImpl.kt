@@ -2,7 +2,7 @@ package com.hankki.data.report.repositoryimpl
 
 import android.content.Context
 import android.net.Uri
-import com.hankki.core.common.utill.ContentUriRequestBody
+import com.hankki.core.network.ContentUriRequestBody
 import com.hankki.data.report.datasource.ReportDataSource
 import com.hankki.data.report.dto.request.ReportOtherSchoolStoreRequestDto
 import com.hankki.data.report.dto.request.toDto
