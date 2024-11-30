@@ -95,10 +95,6 @@ dependencies {
     implementation(projects.data.my)
     implementation(projects.data.universityselection)
 
-    // core
-    implementation(projects.core.network)
-    implementation(projects.core.common)
-
     // other dependencies
     implementation(libs.timber)
     implementation(libs.appcompat)
