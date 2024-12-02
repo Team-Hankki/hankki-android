@@ -86,6 +86,7 @@ android {
 dependencies {
     // baselineProfile
     baselineProfile(projects.baselineprofile)
+    implementation(libs.androidx.profileinstaller)
 
     // feature
     implementation(projects.feature.main)
