@@ -12,9 +12,6 @@ android {
             excludes.add("META-INF/**")
         }
     }
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 }
 
 configureHiltAndroid()

@@ -1,4 +1,4 @@
-package com.hankki.core.common.utill
+package com.hankki.core.network
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -59,7 +59,10 @@ class ContentUriRequestBody(
                 exif = ExifInterface(inputStream)
             }
 
-            var orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            var orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
             when (orientation) {
                 ExifInterface.ORIENTATION_ROTATE_90 -> orientation = 90
                 ExifInterface.ORIENTATION_ROTATE_180 -> orientation = 180
@@ -71,7 +74,15 @@ class ContentUriRequestBody(
                     setRotate(orientation.toFloat())
                 }
 
-                val rotatedBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, originalBitmap.width, originalBitmap.height, matrix, true)
+                val rotatedBitmap = Bitmap.createBitmap(
+                    originalBitmap,
+                    0,
+                    0,
+                    originalBitmap.width,
+                    originalBitmap.height,
+                    matrix,
+                    true
+                )
                 originalBitmap.recycle()
                 originalBitmap = rotatedBitmap
             }
@@ -91,7 +102,11 @@ class ContentUriRequestBody(
         }
     }
 
-    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int,
+    ): Int {
         val (height: Int, width: Int) = options.run { outHeight to outWidth }
         var inSampleSize = 1
 
@@ -111,7 +126,8 @@ class ContentUriRequestBody(
 
     override fun contentLength(): Long = size
 
-    override fun contentType(): MediaType? = uri?.let { contentResolver.getType(it)?.toMediaTypeOrNull() }
+    override fun contentType(): MediaType? =
+        uri?.let { contentResolver.getType(it)?.toMediaTypeOrNull() }
 
     override fun writeTo(sink: BufferedSink) {
         compressedImage?.let(sink::write)

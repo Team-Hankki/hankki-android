@@ -37,8 +37,8 @@ dependencies {
     //domain
     implementation(projects.domain.reissuetoken)
 
-    //feature
-    implementation(projects.feature.main)
+    // exifinterface
+    implementation(libs.exifinterface)
 
     //others
     implementation(platform(libs.okhttp.bom))

@@ -10,5 +10,6 @@ android {
 }
 
 dependencies {
+    // domain
     implementation(projects.domain.my)
 }

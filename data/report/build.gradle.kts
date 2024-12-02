@@ -11,7 +11,4 @@ android {
 dependencies {
     // domain
     implementation(projects.domain.report)
-
-    // core
-    implementation(projects.core.common)
 }

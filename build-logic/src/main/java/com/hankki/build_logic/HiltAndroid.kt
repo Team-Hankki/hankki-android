@@ -1,6 +1,5 @@
 package com.hankki.build_logic
 
-import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
@@ -15,14 +14,5 @@ internal fun Project.configureHiltAndroid() {
         "implementation"(libs.findLibrary("hilt.android").get())
         "ksp"(libs.findLibrary("hilt.android.compiler").get())
         "kspAndroidTest"(libs.findLibrary("hilt.android.compiler").get())
-    }
-}
-
-internal class HiltAndroidPlugin : Plugin<Project> {
-
-    override fun apply(target: Project) {
-        with(target) {
-            configureHiltAndroid()
-        }
     }
 }

@@ -8,16 +8,3 @@ dependencies {
     implementation(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
 }
-
-gradlePlugin {
-    plugins {
-        register("androidHilt") {
-            id = "hankki.android.hilt"
-            implementationClass = "com.hankki.build-logic.HiltAndroidPlugin"
-        }
-        register("kotlinHilt") {
-            id = "chattymin.kotlin.hilt"
-            implementationClass = "com.hankki.build-logic.HiltKotlinPlugin"
-        }
-    }
-}
