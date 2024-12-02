@@ -76,6 +76,12 @@ android {
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
             manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_round"
         }
+
+        create("benchmark") {
+            matchingFallbacks.add("release")
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
+        }
     }
 
     buildFeatures {
