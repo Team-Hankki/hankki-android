@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 plugins {
     alias(libs.plugins.android.test)
     alias(libs.plugins.kotlin.android)
@@ -5,16 +7,16 @@ plugins {
 }
 
 android {
-    namespace = "com.chattymin.baselineprofile"
+    namespace = "com.hankki.baselineprofile"
     compileSdk = 34
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     defaultConfig {
@@ -22,10 +24,18 @@ android {
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
     }
 
     targetProjectPath = ":app"
 
+    testOptions.managedDevices.devices {
+        create<ManagedVirtualDevice>("pixel4api33") {
+            device = "Pixel 4"
+            apiLevel = 33
+            systemImageSource = "aosp"
+        }
+    }
 }
 
 // This is the configuration block for the Baseline Profile plugin.

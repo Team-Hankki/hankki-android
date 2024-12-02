@@ -1,4 +1,4 @@
-package com.chattymin.baselineprofile
+package com.hankki.baselineprofile
 
 import androidx.benchmark.macro.BaselineProfileMode
 import androidx.benchmark.macro.CompilationMode
