@@ -3,6 +3,8 @@ import com.hankki.build_logic.setNamespace
 
 plugins {
     alias(libs.plugins.hankki.application)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.baselineprofile)
 }
 
 val properties = gradleLocalProperties(rootDir, providers)
@@ -82,6 +84,9 @@ android {
 }
 
 dependencies {
+    // baselineProfile
+    baselineProfile(projects.baselineprofile)
+
     // feature
     implementation(projects.feature.main)
 
@@ -99,4 +104,5 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.appcompat)
     implementation(libs.kakao.user)
+    implementation(libs.androidx.profileinstaller)
 }
