@@ -70,3 +70,6 @@ include(
     ":feature:universityselection",
     ":feature:storedetail"
 )
+
+// baselineprofile
+include(":baselineprofile")

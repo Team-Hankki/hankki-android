@@ -3,6 +3,8 @@ import com.hankki.build_logic.setNamespace
 
 plugins {
     alias(libs.plugins.hankki.application)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.baselineprofile)
 }
 
 val properties = gradleLocalProperties(rootDir, providers)
@@ -74,6 +76,12 @@ android {
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
             manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_round"
         }
+
+        create("benchmark") {
+            matchingFallbacks.add("release")
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
+        }
     }
 
     buildFeatures {
@@ -82,6 +90,10 @@ android {
 }
 
 dependencies {
+    // baselineProfile
+    baselineProfile(projects.baselineprofile)
+    implementation(libs.androidx.profileinstaller)
+
     // feature
     implementation(projects.feature.main)
 
@@ -99,4 +111,5 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.appcompat)
     implementation(libs.kakao.user)
+    implementation(libs.androidx.profileinstaller)
 }

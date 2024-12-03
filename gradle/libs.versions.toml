@@ -88,6 +88,12 @@ monitorVersion = "1.7.2"
 ##Amplitude
 amplitudeVersion = "1.17.3"
 
+## baselineprofile
+uiautomator = "2.2.0"
+benchmarkMacroJunit4 = "1.2.4"
+baselineprofile = "1.2.4"
+profileinstaller = "1.3.1"
+
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -166,6 +172,11 @@ androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-c
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist"}
 monitor = { group = "androidx.test", name = "monitor", version.ref = "monitorVersion" }
 
+## baselineprofile
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]
 
@@ -186,3 +197,4 @@ hankki-feature = { id = "hankki.android.feature", version = "unspecified" }
 hankki-data = { id = "hankki.android.data", version = "unspecified" }
 hankki-library = { id = "hankki.android.library", version = "unspecified" }
 hankki-kotlin = { id = "hankki.kotlin.library", version = "unspecified" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
