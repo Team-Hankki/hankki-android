@@ -17,8 +17,6 @@ fun NavController.navigateHome(
 
 fun NavGraphBuilder.homeNavGraph(
     paddingValues: PaddingValues,
-    onShowSnackBar: (String, Long) -> Unit,
-    onShowTextSnackBar: (String) -> Unit,
     navigateStoreDetail: (Long) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
@@ -26,8 +24,6 @@ fun NavGraphBuilder.homeNavGraph(
     composable<Home> {
         HomeRoute(
             paddingValues = paddingValues,
-            onShowSnackBar = onShowSnackBar,
-            onShowTextSnackBar = onShowTextSnackBar,
             navigateStoreDetail = navigateStoreDetail,
             navigateToUniversitySelection = navigateToUniversitySelection,
             navigateToAddNewJogbo = navigateToAddNewJogbo

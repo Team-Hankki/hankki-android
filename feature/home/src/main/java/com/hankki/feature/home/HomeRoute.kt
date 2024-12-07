@@ -87,6 +87,8 @@ import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.R.drawable.ic_coin
@@ -128,8 +130,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeRoute(
     paddingValues: PaddingValues,
-    onShowSnackBar: (String, Long) -> Unit,
-    onShowTextSnackBar: (String) -> Unit,
     navigateToUniversitySelection: () -> Unit,
     navigateStoreDetail: (Long) -> Unit,
     navigateToAddNewJogbo: () -> Unit,
@@ -138,6 +138,9 @@ fun HomeRoute(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val snackBar = LocalSnackBarTrigger.current
+    val buttonSnackBar = LocalSnackBarWithButtonTrigger.current
 
     val focusLocationProviderClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
@@ -158,7 +161,7 @@ fun HomeRoute(
         if (System.currentTimeMillis() - backPressedTime <= 2000L) {
             (context as Activity).finish()
         } else {
-            onShowTextSnackBar("한 번 더 누르시면 앱이 종료됩니다.")
+            snackBar("한 번 더 누르시면 앱이 종료됩니다.")
         }
         backPressedTime = System.currentTimeMillis()
     }
@@ -170,10 +173,7 @@ fun HomeRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is HomeSideEffect.ShowSnackBar -> onShowSnackBar(
-                    sideEffect.message,
-                    sideEffect.jogboId
-                )
+                is HomeSideEffect.ShowSnackBar -> buttonSnackBar(sideEffect.message, sideEffect.jogboId)
 
                 is HomeSideEffect.MoveMap -> {
                     cameraPositionState.move(
@@ -187,7 +187,7 @@ fun HomeRoute(
                 is HomeSideEffect.MoveMyLocation -> {
                     focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                         if (location == null) {
-                            onShowTextSnackBar("위치 정보를 가져올 수 없습니다.")
+                            snackBar("위치 정보를 가져올 수 없습니다.")
                             return@addOnSuccessListener
                         }
 
