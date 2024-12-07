@@ -67,8 +67,6 @@ fun NavGraphBuilder.reportNavGraph(
     navigateToStoreDetail: (storeId: Long) -> Unit,
     navigateToHome: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
-    onShowSnackBar: (String, Long) -> Unit,
-    onShowTextSnackBar: (String) -> Unit,
 ) {
     composable<Report> { backStackEntry ->
         val items = backStackEntry.toRoute<Report>()
@@ -79,7 +77,6 @@ fun NavGraphBuilder.reportNavGraph(
                 items.location,
                 items.address
             ),
-            onShowTextSnackBar = onShowTextSnackBar,
             navigateSearchStore = navigateToSearchStore,
             navigateUp = navigateUp,
             navigateToReportFinish = navigateToReportFinish,
@@ -103,7 +100,6 @@ fun NavGraphBuilder.reportNavGraph(
             navigateToHome = navigateToHome,
             navigateToStoreDetail = navigateToStoreDetail,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
-            onShowSnackBar = onShowSnackBar
         )
     }
 }

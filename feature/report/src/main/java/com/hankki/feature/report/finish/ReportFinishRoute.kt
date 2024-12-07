@@ -33,6 +33,8 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.HankkiTextButton
+import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
+import com.hankki.core.designsystem.event.LocalWhiteSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray900
@@ -51,11 +53,11 @@ fun ReportFinishRoute(
     navigateToHome: () -> Unit,
     navigateToStoreDetail: (storeId: Long) -> Unit,
     navigateToAddNewJogbo: () -> Unit,
-    onShowSnackBar: (String, Long) -> Unit,
     viewModel: ReportFinishViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val whiteSnackBar = LocalWhiteSnackBarTrigger.current
 
     LaunchedEffect(key1 = true) {
         viewModel.setStoreInfo(
@@ -73,7 +75,7 @@ fun ReportFinishRoute(
                 )
 
                 is ReportFinishSideEffect.NavigateToHome -> navigateToHome()
-                is ReportFinishSideEffect.ShowSnackBar -> onShowSnackBar(
+                is ReportFinishSideEffect.ShowSnackBar -> whiteSnackBar(
                     sideEffect.message,
                     sideEffect.jogboId
                 )
