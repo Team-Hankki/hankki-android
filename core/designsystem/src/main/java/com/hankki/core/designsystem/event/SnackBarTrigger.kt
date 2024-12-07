@@ -6,11 +6,11 @@ val LocalSnackBarTrigger = staticCompositionLocalOf<(String) -> Unit> {
     error("No SnackBar provided")
 }
 
-val LocalSnackBarWithButtonTrigger = staticCompositionLocalOf<(String, Long) -> Unit> {
-    error("No SnackBar provided")
+val LocalButtonSnackBarTrigger = staticCompositionLocalOf<(String, Long) -> Unit> {
+    error("No ButtonSnackBar provided")
 }
 
 
 val LocalWhiteSnackBarTrigger = staticCompositionLocalOf<(String, Long) -> Unit> {
-    error("No SnackBar provided")
+    error("No WhiteSnackBar provided")
 }

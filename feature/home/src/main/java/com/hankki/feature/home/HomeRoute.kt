@@ -88,7 +88,7 @@ import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.core.designsystem.event.LocalSnackBarTrigger
-import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
+import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.R.drawable.ic_coin
@@ -140,7 +140,7 @@ fun HomeRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val snackBar = LocalSnackBarTrigger.current
-    val buttonSnackBar = LocalSnackBarWithButtonTrigger.current
+    val buttonSnackBar = LocalButtonSnackBarTrigger.current
 
     val focusLocationProviderClient = remember {
         LocationServices.getFusedLocationProviderClient(context)

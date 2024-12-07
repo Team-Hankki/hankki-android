@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -33,7 +32,6 @@ import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottom
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.button.HankkiTextButton
-import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
 import com.hankki.core.designsystem.event.LocalWhiteSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500

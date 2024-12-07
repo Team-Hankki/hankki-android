@@ -50,7 +50,7 @@ import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.event.LocalSnackBarTrigger
-import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
+import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500
@@ -74,7 +74,7 @@ fun StoreDetailRoute(
 ) {
     val tracker = LocalTracker.current
     val snackBar = LocalSnackBarTrigger.current
-    val buttonSnackBar = LocalSnackBarWithButtonTrigger.current
+    val buttonSnackBar = LocalButtonSnackBarTrigger.current
 
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
