@@ -63,8 +63,6 @@ fun NavGraphBuilder.storeDetailNavGraph(
     navController: NavController,
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
-    onShowSnackBar: (String, Long) -> Unit,
-    onShowErrorSnackBar: (String) -> Unit,
     navigateToAddMenu: (Long) -> Unit,
     navigateToEditMenu: (Long) -> Unit,
     navigateToHome: () -> Unit
@@ -75,8 +73,6 @@ fun NavGraphBuilder.storeDetailNavGraph(
             storeId = items.storeId,
             navigateUp = navigateUp,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
-            onShowSnackBar = onShowSnackBar,
-            onShowErrorSnackBar = onShowErrorSnackBar,
             onAddMenuClick = { navigateToAddMenu(items.storeId) },
             onEditMenuClick = { navigateToEditMenu(items.storeId) }
         )
@@ -95,8 +91,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
                         popUpTo(StoreDetail(items.storeId)) { inclusive = false }
                     }
                 )
-            },
-            onShowErrorSnackBar = onShowErrorSnackBar,
+            }
         )
     }
 
@@ -123,8 +118,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 navController.navigateDeleteSuccessLast(successStoreId, navOptions {
                     popUpTo(StoreDetail(successStoreId)) { inclusive = false }
                 })
-            },
-            onShowErrorSnackBar = onShowErrorSnackBar,
+            }
         )
     }
 
@@ -150,7 +144,6 @@ fun NavGraphBuilder.storeDetailNavGraph(
                     popUpTo(StoreDetail(successStoreId)) { inclusive = false }
                 })
             },
-            onShowErrorSnackBar = onShowErrorSnackBar,
         )
     }
 
@@ -183,14 +176,12 @@ fun NavGraphBuilder.storeDetailNavGraph(
                     popUpTo(StoreDetail(items.storeId)) { inclusive = false }
                 })
             },
-            onShowErrorSnackBar = onShowErrorSnackBar,
         )
     }
 
     composable<DeleteSuccessLast> {
         DeleteSuccessLastRoute(
-            onNavigateToHome = navigateToHome,
-            onShowErrorSnackBar = onShowErrorSnackBar
+            onNavigateToHome = navigateToHome
         )
     }
 

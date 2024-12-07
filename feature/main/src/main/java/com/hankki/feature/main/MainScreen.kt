@@ -13,6 +13,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -54,15 +55,15 @@ import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
 import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
+import com.hankki.core.designsystem.event.LocalWhiteSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
-import com.hankki.core.designsystem.event.LocalSnackBarTrigger
-import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
-import com.hankki.core.designsystem.event.LocalWhiteSnackBarTrigger
 import com.hankki.feature.home.navigation.Home
 import com.hankki.feature.home.navigation.homeNavGraph
 import com.hankki.feature.login.navigation.Login
@@ -145,217 +146,12 @@ internal fun MainScreen(
     ) {
         Scaffold(
             content = { paddingValue ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    NavHost(
-                        navController = navigator.navController,
-                        startDestination = navigator.startDestination,
-                        enterTransition = { EnterTransition.None },
-                        exitTransition = { ExitTransition.None },
-                        popEnterTransition = { EnterTransition.None },
-                        popExitTransition = { ExitTransition.None }
-                    ) {
-                        splashNavGraph(
-                            navigateToHome = {
-                                val navOptions = navOptions {
-                                    popUpTo(navigator.navController.graph.findStartDestination().id) {
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToHome(navOptions = navOptions)
-                            },
-                            navigateToLogIn = {
-                                val navOptions = navOptions {
-                                    popUpTo(navigator.navController.graph.findStartDestination().id) {
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToLogin(
-                                    navOptions = navOptions
-                                )
-                            },
-                        )
-                        homeNavGraph(
-                            paddingValues = paddingValue,
-                            navigateStoreDetail = navigator::navigateToStoreDetail,
-                            navigateToUniversitySelection = navigator::navigateToUniversity,
-                            navigateToAddNewJogbo = navigator::navigateToNewJogbo
-                        )
-                        reportNavGraph(
-                            navigateReport = { latitude, longitude, location, address ->
-                                val navOptions = navOptions {
-                                    popUpTo<Home> {
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToReport(
-                                    LocationModel(
-                                        latitude,
-                                        longitude,
-                                        location,
-                                        address
-                                    ), navOptions
-                                )
-                            },
-                            navigateToSearchStore = {
-                                navigator.navigateToSearchStore()
-                            },
-                            navigateUp = navigator::navigateUpIfNotHome,
-                            navigateToReportFinish = { count, storeName, storeId ->
-                                val navOptions = navOptions {
-                                    popUpTo<Home> {
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToReportFinish(
-                                    count,
-                                    storeName,
-                                    storeId,
-                                    navOptions
-                                )
-                            },
-                            navigateToHome = {
-                                val navOptions = navOptions {
-                                    popUpTo<Home> {
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToHome(navOptions)
-                            },
-                            navigateToStoreDetail = { storeId ->
-                                navigator.navigateToStoreDetail(storeId)
-                            },
-                            navigateToAddNewJogbo = navigator::navigateToNewJogbo,
-                        )
-                        myNavGraph(
-                            paddingValues = paddingValue,
-                            navigateUp = navigator::navigateUpIfNotHome,
-                            navigateToMyJogbo = navigator::navigateToMyJogbo,
-                            navigateToMyStore = navigator::navigateToMyStore,
-                            navigateToJogboDetail = navigator::navigateToMyJogboDetail,
-                            navigateToNewJogbo = navigator::navigateToNewJogbo,
-                            navigateToStoreDetail = navigator::navigateToStoreDetail,
-                            navigateToHome = {
-                                val navOptions = navOptions {
-                                    popUpTo<Home> {
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToHome(navOptions)
-                            }
-                        )
-                        loginNavGraph(
-                            navigateToHome = {
-                                val navOptions = navOptions {
-                                    popUpTo<Login> {
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToHome(navOptions = navOptions)
-                            },
-                            navigateToOnboarding = {
-                                val navOptions = navOptions {
-                                    popUpTo<Login> {
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToOnboarding(navOptions)
-                            }
-                        )
-
-                        onboardingNavGraph(
-                            navigateToUniversity = {
-                                val navOptions = navOptions {
-                                    popUpTo<Onboarding> {
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToUniversity(navOptions)
-                            }
-                        )
-                        universitySelectionNavGraph(
-                            navigateToHome = {
-                                val navOptions = navOptions {
-                                    popUpTo<UniversitySelection> {
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToHome(
-                                    navOptions = navOptions
-                                )
-                            }
-                        )
-                        storeDetailNavGraph(
-                            navController = navigator.navController,
-                            navigateUp = navigator::navigateUpIfNotHome,
-                            navigateToAddNewJogbo = navigator::navigateToNewJogbo,
-                            onShowSnackBar = onShowTextSnackBarWithButton,
-                            onShowErrorSnackBar = onShowErrorSnackBar,
-                            navigateToAddMenu = navigator::navigateToAddMenu,
-                            navigateToEditMenu = navigator::navigateToEditMenu,
-                            navigateToHome = {
-                                val navOptions = navOptions {
-                                    popUpTo<Home> {
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-                                }
-                                navigator.navigateToHome(navOptions)
-                            }
-                        )
-                    }
-
-                    if (!isConnected) {
-                        SingleButtonDialog(
-                            title = "네트워크 오류가 발생했어요",
-                            description = "네트워크 연결 상태를 확인하고 다시 시도해주세요",
-                            buttonTitle = "확인"
-                        ) {
-                            navigator.navigateUpIfNotHome()
-                        }
-                    }
-
-                    SnackbarHost(
-                        hostState = whiteSnackBarWithButtonHostState,
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .statusBarsPadding()
-                            .padding(top = 35.dp)
-                    ) { snackBarData ->
-                        runCatching {
-                            val (message, jogboId) = snackBarData.visuals.message.split("/")
-
-                            HankkiWhiteSnackBarWithButton(
-                                message = message
-                            ) {
-                                snackBarData.dismiss()
-
-                                navigator.navigateToMyJogboDetail(
-                                    jogboId.toLong()
-                                )
-                            }
-                        }.onFailure {
-                            HankkiWhiteSnackBarWithButton(
-                                message = "오류가 발생했어요",
-                                buttonText = "닫기"
-                            ) {
-                                snackBarData.dismiss()
-                            }
-                        }
-                    }
-                }
+                MainContent(
+                    paddingValue = paddingValue,
+                    navigator = navigator,
+                    isConnected = isConnected,
+                    whiteSnackBarWithButtonHostState = whiteSnackBarWithButtonHostState,
+                )
             },
             bottomBar = {
                 MainBottomBar(
@@ -401,6 +197,224 @@ internal fun MainScreen(
                 }
             },
         )
+    }
+}
+
+@Composable
+private fun MainContent(
+    paddingValue: PaddingValues,
+    navigator: MainNavigator,
+    isConnected: Boolean,
+    whiteSnackBarWithButtonHostState: SnackbarHostState,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        NavHost(
+            navController = navigator.navController,
+            startDestination = navigator.startDestination,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
+            splashNavGraph(
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo(navigator.navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions = navOptions)
+                },
+                navigateToLogIn = {
+                    val navOptions = navOptions {
+                        popUpTo(navigator.navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToLogin(
+                        navOptions = navOptions
+                    )
+                },
+            )
+            homeNavGraph(
+                paddingValues = paddingValue,
+                navigateStoreDetail = navigator::navigateToStoreDetail,
+                navigateToUniversitySelection = navigator::navigateToUniversity,
+                navigateToAddNewJogbo = navigator::navigateToNewJogbo
+            )
+            reportNavGraph(
+                navigateReport = { latitude, longitude, location, address ->
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToReport(
+                        LocationModel(
+                            latitude,
+                            longitude,
+                            location,
+                            address
+                        ), navOptions
+                    )
+                },
+                navigateToSearchStore = {
+                    navigator.navigateToSearchStore()
+                },
+                navigateUp = navigator::navigateUpIfNotHome,
+                navigateToReportFinish = { count, storeName, storeId ->
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToReportFinish(
+                        count,
+                        storeName,
+                        storeId,
+                        navOptions
+                    )
+                },
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions)
+                },
+                navigateToStoreDetail = { storeId ->
+                    navigator.navigateToStoreDetail(storeId)
+                },
+                navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+            )
+            myNavGraph(
+                paddingValues = paddingValue,
+                navigateUp = navigator::navigateUpIfNotHome,
+                navigateToMyJogbo = navigator::navigateToMyJogbo,
+                navigateToMyStore = navigator::navigateToMyStore,
+                navigateToJogboDetail = navigator::navigateToMyJogboDetail,
+                navigateToNewJogbo = navigator::navigateToNewJogbo,
+                navigateToStoreDetail = navigator::navigateToStoreDetail,
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions)
+                }
+            )
+            loginNavGraph(
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Login> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions = navOptions)
+                },
+                navigateToOnboarding = {
+                    val navOptions = navOptions {
+                        popUpTo<Login> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToOnboarding(navOptions)
+                }
+            )
+
+            onboardingNavGraph(
+                navigateToUniversity = {
+                    val navOptions = navOptions {
+                        popUpTo<Onboarding> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToUniversity(navOptions)
+                }
+            )
+            universitySelectionNavGraph(
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<UniversitySelection> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(
+                        navOptions = navOptions
+                    )
+                }
+            )
+            storeDetailNavGraph(
+                navController = navigator.navController,
+                navigateUp = navigator::navigateUpIfNotHome,
+                navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+                navigateToAddMenu = navigator::navigateToAddMenu,
+                navigateToEditMenu = navigator::navigateToEditMenu,
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions)
+                }
+            )
+        }
+
+        if (!isConnected) {
+            SingleButtonDialog(
+                title = "네트워크 오류가 발생했어요",
+                description = "네트워크 연결 상태를 확인하고 다시 시도해주세요",
+                buttonTitle = "확인"
+            ) {
+                navigator.navigateUpIfNotHome()
+            }
+        }
+
+        SnackbarHost(
+            hostState = whiteSnackBarWithButtonHostState,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .statusBarsPadding()
+                .padding(top = 35.dp)
+        ) { snackBarData ->
+            runCatching {
+                val (message, jogboId) = snackBarData.visuals.message.split("/")
+
+                HankkiWhiteSnackBarWithButton(
+                    message = message
+                ) {
+                    snackBarData.dismiss()
+
+                    navigator.navigateToMyJogboDetail(
+                        jogboId.toLong()
+                    )
+                }
+            }.onFailure {
+                HankkiWhiteSnackBarWithButton(
+                    message = "오류가 발생했어요",
+                    buttonText = "닫기"
+                ) {
+                    snackBarData.dismiss()
+                }
+            }
+        }
     }
 }
 

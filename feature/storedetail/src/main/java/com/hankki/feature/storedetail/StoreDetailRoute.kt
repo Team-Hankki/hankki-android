@@ -49,6 +49,8 @@ import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalSnackBarWithButtonTrigger
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray50
 import com.hankki.core.designsystem.theme.Gray500
@@ -66,13 +68,13 @@ fun StoreDetailRoute(
     storeId: Long,
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
-    onShowSnackBar: (String, Long) -> Unit,
-    onShowErrorSnackBar: (String) -> Unit,
     viewModel: StoreDetailViewModel = hiltViewModel(),
     onAddMenuClick: (Long) -> Unit,
     onEditMenuClick: (Long) -> Unit
 ) {
     val tracker = LocalTracker.current
+    val snackBar = LocalSnackBarTrigger.current
+    val buttonSnackBar = LocalSnackBarWithButtonTrigger.current
 
     val storeState by viewModel.storeState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
@@ -91,7 +93,7 @@ fun StoreDetailRoute(
                 StoreDetailSideEffect.NavigateUp -> navigateUp()
                 StoreDetailSideEffect.NavigateToAddNewJogbo -> navigateToAddNewJogbo()
                 StoreDetailSideEffect.ShowTextSnackBar -> {
-                    onShowErrorSnackBar("이미 삭제된 식당입니다 ")
+                    snackBar("이미 삭제된 식당입니다 ")
                     navigateUp()
                 }
             }
@@ -142,7 +144,7 @@ fun StoreDetailRoute(
                 selectedIndex = storeState.selectedIndex,
                 buttonLabels = storeState.buttonLabels,
                 onNavigateUp = navigateUp,
-                onShowSnackBar = onShowSnackBar,
+                onShowSnackBar = buttonSnackBar,
                 onLikeClicked = {
                     viewModel.toggleLike(storeId)
                     tracker.track(

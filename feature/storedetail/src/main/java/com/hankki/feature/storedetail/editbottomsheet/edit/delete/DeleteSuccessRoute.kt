@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.Red500
@@ -32,8 +33,9 @@ fun DeleteSuccessRoute(
     viewModel: DeleteSuccessViewModel = hiltViewModel(),
     onNavigateToEditMenu: () -> Unit,
     onNavigateToStoreDetailRoute: () -> Unit,
-    onShowErrorSnackBar: (String) -> Unit,
 ) {
+    val snackBar = LocalSnackBarTrigger.current
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sideEffectFlow = viewModel.sideEffect
 
@@ -43,7 +45,7 @@ fun DeleteSuccessRoute(
                 DeleteSuccessSideEffect.NavigateToEditMenu -> onNavigateToEditMenu()
                 DeleteSuccessSideEffect.NavigateToStoreDetail -> onNavigateToStoreDetailRoute()
                 is DeleteSuccessSideEffect.ShowError -> {
-                    onShowErrorSnackBar(sideEffect.message)
+                    snackBar(sideEffect.message)
                 }
             }
         }
