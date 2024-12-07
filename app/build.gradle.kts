@@ -3,7 +3,6 @@ import com.hankki.build_logic.setNamespace
 
 plugins {
     alias(libs.plugins.hankki.application)
-    alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
 }
 

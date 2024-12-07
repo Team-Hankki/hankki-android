@@ -179,6 +179,7 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 
 [bundles]
 okhttp = ["okhttp", "okhttp-logging"]
+retrofit = ["retrofit-core", "retrofit-kotlin-serialization"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

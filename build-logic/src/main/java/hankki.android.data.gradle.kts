@@ -26,10 +26,6 @@ dependencies {
     // timber
     implementation(libs.findLibrary("timber").get())
 
-    // immutable
-    implementation(libs.findLibrary("kotlinx.immutable").get())
-
     // retrofit
-    implementation(libs.findLibrary("retrofit.core").get())
-    implementation(libs.findLibrary("retrofit.kotlin.serialization").get())
+    implementation(libs.findBundle("retrofit").get())
 }
