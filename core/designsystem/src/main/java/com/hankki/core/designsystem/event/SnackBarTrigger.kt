@@ -10,7 +10,6 @@ val LocalButtonSnackBarTrigger = staticCompositionLocalOf<(String, Long) -> Unit
     error("No ButtonSnackBar provided")
 }
 
-
 val LocalWhiteSnackBarTrigger = staticCompositionLocalOf<(String, Long) -> Unit> {
     error("No WhiteSnackBar provided")
 }
