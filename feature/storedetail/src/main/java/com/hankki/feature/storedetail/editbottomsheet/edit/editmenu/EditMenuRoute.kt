@@ -32,6 +32,7 @@ import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.layout.TopBlurLayout
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -50,8 +51,8 @@ fun EditMenuRoute(
     onNavigateUp: () -> Unit,
     onNavigateToDeleteSuccess: (Long) -> Unit,
     onNavigateToDeleteSuccessLast: (Long) -> Unit,
-    onShowErrorSnackBar: (String) -> Unit,
 ) {
+    val snackBar = LocalSnackBarTrigger.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
@@ -72,7 +73,7 @@ fun EditMenuRoute(
                 }
                 is EditMenuSideEffect.NavigateBack -> onNavigateUp()
                 is EditMenuSideEffect.ShowSnackbar -> {
-                    onShowErrorSnackBar(sideEffect.message)
+                    snackBar(sideEffect.message)
                 }
             }
         }

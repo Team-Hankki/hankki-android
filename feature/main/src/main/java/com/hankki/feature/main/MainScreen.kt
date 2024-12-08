@@ -13,6 +13,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,6 +55,9 @@ import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
 import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalWhiteSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -134,206 +139,46 @@ internal fun MainScreen(
         }
     }
 
-    Scaffold(
-        content = { paddingValue ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                NavHost(
-                    navController = navigator.navController,
-                    startDestination = navigator.startDestination,
-                    enterTransition = { EnterTransition.None },
-                    exitTransition = { ExitTransition.None },
-                    popEnterTransition = { EnterTransition.None },
-                    popExitTransition = { ExitTransition.None }
-                ) {
-                    splashNavGraph(
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id) {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions = navOptions)
-                        },
-                        navigateToLogIn = {
-                            val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id) {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToLogin(
-                                navOptions = navOptions
-                            )
-                        },
-                    )
-                    homeNavGraph(
-                        paddingValues = paddingValue,
-                        onShowSnackBar = onShowTextSnackBarWithButton,
-                        onShowTextSnackBar = onShowErrorSnackBar,
-                        navigateStoreDetail = navigator::navigateToStoreDetail,
-                        navigateToUniversitySelection = navigator::navigateToUniversity,
-                        navigateToAddNewJogbo = navigator::navigateToNewJogbo
-                    )
-                    reportNavGraph(
-                        navigateReport = { latitude, longitude, location, address ->
-                            val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToReport(
-                                LocationModel(
-                                    latitude,
-                                    longitude,
-                                    location,
-                                    address
-                                ), navOptions
-                            )
-                        },
-                        navigateToSearchStore = {
-                            navigator.navigateToSearchStore()
-                        },
-                        navigateUp = navigator::navigateUpIfNotHome,
-                        navigateToReportFinish = { count, storeName, storeId ->
-                            val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToReportFinish(
-                                count,
-                                storeName,
-                                storeId,
-                                navOptions
-                            )
-                        },
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions)
-                        },
-                        navigateToStoreDetail = { storeId ->
-                            navigator.navigateToStoreDetail(storeId)
-                        },
-                        navigateToAddNewJogbo = navigator::navigateToNewJogbo,
-                        onShowSnackBar = onShowWhiteSnackBarWithButton,
-                        onShowTextSnackBar = onShowErrorSnackBar
-                    )
-                    myNavGraph(
-                        paddingValues = paddingValue,
-                        navigateUp = navigator::navigateUpIfNotHome,
-                        navigateToMyJogbo = navigator::navigateToMyJogbo,
-                        navigateToMyStore = navigator::navigateToMyStore,
-                        navigateToJogboDetail = navigator::navigateToMyJogboDetail,
-                        navigateToNewJogbo = navigator::navigateToNewJogbo,
-                        navigateToStoreDetail = navigator::navigateToStoreDetail,
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions)
-                        }
-                    )
-                    loginNavGraph(
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo<Login> {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions = navOptions)
-                        },
-                        navigateToOnboarding = {
-                            val navOptions = navOptions {
-                                popUpTo<Login> {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToOnboarding(navOptions)
-                        }
-                    )
+    CompositionLocalProvider(
+        LocalSnackBarTrigger provides onShowErrorSnackBar,
+        LocalWhiteSnackBarTrigger provides onShowWhiteSnackBarWithButton,
+        LocalButtonSnackBarTrigger provides onShowTextSnackBarWithButton,
+    ) {
+        Scaffold(
+            content = { paddingValue ->
+                MainContent(
+                    paddingValue = paddingValue,
+                    navigator = navigator,
+                    isConnected = isConnected,
+                    whiteSnackBarWithButtonHostState = whiteSnackBarWithButtonHostState,
+                )
+            },
+            bottomBar = {
+                MainBottomBar(
+                    visible = navigator.shouldShowBottomBar(),
+                    tabs = MainTab.entries.toPersistentList(),
+                    currentTab = navigator.currentTab,
+                    onTabSelected = {
+                        navigator.navigate(it)
 
-                    onboardingNavGraph(
-                        navigateToUniversity = {
-                            val navOptions = navOptions {
-                                popUpTo<Onboarding> {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToUniversity(navOptions)
-                        }
-                    )
-                    universitySelectionNavGraph(
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo<UniversitySelection> {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(
-                                navOptions = navOptions
-                            )
-                        }
-                    )
-                    storeDetailNavGraph(
-                        navController = navigator.navController,
-                        navigateUp = navigator::navigateUpIfNotHome,
-                        navigateToAddNewJogbo = navigator::navigateToNewJogbo,
-                        onShowSnackBar = onShowTextSnackBarWithButton,
-                        onShowErrorSnackBar = onShowErrorSnackBar,
-                        navigateToAddMenu = navigator::navigateToAddMenu,
-                        navigateToEditMenu = navigator::navigateToEditMenu,
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo<Home> {
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                            }
-                            navigator.navigateToHome(navOptions)
-                        }
-                    )
-                }
-
-                if (!isConnected) {
-                    SingleButtonDialog(
-                        title = "네트워크 오류가 발생했어요",
-                        description = "네트워크 연결 상태를 확인하고 다시 시도해주세요",
-                        buttonTitle = "확인"
-                    ) {
-                        navigator.navigateUpIfNotHome()
+                        tracker.track(
+                            EventType.CLICK,
+                            "Nav_${it.name}"
+                        )
                     }
+                )
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = errorSnackBarHostState) { snackBarData ->
+                    HankkiTextSnackBar(message = snackBarData.visuals.message)
                 }
 
-                SnackbarHost(
-                    hostState = whiteSnackBarWithButtonHostState,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .statusBarsPadding()
-                        .padding(top = 35.dp)
-                ) { snackBarData ->
+                SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackBarData ->
                     runCatching {
                         val (message, jogboId) = snackBarData.visuals.message.split("/")
 
-                        HankkiWhiteSnackBarWithButton(
-                            message = message
+                        HankkiTextSnackBarWithButton(
+                            message = message,
                         ) {
                             snackBarData.dismiss()
 
@@ -342,60 +187,235 @@ internal fun MainScreen(
                             )
                         }
                     }.onFailure {
-                        HankkiWhiteSnackBarWithButton(
-                            message = "오류가 발생했어요",
+                        HankkiTextSnackBarWithButton(
+                            message = snackBarData.visuals.message,
                             buttonText = "닫기"
                         ) {
                             snackBarData.dismiss()
                         }
                     }
                 }
-            }
-        },
-        bottomBar = {
-            MainBottomBar(
-                visible = navigator.shouldShowBottomBar(),
-                tabs = MainTab.entries.toPersistentList(),
-                currentTab = navigator.currentTab,
-                onTabSelected = {
-                    navigator.navigate(it)
+            },
+        )
+    }
+}
 
-                    tracker.track(
-                        EventType.CLICK,
-                        "Nav_${it.name}"
+@Composable
+private fun MainContent(
+    paddingValue: PaddingValues,
+    navigator: MainNavigator,
+    isConnected: Boolean,
+    whiteSnackBarWithButtonHostState: SnackbarHostState,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        NavHost(
+            navController = navigator.navController,
+            startDestination = navigator.startDestination,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
+            splashNavGraph(
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo(navigator.navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions = navOptions)
+                },
+                navigateToLogIn = {
+                    val navOptions = navOptions {
+                        popUpTo(navigator.navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToLogin(
+                        navOptions = navOptions
+                    )
+                },
+            )
+            homeNavGraph(
+                paddingValues = paddingValue,
+                navigateStoreDetail = navigator::navigateToStoreDetail,
+                navigateToUniversitySelection = navigator::navigateToUniversity,
+                navigateToAddNewJogbo = navigator::navigateToNewJogbo
+            )
+            reportNavGraph(
+                navigateReport = { latitude, longitude, location, address ->
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToReport(
+                        LocationModel(
+                            latitude,
+                            longitude,
+                            location,
+                            address
+                        ), navOptions
+                    )
+                },
+                navigateToSearchStore = {
+                    navigator.navigateToSearchStore()
+                },
+                navigateUp = navigator::navigateUpIfNotHome,
+                navigateToReportFinish = { count, storeName, storeId ->
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToReportFinish(
+                        count,
+                        storeName,
+                        storeId,
+                        navOptions
+                    )
+                },
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions)
+                },
+                navigateToStoreDetail = { storeId ->
+                    navigator.navigateToStoreDetail(storeId)
+                },
+                navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+            )
+            myNavGraph(
+                paddingValues = paddingValue,
+                navigateUp = navigator::navigateUpIfNotHome,
+                navigateToMyJogbo = navigator::navigateToMyJogbo,
+                navigateToMyStore = navigator::navigateToMyStore,
+                navigateToJogboDetail = navigator::navigateToMyJogboDetail,
+                navigateToNewJogbo = navigator::navigateToNewJogbo,
+                navigateToStoreDetail = navigator::navigateToStoreDetail,
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions)
+                }
+            )
+            loginNavGraph(
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Login> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions = navOptions)
+                },
+                navigateToOnboarding = {
+                    val navOptions = navOptions {
+                        popUpTo<Login> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToOnboarding(navOptions)
+                }
+            )
+
+            onboardingNavGraph(
+                navigateToUniversity = {
+                    val navOptions = navOptions {
+                        popUpTo<Onboarding> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToUniversity(navOptions)
+                }
+            )
+            universitySelectionNavGraph(
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<UniversitySelection> {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(
+                        navOptions = navOptions
                     )
                 }
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = errorSnackBarHostState) { snackBarData ->
-                HankkiTextSnackBar(message = snackBarData.visuals.message)
+            storeDetailNavGraph(
+                navController = navigator.navController,
+                navigateUp = navigator::navigateUpIfNotHome,
+                navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+                navigateToAddMenu = navigator::navigateToAddMenu,
+                navigateToEditMenu = navigator::navigateToEditMenu,
+                navigateToHome = {
+                    val navOptions = navOptions {
+                        popUpTo<Home> {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                    navigator.navigateToHome(navOptions)
+                }
+            )
+        }
+
+        if (!isConnected) {
+            SingleButtonDialog(
+                title = "네트워크 오류가 발생했어요",
+                description = "네트워크 연결 상태를 확인하고 다시 시도해주세요",
+                buttonTitle = "확인"
+            ) {
+                navigator.navigateUpIfNotHome()
             }
+        }
 
-            SnackbarHost(hostState = textSnackBarWithButtonHostState) { snackBarData ->
-                runCatching {
-                    val (message, jogboId) = snackBarData.visuals.message.split("/")
+        SnackbarHost(
+            hostState = whiteSnackBarWithButtonHostState,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .statusBarsPadding()
+                .padding(top = 35.dp)
+        ) { snackBarData ->
+            runCatching {
+                val (message, jogboId) = snackBarData.visuals.message.split("/")
 
-                    HankkiTextSnackBarWithButton(
-                        message = message,
-                    ) {
-                        snackBarData.dismiss()
+                HankkiWhiteSnackBarWithButton(
+                    message = message
+                ) {
+                    snackBarData.dismiss()
 
-                        navigator.navigateToMyJogboDetail(
-                            jogboId.toLong()
-                        )
-                    }
-                }.onFailure {
-                    HankkiTextSnackBarWithButton(
-                        message = snackBarData.visuals.message,
-                        buttonText = "닫기"
-                    ) {
-                        snackBarData.dismiss()
-                    }
+                    navigator.navigateToMyJogboDetail(
+                        jogboId.toLong()
+                    )
+                }
+            }.onFailure {
+                HankkiWhiteSnackBarWithButton(
+                    message = "오류가 발생했어요",
+                    buttonText = "닫기"
+                ) {
+                    snackBarData.dismiss()
                 }
             }
-        },
-    )
+        }
+    }
 }
 
 @Composable

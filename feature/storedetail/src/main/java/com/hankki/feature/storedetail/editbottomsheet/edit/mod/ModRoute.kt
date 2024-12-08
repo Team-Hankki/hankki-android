@@ -34,6 +34,7 @@ import com.hankki.core.designsystem.component.button.HankkiExpandedButton
 import com.hankki.core.designsystem.component.button.HankkiMediumButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.Gray900
@@ -57,8 +58,9 @@ fun ModRoute(
     onNavigateUp: () -> Unit,
     onNavigateToEditSuccess: (Long) -> Unit,
     onNavigateToDeleteSuccess: (Long) -> Unit,
-    onShowErrorSnackBar: (String) -> Unit,
 ) {
+    val snackBar = LocalSnackBarTrigger.current
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sideEffectFlow = viewModel.sideEffect
     val coroutineScope = rememberCoroutineScope()
@@ -75,7 +77,7 @@ fun ModRoute(
                 is ModSideEffect.NavigateToDeleteSuccess -> onNavigateToDeleteSuccess(sideEffect.storeId)
                 ModSideEffect.NavigateUp -> onNavigateUp()
                 is ModSideEffect.ShowSnackbar -> {
-                    onShowErrorSnackBar(sideEffect.message)
+                    snackBar(sideEffect.message)
                 }
             }
         }
@@ -151,7 +153,7 @@ fun ModifyMenuScreen(
     onSubmit: () -> Unit,
     onShowDeleteDialog: () -> Unit,
     onShowModCompleteDialog: () -> Unit,
-    hidePriceWarning: () -> Unit
+    hidePriceWarning: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val isVisibleIme = WindowInsets.isImeVisible

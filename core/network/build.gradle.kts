@@ -44,8 +44,7 @@ dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.bundles.retrofit)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)

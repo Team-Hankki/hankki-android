@@ -23,6 +23,7 @@ import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.textfield.HankkiMenuTextField
 import com.hankki.core.designsystem.component.textfield.HankkiPriceTextField
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.*
 import kotlinx.collections.immutable.PersistentList
 
@@ -31,9 +32,9 @@ fun AddMenuRoute(
     storeId: Long,
     onNavigateUp: () -> Unit,
     onNavigateToSuccess: (Int) -> Unit,
-    onShowErrorSnackBar: (String) -> Unit,
     viewModel: AddMenuViewModel = hiltViewModel()
 ) {
+    val snackBar = LocalSnackBarTrigger.current
     val state by viewModel.addMenuState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -46,7 +47,7 @@ fun AddMenuRoute(
                 AddMenuSideEffect.NavigateToSuccess -> onNavigateToSuccess(state.menuList.size)
                 AddMenuSideEffect.NavigateBack -> onNavigateUp()
                 is AddMenuSideEffect.ShowError -> {
-                    onShowErrorSnackBar(sideEffect.message)
+                    snackBar(sideEffect.message)
                 }
             }
         }
