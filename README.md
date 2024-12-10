@@ -33,7 +33,7 @@
 <br>
 
 ### **Module**
-![project dot](https://github.com/user-attachments/assets/8626cdd6-361a-42c7-a383-191a7a44c871)
+![project dot](https://github.com/user-attachments/assets/d7cdb808-5d32-42ed-8f88-0105f1bb96c7)
 
 <br>   
 
