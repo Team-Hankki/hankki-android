@@ -32,7 +32,7 @@
 - Naver Map
 <br>
 
-### **Module**
+### **Dependency Module Graph**
 ![project dot](https://github.com/user-attachments/assets/d7cdb808-5d32-42ed-8f88-0105f1bb96c7)
 
 <br>   
