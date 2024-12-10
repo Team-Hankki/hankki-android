@@ -66,7 +66,7 @@ internal object NetworkModule {
     @JWT
     fun provideJWTOkHttpClient(
         loggingInterceptor: Interceptor,
-        @JWT oauthInterceptor: Interceptor
+        @JWT oauthInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor(oauthInterceptor)

@@ -3,7 +3,6 @@ package com.hankki.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
-import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.entity.response.CategoriesEntity
 import com.hankki.domain.home.entity.response.CategoryEntity

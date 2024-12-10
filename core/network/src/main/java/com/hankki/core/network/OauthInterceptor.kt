@@ -18,7 +18,7 @@ import javax.inject.Inject
 class OauthInterceptor @Inject constructor(
     private val reissueTokenRepository: ReissueTokenRepository,
     private val dataStore: TokenDataStore,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -27,9 +27,7 @@ class OauthInterceptor @Inject constructor(
 
         val response = chain.proceed(authRequest)
         return if (response.code == TOKEN_EXPIRED) {
-            runBlocking {
-                handleTokenExpiration(chain, authRequest, response)
-            }
+            handleTokenExpiration(chain, authRequest, response)
         } else {
             response
         }
@@ -46,15 +44,16 @@ class OauthInterceptor @Inject constructor(
     private fun Request.Builder.addAuthorizationHeader() =
         this.addHeader(AUTHORIZATION, "$BEARER ${dataStore.accessToken}")
 
-    private suspend fun handleTokenExpiration(
+    private fun handleTokenExpiration(
         chain: Interceptor.Chain,
         authRequest: Request,
-        response: Response
+        response: Response,
     ): Response {
         response.close()
+
         return if (tryReissueToken()) {
             val newRequest =
-                authRequest.newBuilder().addAuthorizationHeader().build()
+                authRequest.newBuilder().removeHeader(AUTHORIZATION).addAuthorizationHeader().build()
             chain.proceed(newRequest)
         } else {
             clearUserInfoAndRestart()
@@ -62,22 +61,14 @@ class OauthInterceptor @Inject constructor(
         }
     }
 
-    private suspend fun tryReissueToken(): Boolean {
-        return try {
-            val result =
-                reissueTokenRepository.postReissueToken("$BEARER ${dataStore.refreshToken}")
-            result.onSuccess { data ->
-                Timber.d("Successfully reissued token: ${data.refreshToken}")
-                updateTokens(data.accessToken, data.refreshToken)
-            }.onFailure { error ->
-                Timber.e("Failed to reissue token: $error")
-            }
-            result.isSuccess
-        } catch (t: Throwable) {
-            Timber.e(t, "Exception occurred while reissuing token")
-            false
-        }
-    }
+    private fun tryReissueToken(): Boolean = runBlocking {
+        reissueTokenRepository.postReissueToken("$BEARER ${dataStore.refreshToken}")
+    }.onSuccess { data ->
+        Timber.d("Successfully reissued token: ${data.refreshToken}")
+        updateTokens(data.accessToken, data.refreshToken)
+    }.onFailure { error ->
+        Timber.e("Failed to reissue token: $error")
+    }.isSuccess
 
     private fun updateTokens(newAccessToken: String, newRefreshToken: String) {
         Timber.e("NEW ACCESS TOKEN : $newAccessToken")
