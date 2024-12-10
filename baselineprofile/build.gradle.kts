@@ -56,7 +56,7 @@ androidComponents {
         val artifactsLoader = v.artifacts.getBuiltArtifactsLoader()
         v.instrumentationRunnerArguments.put(
             "targetAppId",
-            v.testedApks.map { artifactsLoader.load(it)?.applicationId }
+            v.testedApks.map { artifactsLoader.load(it)?.applicationId ?: "" }
         )
     }
 }
