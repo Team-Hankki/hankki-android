@@ -55,7 +55,8 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(horizontal = 22.dp, vertical = 16.dp)
+            .padding(vertical = 12.dp)
+            .padding(start = 18.dp, end = 15.dp)
             .then(
                 if (onLongClickItem != null) Modifier.combinedClickable(
                     onClick = { onClickItem(storeId) },
@@ -69,7 +70,7 @@ fun StoreItem(
             model = storeImageUrl ?: R.drawable.img_store_default,
             contentDescription = "Store Image",
             modifier = Modifier
-                .size(72.dp)
+                .size(78.dp)
                 .clip(RoundedCornerShape(12.dp)),
             contentScale = ContentScale.Crop
         )
@@ -99,13 +100,13 @@ fun StoreItem(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_heart_filled),
                     contentDescription = "heart icon",
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(16.dp),
                     tint = Color.Unspecified
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(2.dp))
                 Text(
                     text = heartCount.toString(),
-                    style = HankkiTheme.typography.caption4,
+                    style = HankkiTheme.typography.suitCaption,
                     color = Gray700
                 )
             }
@@ -119,7 +120,7 @@ fun StoreItem(
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
                     text = "${price.toString().formatPrice()}원",
-                    style = HankkiTheme.typography.caption1,
+                    style = HankkiTheme.typography.body6,
                     color = Gray700
                 )
             }

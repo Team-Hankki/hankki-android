@@ -4,17 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.item.StoreItem
-import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red500
 
 @Composable
 fun MyStoreItem(
@@ -44,12 +40,13 @@ fun MyStoreItem(
     ) {
         if (isIconUsed) {
             Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_heart_filled),
-                contentDescription = "plus button",
+                imageVector = ImageVector.vectorResource(
+                    id = if (isIconSelected) com.hankki.feature.my.R.drawable.ic_like_heart_filled else com.hankki.feature.my.R.drawable.ic_like_heart_empty
+                ),
+                contentDescription = "좋아요 버튼",
                 modifier = Modifier
-                    .size(52.dp)
+                    .size(26.dp)
                     .noRippleClickable(onClick = editSelected),
-                colorFilter = ColorFilter.tint(if (isIconSelected) Red500 else Gray200)
             )
         }
     }
