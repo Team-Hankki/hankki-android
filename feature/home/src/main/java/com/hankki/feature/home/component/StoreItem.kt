@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -28,7 +29,10 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
 import com.hankki.core.designsystem.theme.Gray300
+import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray500
+import com.hankki.core.designsystem.theme.Gray700
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
@@ -60,56 +64,60 @@ fun StoreItem(
             contentDescription = "Store Image",
             modifier = Modifier
                 .size(72.dp)
-                .clip(RoundedCornerShape(8.dp)),
+                .clip(RoundedCornerShape(12.dp)),
             contentScale = ContentScale.Crop
         )
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(14.dp))
         Column(modifier = Modifier.wrapContentHeight().weight(1f)) {
-            HankkiCategoryChip(text = category)
-            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = storeName,
-                style = HankkiTheme.typography.suitSub2
+                text = category,
+                style = HankkiTheme.typography.caption4,
+                color = Gray700
             )
-            Spacer(modifier = Modifier.height(2.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_food),
-                    contentDescription = "icon",
-                    tint = Gray300,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(3.dp))
+            Spacer(modifier = Modifier.height(1.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = "${price.toString().formatPrice()}원",
-                    style = HankkiTheme.typography.button1,
-                    color = Gray500
+                    text = storeName,
+                    style = HankkiTheme.typography.body5,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f, false)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_heart_filled),
+                    contentDescription = "heart icon",
+                    modifier = Modifier.size(20.dp),
+                    tint = Color.Unspecified
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_ellipse),
-                    contentDescription = "icon",
-                    tint = Gray300
+                Text(
+                    text = heartCount.toString(),
+                    style = HankkiTheme.typography.caption4,
+                    color = Gray700
                 )
-                Spacer(modifier = Modifier.width(2.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_like_heart),
-                    contentDescription = "icon",
-                    tint = Gray300,
-                    modifier = Modifier.size(16.dp)
+            }
+            Spacer(modifier = Modifier.height(2.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "최저",
+                    style = HankkiTheme.typography.caption4,
+                    color = Gray400
                 )
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
-                    text = "$heartCount",
-                    style = HankkiTheme.typography.button1,
-                    color = Gray500
+                    text = "${price.toString().formatPrice()}원",
+                    style = HankkiTheme.typography.caption1,
+                    color = Gray700
                 )
             }
         }
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(14.dp))
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_plus_btn_filled),
+            painter = painterResource(id = com.hankki.feature.home.R.drawable.ic_add_jogbo),
             contentDescription = "plus button",
             modifier = Modifier.noRippleClickable(onClick = onPlusClick),
             tint = Color.Unspecified
