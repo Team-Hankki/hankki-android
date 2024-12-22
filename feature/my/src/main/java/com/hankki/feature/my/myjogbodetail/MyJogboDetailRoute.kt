@@ -38,7 +38,6 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
-import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -130,11 +129,12 @@ fun MyJogboDetailScreen(
     val scrollState = rememberLazyListState()
 
     if (shareDialogState) {
-        SingleButtonDialog(
-            title = stringResource(R.string.please_wait),
-            description = stringResource(R.string.preparing_share_jogbo),
-            buttonTitle = stringResource(R.string.check),
-            onConfirmation = updateShareDialogState
+        DoubleButtonDialog(
+            title = stringResource(R.string.no_jogbo),
+            negativeButtonTitle = stringResource(R.string.go_back),
+            positiveButtonTitle = stringResource(id = R.string.look_around),
+            onNegativeButtonClicked = updateShareDialogState,
+            onPositiveButtonClicked = navigateToHome
         )
     }
 
