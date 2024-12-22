@@ -1,6 +1,8 @@
-package com.hankki.feature.home.component
+package com.hankki.core.designsystem.component.item
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,16 +29,13 @@ import coil.compose.AsyncImage
 import com.hankki.core.common.extension.formatPrice
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
-import com.hankki.core.designsystem.component.chip.HankkiCategoryChip
-import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray700
-import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StoreItem(
     storeId: Long,
@@ -47,7 +46,8 @@ fun StoreItem(
     heartCount: Int,
     modifier: Modifier = Modifier,
     onClickItem: (Long) -> Unit = {},
-    onPlusClick: () -> Unit = {}
+    onLongClickItem: ((Long) -> Unit)? = null,
+    iconButton: @Composable () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -56,7 +56,13 @@ fun StoreItem(
             .clip(RoundedCornerShape(10.dp))
             .background(White)
             .padding(horizontal = 22.dp, vertical = 16.dp)
-            .noRippleClickable { onClickItem(storeId) },
+            .then(
+                if (onLongClickItem != null) Modifier.combinedClickable(
+                    onClick = { onClickItem(storeId) },
+                    onLongClick = { onLongClickItem(storeId) }
+                )
+                else Modifier.noRippleClickable { onClickItem(storeId) }
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -68,7 +74,11 @@ fun StoreItem(
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.width(14.dp))
-        Column(modifier = Modifier.wrapContentHeight().weight(1f)) {
+        Column(
+            modifier = Modifier
+                .wrapContentHeight()
+                .weight(1f)
+        ) {
             Text(
                 text = category,
                 style = HankkiTheme.typography.caption4,
@@ -116,12 +126,7 @@ fun StoreItem(
         }
         Spacer(modifier = Modifier.width(14.dp))
 
-        Icon(
-            painter = painterResource(id = com.hankki.feature.home.R.drawable.ic_add_jogbo),
-            contentDescription = "plus button",
-            modifier = Modifier.noRippleClickable(onClick = onPlusClick),
-            tint = Color.Unspecified
-        )
+        iconButton()
     }
 }
 
@@ -136,6 +141,14 @@ fun StoreItemPreview() {
             storeName = "한끼네 한정식",
             price = 7900,
             heartCount = 300
-        )
+        ) {
+            // Icon Button
+            Icon(
+                painter = painterResource(id = R.drawable.ic_heart_filled),
+                contentDescription = "plus button",
+                modifier = Modifier.noRippleClickable(onClick = {}),
+                tint = Color.Unspecified
+            )
+        }
     }
 }
