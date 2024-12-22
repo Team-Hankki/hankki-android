@@ -81,14 +81,14 @@ import com.hankki.core.designsystem.component.layout.EmptyImageWithText
 import com.hankki.core.designsystem.component.layout.EmptyView
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
+import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
-import com.hankki.core.designsystem.event.LocalSnackBarTrigger
-import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.R.drawable.ic_coin
@@ -97,9 +97,9 @@ import com.hankki.feature.home.R.drawable.ic_marker
 import com.hankki.feature.home.R.drawable.ic_sort
 import com.hankki.feature.home.R.drawable.ic_university
 import com.hankki.feature.home.component.DropdownFilterChip
+import com.hankki.feature.home.component.HomeStoreItem
 import com.hankki.feature.home.component.RepositionButton
 import com.hankki.feature.home.component.RowFilterChip
-import com.hankki.feature.home.component.StoreItem
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
 import com.hankki.feature.home.model.ChipState
@@ -173,7 +173,10 @@ fun HomeRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
-                is HomeSideEffect.ShowSnackBar -> buttonSnackBar(sideEffect.message, sideEffect.jogboId)
+                is HomeSideEffect.ShowSnackBar -> buttonSnackBar(
+                    sideEffect.message,
+                    sideEffect.jogboId
+                )
 
                 is HomeSideEffect.MoveMap -> {
                     cameraPositionState.move(
@@ -617,7 +620,7 @@ fun HomeScreen(
                                             items = storeItems,
                                             key = { item -> item.id }
                                         ) { item ->
-                                            StoreItem(
+                                            HomeStoreItem(
                                                 storeId = item.id,
                                                 storeImageUrl = item.imageUrl,
                                                 category = item.category,
@@ -684,7 +687,7 @@ fun HomeScreen(
                                 }
 
                                 if (selectedStoreItem != null) {
-                                    StoreItem(
+                                    HomeStoreItem(
                                         storeId = selectedStoreItem.id,
                                         storeImageUrl = selectedStoreItem.imageUrl,
                                         category = selectedStoreItem.category,
