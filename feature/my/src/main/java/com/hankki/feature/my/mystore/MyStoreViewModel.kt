@@ -128,4 +128,8 @@ class MyStoreViewModel @Inject constructor(
             _mySideEffect.emit(MyStoreSideEffect.NavigateToDetail(storeId))
         }
     }
+
+    companion object {
+        const val LIKE = "like"
+    }
 }

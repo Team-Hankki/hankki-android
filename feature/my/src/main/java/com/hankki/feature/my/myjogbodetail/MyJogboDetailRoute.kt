@@ -3,7 +3,6 @@ package com.hankki.feature.my.myjogbodetail
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -50,7 +49,7 @@ import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.StoreItem
+import com.hankki.feature.my.component.MyStoreItem
 import com.hankki.feature.my.myjogbodetail.component.JogboFolder
 import com.hankki.feature.my.myjogbodetail.component.MoveToHomeButton
 import kotlinx.collections.immutable.PersistentList
@@ -62,7 +61,7 @@ fun MyJogboDetailRoute(
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
+    myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
@@ -213,21 +212,20 @@ fun MyJogboDetailScreen(
                     }
 
                     items(state.data) { store ->
-                        StoreItem(
-                            imageUrl = store.imageUrl,
+                        MyStoreItem(
+                            storeId = store.id,
+                            storeImageUrl = store.imageUrl,
                             category = store.category,
-                            name = store.name,
-                            price = store.lowestPrice.toString(),
+                            storeName = store.name,
+                            price = store.lowestPrice,
                             heartCount = store.heartCount,
                             isIconUsed = false,
                             isIconSelected = false,
-                            modifier = Modifier.combinedClickable(
-                                onClick = { navigateToStoreDetail(store.id) },
-                                onLongClick = {
-                                    updateSelectedStoreId(store.id)
-                                    updateDeleteDialogState()
-                                }
-                            )
+                            onClickItem = { navigateToStoreDetail(store.id) },
+                            onLongClickItem = {
+                                updateSelectedStoreId(store.id)
+                                updateDeleteDialogState()
+                            }
                         )
                         if (state.data.indexOf(store) != state.data.lastIndex) {
                             HorizontalDivider(
