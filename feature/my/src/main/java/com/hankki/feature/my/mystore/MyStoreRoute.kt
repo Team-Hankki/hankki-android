@@ -38,7 +38,8 @@ import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.my.R
-import com.hankki.feature.my.component.StoreItem
+import com.hankki.feature.my.component.MyStoreItem
+import com.hankki.feature.my.mystore.MyStoreViewModel.Companion.LIKE
 import com.hankki.feature.my.mystore.model.MyStoreModel
 import kotlinx.collections.immutable.PersistentList
 
@@ -53,7 +54,7 @@ fun MyStoreRoute(
     val state by myStoreViewModel.myStoreState.collectAsStateWithLifecycle()
 
     LaunchedEffect(type) {
-        if (type == "like") {
+        if (type == LIKE) {
             myStoreViewModel.getLikedStoreList()
         } else {
             myStoreViewModel.getReportedStoreList()
@@ -108,7 +109,7 @@ fun MyStoreScreen(
             },
             content = {
                 Text(
-                    text = if (type == "like") stringResource(id = R.string.description_store_like) else stringResource(
+                    text = if (type == LIKE) stringResource(id = R.string.description_store_like) else stringResource(
                         id = R.string.description_store_report
                     ),
                     style = HankkiTheme.typography.sub3,
@@ -120,7 +121,7 @@ fun MyStoreScreen(
             when (state) {
                 EmptyUiState.Empty -> {
                     EmptyView(
-                        text = if (type == "like") stringResource(R.string.no_liked_store) else stringResource(
+                        text = if (type == LIKE) stringResource(R.string.no_liked_store) else stringResource(
                             R.string.no_reported_store
                         )
                     )
@@ -141,21 +142,21 @@ fun MyStoreScreen(
                 is EmptyUiState.Success -> {
                     LazyColumn {
                         itemsIndexed(state.data) { index, store ->
-                            StoreItem(
-                                imageUrl = store.imageURL,
+                            MyStoreItem(
+                                storeId = store.id,
+                                storeImageUrl = store.imageURL,
                                 category = store.category,
-                                name = store.name,
-                                price = store.lowestPrice.toString(),
+                                storeName = store.name,
+                                price = store.lowestPrice,
                                 heartCount = store.heartCount,
-                                isIconUsed = (type == "like"),
+                                isIconUsed = (type == LIKE),
                                 isIconSelected = store.isLiked ?: false,
+                                onClickItem = { navigateToStoreDetail(store.id) },
                                 editSelected = {
                                     updateStoreSelected(store.id, store.isLiked == true)
                                 },
-                                modifier = Modifier.noRippleClickable {
-                                    navigateToStoreDetail(store.id)
-                                }
                             )
+
                             if (index != state.data.lastIndex) {
                                 HorizontalDivider(
                                     modifier = Modifier.padding(
@@ -180,7 +181,7 @@ fun MyStoreScreenPreview() {
     HankkijogboTheme {
         MyStoreScreen(
             navigateUp = {},
-            type = "like",
+            type = LIKE,
             state = EmptyUiState.Empty,
             updateStoreSelected = { _, _ -> },
             navigateToStoreDetail = {}
