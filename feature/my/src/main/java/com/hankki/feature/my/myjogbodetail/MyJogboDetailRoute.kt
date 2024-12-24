@@ -1,12 +1,13 @@
 package com.hankki.feature.my.myjogbodetail
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +38,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -60,7 +64,8 @@ fun MyJogboDetailRoute(
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel(),
+    navigateToNewJogbo: () -> Unit, // TODO: 받아와야함
+    myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
@@ -99,11 +104,12 @@ fun MyJogboDetailRoute(
         selectedStoreId = state.selectedStoreId,
         updateSelectedStoreId = myJogboDetailViewModel::updateSelectedStoreId,
         navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
-        navigateToHome = myJogboDetailViewModel::navigateToHome
+        navigateToHome = myJogboDetailViewModel::navigateToHome,
+        navigateToNewJogbo = navigateToNewJogbo,
+        shareJogbo = myJogboDetailViewModel::shareJogbo
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyJogboDetailScreen(
     navigateUp: () -> Unit,
@@ -120,12 +126,16 @@ fun MyJogboDetailScreen(
     updateSelectedStoreId: (Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
+    navigateToNewJogbo: () -> Unit,
+    isSharedJogbo: Boolean = true, // TODO: 공유받은 족보라면 true로 바꿔줘야함
+    shareJogbo: (Context, String, String, String) -> Unit // TODO: 족보 공유
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
         mutableDoubleStateOf(configuration.screenHeightDp * 0.09)
     }
     val scrollState = rememberLazyListState()
+    val context = LocalContext.current
 
     if (shareDialogState) {
         DoubleButtonDialog(
@@ -170,114 +180,159 @@ fun MyJogboDetailScreen(
             },
             content = {
                 Text(
-                    text = stringResource(R.string.my_jogbo),
+                    text = if (isSharedJogbo) stringResource(R.string.shared_jogbo) else stringResource(
+                        R.string.my_jogbo
+                    ),
                     style = HankkiTheme.typography.sub3,
                     color = Gray900
                 )
             }
         )
 
-        LazyColumn(
+        Box(
             modifier = Modifier
+                .fillMaxSize()
                 .background(White)
                 .navigationBarsPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            state = scrollState
         ) {
-            when (state) {
-                is EmptyUiState.Loading -> {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillParentMaxSize()
-                        ) {
-                            HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
-                        }
-                    }
-                }
-
-                is EmptyUiState.Success -> {
-                    item {
-                        JogboFolder(
-                            title = jogboTitle,
-                            chips = jogboChips,
-                            userNickname = userNickname,
-                            shareJogboDialogState = updateShareDialogState
-                        )
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-
-                    items(state.data) { store ->
-                        MyStoreItem(
-                            storeId = store.id,
-                            storeImageUrl = store.imageUrl,
-                            category = store.category,
-                            storeName = store.name,
-                            price = store.lowestPrice,
-                            heartCount = store.heartCount,
-                            isIconUsed = false,
-                            isIconSelected = false,
-                            onClickItem = { navigateToStoreDetail(store.id) },
-                            onLongClickItem = {
-                                updateSelectedStoreId(store.id)
-                                updateDeleteDialogState()
-                            }
-                        )
-                        if (state.data.indexOf(store) != state.data.lastIndex) {
-                            HorizontalDivider(
-                                modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
-                                thickness = 1.dp,
-                                color = Gray200
-                            )
-                        }
-                    }
-
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 20.dp, bottom = 30.dp),
-                            contentAlignment = Alignment.TopCenter
-                        ) {
-                            MoveToHomeButton(
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                state = scrollState
+            ) {
+                when (state) {
+                    is EmptyUiState.Loading -> {
+                        item {
+                            Box(
                                 modifier = Modifier
-                                    .noRippleClickable(navigateToHome),
-                            )
+                                    .fillParentMaxSize()
+                            ) {
+                                HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                            }
                         }
                     }
-                }
 
-                is EmptyUiState.Empty -> {
-                    item {
-                        JogboFolder(
-                            title = jogboTitle,
-                            chips = jogboChips,
-                            userNickname = userNickname,
-                            shareJogboDialogState = updateShareDialogState
-                        )
+                    is EmptyUiState.Success -> {
+                        item {
+                            JogboFolder(
+                                title = jogboTitle,
+                                chips = jogboChips,
+                                userNickname = userNickname,
+                                shareJogboDialogState = {
+                                    shareJogbo(
+                                        context,
+                                        "", // TODO: 식당 이미지 불러오기
+                                        jogboTitle,
+                                        userNickname
+                                    )
+                                },
+                                // isSharedJogbo = isSharedJogbo
+                            )
+                        }
 
-                        Spacer(modifier = Modifier.height((height).dp))
+                        item {
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
 
-                        EmptyViewWithButton(
-                            text = stringResource(R.string.my_jogbo) +
-                                    stringResource(R.string.add_store_to_jogbo),
-                            content = {
+                        items(state.data) { store ->
+                            MyStoreItem(
+                                storeId = store.id,
+                                storeImageUrl = store.imageUrl,
+                                category = store.category,
+                                storeName = store.name,
+                                price = store.lowestPrice,
+                                heartCount = store.heartCount,
+                                isIconUsed = false,
+                                isIconSelected = false,
+                                onClickItem = { if (!isSharedJogbo) navigateToStoreDetail(store.id) },
+                                onLongClickItem = {
+                                    if (!isSharedJogbo) {
+                                        updateSelectedStoreId(store.id)
+                                        updateDeleteDialogState()
+                                    }
+                                }
+                            )
+                            if (state.data.indexOf(store) != state.data.lastIndex) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(
+                                        vertical = 1.dp,
+                                        horizontal = 22.dp
+                                    ),
+                                    thickness = 1.dp,
+                                    color = Gray200
+                                )
+                            }
+                        }
+
+                        if (!isSharedJogbo) item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 20.dp, bottom = 30.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
                                 MoveToHomeButton(
                                     modifier = Modifier
-                                        .padding(top = 20.dp)
                                         .noRippleClickable(navigateToHome),
                                 )
                             }
+                        }
+                    }
+
+                    is EmptyUiState.Empty -> {
+                        item {
+                            JogboFolder(
+                                title = jogboTitle,
+                                chips = jogboChips,
+                                userNickname = userNickname,
+                                shareJogboDialogState = updateShareDialogState,
+                                //isSharedJogbo = isSharedJogbo
+                            )
+
+                            Spacer(modifier = Modifier.height((height).dp))
+
+                            if (!isSharedJogbo)
+                                EmptyViewWithButton(
+                                    text = stringResource(R.string.my_jogbo) +
+                                            stringResource(R.string.add_store_to_jogbo),
+                                    content = {
+                                        MoveToHomeButton(
+                                            modifier = Modifier
+                                                .padding(top = 20.dp)
+                                                .noRippleClickable(navigateToHome),
+                                        )
+                                    }
+                                )
+                        }
+                    }
+
+                    is EmptyUiState.Failure -> {}
+                }
+            }
+
+            if (isSharedJogbo)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    BottomBlurLayout()
+
+                    Column {
+                        HankkiButton(
+                            modifier = Modifier
+                                .padding(horizontal = 22.dp)
+                                .fillMaxWidth()
+                                .padding(bottom = 15.dp),
+                            text = stringResource(R.string.add_to_my_jogbo),
+                            onClick = navigateToNewJogbo, // TODO: 족보 생성하기 페이지로 이동
+                            enabled = true,
+                            textStyle = HankkiTheme.typography.sub3,
                         )
                     }
                 }
-
-                is EmptyUiState.Failure -> {}
-            }
         }
     }
 }
@@ -290,7 +345,8 @@ fun MyJogboDetailScreenPreview() {
             favoriteId = 1,
             navigateUp = {},
             navigateToDetail = {},
-            navigateToHome = {}
+            navigateToHome = {},
+            navigateToNewJogbo = {}
         )
     }
 }
