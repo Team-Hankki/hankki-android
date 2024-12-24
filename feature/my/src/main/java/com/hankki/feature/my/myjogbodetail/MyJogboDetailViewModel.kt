@@ -1,10 +1,14 @@
 package com.hankki.feature.my.myjogbodetail
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.domain.my.repository.MyRepository
+import com.kakao.sdk.common.util.KakaoCustomTabsClient
+import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.share.WebSharerClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,7 +39,9 @@ class MyJogboDetailViewModel @Inject constructor(
                 .onSuccess { jogbo ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
                         myStoreItems = jogbo,
-                        uiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(jogbo.stores.toPersistentList())
+                        uiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(
+                            jogbo.stores.toPersistentList()
+                        )
                     )
                 }
                 .onFailure(Timber::e)
@@ -54,9 +60,9 @@ class MyJogboDetailViewModel @Inject constructor(
         )
     }
 
-    fun deleteSelectedStore(favoriteId:Long, storeId:Long){
+    fun deleteSelectedStore(favoriteId: Long, storeId: Long) {
         viewModelScope.launch {
-            myRepository.deleteJogboStore(favoriteId,storeId)
+            myRepository.deleteJogboStore(favoriteId, storeId)
                 .onSuccess { jogbo ->
                     updateDeleteDialogState(true)
                     getJogboDetail(favoriteId)
@@ -94,6 +100,32 @@ class MyJogboDetailViewModel @Inject constructor(
                     )
                 }
                 .onFailure(Timber::e)
+        }
+    }
+
+    fun shareJogbo(context: Context, image: String, title: String, senderName: String) {
+        val templateId = 115383L
+        val templateArgs = mapOf(
+            "IMAGE_URL" to image,
+            "NAME" to title,
+            "SENDER" to senderName
+        )
+
+        if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
+            ShareClient.instance.shareCustom(context, templateId, templateArgs) { result, error ->
+                if (error != null) {
+                    Timber.e(error)
+                } else if (result != null) {
+                    context.startActivity(result.intent)
+                }
+            }
+        } else {
+            val sharerUrl = WebSharerClient.instance.makeCustomUrl(templateId, templateArgs)
+            try {
+                KakaoCustomTabsClient.openWithDefault(context, sharerUrl)
+            } catch (e: UnsupportedOperationException) {
+                Timber.e(e.message)
+            }
         }
     }
 }
