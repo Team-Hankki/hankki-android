@@ -220,12 +220,14 @@ fun MyJogboDetailScreen(
                                 chips = jogboChips,
                                 userNickname = userNickname,
                                 shareJogboDialogState = {
-                                    shareJogbo(
-                                        context,
-                                        "", // TODO: 식당 이미지 불러오기
-                                        jogboTitle,
-                                        userNickname
-                                    )
+                                    state.data.firstOrNull { it.imageUrl != null }?.imageUrl?.let {
+                                        shareJogbo(
+                                            context,
+                                            it, // TODO: 문제점 -> 만약 식당이 전부 이미지가 없으면 공유가 안됨.
+                                            jogboTitle,
+                                            userNickname
+                                        )
+                                    }
                                 },
                                 // isSharedJogbo = isSharedJogbo
                             )
