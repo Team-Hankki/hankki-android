@@ -27,8 +27,8 @@ fun NavController.navigateMyStore(type: String) {
     navigate(MyStore(type))
 }
 
-fun NavController.navigateMyJogboDetail(favoriteId: Long,navOptions: NavOptions) {
-    navigate(MyJogboDetail(favoriteId = favoriteId),navOptions)
+fun NavController.navigateMyJogboDetail(favoriteId: Long, navOptions: NavOptions) {
+    navigate(MyJogboDetail(favoriteId = favoriteId), navOptions)
 }
 
 fun NavController.navigateNewJogbo() {
@@ -65,7 +65,8 @@ fun NavGraphBuilder.myNavGraph(
             favoriteId = jogbo.favoriteId,
             navigateToDetail = navigateToStoreDetail,
             navigateUp = navigateUp,
-            navigateToHome = navigateToHome
+            navigateToHome = navigateToHome,
+            navigateToNewJogbo = navigateToNewJogbo
         )
     }
     composable<NewJogbo> {
@@ -91,3 +92,5 @@ data class MyJogboDetail(
 
 @Serializable
 data object NewJogbo : Route
+
+val uri = "https://www.hankki.com"
