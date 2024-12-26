@@ -4,6 +4,7 @@ import com.hankki.data.my.datasource.MyDataSource
 import com.hankki.data.my.dto.request.toDto
 import com.hankki.data.my.dto.response.toEntity
 import com.hankki.domain.my.entity.request.NewJogboEntity
+import com.hankki.domain.my.entity.response.IsJogboOwnerEntity
 import com.hankki.domain.my.entity.response.LikedStoreResponseEntity
 import com.hankki.domain.my.entity.response.MyJogboDetailEntity
 import com.hankki.domain.my.entity.response.MyJogboEntity
@@ -63,5 +64,10 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun unLikeStore(storeId: Long): Result<LikedStoreResponseEntity> =
         runCatching {
             myDataSource.deleteLikeStore(storeId).data.toEntity()
+        }
+
+    override suspend fun getIsJogboOwner(favoriteId: Long): Result<IsJogboOwnerEntity>  =
+        runCatching {
+            myDataSource.getIsJogboOwner(favoriteId).data.toEntity()
         }
 }

@@ -135,4 +135,15 @@ class MyJogboDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun checkIsJogboOwner(favoriteId:Long){
+        viewModelScope.launch {
+            myRepository.getIsJogboOwner(favoriteId)
+                .onSuccess { isJogboOwner ->
+                    _myJogboDetailState.value = _myJogboDetailState.value.copy(
+                    isJogboOwner = isJogboOwner.isJogboOwner
+                ) }
+                .onFailure(Timber::e)
+        }
+    }
 }

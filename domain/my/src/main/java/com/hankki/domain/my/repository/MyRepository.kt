@@ -1,6 +1,7 @@
 package com.hankki.domain.my.repository
 
 import com.hankki.domain.my.entity.request.NewJogboEntity
+import com.hankki.domain.my.entity.response.IsJogboOwnerEntity
 import com.hankki.domain.my.entity.response.LikedStoreResponseEntity
 import com.hankki.domain.my.entity.response.MyJogboDetailEntity
 import com.hankki.domain.my.entity.response.MyJogboEntity
@@ -20,4 +21,5 @@ interface MyRepository {
     suspend fun deleteJogboStores(body: List<Long>): Result<Unit>
     suspend fun likeStore(storeId: Long): Result<LikedStoreResponseEntity>
     suspend fun unLikeStore(storeId: Long): Result<LikedStoreResponseEntity>
+    suspend fun getIsJogboOwner(favoriteId: Long): Result<IsJogboOwnerEntity>
 }

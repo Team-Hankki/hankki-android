@@ -75,6 +75,7 @@ fun MyJogboDetailRoute(
     LaunchedEffect(true) {
         myJogboDetailViewModel.getJogboDetail(favoriteId)
         myJogboDetailViewModel.getUserName()
+        myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
     }
 
     LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
@@ -111,6 +112,7 @@ fun MyJogboDetailRoute(
         shareJogbo = myJogboDetailViewModel::shareJogbo,
         isSharedJogbo = isSharedJogbo,
         favoriteId = favoriteId,
+        isJogboOwner = state.isJogboOwner
     )
 }
 
@@ -133,7 +135,8 @@ fun MyJogboDetailScreen(
     navigateToNewJogbo: (Boolean) -> Unit,
     isSharedJogbo: Boolean,
     shareJogbo: (Context, String, String, String, Long) -> Unit,
-    favoriteId: Long
+    favoriteId: Long,
+    isJogboOwner : Boolean
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
@@ -321,7 +324,7 @@ fun MyJogboDetailScreen(
                 }
             }
 
-            if (isSharedJogbo)
+            if (isSharedJogbo && !isJogboOwner)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

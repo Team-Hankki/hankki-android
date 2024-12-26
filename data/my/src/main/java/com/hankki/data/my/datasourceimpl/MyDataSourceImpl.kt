@@ -5,6 +5,7 @@ import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.my.datasource.MyDataSource
 import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
+import com.hankki.data.my.dto.response.IsJogboOwnerResponseDto
 import com.hankki.data.my.dto.response.JogboDetailDto
 import com.hankki.data.my.dto.response.LikedStoreResponseDto
 import com.hankki.data.my.dto.response.StoreDto
@@ -41,4 +42,7 @@ class MyDataSourceImpl @Inject constructor(
 
     override suspend fun deleteLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto> =
         myService.deleteLikeStore(storeId)
+
+    override suspend fun getIsJogboOwner(favoriteId: Long): BaseResponse<IsJogboOwnerResponseDto> =
+        myService.getIsJogboOwner(favoriteId)
 }
