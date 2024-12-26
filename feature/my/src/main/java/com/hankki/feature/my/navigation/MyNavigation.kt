@@ -33,8 +33,8 @@ fun NavController.navigateMyJogboDetail(favoriteId: Long, navOptions: NavOptions
     navigate(MyJogboDetail(favoriteId = favoriteId), navOptions)
 }
 
-fun NavController.navigateNewJogbo(isSharedJogbo: Boolean = false) {
-    navigate(NewJogbo(isSharedJogbo))
+fun NavController.navigateNewJogbo(isSharedJogbo: Boolean = false, favoriteId: Long = 0L) {
+    navigate(NewJogbo(isSharedJogbo, favoriteId))
 }
 
 fun NavGraphBuilder.myNavGraph(
@@ -43,10 +43,11 @@ fun NavGraphBuilder.myNavGraph(
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
-    navigateToNewJogbo: (Boolean) -> Unit,
+    navigateToNewJogbo: () -> Unit,
+    navigateToNewSharedJogbo: (Boolean,Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    isDeepLink:Boolean
+    isDeepLink: Boolean
 ) {
     composable<My> {
         MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
@@ -76,16 +77,17 @@ fun NavGraphBuilder.myNavGraph(
             navigateToDetail = navigateToStoreDetail,
             navigateUp = navigateUp,
             navigateToHome = navigateToHome,
-            navigateToNewJogbo = navigateToNewJogbo,
+            navigateToNewSharedJogbo = navigateToNewSharedJogbo,
             isSharedJogbo = isDeepLink
         )
     }
     composable<NewJogbo> { backStackEntry ->
-        val isSharedJogbo = backStackEntry.toRoute<NewJogbo>().isSharedJogbo
+        val jogbo = backStackEntry.toRoute<NewJogbo>()
         NewJogboRoute(
             navigateUp = navigateUp,
             navigateToMyJogbo = navigateToMyJogbo,
-            isSharedJogbo = isSharedJogbo
+            isSharedJogbo = jogbo.isSharedJogbo,
+            favoriteId = jogbo.favoriteId
         )
     }
 }
@@ -108,5 +110,6 @@ data class MyJogboDetail(
 
 @Serializable
 data class NewJogbo(
-    val isSharedJogbo: Boolean = false
+    val isSharedJogbo: Boolean,
+    val favoriteId: Long
 ) : Route

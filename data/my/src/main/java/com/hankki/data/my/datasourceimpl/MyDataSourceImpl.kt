@@ -33,16 +33,14 @@ class MyDataSourceImpl @Inject constructor(
     override suspend fun deleteWithdraw(): CreatedBaseResponse = myService.deleteWithdraw()
     override suspend fun deleteJogboStore(favoriteId:Long,storeId:Long) =
         myService.deleteJogboStore(favoriteId,storeId)
-
     override suspend fun deleteJogboStores(body: JogbosRequestDto) =
         myService.deleteJogboStores(body)
-
     override suspend fun postLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto> =
         myService.postLikeStore(storeId)
-
     override suspend fun deleteLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto> =
         myService.deleteLikeStore(storeId)
-
     override suspend fun getIsJogboOwner(favoriteId: Long): BaseResponse<IsJogboOwnerResponseDto> =
         myService.getIsJogboOwner(favoriteId)
+    override suspend fun postSharedJogbo(favoriteId: Long,body: NewJogboDto): CreatedBaseResponse =
+        myService.postSharedJogbo(favoriteId,body)
 }

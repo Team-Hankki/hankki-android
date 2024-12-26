@@ -316,7 +316,8 @@ private fun MainContent(
                     }
                     navigator.navigateToHome(navOptions)
                 },
-                isDeepLink = isDeepLink
+                isDeepLink = isDeepLink,
+                navigateToNewSharedJogbo = navigator::navigateToNewSharedJogbo
             )
             loginNavGraph(
                 navigateToHome = {

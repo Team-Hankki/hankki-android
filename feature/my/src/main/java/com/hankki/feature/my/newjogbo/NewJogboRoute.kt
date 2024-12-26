@@ -51,6 +51,7 @@ import com.hankki.feature.my.R
 fun NewJogboRoute(
     navigateUp: () -> Unit,
     navigateToMyJogbo: () -> Unit,
+    favoriteId: Long,
     isSharedJogbo: Boolean = false,
     newJogboViewModel: NewJogboViewModel = hiltViewModel(),
 ) {
@@ -86,9 +87,11 @@ fun NewJogboRoute(
         buttonEnabledState = state.buttonEnabled,
         editTagsLength = newJogboViewModel::editTagsLength,
         createNewJogbo = newJogboViewModel::createNewJogbo,
+        createSharedJogbo = newJogboViewModel::createSharedJogbo,
         errorDialogState = state.errorDialogState,
         updateErrorDialogState = { newJogboViewModel.updateErrorDialog(state.errorDialogState) },
-        isSharedJogbo = isSharedJogbo
+        isSharedJogbo = isSharedJogbo,
+        favoriteId = favoriteId
     )
 }
 
@@ -103,10 +106,12 @@ fun NewJogboScreen(
     editTagsLength: (String) -> Int,
     buttonEnabledState: Boolean,
     createNewJogbo: () -> Unit,
+    createSharedJogbo: (Long) -> Unit,
     errorDialogState: Boolean,
     updateErrorDialogState: () -> Unit,
     modifier: Modifier = Modifier,
-    isSharedJogbo: Boolean
+    isSharedJogbo: Boolean,
+    favoriteId: Long,
 ) {
     val isVisibleIme = WindowInsets.isImeVisible
     val focusManager = LocalFocusManager.current
@@ -205,7 +210,7 @@ fun NewJogboScreen(
                     .fillMaxWidth()
                     .imePadding(),
                 text = if (isSharedJogbo) stringResource(R.string.add) else stringResource(R.string.make_jogbo),
-                onClick = createNewJogbo,
+                onClick = { createSharedJogbo(favoriteId) },
                 enabled = buttonEnabledState,
                 textStyle = HankkiTheme.typography.sub3,
             )
@@ -217,7 +222,7 @@ fun NewJogboScreen(
                     .fillMaxWidth()
                     .padding(bottom = 15.dp),
                 text = if (isSharedJogbo) stringResource(R.string.add) else stringResource(R.string.make_jogbo),
-                onClick = createNewJogbo,
+                onClick = { createNewJogbo() },
                 enabled = buttonEnabledState,
                 textStyle = HankkiTheme.typography.sub3,
             )
@@ -242,9 +247,11 @@ fun NewJogboScreenPreview() {
             editTagsLength = dummyEditTagsLength,
             buttonEnabledState = false,
             createNewJogbo = {},
+            createSharedJogbo = {},
             errorDialogState = false,
             updateErrorDialogState = {},
-            isSharedJogbo = false
+            isSharedJogbo = false,
+            favoriteId = 0L
         )
     }
 }
@@ -266,9 +273,11 @@ fun NewShareJogboScreenPreview() {
             editTagsLength = dummyEditTagsLength,
             buttonEnabledState = false,
             createNewJogbo = {},
+            createSharedJogbo = {},
             errorDialogState = false,
             updateErrorDialogState = {},
-            isSharedJogbo = true
+            isSharedJogbo = true,
+            favoriteId = 0L
         )
     }
 }

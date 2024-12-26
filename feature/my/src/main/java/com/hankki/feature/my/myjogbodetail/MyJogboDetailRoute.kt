@@ -65,7 +65,7 @@ fun MyJogboDetailRoute(
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    navigateToNewJogbo: (Boolean) -> Unit,
+    navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     isSharedJogbo: Boolean = false,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
@@ -108,7 +108,7 @@ fun MyJogboDetailRoute(
         updateSelectedStoreId = myJogboDetailViewModel::updateSelectedStoreId,
         navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
         navigateToHome = myJogboDetailViewModel::navigateToHome,
-        navigateToNewJogbo = navigateToNewJogbo,
+        navigateToNewSharedJogbo = navigateToNewSharedJogbo,
         shareJogbo = myJogboDetailViewModel::shareJogbo,
         isSharedJogbo = isSharedJogbo,
         favoriteId = favoriteId,
@@ -132,7 +132,7 @@ fun MyJogboDetailScreen(
     updateSelectedStoreId: (Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    navigateToNewJogbo: (Boolean) -> Unit,
+    navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     isSharedJogbo: Boolean,
     shareJogbo: (Context, String, String, String, Long) -> Unit,
     favoriteId: Long,
@@ -324,7 +324,9 @@ fun MyJogboDetailScreen(
                 }
             }
 
-            if (isSharedJogbo && !isJogboOwner)
+//            if (isSharedJogbo && !isJogboOwner) TODO: 테스트용 실제 PR에는 해당 부분 올려야함.
+            if (isSharedJogbo)
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -340,7 +342,7 @@ fun MyJogboDetailScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 15.dp),
                             text = stringResource(R.string.add_to_my_jogbo),
-                            onClick = { navigateToNewJogbo(isSharedJogbo) },
+                            onClick = { navigateToNewSharedJogbo(isSharedJogbo,favoriteId) },
                             enabled = true,
                             textStyle = HankkiTheme.typography.sub3,
                         )
@@ -359,7 +361,7 @@ fun MyJogboDetailScreenPreview() {
             navigateUp = {},
             navigateToDetail = {},
             navigateToHome = {},
-            navigateToNewJogbo = {},
+            navigateToNewSharedJogbo = { _, _->},
             isSharedJogbo = false
         )
     }

@@ -25,4 +25,5 @@ interface MyDataSource {
     suspend fun postLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
     suspend fun deleteLikeStore(storeId: Long): BaseResponse<LikedStoreResponseDto>
     suspend fun getIsJogboOwner(favoriteId: Long): BaseResponse<IsJogboOwnerResponseDto>
+    suspend fun postSharedJogbo(favoriteId: Long, body: NewJogboDto): CreatedBaseResponse
 }

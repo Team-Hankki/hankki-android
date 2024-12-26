@@ -71,4 +71,10 @@ interface MyService {
     suspend fun getIsJogboOwner(
         @Path("favoriteId") favoriteId: Long,
     ): BaseResponse<IsJogboOwnerResponseDto>
+
+    @POST("/api/v1/favorites/shared/{favoriteId}")
+    suspend fun postSharedJogbo(
+        @Path("favoriteId") favoriteId: Long,
+        @Body body: NewJogboDto,
+        ): CreatedBaseResponse
 }

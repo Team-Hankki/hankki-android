@@ -157,8 +157,12 @@ internal class MainNavigator(
         })
     }
 
-    fun navigateToNewJogbo(isSharedJogbo: Boolean = false) {
-        navController.navigateNewJogbo(isSharedJogbo)
+    fun navigateToNewJogbo() {
+        navController.navigateNewJogbo()
+    }
+
+    fun navigateToNewSharedJogbo(isSharedJogbo: Boolean, favoriteId: Long) {
+        navController.navigateNewJogbo(isSharedJogbo, favoriteId)
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {

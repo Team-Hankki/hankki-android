@@ -66,8 +66,13 @@ class MyRepositoryImpl @Inject constructor(
             myDataSource.deleteLikeStore(storeId).data.toEntity()
         }
 
-    override suspend fun getIsJogboOwner(favoriteId: Long): Result<IsJogboOwnerEntity>  =
+    override suspend fun getIsJogboOwner(favoriteId: Long): Result<IsJogboOwnerEntity> =
         runCatching {
             myDataSource.getIsJogboOwner(favoriteId).data.toEntity()
+        }
+
+    override suspend fun createSharedJogbo(favoriteId: Long, body: NewJogboEntity): Result<Unit> =
+        runCatching {
+            myDataSource.postSharedJogbo(favoriteId,body.toDto())
         }
 }
