@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.hankki.core.common.amplitude.AmplitudeTracker
 import com.hankki.core.common.amplitude.LocalTracker
@@ -26,9 +25,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navigator: MainNavigator = rememberMainNavigator()
 
+            val intent = intent
+            val isDeepLink = intent.data?.host == "kakaolink"
+
             HankkijogboTheme {
                 CompositionLocalProvider(LocalTracker provides tracker) {
-                    MainScreen(navigator = navigator)
+                    MainScreen(navigator = navigator, isDeepLink = isDeepLink)
                 }
             }
         }

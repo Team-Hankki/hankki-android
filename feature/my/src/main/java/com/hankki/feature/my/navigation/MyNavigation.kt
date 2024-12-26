@@ -5,7 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
+import com.hankki.core.common.BuildConfig.KAKAO_NATIVE_APP_KEY
 import com.hankki.core.navigation.MainTabRoute
 import com.hankki.core.navigation.Route
 import com.hankki.feature.my.myjogbo.MyJogboRoute
@@ -31,8 +33,8 @@ fun NavController.navigateMyJogboDetail(favoriteId: Long, navOptions: NavOptions
     navigate(MyJogboDetail(favoriteId = favoriteId), navOptions)
 }
 
-fun NavController.navigateNewJogbo() {
-    navigate(NewJogbo)
+fun NavController.navigateNewJogbo(isSharedJogbo: Boolean = false) {
+    navigate(NewJogbo(isSharedJogbo))
 }
 
 fun NavGraphBuilder.myNavGraph(
@@ -41,9 +43,10 @@ fun NavGraphBuilder.myNavGraph(
     navigateToMyJogbo: () -> Unit,
     navigateToMyStore: (String) -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
-    navigateToNewJogbo: () -> Unit,
+    navigateToNewJogbo: (Boolean) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    isDeepLink:Boolean
 ) {
     composable<My> {
         MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
@@ -59,18 +62,31 @@ fun NavGraphBuilder.myNavGraph(
             navigateToDetail = navigateToStoreDetail
         )
     }
-    composable<MyJogboDetail> { backStackEntry ->
+    composable<MyJogboDetail>(
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "kakao${KAKAO_NATIVE_APP_KEY}://kakaolink?favoriteId={favoriteId}"
+            }
+        )
+    ) { backStackEntry ->
         val jogbo = backStackEntry.toRoute<MyJogboDetail>()
+
         MyJogboDetailRoute(
             favoriteId = jogbo.favoriteId,
             navigateToDetail = navigateToStoreDetail,
             navigateUp = navigateUp,
             navigateToHome = navigateToHome,
-            navigateToNewJogbo = navigateToNewJogbo
+            navigateToNewJogbo = navigateToNewJogbo,
+            isSharedJogbo = isDeepLink
         )
     }
-    composable<NewJogbo> {
-        NewJogboRoute(navigateUp)
+    composable<NewJogbo> { backStackEntry ->
+        val isSharedJogbo = backStackEntry.toRoute<NewJogbo>().isSharedJogbo
+        NewJogboRoute(
+            navigateUp = navigateUp,
+            navigateToMyJogbo = navigateToMyJogbo,
+            isSharedJogbo = isSharedJogbo
+        )
     }
 }
 
@@ -91,6 +107,6 @@ data class MyJogboDetail(
 ) : Route
 
 @Serializable
-data object NewJogbo : Route
-
-val uri = "https://www.hankki.com"
+data class NewJogbo(
+    val isSharedJogbo: Boolean = false
+) : Route

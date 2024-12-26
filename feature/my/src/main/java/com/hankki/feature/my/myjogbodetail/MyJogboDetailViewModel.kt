@@ -103,12 +103,19 @@ class MyJogboDetailViewModel @Inject constructor(
         }
     }
 
-    fun shareJogbo(context: Context, image: String, title: String, senderName: String) {
+    fun shareJogbo(
+        context: Context,
+        image: String,
+        title: String,
+        senderName: String,
+        favoriteId: Long
+    ) {
         val templateId = 115383L
         val templateArgs = mapOf(
             "IMAGE_URL" to image,
             "NAME" to title,
-            "SENDER" to senderName
+            "SENDER" to senderName,
+            "FAVORITE_ID" to favoriteId.toString(),
         )
 
         if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {

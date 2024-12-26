@@ -51,7 +51,7 @@ import kotlinx.collections.immutable.PersistentList
 fun MyJogboRoute(
     navigateUp: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
-    navigateToNewJogbo: () -> Unit,
+    navigateToNewJogbo: (Boolean) -> Unit,
     myJogboViewModel: MyJogboViewModel = hiltViewModel(),
 ) {
     val state by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
@@ -86,7 +86,7 @@ fun MyJogboRoute(
 fun MyJogboScreen(
     navigateUp: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
-    navigateToNewJogbo: () -> Unit,
+    navigateToNewJogbo: (Boolean) -> Unit,
     state: UiState<PersistentList<MyJogboModel>>,
     editModeState: Boolean,
     updateEditModeState: () -> Unit,
@@ -189,7 +189,7 @@ fun MyJogboScreen(
                                     type = EventType.CREATE,
                                     name = "Mypage_MyJokbo_NewJokbo"
                                 )
-                                navigateToNewJogbo()
+                                navigateToNewJogbo(false)
                             }
                         )
                     }

@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.common.BuildConfig.KAKAO_SHARE_DEFAULT_IMAGE
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.button.HankkiButton
@@ -64,7 +65,8 @@ fun MyJogboDetailRoute(
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    navigateToNewJogbo: () -> Unit, // TODO: 받아와야함
+    navigateToNewJogbo: (Boolean) -> Unit,
+    isSharedJogbo: Boolean = false,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -106,7 +108,9 @@ fun MyJogboDetailRoute(
         navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
         navigateToHome = myJogboDetailViewModel::navigateToHome,
         navigateToNewJogbo = navigateToNewJogbo,
-        shareJogbo = myJogboDetailViewModel::shareJogbo
+        shareJogbo = myJogboDetailViewModel::shareJogbo,
+        isSharedJogbo = isSharedJogbo,
+        favoriteId = favoriteId,
     )
 }
 
@@ -126,9 +130,10 @@ fun MyJogboDetailScreen(
     updateSelectedStoreId: (Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    navigateToNewJogbo: () -> Unit,
-    isSharedJogbo: Boolean = true, // TODO: 공유받은 족보라면 true로 바꿔줘야함
-    shareJogbo: (Context, String, String, String) -> Unit // TODO: 족보 공유
+    navigateToNewJogbo: (Boolean) -> Unit,
+    isSharedJogbo: Boolean,
+    shareJogbo: (Context, String, String, String, Long) -> Unit,
+    favoriteId: Long
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
@@ -220,16 +225,19 @@ fun MyJogboDetailScreen(
                                 chips = jogboChips,
                                 userNickname = userNickname,
                                 shareJogboDialogState = {
-                                    state.data.firstOrNull { it.imageUrl != null }?.imageUrl?.let {
-                                        shareJogbo(
-                                            context,
-                                            it, // TODO: 문제점 -> 만약 식당이 전부 이미지가 없으면 공유가 안됨.
-                                            jogboTitle,
-                                            userNickname
-                                        )
-                                    }
+                                    val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
+                                        val imageUrl = state.data.firstOrNull { it.imageUrl != null }?.imageUrl
+                                            ?: defaultImageUrl
+
+                                    shareJogbo(
+                                        context,
+                                        imageUrl,
+                                        jogboTitle,
+                                        userNickname,
+                                        favoriteId
+                                    )
                                 },
-                                // isSharedJogbo = isSharedJogbo
+                                isSharedJogbo = isSharedJogbo
                             )
                         }
 
@@ -289,7 +297,7 @@ fun MyJogboDetailScreen(
                                 chips = jogboChips,
                                 userNickname = userNickname,
                                 shareJogboDialogState = updateShareDialogState,
-                                //isSharedJogbo = isSharedJogbo
+                                isSharedJogbo = isSharedJogbo
                             )
 
                             Spacer(modifier = Modifier.height((height).dp))
@@ -329,7 +337,7 @@ fun MyJogboDetailScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 15.dp),
                             text = stringResource(R.string.add_to_my_jogbo),
-                            onClick = navigateToNewJogbo, // TODO: 족보 생성하기 페이지로 이동
+                            onClick = { navigateToNewJogbo(isSharedJogbo) },
                             enabled = true,
                             textStyle = HankkiTheme.typography.sub3,
                         )
@@ -348,7 +356,8 @@ fun MyJogboDetailScreenPreview() {
             navigateUp = {},
             navigateToDetail = {},
             navigateToHome = {},
-            navigateToNewJogbo = {}
+            navigateToNewJogbo = {},
+            isSharedJogbo = false
         )
     }
 }
