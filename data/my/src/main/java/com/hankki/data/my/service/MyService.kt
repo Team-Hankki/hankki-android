@@ -77,9 +77,4 @@ interface MyService {
         @Path("favoriteId") favoriteId: Long,
         @Body body: NewJogboDto,
         ): CreatedBaseResponse
-
-    @GET("/api/v1/favorites/shared/{favoriteId}")
-    suspend fun getSharedJogboDetail(
-        @Path("favoriteId") favoriteId: Long,
-    ): BaseResponse<JogboDetailDto>
 }

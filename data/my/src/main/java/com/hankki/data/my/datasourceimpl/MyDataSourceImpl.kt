@@ -12,10 +12,12 @@ import com.hankki.data.my.dto.response.StoreDto
 import com.hankki.data.my.dto.response.MyJogboDto
 import com.hankki.data.my.dto.response.UserInformationDto
 import com.hankki.data.my.service.MyService
+import com.hankki.data.my.service.NoTokenMyService
 import javax.inject.Inject
 
 class MyDataSourceImpl @Inject constructor(
-    private val myService: MyService
+    private val myService: MyService,
+    private val noTokenMyService: NoTokenMyService
 ) : MyDataSource {
     override suspend fun getUserInformation(): BaseResponse<UserInformationDto> =
         myService.getUserInformation()
@@ -44,5 +46,5 @@ class MyDataSourceImpl @Inject constructor(
     override suspend fun postSharedJogbo(favoriteId: Long,body: NewJogboDto): CreatedBaseResponse =
         myService.postSharedJogbo(favoriteId,body)
     override suspend fun getSharedJogboDetail(favoriteId:Long): BaseResponse<JogboDetailDto> =
-        myService.getSharedJogboDetail(favoriteId)
+        noTokenMyService.getSharedJogboDetail(favoriteId)
 }
