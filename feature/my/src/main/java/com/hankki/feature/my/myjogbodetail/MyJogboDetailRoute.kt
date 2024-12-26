@@ -219,11 +219,11 @@ fun MyJogboDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(White)
-                .navigationBarsPadding()
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 state = scrollState
             ) {
@@ -352,11 +352,14 @@ fun MyJogboDetailScreen(
                         .align(Alignment.BottomCenter),
                     contentAlignment = Alignment.BottomCenter
                 ) {
-                    BottomBlurLayout()
+                    BottomBlurLayout(
+                        imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle
+                    )
 
                     Column {
                         HankkiButton(
                             modifier = Modifier
+                                .navigationBarsPadding()
                                 .padding(horizontal = 22.dp)
                                 .fillMaxWidth()
                                 .padding(bottom = 15.dp),
