@@ -343,9 +343,7 @@ fun MyJogboDetailScreen(
                 }
             }
 
-//            if (isSharedJogbo && !isJogboOwner) TODO: 테스트용 실제 PR에는 해당 부분 올려야함.
-            if (isSharedJogbo)
-
+            if (isSharedJogbo && !isJogboOwner)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
