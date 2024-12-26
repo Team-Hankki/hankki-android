@@ -48,6 +48,7 @@
     <string name="add_to_my_jogbo">내 족보에 추가하기</string>
     <string name="add">추가하기</string>
     <string name="added_jogbo">족보가 추가되었습니다</string>
+    <string name="deleted_jogbo">생성자에 의해 삭제된 족보입니다</string>
 
     <!--common-->
     <string name="my_jogbo">나의 족보</string>
