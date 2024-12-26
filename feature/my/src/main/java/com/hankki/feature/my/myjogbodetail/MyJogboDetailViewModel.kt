@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.core.common.utill.UiState
 import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.domain.my.repository.MyRepository
 import com.kakao.sdk.common.util.KakaoCustomTabsClient
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -48,6 +50,27 @@ class MyJogboDetailViewModel @Inject constructor(
         }
     }
 
+    fun getSharedJogboDetail(favoriteId: Long) {
+        viewModelScope.launch {
+            myRepository.getSharedJogboDetail(favoriteId)
+                .onSuccess { jogbo ->
+                    _myJogboDetailState.value = _myJogboDetailState.value.copy(
+                        myStoreItems = jogbo,
+                        uiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(
+                            jogbo.stores.toPersistentList()
+                        )
+                    )
+                }
+                .onFailure { error ->
+                    _myJogboDetailState.value = _myJogboDetailState.value.copy(uiState = EmptyUiState.Failure)
+
+                    if (error is HttpException && error.code() == DO_NOT_EXISTS_ERROR) {
+                        _mySideEffect.emit(MyJogboDetailSideEffect.ShowNoExistsDialog)
+                    }
+                }
+        }
+    }
+
     fun updateDeleteDialogState(state: Boolean) {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
             deleteDialogState = !state
@@ -57,6 +80,12 @@ class MyJogboDetailViewModel @Inject constructor(
     fun updateShareDialogState(state: Boolean) {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
             shareDialogState = !state
+        )
+    }
+
+    fun updateNoExistsDialog(state: Boolean) {
+        _myJogboDetailState.value = _myJogboDetailState.value.copy(
+            noExistsDialogState = !state,
         )
     }
 
@@ -145,5 +174,9 @@ class MyJogboDetailViewModel @Inject constructor(
                 ) }
                 .onFailure(Timber::e)
         }
+    }
+
+    companion object {
+        private const val DO_NOT_EXISTS_ERROR: Int = 404
     }
 }

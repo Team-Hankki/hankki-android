@@ -23,4 +23,5 @@ interface MyRepository {
     suspend fun unLikeStore(storeId: Long): Result<LikedStoreResponseEntity>
     suspend fun getIsJogboOwner(favoriteId: Long): Result<IsJogboOwnerEntity>
     suspend fun createSharedJogbo(favoriteId: Long, body: NewJogboEntity): Result<Unit>
+    suspend fun getSharedJogboDetail(favoriteId: Long): Result<MyJogboDetailEntity>
 }

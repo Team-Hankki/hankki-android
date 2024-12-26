@@ -16,4 +16,6 @@ object ServiceModule {
     @Singleton
     fun providesMyService(@JWT retrofit: Retrofit): MyService =
         retrofit.create(MyService::class.java)
+
+    //TODO : 토큰 없이 getSharedJogboDetail 호출
 }

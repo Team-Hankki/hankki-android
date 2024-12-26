@@ -41,6 +41,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
@@ -73,7 +74,8 @@ fun MyJogboDetailRoute(
     val state by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        myJogboDetailViewModel.getJogboDetail(favoriteId)
+        if (isSharedJogbo) myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
+        else myJogboDetailViewModel.getJogboDetail(favoriteId)
         myJogboDetailViewModel.getUserName()
         myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
     }
@@ -84,6 +86,10 @@ fun MyJogboDetailRoute(
                 when (sideEffect) {
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
+                    is MyJogboDetailSideEffect.ShowNoExistsDialog -> {
+                        //navigateUp() //TODO: 기획쌤께 여쭤봐야함
+                        myJogboDetailViewModel.updateNoExistsDialog(state.noExistsDialogState)
+                    }
                 }
             }
     }
@@ -95,9 +101,11 @@ fun MyJogboDetailRoute(
         state = state.uiState,
         deleteDialogState = state.deleteDialogState,
         shareDialogState = state.shareDialogState,
+        noExistsDialogState = state.noExistsDialogState,
         userNickname = state.userInformation.nickname,
         updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(state.shareDialogState) },
         updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialogState(state.deleteDialogState) },
+        updateNoExistsDialogState = { myJogboDetailViewModel.updateNoExistsDialog(state.noExistsDialogState) },
         deleteSelectedStore = { storeId ->
             myJogboDetailViewModel.deleteSelectedStore(
                 favoriteId,
@@ -124,9 +132,11 @@ fun MyJogboDetailScreen(
     state: EmptyUiState<PersistentList<Store>>,
     deleteDialogState: Boolean,
     shareDialogState: Boolean,
+    noExistsDialogState: Boolean,
     userNickname: String,
     updateShareDialogState: () -> Unit,
     updateDeleteDialogState: () -> Unit,
+    updateNoExistsDialogState: () -> Unit,
     deleteSelectedStore: (Long) -> Unit,
     selectedStoreId: Long,
     updateSelectedStoreId: (Long) -> Unit,
@@ -136,7 +146,7 @@ fun MyJogboDetailScreen(
     isSharedJogbo: Boolean,
     shareJogbo: (Context, String, String, String, Long) -> Unit,
     favoriteId: Long,
-    isJogboOwner : Boolean
+    isJogboOwner: Boolean
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
@@ -164,6 +174,14 @@ fun MyJogboDetailScreen(
             onPositiveButtonClicked = {
                 deleteSelectedStore(selectedStoreId)
             }
+        )
+    }
+
+    if (noExistsDialogState) {
+        SingleButtonDialog(
+            title = stringResource(R.string.deleted_jogbo),
+            buttonTitle = stringResource(R.string.check),
+            onConfirmation = updateNoExistsDialogState
         )
     }
 
@@ -229,7 +247,8 @@ fun MyJogboDetailScreen(
                                 userNickname = userNickname,
                                 shareJogboDialogState = {
                                     val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
-                                        val imageUrl = state.data.firstOrNull { it.imageUrl != null }?.imageUrl
+                                    val imageUrl =
+                                        state.data.firstOrNull { it.imageUrl != null }?.imageUrl
                                             ?: defaultImageUrl
 
                                     shareJogbo(
@@ -342,7 +361,7 @@ fun MyJogboDetailScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 15.dp),
                             text = stringResource(R.string.add_to_my_jogbo),
-                            onClick = { navigateToNewSharedJogbo(isSharedJogbo,favoriteId) },
+                            onClick = { navigateToNewSharedJogbo(isSharedJogbo, favoriteId) },
                             enabled = true,
                             textStyle = HankkiTheme.typography.sub3,
                         )
@@ -361,7 +380,7 @@ fun MyJogboDetailScreenPreview() {
             navigateUp = {},
             navigateToDetail = {},
             navigateToHome = {},
-            navigateToNewSharedJogbo = { _, _->},
+            navigateToNewSharedJogbo = { _, _ -> },
             isSharedJogbo = false
         )
     }

@@ -43,4 +43,6 @@ class MyDataSourceImpl @Inject constructor(
         myService.getIsJogboOwner(favoriteId)
     override suspend fun postSharedJogbo(favoriteId: Long,body: NewJogboDto): CreatedBaseResponse =
         myService.postSharedJogbo(favoriteId,body)
+    override suspend fun getSharedJogboDetail(favoriteId:Long): BaseResponse<JogboDetailDto> =
+        myService.getSharedJogboDetail(favoriteId)
 }

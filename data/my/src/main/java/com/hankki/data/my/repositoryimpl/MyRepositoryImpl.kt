@@ -75,4 +75,9 @@ class MyRepositoryImpl @Inject constructor(
         runCatching {
             myDataSource.postSharedJogbo(favoriteId,body.toDto())
         }
+
+    override suspend fun getSharedJogboDetail(favoriteId: Long): Result<MyJogboDetailEntity> =
+        runCatching {
+            myDataSource.getSharedJogboDetail(favoriteId).data.toEntity()
+        }
 }
