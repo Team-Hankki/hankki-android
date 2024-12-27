@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
+import com.hankki.feature.storedetail.StoreDetailReportRoute
 import com.hankki.feature.storedetail.StoreDetailRoute
 import com.hankki.feature.storedetail.editbottomsheet.add.addmenu.AddMenuRoute
 import com.hankki.feature.storedetail.editbottomsheet.add.addsuccess.AddMenuSuccessRoute
@@ -59,6 +60,10 @@ fun NavController.navigateDeleteSuccessLast(storeId: Long, navOptions: NavOption
     navigate(DeleteSuccessLast(storeId = storeId), navOptions)
 }
 
+fun NavController.navigateToStoreDetailReport(storeId: Long, navOptions: NavOptions? = null) {
+    navigate(StoreDetailReport(storeId = storeId), navOptions)
+}
+
 fun NavGraphBuilder.storeDetailNavGraph(
     navController: NavController,
     navigateUp: () -> Unit,
@@ -73,6 +78,9 @@ fun NavGraphBuilder.storeDetailNavGraph(
             storeId = items.storeId,
             navigateUp = navigateUp,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
+            navigateToStoreDetailReportRoute = { storeId ->
+                navController.navigateToStoreDetailReport(storeId)
+            },
             onAddMenuClick = { navigateToAddMenu(items.storeId) },
             onEditMenuClick = { navigateToEditMenu(items.storeId) }
         )
@@ -201,6 +209,14 @@ fun NavGraphBuilder.storeDetailNavGraph(
             }
         )
     }
+
+    composable<StoreDetailReport> { backStackEntry ->
+        val items = backStackEntry.toRoute<StoreDetailReport>()
+        StoreDetailReportRoute(
+            storeId = items.storeId,
+            onNavigateUp = { navController.popBackStack() }
+        )
+    }
 }
 
 @Serializable
@@ -234,3 +250,6 @@ data class DeleteSuccess(val storeId: Long) : MainTabRoute
 
 @Serializable
 data class DeleteSuccessLast(val storeId: Long) : MainTabRoute
+
+@Serializable
+data class StoreDetailReport(val storeId: Long) : MainTabRoute
