@@ -24,4 +24,7 @@ data class StoreDetailState(
     val buttonEnabled: Boolean = false,
     val submittedMenuCount: Int = 0,
     val errorMessage: String = "",
+    val categoryImageUrl: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 )
