@@ -189,6 +189,7 @@ class StoreDetailViewModel @Inject constructor(
         )
     }
 
+    fun navigateToReport(storeId: Long) {
     companion object {
         private const val DO_NOT_EXISTS_ERROR: Int = 404
     }
