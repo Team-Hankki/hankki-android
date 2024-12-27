@@ -18,7 +18,13 @@ data class StoreDetailResponseDto(
     @SerialName("imageUrls")
     val imageUrls: List<String>,
     @SerialName("menus")
-    val menus: List<MenuItemDto>
+    val menus: List<MenuItemDto>,
+    @SerialName("latitude")
+    val latitude: Double,
+    @SerialName("longitude")
+    val longitude: Double,
+    @SerialName("categoryImageUrl")
+    val categoryImageUrl: String
 ) {
     fun toStoreDetailResponseEntity() = StoreDetailResponseEntity(
         name = name,
@@ -26,7 +32,10 @@ data class StoreDetailResponseDto(
         isLiked = isLiked,
         heartCount = heartCount,
         imageUrls = imageUrls,
-        menus = menus.map { it.toMenuItem() }
+        menus = menus.map { it.toMenuItem() },
+        latitude = latitude,
+        longitude = longitude,
+        categoryImageUrl = categoryImageUrl
     )
 }
 
