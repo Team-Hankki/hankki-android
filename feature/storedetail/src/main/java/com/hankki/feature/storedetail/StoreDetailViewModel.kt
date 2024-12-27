@@ -82,6 +82,9 @@ class StoreDetailViewModel @Inject constructor(
             isLiked = storeDetail.isLiked,
             heartCount = storeDetail.heartCount,
             menuItems = storeDetail.menus.toPersistentList(),
+            categoryImageUrl = storeDetail.categoryImageUrl,
+            latitude = storeDetail.latitude,
+            longitude = storeDetail.longitude
         )
     }
 
@@ -190,6 +193,12 @@ class StoreDetailViewModel @Inject constructor(
     }
 
     fun navigateToReport(storeId: Long) {
+        viewModelScope.launch {
+            _sideEffects.emit(StoreDetailSideEffect.NavigateToReport(storeId))
+        }
+    }
+
+
     companion object {
         private const val DO_NOT_EXISTS_ERROR: Int = 404
     }
