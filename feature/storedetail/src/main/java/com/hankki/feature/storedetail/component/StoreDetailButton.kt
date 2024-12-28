@@ -1,7 +1,6 @@
 package com.hankki.feature.storedetail.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -16,12 +15,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.ui.graphics.Color
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray100
-import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Red100
-import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
@@ -98,7 +94,8 @@ fun StoreDetailDifferentButton(
             .clip(RoundedCornerShape(23.dp))
             .background(color = White)
             .noRippleClickable(onClick = onClick)
-            .padding(horizontal = 5.5.dp, vertical = 6.dp),
+            .padding(start = 9.5.dp, end = 5.5.dp)
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
