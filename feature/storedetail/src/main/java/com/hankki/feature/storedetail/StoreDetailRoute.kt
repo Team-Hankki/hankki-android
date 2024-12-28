@@ -48,6 +48,7 @@ import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
+import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray350
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray50
@@ -96,9 +97,6 @@ fun StoreDetailRoute(
                 StoreDetailSideEffect.ShowTextSnackBar -> {
                     snackBar("이미 삭제된 식당입니다 ")
                     navigateUp()
-                }
-                is StoreDetailSideEffect.NavigateToReport -> {
-                    navigateToStoreDetailReportRoute(sideEffect.storeId)
                 }
             }
         }
@@ -168,7 +166,7 @@ fun StoreDetailRoute(
                 addStoreAtJogbo = { jogboId ->
                     viewModel.addStoreAtJogbo(jogboId, storeId)
                 },
-                onReportClicked = { viewModel.navigateToReport(storeId) },
+                onReportClicked = { navigateToStoreDetailReportRoute(storeId) },
                 isOpenEditMenuBottomSheet = storeState.isOpenEditMenuBottomSheet,
                 openEditMenuBottomSheet = viewModel::controlEditMenuBottomSheet,
                 onDismissEditMenuBottomSheetRequest = viewModel::controlEditMenuBottomSheet,
@@ -274,7 +272,7 @@ fun StoreDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(Gray50)
+            .background(Gray100)
             .navigationBarsPadding()
     ) {
         Box {
@@ -322,6 +320,7 @@ fun StoreDetailScreen(
             contentAlignment = Alignment.CenterEnd,
             modifier = Modifier
                 .fillMaxWidth()
+                .background(White)
                 .offset(y = (-50).dp)
                 .padding(end = 15.dp)
         ) {
@@ -413,7 +412,10 @@ fun StoreDetailScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 22.dp)
+            ) {
                 Text(
                     text = stringResource(id = com.hankki.feature.storedetail.R.string.store_detail_caution_title),
                     style = HankkiTheme.typography.caption3,
