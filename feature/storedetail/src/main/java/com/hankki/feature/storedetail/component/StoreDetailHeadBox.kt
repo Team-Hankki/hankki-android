@@ -37,7 +37,6 @@ fun StoreDetailHeadBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(White)
-            .padding(top = 18.dp)
             .wrapContentSize()
     ) {
         Row(
@@ -60,7 +59,6 @@ fun StoreDetailHeadBox(
                 color = Gray900,
             )
         }
-
 
         Text(
             text = title,
