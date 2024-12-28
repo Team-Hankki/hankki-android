@@ -70,8 +70,8 @@ class StoreDetailViewModel @Inject constructor(
             val result = storeDetailRepository.getStoreDetailNickname()
             result.onSuccess {
                 _storeState.value = _storeState.value.copy(nickname = it.nickname)
-            }.onFailure {
-                //fail
+            }.onFailure { error ->
+                Timber.e("Failed to delete store123: ${error.message}")
             }
         }
     }
@@ -191,13 +191,6 @@ class StoreDetailViewModel @Inject constructor(
             isOpenEditMenuBottomSheet = !_storeState.value.isOpenEditMenuBottomSheet
         )
     }
-
-    fun navigateToReport(storeId: Long) {
-        viewModelScope.launch {
-            _sideEffects.emit(StoreDetailSideEffect.NavigateToReport(storeId))
-        }
-    }
-
 
     companion object {
         private const val DO_NOT_EXISTS_ERROR: Int = 404
