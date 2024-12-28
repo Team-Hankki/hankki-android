@@ -68,8 +68,12 @@ fun NavGraphBuilder.storeDetailNavGraph(
     navController: NavController,
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
+    navigateToStoreDetailReport: (Long) -> Unit,
     navigateToAddMenu: (Long) -> Unit,
     navigateToEditMenu: (Long) -> Unit,
+    navigateToEditMod: (Long, Long, String, String) -> Unit,
+    navigateToEditSuccess: (Long) -> Unit,
+    navigateToDeleteSuccess: (Long) -> Unit,
     navigateToHome: () -> Unit
 ) {
     composable<StoreDetail> { backStackEntry ->
@@ -78,9 +82,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
             storeId = items.storeId,
             navigateUp = navigateUp,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
-            navigateToStoreDetailReportRoute = { storeId ->
-                navController.navigateToStoreDetailReport(storeId)
-            },
+            navigateToStoreDetailReportRoute = navigateToStoreDetailReport,
             onAddMenuClick = { navigateToAddMenu(items.storeId) },
             onEditMenuClick = { navigateToEditMenu(items.storeId) }
         )
@@ -110,17 +112,10 @@ fun NavGraphBuilder.storeDetailNavGraph(
             onNavigateUp = navigateUp,
             onMenuSelected = { },
             onEditModClick = { menuId, menuName, price ->
-                navController.navigateEditMod(
-                    storeId = items.storeId,
-                    menuId = menuId,
-                    menuName = menuName,
-                    price = price
-                )
+                navigateToEditMod(items.storeId, menuId, menuName, price)
             },
             onNavigateToDeleteSuccess = { successStoreId ->
-                navController.navigateDeleteSuccess(successStoreId, navOptions {
-                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
-                })
+                navigateToDeleteSuccess(successStoreId)
             },
             onNavigateToDeleteSuccessLast = { successStoreId ->
                 navController.navigateDeleteSuccessLast(successStoreId, navOptions {
@@ -143,14 +138,10 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 })
             },
             onNavigateToEditSuccess = { successStoreId ->
-                navController.navigateEditModSuccess(successStoreId, navOptions {
-                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
-                })
+                navigateToEditSuccess(successStoreId)
             },
             onNavigateToDeleteSuccess = { successStoreId ->
-                navController.navigateDeleteSuccess(successStoreId, navOptions {
-                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
-                })
+                navigateToDeleteSuccess(successStoreId)
             },
         )
     }
