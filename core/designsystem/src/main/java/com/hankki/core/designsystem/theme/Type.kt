@@ -56,7 +56,7 @@ class HankkiTypography internal constructor(
     caption4: TextStyle,
     caption5: TextStyle,
     suitCaption: TextStyle,
-    ) {
+) {
     var h1: TextStyle by mutableStateOf(h1)
         private set
     var h2: TextStyle by mutableStateOf(h2)
@@ -113,7 +113,7 @@ class HankkiTypography internal constructor(
         private set
     var caption3: TextStyle by mutableStateOf(caption3)
         private set
-    var caption4: TextStyle by mutableStateOf(caption3)
+    var caption4: TextStyle by mutableStateOf(caption4)
         private set
     var caption5: TextStyle by mutableStateOf(caption5)
         private set
@@ -149,8 +149,10 @@ class HankkiTypography internal constructor(
         caption1: TextStyle = this.caption1,
         caption2: TextStyle = this.caption2,
         caption3: TextStyle = this.caption3,
+        caption4: TextStyle = this.caption4,
+        caption5: TextStyle = this.caption5,
         suitCaption: TextStyle = this.suitCaption,
-        ): HankkiTypography = HankkiTypography(
+    ): HankkiTypography = HankkiTypography(
         h1,
         h2,
         h3,
@@ -182,7 +184,7 @@ class HankkiTypography internal constructor(
         caption4,
         caption5,
         suitCaption,
-        )
+    )
 
     fun update(other: HankkiTypography) {
         h1 = other.h1
@@ -214,7 +216,6 @@ class HankkiTypography internal constructor(
         caption2 = other.caption2
         caption3 = other.caption3
         caption4 = other.caption4
-        caption5 = other.caption5
         suitCaption = other.suitCaption
     }
 }
@@ -225,7 +226,7 @@ fun hankkiTextStyle(
     fontSize: TextUnit,
     lineHeight: TextUnit,
     letterSpacing: TextUnit = 0.sp,
-): TextStyle = TextStyle(
+    ): TextStyle = TextStyle(
     fontFamily = fontFamily,
     fontWeight = fontWeight,
     fontSize = fontSize,
@@ -405,19 +406,19 @@ fun hankkiTypography(): HankkiTypography {
         ),
         caption3 = hankkiTextStyle(
             fontFamily = PretendardBold,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
-            lineHeight = 16.5.sp
+            lineHeight = 18.sp
         ),
         caption4 = hankkiTextStyle(
             fontFamily = PretendardMedium,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Medium,
             fontSize = 12.sp,
-            lineHeight = 16.5.sp
+            lineHeight = 18.sp
         ),
         caption5 = hankkiTextStyle(
             fontFamily = PretendardSemiBold,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 11.sp,
             lineHeight = 16.5.sp
         ),
