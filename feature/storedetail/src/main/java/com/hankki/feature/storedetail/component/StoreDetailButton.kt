@@ -25,7 +25,7 @@ fun StoreDetailMenuButton(
     leadingIcon: @Composable () -> Unit = {},
     content: @Composable () -> Unit,
     onClick: () -> Unit,
-    tailingIcon: @Composable () -> Unit = {},
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -40,7 +40,7 @@ fun StoreDetailMenuButton(
             Spacer(modifier = Modifier.width(4.dp))
             content()
             Spacer(modifier = Modifier.width(4.dp))
-            tailingIcon()
+            trailingIcon()
         }
     }
 }
