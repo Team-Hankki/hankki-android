@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.location.Geocoder
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -26,10 +27,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray100
+import com.hankki.core.designsystem.theme.Gray300
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray700
@@ -50,9 +56,16 @@ import com.naver.maps.map.overlay.OverlayImage
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-fun StoreDetailMapBox(latitude: Double, longitude: Double) {
+fun StoreDetailMapBox(
+    latitude: Double,
+    longitude: Double,
+) {
     var address by remember { mutableStateOf("") }
     val context = LocalContext.current
+
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition(LatLng(latitude, longitude), 17.0)
+    }
 
     LaunchedEffect(latitude, longitude) {
         if (Geocoder.isPresent()) {
@@ -64,7 +77,7 @@ fun StoreDetailMapBox(latitude: Double, longitude: Double) {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                address = "주소를 불러오는데 실패했어요."
+                address = "-"
             }
         }
     }
@@ -74,28 +87,41 @@ fun StoreDetailMapBox(latitude: Double, longitude: Double) {
             .fillMaxWidth()
             .padding(horizontal = 22.dp)
     ) {
-        NaverMap(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                .aspectRatio(1.5f),
-            cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition(LatLng(latitude, longitude), 17.0)
-            },
-            properties = MapProperties(
-                mapType = MapType.Basic,
-                locationTrackingMode = LocationTrackingMode.None
-            ),
-            uiSettings = MapUiSettings(
-                isCompassEnabled = false,
-                isZoomControlEnabled = false,
-                isScaleBarEnabled = false,
-                isScrollGesturesEnabled = false,
-                isZoomGesturesEnabled = false,
-                isRotateGesturesEnabled = false
+        if (address == "-") {
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_map_error),
+                contentDescription = "지도 로드 실패",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                    .aspectRatio(1.5f),
+                contentScale = ContentScale.Crop
             )
-        ) {
-            MapMarker(latitude = latitude, longitude = longitude)
+        } else {
+            NaverMap(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                    .aspectRatio(1.5f),
+                cameraPositionState = cameraPositionState,
+                properties = MapProperties(
+                    mapType = MapType.Basic,
+                    locationTrackingMode = LocationTrackingMode.None,
+                    minZoom = 5.0,
+                    maxZoom = 20.0,
+                ),
+                uiSettings = MapUiSettings(
+                    isCompassEnabled = false,
+                    isZoomControlEnabled = false,
+                    isScaleBarEnabled = false,
+                    isScrollGesturesEnabled = true,
+                    isZoomGesturesEnabled = true,
+                    isTiltGesturesEnabled = false,
+                    isRotateGesturesEnabled = false,
+                )
+            ) {
+                MapMarker(latitude = latitude, longitude = longitude)
+            }
         }
 
         Row(
@@ -121,7 +147,9 @@ fun StoreDetailMapBox(latitude: Double, longitude: Double) {
                 Text(
                     text = address,
                     style = HankkiTheme.typography.caption4,
-                    color = Gray700
+                    color = Gray700,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             Box(
@@ -133,7 +161,7 @@ fun StoreDetailMapBox(latitude: Double, longitude: Double) {
                 Text(
                     text = "복사",
                     style = HankkiTheme.typography.caption5,
-                    color = Gray600,
+                    color = if (address == "-") Gray300 else Gray600,
                     modifier = Modifier.noRippleClickable {
                         val clipboardManager =
                             context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
