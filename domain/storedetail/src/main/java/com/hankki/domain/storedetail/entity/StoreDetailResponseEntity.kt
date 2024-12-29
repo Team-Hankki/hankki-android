@@ -6,7 +6,10 @@ data class StoreDetailResponseEntity(
     var isLiked: Boolean,
     val heartCount: Int,
     val imageUrls: List<String>,
-    val menus: List<MenuItem>
+    val menus: List<MenuItem>,
+    val latitude: Double,
+    val longitude: Double,
+    val categoryImageUrl: String
 )
 
 data class MenuItem(

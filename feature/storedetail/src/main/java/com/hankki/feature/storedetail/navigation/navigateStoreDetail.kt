@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import com.hankki.core.navigation.MainTabRoute
+import com.hankki.feature.storedetail.StoreDetailReportRoute
 import com.hankki.feature.storedetail.StoreDetailRoute
 import com.hankki.feature.storedetail.editbottomsheet.add.addmenu.AddMenuRoute
 import com.hankki.feature.storedetail.editbottomsheet.add.addsuccess.AddMenuSuccessRoute
@@ -59,12 +60,20 @@ fun NavController.navigateDeleteSuccessLast(storeId: Long, navOptions: NavOption
     navigate(DeleteSuccessLast(storeId = storeId), navOptions)
 }
 
+fun NavController.navigateToStoreDetailReport(storeId: Long, navOptions: NavOptions? = null) {
+    navigate(StoreDetailReport(storeId = storeId), navOptions)
+}
+
 fun NavGraphBuilder.storeDetailNavGraph(
     navController: NavController,
     navigateUp: () -> Unit,
     navigateToAddNewJogbo: () -> Unit,
+    navigateToStoreDetailReport: (Long) -> Unit,
     navigateToAddMenu: (Long) -> Unit,
     navigateToEditMenu: (Long) -> Unit,
+    navigateToEditMod: (Long, Long, String, String) -> Unit,
+    navigateToEditSuccess: (Long) -> Unit,
+    navigateToDeleteSuccess: (Long) -> Unit,
     navigateToHome: () -> Unit
 ) {
     composable<StoreDetail> { backStackEntry ->
@@ -73,6 +82,7 @@ fun NavGraphBuilder.storeDetailNavGraph(
             storeId = items.storeId,
             navigateUp = navigateUp,
             navigateToAddNewJogbo = navigateToAddNewJogbo,
+            navigateToStoreDetailReportRoute = navigateToStoreDetailReport,
             onAddMenuClick = { navigateToAddMenu(items.storeId) },
             onEditMenuClick = { navigateToEditMenu(items.storeId) }
         )
@@ -102,17 +112,10 @@ fun NavGraphBuilder.storeDetailNavGraph(
             onNavigateUp = navigateUp,
             onMenuSelected = { },
             onEditModClick = { menuId, menuName, price ->
-                navController.navigateEditMod(
-                    storeId = items.storeId,
-                    menuId = menuId,
-                    menuName = menuName,
-                    price = price
-                )
+                navigateToEditMod(items.storeId, menuId, menuName, price)
             },
             onNavigateToDeleteSuccess = { successStoreId ->
-                navController.navigateDeleteSuccess(successStoreId, navOptions {
-                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
-                })
+                navigateToDeleteSuccess(successStoreId)
             },
             onNavigateToDeleteSuccessLast = { successStoreId ->
                 navController.navigateDeleteSuccessLast(successStoreId, navOptions {
@@ -135,14 +138,10 @@ fun NavGraphBuilder.storeDetailNavGraph(
                 })
             },
             onNavigateToEditSuccess = { successStoreId ->
-                navController.navigateEditModSuccess(successStoreId, navOptions {
-                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
-                })
+                navigateToEditSuccess(successStoreId)
             },
             onNavigateToDeleteSuccess = { successStoreId ->
-                navController.navigateDeleteSuccess(successStoreId, navOptions {
-                    popUpTo(StoreDetail(successStoreId)) { inclusive = false }
-                })
+                navigateToDeleteSuccess(successStoreId)
             },
         )
     }
@@ -201,6 +200,14 @@ fun NavGraphBuilder.storeDetailNavGraph(
             }
         )
     }
+
+    composable<StoreDetailReport> { backStackEntry ->
+        val items = backStackEntry.toRoute<StoreDetailReport>()
+        StoreDetailReportRoute(
+            storeId = items.storeId,
+            onNavigateUp = { navController.popBackStack() }
+        )
+    }
 }
 
 @Serializable
@@ -234,3 +241,6 @@ data class DeleteSuccess(val storeId: Long) : MainTabRoute
 
 @Serializable
 data class DeleteSuccessLast(val storeId: Long) : MainTabRoute
+
+@Serializable
+data class StoreDetailReport(val storeId: Long) : MainTabRoute

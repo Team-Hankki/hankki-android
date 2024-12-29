@@ -31,6 +31,7 @@ import com.hankki.feature.storedetail.navigation.navigateEditMenu
 import com.hankki.feature.storedetail.navigation.navigateEditMod
 import com.hankki.feature.storedetail.navigation.navigateEditModSuccess
 import com.hankki.feature.storedetail.navigation.navigateStoreDetail
+import com.hankki.feature.storedetail.navigation.navigateToStoreDetailReport
 import com.hankki.feature.universityselection.navigation.navigateToUniversitySelection
 
 internal class MainNavigator(
@@ -185,7 +186,6 @@ internal class MainNavigator(
         )
     }
 
-
     fun navigateToEditSuccess(storeId: Long) {
         navController.navigateEditModSuccess(
             storeId = storeId,
@@ -218,7 +218,6 @@ internal class MainNavigator(
         navController.navigateEditMenu(storeId, options)
     }
 
-
     fun navigateToDeleteSuccess(storeId: Long) {
         navController.navigateDeleteSuccess(
             storeId = storeId,
@@ -231,6 +230,9 @@ internal class MainNavigator(
         )
     }
 
+    fun navigateToStoreDetailReport(storeId: Long) {
+        navController.navigateToStoreDetailReport(storeId)
+    }
 }
 
 @Composable

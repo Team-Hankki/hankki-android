@@ -363,8 +363,12 @@ private fun MainContent(
                 navController = navigator.navController,
                 navigateUp = navigator::navigateUpIfNotHome,
                 navigateToAddNewJogbo = navigator::navigateToNewJogbo,
+                navigateToStoreDetailReport = navigator::navigateToStoreDetailReport,
                 navigateToAddMenu = navigator::navigateToAddMenu,
                 navigateToEditMenu = navigator::navigateToEditMenu,
+                navigateToEditMod = navigator::navigateToEditMod,
+                navigateToEditSuccess = navigator::navigateToEditSuccess,
+                navigateToDeleteSuccess = navigator::navigateToDeleteSuccess,
                 navigateToHome = {
                     val navOptions = navOptions {
                         popUpTo<Home> {
