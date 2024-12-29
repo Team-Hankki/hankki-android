@@ -64,6 +64,7 @@ fun StoreDetailMapBox(latitude: Double, longitude: Double) {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                address = "주소를 불러오는데 실패했어요."
             }
         }
     }
