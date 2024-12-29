@@ -6,7 +6,6 @@ import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.domain.home.entity.response.CategoriesEntity
 import com.hankki.domain.home.entity.response.CategoryEntity
-import com.hankki.domain.home.entity.response.CategoryResponseEntity
 import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
@@ -22,6 +21,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -38,6 +38,24 @@ class HomeViewModel @Inject constructor(
     private val _sideEffect: MutableSharedFlow<HomeSideEffect> = MutableSharedFlow()
     val sideEffect: SharedFlow<HomeSideEffect>
         get() = _sideEffect.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            homeRepository.getCategories().onSuccess { items ->
+                _state.update {
+                    it.copy(
+                        categoryChipItems = items.map { chip ->
+                            CategoryChipItem(
+                                name = chip.name,
+                                tag = chip.tag,
+                                imageUrl = chip.imageUrl
+                            )
+                        }.toPersistentList()
+                    )
+                }
+            }
+        }
+    }
 
     fun getUniversityInformation() {
         viewModelScope.launch {
@@ -120,7 +138,8 @@ class HomeViewModel @Inject constructor(
             homeRepository.getStores(
                 universityId = universityId,
                 storeCategory = if (_state.value.categoryChipState is ChipState.Fixed) {
-                    (_state.value.categoryChipState as ChipState.Fixed).tag
+                    if ((_state.value.categoryChipState as ChipState.Fixed).tag == "ALL") null
+                    else (_state.value.categoryChipState as ChipState.Fixed).tag
                 } else null,
                 priceCategory = if (_state.value.priceChipState is ChipState.Fixed) {
                     (_state.value.priceChipState as ChipState.Fixed).tag
@@ -249,25 +268,6 @@ class HomeViewModel @Inject constructor(
             }
         } else if (newState is ChipState.Unselected) {
             fetchData()
-        }
-    }
-
-    fun clickCategoryChip() {
-        updateChipState(
-            targetChipState = _state.value.categoryChipState,
-            updateState = { _state.value = _state.value.copy(categoryChipState = it) },
-            fetchItems = homeRepository::getCategories,
-        ) { chips ->
-            _state.value = _state.value.copy(
-                categoryChipItems = chips.map { chip ->
-                    chip as CategoryResponseEntity
-                    CategoryChipItem(
-                        name = chip.name,
-                        tag = chip.tag,
-                        imageUrl = chip.imageUrl
-                    )
-                }.toPersistentList()
-            )
         }
     }
 
