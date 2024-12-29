@@ -1,7 +1,6 @@
 package com.hankki.feature.home
 
 import com.hankki.core.common.utill.EmptyUiState
-import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
@@ -29,6 +28,7 @@ data class HomeState(
     val isSortChipOpen: Boolean = false,
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,
+    val isFilterBottomSheetOpen: Boolean = false,
     val selectedStoreItem: StoreItemModel? = null,
     val markerItems: PersistentList<PinModel> = persistentListOf(),
     val storeItems: EmptyUiState<PersistentList<StoreItemModel>> = EmptyUiState.Loading,
