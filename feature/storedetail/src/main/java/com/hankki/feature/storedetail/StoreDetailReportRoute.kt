@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,7 +19,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -110,10 +110,10 @@ private fun StoreDetailReportScreen(
             HankkiTopBar(
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_left),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_left),
                         contentDescription = "뒤로가기",
                         modifier = Modifier
-                            .offset(x = 6.dp, y = 2.dp)
+                            .padding(start = 6.dp, top = 2.dp)
                             .noRippleClickable(onClick = onNavigateUp),
                         tint = Gray900
                     )
@@ -162,7 +162,7 @@ private fun StoreDetailReportScreen(
                         },
                         tailingIcon = {
                             Icon(
-                                painter = painterResource(
+                                imageVector = ImageVector.vectorResource(
                                     id = if (isSelected) R.drawable.ic_btn_radio_check
                                     else R.drawable.ic_btn_radio_uncheck
                                 ),

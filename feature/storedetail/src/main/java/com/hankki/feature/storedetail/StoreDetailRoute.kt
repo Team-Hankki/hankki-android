@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,10 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -304,10 +307,10 @@ fun StoreDetailScreen(
                 HankkiTopBar(
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_left),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_left),
                             contentDescription = "뒤로가기",
                             modifier = Modifier
-                                .offset(x = 6.dp, y = 2.dp)
+                                .padding(start = 6.dp, top = 2.dp)
                                 .noRippleClickable(onClick = onNavigateUp),
                             tint = Gray50
                         )
@@ -327,7 +330,7 @@ fun StoreDetailScreen(
             StoreDetailDifferentButton(
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_home),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_home),
                         contentDescription = null,
                         tint = Color.Unspecified
                     )
@@ -342,7 +345,7 @@ fun StoreDetailScreen(
                 onClick = onReportClicked,
                 tailingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
                         contentDescription = null,
                         tint = Gray350
                     )
@@ -362,7 +365,7 @@ fun StoreDetailScreen(
                     StoreDetailMenuButton(
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = if (isLiked) R.drawable.ic_read_heart else R.drawable.ic_heart),
+                                imageVector = ImageVector.vectorResource(id = if (isLiked) R.drawable.ic_read_heart else R.drawable.ic_heart),
                                 contentDescription = "좋아요 아이콘",
                                 tint = Color.Unspecified
                             )
@@ -384,7 +387,7 @@ fun StoreDetailScreen(
                     StoreDetailMenuButton(
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_my_jogbo),
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_my_jogbo),
                                 contentDescription = "추가 아이콘",
                                 tint = Color.Unspecified
                             )

@@ -14,8 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray500
@@ -78,7 +79,7 @@ fun StoreDetailMenuBox(
         StoreDetailModDeleteButton(
             leadingIcon = {
                 Icon(
-                    painter = painterResource(id = com.hankki.feature.storedetail.R.drawable.ic_bottom_edit),
+                    imageVector = ImageVector.vectorResource(id = com.hankki.feature.storedetail.R.drawable.ic_bottom_edit),
                     contentDescription = "추가 아이콘",
                     tint = Gray500
                 )
