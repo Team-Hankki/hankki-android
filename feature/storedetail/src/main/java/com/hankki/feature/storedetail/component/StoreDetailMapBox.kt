@@ -101,7 +101,11 @@ fun StoreDetailMapBox(latitude: Double, longitude: Double) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
-                .border(1.dp, Gray100, shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                .border(
+                    1.dp,
+                    Gray100,
+                    shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+                )
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
