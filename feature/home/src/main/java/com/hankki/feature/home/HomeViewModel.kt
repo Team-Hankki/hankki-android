@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
+import timber.log.Timber.Forest.tag
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +41,8 @@ class HomeViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
+        getUniversityInformation()
+
         viewModelScope.launch {
             homeRepository.getCategories().onSuccess { items ->
                 _state.update {
@@ -54,10 +57,36 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             }
+
+            homeRepository.getPriceCategories().onSuccess { items ->
+                _state.update {
+                    it.copy(
+                        priceChipItems = items.map { chip ->
+                            ChipItem(
+                                name = chip.name,
+                                tag = chip.tag
+                            )
+                        }.toPersistentList()
+                    )
+                }
+            }
+
+            homeRepository.getSortCategories().onSuccess { items ->
+                _state.update {
+                    it.copy(
+                        sortChipItems = items.map { chip ->
+                            ChipItem(
+                                name = chip.name,
+                                tag = chip.tag
+                            )
+                        }.toPersistentList()
+                    )
+                }
+            }
         }
     }
 
-    fun getUniversityInformation() {
+    private fun getUniversityInformation() {
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->
@@ -123,12 +152,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun showSnackBar(message: String, storeId: Long) {
-        viewModelScope.launch {
-            _sideEffect.emit(HomeSideEffect.ShowSnackBar(message, storeId))
-        }
-    }
-
     private fun getStoreItems(universityId: Long?) {
         viewModelScope.launch {
             _state.value = _state.value.copy(
@@ -191,7 +214,8 @@ class HomeViewModel @Inject constructor(
             homeRepository.getStoresPins(
                 universityId = universityId,
                 storeCategory = if (_state.value.categoryChipState is ChipState.Fixed) {
-                    (_state.value.categoryChipState as ChipState.Fixed).tag
+                    if ((_state.value.categoryChipState as ChipState.Fixed).tag == "ALL") null
+                    else (_state.value.categoryChipState as ChipState.Fixed).tag
                 } else null,
                 priceCategory = if (_state.value.priceChipState is ChipState.Fixed) {
                     (_state.value.priceChipState as ChipState.Fixed).tag
@@ -219,13 +243,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun clickedMainBottomSheetItem(id: Long) {
-        val item = _state.value.markerItems.find { it.id == id } ?: return
-
-        clickMarkerItem(id)
-        moveMap(item.latitude, item.longitude)
-    }
-
     fun selectStoreItem(storeItem: StoreItemModel) {
         _state.value = _state.value.copy(
             selectedStoreItem = storeItem
@@ -239,70 +256,10 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun updateChipState(
-        targetChipState: ChipState,
-        updateState: (ChipState) -> Unit,
-        fetchItems: suspend () -> Result<List<CategoryEntity>>,
-        onSuccess: (List<CategoryEntity>) -> Unit = { },
-    ) {
-        val newState = when (targetChipState) {
-            is ChipState.Fixed -> ChipState.Unselected()
-            is ChipState.Selected -> ChipState.Unselected()
-            is ChipState.Unselected -> ChipState.Selected()
-        }
-
-        _state.value = _state.value.copy(
-            categoryChipState = if (_state.value.categoryChipState is ChipState.Selected && targetChipState != _state.value.categoryChipState) ChipState.Unselected() else _state.value.categoryChipState,
-            priceChipState = if (_state.value.priceChipState is ChipState.Selected && targetChipState != _state.value.priceChipState) ChipState.Unselected() else _state.value.priceChipState,
-            sortChipState = if (_state.value.sortChipState is ChipState.Selected && targetChipState != _state.value.sortChipState) ChipState.Unselected() else _state.value.sortChipState
-        )
-
-        updateState(newState)
-
-        if (newState is ChipState.Selected) {
-            viewModelScope.launch {
-                fetchItems()
-                    .onSuccess { chips ->
-                        onSuccess(chips)
-                    }.onFailure(Timber::e)
-            }
-        } else if (newState is ChipState.Unselected) {
-            fetchData()
-        }
-    }
-
-    fun clickPriceChip() {
-        updateChipState(
-            targetChipState = _state.value.priceChipState,
-            updateState = { _state.value = _state.value.copy(priceChipState = it) },
-            fetchItems = homeRepository::getPriceCategories
-        ) { chips ->
-            _state.value = _state.value.copy(
-                priceChipItems = chips.map { chip ->
-                    chip as CategoriesEntity
-                    ChipItem(
-                        name = chip.name,
-                        tag = chip.tag
-                    )
-                }.toPersistentList()
-            )
-        }
-    }
-
-    fun clickSortChip() {
-        updateChipState(
-            targetChipState = _state.value.sortChipState,
-            updateState = { _state.value = _state.value.copy(sortChipState = it) },
-            fetchItems = homeRepository::getSortCategories
-        ) { chips ->
-            _state.value = _state.value.copy(
-                sortChipItems = chips.map { chip ->
-                    chip as CategoriesEntity
-                    ChipItem(
-                        name = chip.name,
-                        tag = chip.tag
-                    )
-                }.toPersistentList()
+    fun controlFilterBottomSheetState() {
+        _state.update {
+            it.copy(
+                isFilterBottomSheetOpen = !it.isFilterBottomSheetOpen
             )
         }
     }
@@ -314,6 +271,15 @@ class HomeViewModel @Inject constructor(
                 HomeChips.SORT -> selectSortChipItem(item, tag)
                 HomeChips.PRICE -> selectPriceChipItem(item, tag)
             }
+
+            fetchData()
+        }
+    }
+
+    fun setChipItem(priceItem: String, priceTag: String, sortItem: String, sortTag: String) {
+        runBlocking {
+            selectPriceChipItem(priceItem, priceTag)
+            selectSortChipItem(sortItem, sortTag)
 
             fetchData()
         }
