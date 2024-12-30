@@ -1,4 +1,4 @@
-package com.hankki.core.designsystem.component.chip
+package com.hankki.feature.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,7 +23,7 @@ import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 
 @Composable
-fun HankkiFilterChip2(
+fun HankkiFilterChip(
     text: String,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
@@ -63,8 +63,8 @@ fun HankkiFilterChip2(
 fun HankkiFilterChipPreview() {
     HankkijogboTheme {
         Column {
-            HankkiFilterChip2(text = "최신순", isSelected = true)
-            HankkiFilterChip2(text = "가격순", isSelected = false)
+            HankkiFilterChip(text = "최신순", isSelected = true)
+            HankkiFilterChip(text = "가격순", isSelected = false)
         }
     }
 }

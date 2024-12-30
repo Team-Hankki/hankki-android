@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
-import com.hankki.core.designsystem.component.chip.HankkiFilterChip2
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray850
@@ -120,7 +119,7 @@ private fun FilterContent(
         ) {
             filters.forEach {
                 key(it.tag) {
-                    HankkiFilterChip2(
+                    HankkiFilterChip(
                         text = it.name,
                         isSelected = tag == it.tag
                     ) {
