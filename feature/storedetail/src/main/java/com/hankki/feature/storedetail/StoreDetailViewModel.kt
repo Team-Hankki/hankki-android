@@ -70,8 +70,8 @@ class StoreDetailViewModel @Inject constructor(
             val result = storeDetailRepository.getStoreDetailNickname()
             result.onSuccess {
                 _storeState.value = _storeState.value.copy(nickname = it.nickname)
-            }.onFailure {
-                //fail
+            }.onFailure { error ->
+                Timber.e("Failed to delete store123: ${error.message}")
             }
         }
     }
@@ -82,6 +82,9 @@ class StoreDetailViewModel @Inject constructor(
             isLiked = storeDetail.isLiked,
             heartCount = storeDetail.heartCount,
             menuItems = storeDetail.menus.toPersistentList(),
+            categoryImageUrl = storeDetail.categoryImageUrl,
+            latitude = storeDetail.latitude,
+            longitude = storeDetail.longitude
         )
     }
 

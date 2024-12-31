@@ -27,6 +27,7 @@ val SuiteRegular = FontFamily(Font(R.font.suite_regular, FontWeight.Normal))
 class HankkiTypography internal constructor(
     h1: TextStyle,
     h2: TextStyle,
+    h3: TextStyle,
     suitH1: TextStyle,
     suitH2: TextStyle,
     suitH3: TextStyle,
@@ -55,10 +56,12 @@ class HankkiTypography internal constructor(
     caption4: TextStyle,
     caption5: TextStyle,
     suitCaption: TextStyle,
-    ) {
+) {
     var h1: TextStyle by mutableStateOf(h1)
         private set
     var h2: TextStyle by mutableStateOf(h2)
+        private set
+    var h3: TextStyle by mutableStateOf(h3)
         private set
     var suitH1: TextStyle by mutableStateOf(suitH1)
         private set
@@ -120,6 +123,7 @@ class HankkiTypography internal constructor(
     fun copy(
         h1: TextStyle = this.h1,
         h2: TextStyle = this.h2,
+        h3: TextStyle = this.h3,
         suitH1: TextStyle = this.suitH1,
         suitH2: TextStyle = this.suitH2,
         suitH3: TextStyle = this.suitH3,
@@ -148,9 +152,10 @@ class HankkiTypography internal constructor(
         caption4: TextStyle = this.caption4,
         caption5: TextStyle = this.caption5,
         suitCaption: TextStyle = this.suitCaption,
-        ): HankkiTypography = HankkiTypography(
+    ): HankkiTypography = HankkiTypography(
         h1,
         h2,
+        h3,
         suitH1,
         suitH2,
         suitH3,
@@ -179,11 +184,12 @@ class HankkiTypography internal constructor(
         caption4,
         caption5,
         suitCaption,
-        )
+    )
 
     fun update(other: HankkiTypography) {
         h1 = other.h1
         h2 = other.h2
+        h3 = other.h3
         suitH1 = other.suitH1
         suitH2 = other.suitH2
         suitH3 = other.suitH3
@@ -219,11 +225,13 @@ fun hankkiTextStyle(
     fontWeight: FontWeight,
     fontSize: TextUnit,
     lineHeight: TextUnit,
-): TextStyle = TextStyle(
+    letterSpacing: TextUnit = 0.sp,
+    ): TextStyle = TextStyle(
     fontFamily = fontFamily,
     fontWeight = fontWeight,
     fontSize = fontSize,
     lineHeight = lineHeight,
+    letterSpacing = letterSpacing,
     lineHeightStyle = LineHeightStyle(
         alignment = LineHeightStyle.Alignment.Center,
         trim = LineHeightStyle.Trim.None
@@ -244,6 +252,13 @@ fun hankkiTypography(): HankkiTypography {
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             lineHeight = 30.sp
+        ),
+        h3 = hankkiTextStyle(
+            fontFamily = PretendardSemiBold,
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            lineHeight = 33.sp,
+            letterSpacing = (-0.44).sp
         ),
         suitH1 = hankkiTextStyle(
             fontFamily = SuiteBold,
