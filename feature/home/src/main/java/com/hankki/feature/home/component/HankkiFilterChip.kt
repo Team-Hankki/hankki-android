@@ -27,7 +27,7 @@ fun HankkiFilterChip(
     text: String,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    textStyle: TextStyle = HankkiTheme.typography.caption2,
+    textStyle: TextStyle = HankkiTheme.typography.suitCaption,
     onClick: () -> Unit = {},
 ) {
     val (textColor, borderColor, containerColor) = if (isSelected) {
