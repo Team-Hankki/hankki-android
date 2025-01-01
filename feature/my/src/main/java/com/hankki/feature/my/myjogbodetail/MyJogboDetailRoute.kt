@@ -73,9 +73,12 @@ fun MyJogboDetailRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(isSharedJogbo) {
+        myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
+    }
+
     LaunchedEffect(true) {
-        if (isSharedJogbo) myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
-        else myJogboDetailViewModel.getJogboDetail(favoriteId)
+        myJogboDetailViewModel.getJogboDetail(favoriteId)
         myJogboDetailViewModel.getUserName()
         myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
     }
