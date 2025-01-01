@@ -78,6 +78,7 @@ fun NavGraphBuilder.myNavGraph(
             navigateUp = navigateUp,
             navigateToHome = navigateToHome,
             navigateToNewSharedJogbo = navigateToNewSharedJogbo,
+            navigateToMyJogbo = navigateToMyJogbo,
             isSharedJogbo = isSharedJogbo
         )
     }

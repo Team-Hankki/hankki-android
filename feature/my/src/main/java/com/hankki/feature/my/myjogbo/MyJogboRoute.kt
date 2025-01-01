@@ -27,12 +27,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray700
@@ -54,10 +57,22 @@ fun MyJogboRoute(
     navigateToNewJogbo: () -> Unit,
     myJogboViewModel: MyJogboViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val state by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         myJogboViewModel.getMyJogboList()
+    }
+
+    LaunchedEffect(myJogboViewModel.myJogboSideEffect, lifecycleOwner) {
+        myJogboViewModel.myJogboSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is MyJogboSideEffect.ShowNoExistsDialog -> {
+                        myJogboViewModel.updateNoExistsDialog() // TODO: 어떻게 띄워야할까...
+                    }
+                }
+            }
     }
 
     MyJogboScreen(
@@ -69,10 +84,12 @@ fun MyJogboRoute(
         updateEditModeState = myJogboViewModel::updateEditModeState,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
         resetEditModeState = myJogboViewModel::resetEditModeState,
-        deleteDialogState = state.dialogState,
+        deleteDialogState = state.deleteDialogState,
         updateDeleteDialogState = myJogboViewModel::updateDeleteDialogState,
         deleteSelectedJogbo = myJogboViewModel::deleteSelectedJogbo,
-        buttonEnabledState = state.buttonEnabled
+        buttonEnabledState = state.buttonEnabled,
+        noExistsDialogState = state.noExistsDialogState,
+        updateNoExistsDialogState = myJogboViewModel::updateNoExistsDialog
     )
 
     BackOnPressed(
@@ -95,7 +112,9 @@ fun MyJogboScreen(
     deleteDialogState: Boolean,
     updateDeleteDialogState: (Boolean) -> Unit,
     deleteSelectedJogbo: () -> Unit,
-    buttonEnabledState: Boolean
+    buttonEnabledState: Boolean,
+    noExistsDialogState: Boolean,
+    updateNoExistsDialogState: () -> Unit
 ) {
     val tracker = LocalTracker.current
 
@@ -106,6 +125,14 @@ fun MyJogboScreen(
             positiveButtonTitle = stringResource(id = R.string.do_delete),
             onNegativeButtonClicked = { updateDeleteDialogState(false) },
             onPositiveButtonClicked = { if (buttonEnabledState) deleteSelectedJogbo() }
+        )
+    }
+
+    if (noExistsDialogState) {
+        SingleButtonDialog(
+            title = stringResource(R.string.deleted_jogbo),
+            buttonTitle = stringResource(R.string.check),
+            onConfirmation = updateNoExistsDialogState
         )
     }
 
@@ -240,7 +267,9 @@ fun MyJogboScreenPreview() {
             updateDeleteDialogState = {},
             deleteSelectedJogbo = {},
             buttonEnabledState = false,
-            editModeState = false
+            editModeState = false,
+            noExistsDialogState = false,
+            updateNoExistsDialogState = {}
         )
     }
 }

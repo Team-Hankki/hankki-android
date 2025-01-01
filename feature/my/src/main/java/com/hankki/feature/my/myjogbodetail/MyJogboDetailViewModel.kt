@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
-import com.hankki.core.common.utill.UiState
 import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.domain.my.repository.MyRepository
 import com.kakao.sdk.common.util.KakaoCustomTabsClient
@@ -62,10 +61,11 @@ class MyJogboDetailViewModel @Inject constructor(
                     )
                 }
                 .onFailure { error ->
-                    _myJogboDetailState.value = _myJogboDetailState.value.copy(uiState = EmptyUiState.Failure)
+                    _myJogboDetailState.value =
+                        _myJogboDetailState.value.copy(uiState = EmptyUiState.Failure)
 
                     if (error is HttpException && error.code() == DO_NOT_EXISTS_ERROR) {
-                        _mySideEffect.emit(MyJogboDetailSideEffect.ShowNoExistsDialog)
+                        _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToMyJogbo)
                     }
                 }
         }
@@ -80,12 +80,6 @@ class MyJogboDetailViewModel @Inject constructor(
     fun updateShareDialogState(state: Boolean) {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
             shareDialogState = !state
-        )
-    }
-
-    fun updateNoExistsDialog(state: Boolean) {
-        _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            noExistsDialogState = !state,
         )
     }
 
@@ -165,13 +159,14 @@ class MyJogboDetailViewModel @Inject constructor(
         }
     }
 
-    fun checkIsJogboOwner(favoriteId:Long){
+    fun checkIsJogboOwner(favoriteId: Long) {
         viewModelScope.launch {
             myRepository.getIsJogboOwner(favoriteId)
                 .onSuccess { isJogboOwner ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
-                    isJogboOwner = isJogboOwner.isJogboOwner
-                ) }
+                        isJogboOwner = isJogboOwner.isJogboOwner
+                    )
+                }
                 .onFailure(Timber::e)
         }
     }

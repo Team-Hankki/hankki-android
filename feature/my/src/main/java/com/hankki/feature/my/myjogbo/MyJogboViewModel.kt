@@ -7,8 +7,11 @@ import com.hankki.domain.my.repository.MyRepository
 import com.hankki.feature.my.myjogbo.model.toMyJogboModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,6 +24,10 @@ class MyJogboViewModel @Inject constructor(
     private val _myJogboState = MutableStateFlow(MyJogboState())
     val myJogboState: StateFlow<MyJogboState>
         get() = _myJogboState.asStateFlow()
+
+    private val _myJogboSideEffect: MutableSharedFlow<MyJogboSideEffect> = MutableSharedFlow()
+    val myJogboSideEffect: SharedFlow<MyJogboSideEffect>
+        get() = _myJogboSideEffect.asSharedFlow()
 
     fun getMyJogboList() {
         viewModelScope.launch {
@@ -80,7 +87,7 @@ class MyJogboViewModel @Inject constructor(
 
     fun updateDeleteDialogState(state: Boolean) {
         _myJogboState.value = _myJogboState.value.copy(
-            dialogState = state,
+            deleteDialogState = state,
             buttonEnabled = true
         )
     }
@@ -97,7 +104,7 @@ class MyJogboViewModel @Inject constructor(
                 myRepository.deleteJogboStores(deleteList)
                     .onSuccess {
                         _myJogboState.value = _myJogboState.value.copy(
-                            dialogState = false,
+                            deleteDialogState = false,
                             editModeState = false
                         )
                         getMyJogboList()
@@ -105,5 +112,11 @@ class MyJogboViewModel @Inject constructor(
                     .onFailure(Timber::e)
             }
         }
+    }
+
+    fun updateNoExistsDialog() {
+        _myJogboState.value = _myJogboState.value.copy(
+            noExistsDialogState = !_myJogboState.value.noExistsDialogState,
+        )
     }
 }
