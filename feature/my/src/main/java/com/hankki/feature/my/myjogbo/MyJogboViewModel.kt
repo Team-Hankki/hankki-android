@@ -25,10 +25,6 @@ class MyJogboViewModel @Inject constructor(
     val myJogboState: StateFlow<MyJogboState>
         get() = _myJogboState.asStateFlow()
 
-    private val _myJogboSideEffect: MutableSharedFlow<MyJogboSideEffect> = MutableSharedFlow()
-    val myJogboSideEffect: SharedFlow<MyJogboSideEffect>
-        get() = _myJogboSideEffect.asSharedFlow()
-
     fun getMyJogboList() {
         viewModelScope.launch {
             myRepository.getMyJogboList()

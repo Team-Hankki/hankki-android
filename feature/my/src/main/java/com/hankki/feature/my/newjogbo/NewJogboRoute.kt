@@ -50,7 +50,7 @@ import com.hankki.feature.my.R
 @Composable
 fun NewJogboRoute(
     navigateUp: () -> Unit,
-    navigateToMyJogbo: () -> Unit,
+    navigateToMyJogbo: (Boolean) -> Unit,
     favoriteId: Long,
     isSharedJogbo: Boolean = false,
     newJogboViewModel: NewJogboViewModel = hiltViewModel(),
@@ -66,7 +66,7 @@ fun NewJogboRoute(
                     is NewJogboSideEffect.NavigateToNewJogbo -> {
                         if (isSharedJogbo) {
                             snackBar("족보가 추가되었습니다")
-                            navigateToMyJogbo()
+                            navigateToMyJogbo(false)
                         } else navigateUp()
                     }
 

@@ -21,8 +21,8 @@ fun NavController.navigateMy(navOptions: NavOptions) {
     navigate(My, navOptions)
 }
 
-fun NavController.navigateMyJogbo() {
-    navigate(MyJogbo)
+fun NavController.navigateMyJogbo(isDeletedDialogNeed: Boolean = false) {
+    navigate(MyJogbo(isDeletedDialogNeed))
 }
 
 fun NavController.navigateMyStore(type: String) {
@@ -40,11 +40,11 @@ fun NavController.navigateNewJogbo(isSharedJogbo: Boolean = false, favoriteId: L
 fun NavGraphBuilder.myNavGraph(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    navigateToMyJogbo: () -> Unit,
+    navigateToMyJogbo: (Boolean) -> Unit,
     navigateToMyStore: (String) -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
-    navigateToNewSharedJogbo: (Boolean,Long) -> Unit,
+    navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
     isSharedJogbo: Boolean
@@ -52,8 +52,15 @@ fun NavGraphBuilder.myNavGraph(
     composable<My> {
         MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
     }
-    composable<MyJogbo> {
-        MyJogboRoute(navigateUp, navigateToJogboDetail, navigateToNewJogbo)
+    composable<MyJogbo> { backStackEntry ->
+        val isDeletedDialogNeed = backStackEntry.toRoute<MyJogbo>()
+
+        MyJogboRoute(
+            isDeletedDialogNeed.isDeletedDialogNeed,
+            navigateUp,
+            navigateToJogboDetail,
+            navigateToNewJogbo
+        )
     }
     composable<MyStore> { backStackEntry ->
         val type = backStackEntry.toRoute<MyStore>()
@@ -97,7 +104,9 @@ fun NavGraphBuilder.myNavGraph(
 data object My : MainTabRoute
 
 @Serializable
-data object MyJogbo : Route
+data class MyJogbo(
+    val isDeletedDialogNeed: Boolean
+) : Route
 
 @Serializable
 data class MyStore(

@@ -68,7 +68,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix
 @Composable
 fun MyRoute(
     paddingValues: PaddingValues,
-    navigateToJogbo: () -> Unit,
+    navigateToJogbo: (Boolean) -> Unit,
     navigateToStore: (String) -> Unit,
     myViewModel: MyViewModel = hiltViewModel(),
 ) {
@@ -122,7 +122,7 @@ fun MyRoute(
 @Composable
 fun MyScreen(
     paddingValues: PaddingValues,
-    navigateToMyJogbo: () -> Unit,
+    navigateToMyJogbo: (Boolean) -> Unit,
     navigateToMyStore: (String) -> Unit,
     state: MyState,
     showWebView: (String) -> Unit,
@@ -215,7 +215,7 @@ fun MyScreen(
                                     type = EventType.CLICK,
                                     name = "Mypage_MyJokbo"
                                 )
-                                navigateToMyJogbo()
+                                navigateToMyJogbo(false)
                             }
                         )
 

@@ -27,9 +27,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
@@ -52,27 +50,19 @@ import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun MyJogboRoute(
+    isDeletedDialogNeed: Boolean,
     navigateUp: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     myJogboViewModel: MyJogboViewModel = hiltViewModel(),
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
     val state by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         myJogboViewModel.getMyJogboList()
-    }
-
-    LaunchedEffect(myJogboViewModel.myJogboSideEffect, lifecycleOwner) {
-        myJogboViewModel.myJogboSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { sideEffect ->
-                when (sideEffect) {
-                    is MyJogboSideEffect.ShowNoExistsDialog -> {
-                        myJogboViewModel.updateNoExistsDialog() // TODO: 어떻게 띄워야할까...
-                    }
-                }
-            }
+        if (isDeletedDialogNeed) {
+            myJogboViewModel.updateNoExistsDialog()
+        }
     }
 
     MyJogboScreen(

@@ -141,8 +141,8 @@ internal class MainNavigator(
         navController.navigateToUniversitySelection(navOptions)
     }
 
-    fun navigateToMyJogbo() {
-        navController.navigateMyJogbo()
+    fun navigateToMyJogbo(isDeletedDialogNeed:Boolean) {
+        navController.navigateMyJogbo(isDeletedDialogNeed)
     }
 
     fun navigateToMyStore(type: String) {

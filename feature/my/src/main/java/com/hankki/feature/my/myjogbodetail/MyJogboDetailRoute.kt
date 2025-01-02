@@ -66,7 +66,7 @@ fun MyJogboDetailRoute(
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
-    navigateToMyJogbo: () -> Unit,
+    navigateToMyJogbo: (Boolean) -> Unit,
     isSharedJogbo: Boolean = false,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
@@ -88,7 +88,7 @@ fun MyJogboDetailRoute(
                 when (sideEffect) {
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
-                    is MyJogboDetailSideEffect.NavigateToMyJogbo -> navigateToMyJogbo()
+                    is MyJogboDetailSideEffect.NavigateToMyJogbo -> navigateToMyJogbo(true)
                 }
             }
     }
