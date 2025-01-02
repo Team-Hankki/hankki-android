@@ -12,6 +12,8 @@
     <string name="add_store_to_jogbo">에\n식당을 추가해보세요</string>
     <string name="look_around">둘러보기</string>
     <string name="no_jogbo">족보에 식당이 없어요\n식당 1개 이상 시에만 공유할 수 있어요</string>
+    <string name="need_login">족보를 확인하려면\n로그인이 필요해요</string>
+    <string name="login">로그인하기</string>
 
     <!--my page-->
     <string name="my">MY</string>
