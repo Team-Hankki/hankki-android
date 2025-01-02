@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.domain.my.entity.response.UserInformationEntity
 import com.hankki.domain.my.repository.MyRepository
+import com.hankki.domain.token.repository.TokenRepository
 import com.kakao.sdk.common.util.KakaoCustomTabsClient
 import com.kakao.sdk.share.ShareClient
 import com.kakao.sdk.share.WebSharerClient
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyJogboDetailViewModel @Inject constructor(
     private val myRepository: MyRepository,
+    private val tokenRepository: TokenRepository
 ) : ViewModel() {
     private val _myJogboDetailState = MutableStateFlow(MyJogboDetailState())
     val myJogboDetailState: StateFlow<MyJogboDetailState>
@@ -65,6 +67,10 @@ class MyJogboDetailViewModel @Inject constructor(
                             jogbo.stores.toPersistentList()
                         )
                     )
+                    val isLogined = tokenRepository.getAccessToken().isNotEmpty()
+                    if (!isLogined) {
+                        _mySideEffect.emit(MyJogboDetailSideEffect.ShowLoginDialog)
+                    }
                 }
                 .onFailure { error ->
                     _myJogboDetailState.value =

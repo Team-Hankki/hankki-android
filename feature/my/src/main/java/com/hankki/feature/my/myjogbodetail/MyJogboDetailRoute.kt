@@ -41,6 +41,7 @@ import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
@@ -89,6 +90,7 @@ fun MyJogboDetailRoute(
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                     is MyJogboDetailSideEffect.NavigateToMyJogbo -> navigateToMyJogbo(true)
+                    is MyJogboDetailSideEffect.ShowLoginDialog -> myJogboDetailViewModel.updateLoginDialog()
                 }
             }
     }
@@ -117,7 +119,9 @@ fun MyJogboDetailRoute(
         shareJogbo = myJogboDetailViewModel::shareJogbo,
         isSharedJogbo = isSharedJogbo,
         favoriteId = favoriteId,
-        isJogboOwner = state.isJogboOwner
+        isJogboOwner = state.isJogboOwner,
+        loginDialogState = state.loginDialogState,
+        updateLoginDialogState = myJogboDetailViewModel::updateLoginDialog
     )
 }
 
@@ -141,7 +145,9 @@ fun MyJogboDetailScreen(
     isSharedJogbo: Boolean,
     shareJogbo: (Context, String, String, String, Long) -> Unit,
     favoriteId: Long,
-    isJogboOwner: Boolean
+    isJogboOwner: Boolean,
+    loginDialogState: Boolean,
+    updateLoginDialogState: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
@@ -169,6 +175,14 @@ fun MyJogboDetailScreen(
             onPositiveButtonClicked = {
                 deleteSelectedStore(selectedStoreId)
             }
+        )
+    }
+
+    if (loginDialogState) {
+        SingleButtonDialog(
+            title = stringResource(R.string.need_login),
+            buttonTitle = stringResource(R.string.login),
+            onConfirmation = updateLoginDialogState
         )
     }
 
