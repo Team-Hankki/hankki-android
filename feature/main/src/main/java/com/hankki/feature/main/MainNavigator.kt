@@ -15,6 +15,7 @@ import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateOnboarding
 import com.hankki.feature.main.splash.navigation.Splash
+import com.hankki.feature.my.navigation.MyJogbo
 import com.hankki.feature.my.navigation.MyJogboDetail
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
@@ -141,8 +142,22 @@ internal class MainNavigator(
         navController.navigateToUniversitySelection(navOptions)
     }
 
-    fun navigateToMyJogbo(isDeletedDialogNeed:Boolean) {
-        navController.navigateMyJogbo(isDeletedDialogNeed)
+    fun navigateToMy() {
+        navController.navigateMy(navOptions {
+            popUpTo<MyJogbo> {
+                inclusive = true
+            }
+            launchSingleTop = true
+        })
+    }
+
+    fun navigateToMyJogbo(isDeletedDialogNeed: Boolean) {
+        navController.navigateMyJogbo(isDeletedDialogNeed, navOptions {
+            popUpTo<MyJogboDetail> {
+                inclusive = true
+            }
+            launchSingleTop = true
+        })
     }
 
     fun navigateToMyStore(type: String) {

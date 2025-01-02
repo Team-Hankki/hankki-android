@@ -52,13 +52,16 @@ import kotlinx.collections.immutable.PersistentList
 fun MyJogboRoute(
     isDeletedDialogNeed: Boolean,
     navigateUp: () -> Unit,
+    navigateToMy: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
+    resetDeepLinkState: () -> Unit,
     myJogboViewModel: MyJogboViewModel = hiltViewModel(),
 ) {
     val state by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
+        resetDeepLinkState()
         myJogboViewModel.getMyJogboList()
         if (isDeletedDialogNeed) {
             myJogboViewModel.updateNoExistsDialog()
@@ -67,6 +70,7 @@ fun MyJogboRoute(
 
     MyJogboScreen(
         navigateUp = navigateUp,
+        navigateToMy = navigateToMy,
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
         state = state.uiState,
@@ -92,6 +96,7 @@ fun MyJogboRoute(
 @Composable
 fun MyJogboScreen(
     navigateUp: () -> Unit,
+    navigateToMy : () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     state: UiState<PersistentList<MyJogboModel>>,
@@ -142,7 +147,7 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 7.dp)
                         .size(40.dp)
-                        .noRippleClickable(if (editModeState) resetEditModeState else navigateUp),
+                        .noRippleClickable(if (editModeState) resetEditModeState else navigateToMy),//navigateUp),
                 )
             },
             content = {
@@ -247,6 +252,7 @@ fun MyJogboScreenPreview() {
     HankkijogboTheme {
         MyJogboScreen(
             navigateUp = {},
+            navigateToMy = {},
             navigateToJogboDetail = { _ -> },
             navigateToNewJogbo = {},
             state = UiState.Loading,

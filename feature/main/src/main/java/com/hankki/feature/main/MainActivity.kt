@@ -32,7 +32,8 @@ class MainActivity : ComponentActivity() {
                 CompositionLocalProvider(LocalTracker provides tracker) {
                     MainScreen(
                         navigator = navigator,
-                        isDeepLink = isDeepLink.value
+                        isDeepLink = isDeepLink.value,
+                        resetDeepLinkState = { isDeepLink.value = false }
                     )
                 }
             }

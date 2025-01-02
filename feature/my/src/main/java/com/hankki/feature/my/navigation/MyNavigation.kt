@@ -17,12 +17,15 @@ import com.hankki.feature.my.mystore.MyStoreRoute
 import com.hankki.feature.my.newjogbo.NewJogboRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateMy(navOptions: NavOptions) {
+fun NavController.navigateMy(navOptions: NavOptions? = null) {
     navigate(My, navOptions)
 }
 
-fun NavController.navigateMyJogbo(isDeletedDialogNeed: Boolean = false) {
-    navigate(MyJogbo(isDeletedDialogNeed))
+fun NavController.navigateMyJogbo(
+    isDeletedDialogNeed: Boolean = false,
+    navOptions: NavOptions? = null
+) {
+    navigate(MyJogbo(isDeletedDialogNeed), navOptions)
 }
 
 fun NavController.navigateMyStore(type: String) {
@@ -40,6 +43,7 @@ fun NavController.navigateNewJogbo(isSharedJogbo: Boolean = false, favoriteId: L
 fun NavGraphBuilder.myNavGraph(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
+    navigateToMy: () -> Unit,
     navigateToMyJogbo: (Boolean) -> Unit,
     navigateToMyStore: (String) -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
@@ -47,7 +51,8 @@ fun NavGraphBuilder.myNavGraph(
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    isSharedJogbo: Boolean
+    isSharedJogbo: Boolean,
+    resetDeepLinkState: () -> Unit
 ) {
     composable<My> {
         MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
@@ -56,10 +61,12 @@ fun NavGraphBuilder.myNavGraph(
         val isDeletedDialogNeed = backStackEntry.toRoute<MyJogbo>()
 
         MyJogboRoute(
-            isDeletedDialogNeed.isDeletedDialogNeed,
-            navigateUp,
-            navigateToJogboDetail,
-            navigateToNewJogbo
+            isDeletedDialogNeed = isDeletedDialogNeed.isDeletedDialogNeed,
+            navigateUp = navigateUp,
+            navigateToMy = navigateToMy,
+            navigateToJogboDetail = navigateToJogboDetail,
+            navigateToNewJogbo = navigateToNewJogbo,
+            resetDeepLinkState = resetDeepLinkState
         )
     }
     composable<MyStore> { backStackEntry ->

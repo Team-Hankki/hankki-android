@@ -88,7 +88,8 @@ private const val SNACK_BAR_DURATION = 2000L
 internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
     viewModel: MainViewModel = hiltViewModel(),
-    isDeepLink: Boolean = false
+    isDeepLink: Boolean = false,
+    resetDeepLinkState: () -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
     val tracker = LocalTracker.current
@@ -152,7 +153,8 @@ internal fun MainScreen(
                     navigator = navigator,
                     isConnected = isConnected,
                     whiteSnackBarWithButtonHostState = whiteSnackBarWithButtonHostState,
-                    isDeepLink = isDeepLink
+                    isDeepLink = isDeepLink,
+                    resetDeepLinkState = resetDeepLinkState
                 )
             },
             bottomBar = {
@@ -208,7 +210,8 @@ private fun MainContent(
     navigator: MainNavigator,
     isConnected: Boolean,
     whiteSnackBarWithButtonHostState: SnackbarHostState,
-    isDeepLink: Boolean
+    isDeepLink: Boolean,
+    resetDeepLinkState: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -302,6 +305,7 @@ private fun MainContent(
             myNavGraph(
                 paddingValues = paddingValue,
                 navigateUp = navigator::navigateUpIfNotHome,
+                navigateToMy = navigator::navigateToMy,
                 navigateToMyJogbo = navigator::navigateToMyJogbo,
                 navigateToMyStore = navigator::navigateToMyStore,
                 navigateToJogboDetail = navigator::navigateToMyJogboDetail,
@@ -317,7 +321,8 @@ private fun MainContent(
                     navigator.navigateToHome(navOptions)
                 },
                 isSharedJogbo = isDeepLink,
-                navigateToNewSharedJogbo = navigator::navigateToNewSharedJogbo
+                navigateToNewSharedJogbo = navigator::navigateToNewSharedJogbo,
+                resetDeepLinkState = resetDeepLinkState
             )
             loginNavGraph(
                 navigateToHome = {
