@@ -79,7 +79,6 @@ fun MyJogboDetailRoute(
 
     LaunchedEffect(true) {
         myJogboDetailViewModel.getJogboDetail(favoriteId)
-        myJogboDetailViewModel.getUserName()
         myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
     }
 
@@ -90,6 +89,7 @@ fun MyJogboDetailRoute(
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                     is MyJogboDetailSideEffect.NavigateToMyJogbo -> navigateToMyJogbo()
+                    is MyJogboDetailSideEffect.ShowLoginDialog -> myJogboDetailViewModel.updateLoginDialog()
                 }
             }
     }

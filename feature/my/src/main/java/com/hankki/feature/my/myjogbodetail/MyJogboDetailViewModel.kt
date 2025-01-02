@@ -1,6 +1,7 @@
 package com.hankki.feature.my.myjogbodetail
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
@@ -39,6 +40,9 @@ class MyJogboDetailViewModel @Inject constructor(
             myRepository.getJogboDetail(favoriteId)
                 .onSuccess { jogbo ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
+                        userInformation = UserInformationEntity(
+                            nickname = jogbo.nickname
+                        ),
                         myStoreItems = jogbo,
                         uiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(
                             jogbo.stores.toPersistentList()
@@ -54,6 +58,9 @@ class MyJogboDetailViewModel @Inject constructor(
             myRepository.getSharedJogboDetail(favoriteId)
                 .onSuccess { jogbo ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
+                        userInformation = UserInformationEntity(
+                            nickname = jogbo.nickname
+                        ),
                         myStoreItems = jogbo,
                         uiState = if (jogbo.stores.isEmpty()) EmptyUiState.Empty else EmptyUiState.Success(
                             jogbo.stores.toPersistentList()
@@ -112,20 +119,6 @@ class MyJogboDetailViewModel @Inject constructor(
         }
     }
 
-    fun getUserName() {
-        viewModelScope.launch {
-            myRepository.getUserInformation()
-                .onSuccess { userInformation ->
-                    _myJogboDetailState.value = _myJogboDetailState.value.copy(
-                        userInformation = UserInformationEntity(
-                            nickname = userInformation.nickname
-                        )
-                    )
-                }
-                .onFailure(Timber::e)
-        }
-    }
-
     fun shareJogbo(
         context: Context,
         image: String,
@@ -169,6 +162,12 @@ class MyJogboDetailViewModel @Inject constructor(
                 }
                 .onFailure(Timber::e)
         }
+    }
+
+    fun updateLoginDialog() {
+        _myJogboDetailState.value = _myJogboDetailState.value.copy(
+            loginDialogState = !_myJogboDetailState.value.loginDialogState,
+        )
     }
 
     companion object {

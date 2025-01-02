@@ -14,6 +14,7 @@ data class MyJogboDetailState(
     val myStoreItems: MyJogboDetailEntity = MyJogboDetailEntity(
         title = "",
         chips = persistentListOf("", ""),
+        nickname = "",
         stores = persistentListOf(
             Store(0, "", "", "", 0, 0)
         )
@@ -24,4 +25,5 @@ data class MyJogboDetailState(
     var noExistsDialogState: Boolean = false,
     var selectedStoreId: Long = 0,
     var isJogboOwner: Boolean = true,
+    val loginDialogState: Boolean = false,
 )
