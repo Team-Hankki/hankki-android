@@ -85,9 +85,9 @@ class MyJogboViewModel @Inject constructor(
         }
     }
 
-    fun updateDeleteDialogState(state: Boolean) {
+    fun updateDeleteDialogState() {
         _myJogboState.value = _myJogboState.value.copy(
-            deleteDialogState = state,
+            deleteDialogState = !_myJogboState.value.deleteDialogState,
             buttonEnabled = true
         )
     }

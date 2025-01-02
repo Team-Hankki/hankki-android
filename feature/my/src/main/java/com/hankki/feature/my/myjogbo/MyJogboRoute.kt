@@ -110,7 +110,7 @@ fun MyJogboScreen(
     updateJogboSelectedState: (Int, Boolean) -> Unit,
     resetEditModeState: () -> Unit,
     deleteDialogState: Boolean,
-    updateDeleteDialogState: (Boolean) -> Unit,
+    updateDeleteDialogState: () -> Unit,
     deleteSelectedJogbo: () -> Unit,
     buttonEnabledState: Boolean,
     noExistsDialogState: Boolean,
@@ -123,7 +123,7 @@ fun MyJogboScreen(
             title = stringResource(R.string.ask_delete_jogbo),
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
-            onNegativeButtonClicked = { updateDeleteDialogState(false) },
+            onNegativeButtonClicked = updateDeleteDialogState,
             onPositiveButtonClicked = { if (buttonEnabledState) deleteSelectedJogbo() }
         )
     }
@@ -176,7 +176,7 @@ fun MyJogboScreen(
                         .run {
                             if (editModeState && isSelectedJogboExists) {
                                 noRippleClickable {
-                                    updateDeleteDialogState(true)
+                                    updateDeleteDialogState()
                                 }
                             } else if (!editModeState) {
                                 noRippleClickable(updateEditModeState)

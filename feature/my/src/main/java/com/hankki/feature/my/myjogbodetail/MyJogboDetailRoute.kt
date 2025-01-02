@@ -89,7 +89,6 @@ fun MyJogboDetailRoute(
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                     is MyJogboDetailSideEffect.NavigateToMyJogbo -> navigateToMyJogbo()
-                    is MyJogboDetailSideEffect.ShowLoginDialog -> myJogboDetailViewModel.updateLoginDialog()
                 }
             }
     }
@@ -102,8 +101,8 @@ fun MyJogboDetailRoute(
         deleteDialogState = state.deleteDialogState,
         shareDialogState = state.shareDialogState,
         userNickname = state.userInformation.nickname,
-        updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(state.shareDialogState) },
-        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialogState(state.deleteDialogState) },
+        updateShareDialogState = myJogboDetailViewModel::updateShareDialogState,
+        updateDeleteDialogState = myJogboDetailViewModel::updateDeleteDialogState,
         deleteSelectedStore = { storeId ->
             myJogboDetailViewModel.deleteSelectedStore(
                 favoriteId,

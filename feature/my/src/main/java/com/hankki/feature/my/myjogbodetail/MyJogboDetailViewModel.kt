@@ -1,7 +1,6 @@
 package com.hankki.feature.my.myjogbodetail
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
@@ -78,24 +77,25 @@ class MyJogboDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateDeleteDialogState(state: Boolean) {
+    fun updateDeleteDialogState() {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            deleteDialogState = !state
+            deleteDialogState = !_myJogboDetailState.value.deleteDialogState
         )
     }
 
-    fun updateShareDialogState(state: Boolean) {
+    fun updateShareDialogState() {
         _myJogboDetailState.value = _myJogboDetailState.value.copy(
-            shareDialogState = !state
+            shareDialogState = !_myJogboDetailState.value.shareDialogState
         )
     }
 
     fun deleteSelectedStore(favoriteId: Long, storeId: Long) {
         viewModelScope.launch {
             myRepository.deleteJogboStore(favoriteId, storeId)
-                .onSuccess { jogbo ->
-                    updateDeleteDialogState(true)
+                .onSuccess {
+                    updateDeleteDialogState()
                     getJogboDetail(favoriteId)
+                    getSharedJogboDetail(favoriteId)
                 }
                 .onFailure(Timber::e)
         }
