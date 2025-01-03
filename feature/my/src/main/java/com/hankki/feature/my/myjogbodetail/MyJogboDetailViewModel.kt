@@ -56,6 +56,7 @@ class MyJogboDetailViewModel @Inject constructor(
 
     fun getSharedJogboDetail(favoriteId: Long) {
         viewModelScope.launch {
+            val isLogined = tokenRepository.getAccessToken().isNotEmpty()
             myRepository.getSharedJogboDetail(favoriteId)
                 .onSuccess { jogbo ->
                     _myJogboDetailState.value = _myJogboDetailState.value.copy(
@@ -67,17 +68,18 @@ class MyJogboDetailViewModel @Inject constructor(
                             jogbo.stores.toPersistentList()
                         )
                     )
-                    val isLogined = tokenRepository.getAccessToken().isNotEmpty()
-                    if (!isLogined) {
-                        _mySideEffect.emit(MyJogboDetailSideEffect.ShowLoginDialog)
-                    }
+                    if (!isLogined) _mySideEffect.emit(MyJogboDetailSideEffect.ShowLoginDialog)
                 }
                 .onFailure { error ->
                     _myJogboDetailState.value =
                         _myJogboDetailState.value.copy(uiState = EmptyUiState.Failure)
 
                     if (error is HttpException && error.code() == DO_NOT_EXISTS_ERROR) {
-                        _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToMyJogbo)
+                        if (!isLogined) {
+                            _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToLogin) //삭제된 족보면서 로그인 하지 않음 -> 로그인에서 다이얼로그
+                        } else {
+                            _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToMyJogbo)
+                        }
                     }
                 }
         }

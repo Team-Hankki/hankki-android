@@ -68,7 +68,7 @@ fun MyJogboDetailRoute(
     navigateToHome: () -> Unit,
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     navigateToMyJogbo: (Boolean) -> Unit,
-    navigateToLogin: () -> Unit,
+    navigateToLogin: (Boolean) -> Unit,
     isSharedJogbo: Boolean = false,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
@@ -92,6 +92,7 @@ fun MyJogboDetailRoute(
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
                     is MyJogboDetailSideEffect.NavigateToMyJogbo -> navigateToMyJogbo(true)
                     is MyJogboDetailSideEffect.ShowLoginDialog -> myJogboDetailViewModel.updateLoginDialog()
+                    is MyJogboDetailSideEffect.NavigateToLogin -> navigateToLogin(true)
                 }
             }
     }
@@ -150,7 +151,7 @@ fun MyJogboDetailScreen(
     isJogboOwner: Boolean,
     loginDialogState: Boolean,
     updateLoginDialogState: () -> Unit,
-    navigateToLogin: () -> Unit
+    navigateToLogin: (Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
@@ -187,7 +188,7 @@ fun MyJogboDetailScreen(
             buttonTitle = stringResource(R.string.login),
             onConfirmation = {
                 updateLoginDialogState()
-                navigateToLogin()
+                navigateToLogin(false)
             }
         )
     }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +22,9 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val tokenRepository: TokenRepository
 ) : ViewModel() {
+    private val _loginState = MutableStateFlow(LoginState())
+    val loginState: StateFlow<LoginState>
+        get() = _loginState.asStateFlow()
 
     private val _loginSideEffects = MutableSharedFlow<LoginSideEffect>()
     val loginSideEffects: SharedFlow<LoginSideEffect>
@@ -87,6 +91,12 @@ class LoginViewModel @Inject constructor(
             _loginSideEffects.emit(LoginSideEffect.LoginError(errorMessage))
             setButtonEnabled(true)
         }
+    }
+
+    fun updateLoginDialog() {
+        _loginState.value = _loginState.value.copy(
+            loginDialogState = !_loginState.value.loginDialogState,
+        )
     }
 
     companion object {

@@ -51,7 +51,7 @@ fun NavGraphBuilder.myNavGraph(
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    navigateToLogin: () -> Unit,
+    navigateToLogin: (Boolean) -> Unit,
     isSharedJogbo: Boolean,
     resetDeepLinkState: () -> Unit
 ) {

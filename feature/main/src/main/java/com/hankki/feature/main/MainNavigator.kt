@@ -76,14 +76,14 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateToLogin(navOptions: NavOptions? = null) {
+    fun navigateToLogin(isLoginDialogNeed: Boolean, navOptions: NavOptions? = null) {
         val options = navOptions ?: navOptions {
             popUpTo(navController.graph.startDestinationId) {
                 inclusive = false
             }
             launchSingleTop = true
         }
-        navController.navigate(Login, options)
+        navController.navigate(Login(isLoginDialogNeed), options)
     }
 
     fun navigateToOnboarding(navOptions: NavOptions) {

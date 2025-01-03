@@ -243,6 +243,7 @@ private fun MainContent(
                         launchSingleTop = true
                     }
                     navigator.navigateToLogin(
+                        isLoginDialogNeed = false,
                         navOptions = navOptions
                     )
                 },
