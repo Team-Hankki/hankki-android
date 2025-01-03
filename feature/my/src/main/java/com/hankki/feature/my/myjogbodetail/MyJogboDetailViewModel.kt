@@ -76,7 +76,7 @@ class MyJogboDetailViewModel @Inject constructor(
 
                     if (error is HttpException && error.code() == DO_NOT_EXISTS_ERROR) {
                         if (!isLogined) {
-                            _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToLogin) //삭제된 족보면서 로그인 하지 않음 -> 로그인에서 다이얼로그
+                            _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToLogin)
                         } else {
                             _mySideEffect.emit(MyJogboDetailSideEffect.NavigateToMyJogbo)
                         }
