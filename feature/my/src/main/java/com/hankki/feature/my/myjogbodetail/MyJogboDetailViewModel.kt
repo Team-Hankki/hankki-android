@@ -69,6 +69,7 @@ class MyJogboDetailViewModel @Inject constructor(
                         )
                     )
                     if (!isLogined) _mySideEffect.emit(MyJogboDetailSideEffect.ShowLoginDialog)
+                    else checkIsJogboOwner(favoriteId)
                 }
                 .onFailure { error ->
                     _myJogboDetailState.value =

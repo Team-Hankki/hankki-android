@@ -80,7 +80,6 @@ fun MyJogboDetailRoute(
             myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
         else {
             myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
-            myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
             myJogboDetailViewModel.getJogboDetail(favoriteId)
         }
     }
@@ -352,7 +351,7 @@ fun MyJogboDetailScreen(
                 }
             }
 
-            if (isSharedJogbo && !isJogboOwner)
+            if (!isJogboOwner) // 공유된 족보가 내거라면.. 버튼 x
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
