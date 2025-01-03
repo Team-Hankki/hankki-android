@@ -1,11 +1,27 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.hankki.build_logic.setNamespace
 
 plugins {
     alias(libs.plugins.hankki.feature)
 }
 
+val properties = gradleLocalProperties(rootDir, providers)
+
 android {
     setNamespace("feature.main")
+
+    defaultConfig {
+        buildConfigField(
+            "String",
+            "KAKAO_NATIVE_APP_KEY",
+            properties.getProperty("kakaoNativeAppKey"),
+        )
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties.getProperty("kakaoNative.AppKey")
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

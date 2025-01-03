@@ -74,6 +74,30 @@ class NewJogboViewModel @Inject constructor(
         }
     }
 
+    fun createSharedJogbo(favoriteId: Long) {
+        viewModelScope.launch {
+            _newJogboState.value = _newJogboState.value.copy(
+                buttonEnabled = false
+            )
+            myRepository.createSharedJogbo(
+                favoriteId,
+                NewJogboEntity(
+                    title = _newJogboState.value.title,
+                    details = _newJogboState.value.tags.split("#").filter { it.isNotBlank() }
+                        .map { "#$it" }
+                )
+            ).onSuccess {
+                _newJogboSideEffect.emit(NewJogboSideEffect.NavigateToNewJogbo)
+            }.onFailure { error ->
+                Timber.e(error)
+
+                if (error is HttpException && error.code() == DUPLICATE_NAME_ERROR) {
+                    _newJogboSideEffect.emit(NewJogboSideEffect.ShowErrorDialog)
+                }
+            }
+        }
+    }
+
     fun updateErrorDialog(state: Boolean) {
         _newJogboState.value = _newJogboState.value.copy(
             errorDialogState = !state,

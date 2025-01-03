@@ -55,8 +55,8 @@ import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBar
 import com.hankki.core.designsystem.component.snackbar.HankkiTextSnackBarWithButton
 import com.hankki.core.designsystem.component.snackbar.HankkiWhiteSnackBarWithButton
-import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.event.LocalWhiteSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray400
@@ -88,6 +88,8 @@ private const val SNACK_BAR_DURATION = 2000L
 internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
     viewModel: MainViewModel = hiltViewModel(),
+    isDeepLink: Boolean = false,
+    resetDeepLinkState: () -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
     val tracker = LocalTracker.current
@@ -151,6 +153,8 @@ internal fun MainScreen(
                     navigator = navigator,
                     isConnected = isConnected,
                     whiteSnackBarWithButtonHostState = whiteSnackBarWithButtonHostState,
+                    isDeepLink = isDeepLink,
+                    resetDeepLinkState = resetDeepLinkState
                 )
             },
             bottomBar = {
@@ -206,6 +210,8 @@ private fun MainContent(
     navigator: MainNavigator,
     isConnected: Boolean,
     whiteSnackBarWithButtonHostState: SnackbarHostState,
+    isDeepLink: Boolean,
+    resetDeepLinkState: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -237,6 +243,7 @@ private fun MainContent(
                         launchSingleTop = true
                     }
                     navigator.navigateToLogin(
+                        isLoginDialogNeed = false,
                         navOptions = navOptions
                     )
                 },
@@ -299,6 +306,7 @@ private fun MainContent(
             myNavGraph(
                 paddingValues = paddingValue,
                 navigateUp = navigator::navigateUpIfNotHome,
+                navigateToMy = navigator::navigateToMy,
                 navigateToMyJogbo = navigator::navigateToMyJogbo,
                 navigateToMyStore = navigator::navigateToMyStore,
                 navigateToJogboDetail = navigator::navigateToMyJogboDetail,
@@ -312,7 +320,11 @@ private fun MainContent(
                         launchSingleTop = true
                     }
                     navigator.navigateToHome(navOptions)
-                }
+                },
+                navigateToLogin = navigator::navigateToLogin,
+                isSharedJogbo = isDeepLink,
+                navigateToNewSharedJogbo = navigator::navigateToNewSharedJogbo,
+                resetDeepLinkState = resetDeepLinkState
             )
             loginNavGraph(
                 navigateToHome = {

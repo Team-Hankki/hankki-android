@@ -1,7 +1,9 @@
 package com.hankki.data.my.di
 
 import com.hankki.core.network.JWT
+import com.hankki.core.network.NoToken
 import com.hankki.data.my.service.MyService
+import com.hankki.data.my.service.NoTokenMyService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,4 +18,9 @@ object ServiceModule {
     @Singleton
     fun providesMyService(@JWT retrofit: Retrofit): MyService =
         retrofit.create(MyService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNoTokenMyService(@NoToken retrofit: Retrofit): NoTokenMyService =
+        retrofit.create(NoTokenMyService::class.java)
 }

@@ -4,5 +4,5 @@ data class NewJogboState(
     val title : String = "",
     val tags : String = "",
     val buttonEnabled : Boolean = false,
-    var errorDialogState: Boolean = false
+    val errorDialogState: Boolean = false
 )

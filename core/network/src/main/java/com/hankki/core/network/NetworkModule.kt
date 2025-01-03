@@ -74,7 +74,7 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    @REISSUE
+    @NoToken
     fun provideOkHttpClient(
         loggingInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
@@ -95,9 +95,9 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    @REISSUE
+    @NoToken
     fun provideReissueRetrofit(
-        @REISSUE client: OkHttpClient,
+        @NoToken client: OkHttpClient,
         factory: Converter.Factory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

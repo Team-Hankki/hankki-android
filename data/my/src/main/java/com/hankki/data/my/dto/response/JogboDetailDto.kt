@@ -11,6 +11,8 @@ data class JogboDetailDto(
     val title: String,
     @SerialName("details")
     val details: List<String>,
+    @SerialName("nickname")
+    val nickname: String,
     @SerialName("stores")
     val stores: List<Jogbo>,
 ) {
@@ -34,6 +36,7 @@ data class JogboDetailDto(
 fun JogboDetailDto.toEntity() = MyJogboDetailEntity(
     title = this.title,
     chips = this.details,
+    nickname = this.nickname,
     stores = stores.map {
         Store(
             id = it.id,

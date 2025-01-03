@@ -161,6 +161,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
 
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref="kakao"}
+kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref="kakao"}
 
 amplitude = { group = "com.amplitude", name = "analytics-android", version.ref="amplitudeVersion" }
 

@@ -4,6 +4,7 @@ import com.hankki.core.network.BaseResponse
 import com.hankki.core.network.CreatedBaseResponse
 import com.hankki.data.my.dto.request.JogbosRequestDto
 import com.hankki.data.my.dto.request.NewJogboDto
+import com.hankki.data.my.dto.response.IsJogboOwnerResponseDto
 import com.hankki.data.my.dto.response.JogboDetailDto
 import com.hankki.data.my.dto.response.LikedStoreResponseDto
 import com.hankki.data.my.dto.response.MyJogboDto
@@ -65,4 +66,15 @@ interface MyService {
     suspend fun deleteLikeStore(
         @Path("id") storeId: Long,
     ): BaseResponse<LikedStoreResponseDto>
+
+    @GET("/api/v1/favorites/shared/{favoriteId}/ownership")
+    suspend fun getIsJogboOwner(
+        @Path("favoriteId") favoriteId: Long,
+    ): BaseResponse<IsJogboOwnerResponseDto>
+
+    @POST("/api/v1/favorites/shared/{favoriteId}")
+    suspend fun postSharedJogbo(
+        @Path("favoriteId") favoriteId: Long,
+        @Body body: NewJogboDto,
+        ): CreatedBaseResponse
 }

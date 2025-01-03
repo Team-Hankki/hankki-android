@@ -14,6 +14,21 @@ android {
         load(rootProject.file("local.properties").inputStream())
     }
 
+    defaultConfig{
+        buildConfigField(
+            "String",
+            "KAKAO_NATIVE_APP_KEY",
+            properties.getProperty("kakaoNativeAppKey"),
+        )
+        buildConfigField(
+            "String",
+            "KAKAO_SHARE_DEFAULT_IMAGE",
+            properties.getProperty("kakaoShare.defaultImage"),
+        )
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties.getProperty("kakaoNative.AppKey")
+        manifestPlaceholders["KAKAO_SHARE_DEFAULT_IMAGE"] = properties.getProperty("kakaoShare.defaultImage")
+    }
+
     buildTypes {
         debug {
             val devAmplitude = properties["amplitudeDevKey"] as? String ?: ""

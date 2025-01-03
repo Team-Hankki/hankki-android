@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginRoute(
+    isLoginDialogNeed: Boolean,
     navigateToHome: () -> Unit,
     navigateToOnboarding: () -> Unit,
 ) {
@@ -43,6 +45,13 @@ fun LoginRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val isButtonEnabled by viewModel.isButtonEnabled.collectAsStateWithLifecycle()
+    val state by viewModel.loginState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(true) {
+        if (isLoginDialogNeed) {
+            viewModel.updateLoginDialog()
+        }
+    }
 
     LaunchedEffect(viewModel.loginSideEffects, lifecycleOwner) {
         viewModel.loginSideEffects
@@ -82,7 +91,9 @@ fun LoginRoute(
             viewModel.startKakaoLogin(
                 isKakaoTalkAvailable = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
             )
-        }
+        },
+        loginDialogState = state.loginDialogState,
+        updateLoginDialogState = viewModel::updateLoginDialog
     )
 }
 
@@ -90,8 +101,21 @@ fun LoginRoute(
 @Composable
 fun LoginScreen(
     isButtonEnabled: Boolean,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    loginDialogState: Boolean,
+    updateLoginDialogState: () -> Unit
 ) {
+
+    if (loginDialogState) {
+        SingleButtonDialog(
+            title = stringResource(R.string.deleted_jogbo),
+            buttonTitle = stringResource(R.string.check),
+            onConfirmation = {
+                updateLoginDialogState()
+            }
+        )
+    }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -169,6 +193,11 @@ private fun startKakaoWebLogin(
 @Preview
 fun LoginPreview() {
     HankkijogboTheme {
-        LoginScreen(isButtonEnabled = true) { }
+        LoginScreen(
+            isButtonEnabled = true,
+            onLoginClick = {},
+            loginDialogState = false,
+            updateLoginDialogState = {},
+        )
     }
 }
