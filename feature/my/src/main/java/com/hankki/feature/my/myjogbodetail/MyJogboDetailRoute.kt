@@ -68,6 +68,7 @@ fun MyJogboDetailRoute(
     navigateToHome: () -> Unit,
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     navigateToMyJogbo: (Boolean) -> Unit,
+    navigateToLogin: () -> Unit,
     isSharedJogbo: Boolean = false,
     myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
@@ -75,12 +76,12 @@ fun MyJogboDetailRoute(
     val state by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(isSharedJogbo) {
-        myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
-    }
-
-    LaunchedEffect(true) {
-        myJogboDetailViewModel.getJogboDetail(favoriteId)
-        myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
+        if (isSharedJogbo)
+            myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
+        else {
+            myJogboDetailViewModel.getJogboDetail(favoriteId)
+            myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
+        }
     }
 
     LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
@@ -121,7 +122,8 @@ fun MyJogboDetailRoute(
         favoriteId = favoriteId,
         isJogboOwner = state.isJogboOwner,
         loginDialogState = state.loginDialogState,
-        updateLoginDialogState = myJogboDetailViewModel::updateLoginDialog
+        updateLoginDialogState = myJogboDetailViewModel::updateLoginDialog,
+        navigateToLogin = navigateToLogin
     )
 }
 
@@ -147,7 +149,8 @@ fun MyJogboDetailScreen(
     favoriteId: Long,
     isJogboOwner: Boolean,
     loginDialogState: Boolean,
-    updateLoginDialogState: () -> Unit
+    updateLoginDialogState: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
@@ -182,7 +185,10 @@ fun MyJogboDetailScreen(
         SingleButtonDialog(
             title = stringResource(R.string.need_login),
             buttonTitle = stringResource(R.string.login),
-            onConfirmation = updateLoginDialogState
+            onConfirmation = {
+                updateLoginDialogState()
+                navigateToLogin()
+            }
         )
     }
 
@@ -384,7 +390,8 @@ fun MyJogboDetailScreenPreview() {
             navigateToHome = {},
             navigateToNewSharedJogbo = { _, _ -> },
             navigateToMyJogbo = {},
-            isSharedJogbo = false
+            isSharedJogbo = false,
+            navigateToLogin = {}
         )
     }
 }

@@ -320,6 +320,7 @@ private fun MainContent(
                     }
                     navigator.navigateToHome(navOptions)
                 },
+                navigateToLogin = navigator::navigateToLogin,
                 isSharedJogbo = isDeepLink,
                 navigateToNewSharedJogbo = navigator::navigateToNewSharedJogbo,
                 resetDeepLinkState = resetDeepLinkState

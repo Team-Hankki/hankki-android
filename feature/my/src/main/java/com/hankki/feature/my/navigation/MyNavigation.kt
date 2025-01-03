@@ -51,6 +51,7 @@ fun NavGraphBuilder.myNavGraph(
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
+    navigateToLogin: () -> Unit,
     isSharedJogbo: Boolean,
     resetDeepLinkState: () -> Unit
 ) {
@@ -93,7 +94,8 @@ fun NavGraphBuilder.myNavGraph(
             navigateToHome = navigateToHome,
             navigateToNewSharedJogbo = navigateToNewSharedJogbo,
             navigateToMyJogbo = navigateToMyJogbo,
-            isSharedJogbo = isSharedJogbo
+            isSharedJogbo = isSharedJogbo,
+            navigateToLogin = navigateToLogin
         )
     }
     composable<NewJogbo> { backStackEntry ->
