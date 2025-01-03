@@ -79,8 +79,9 @@ fun MyJogboDetailRoute(
         if (isSharedJogbo)
             myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
         else {
-            myJogboDetailViewModel.getJogboDetail(favoriteId)
+            myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
             myJogboDetailViewModel.checkIsJogboOwner(favoriteId)
+            myJogboDetailViewModel.getJogboDetail(favoriteId)
         }
     }
 
