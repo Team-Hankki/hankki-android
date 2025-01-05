@@ -137,10 +137,10 @@ class MyJogboDetailViewModel @Inject constructor(
     ) {
         val templateId = 115383L
         val templateArgs = mapOf(
-            "IMAGE_URL" to image,
-            "NAME" to title,
-            "SENDER" to senderName,
-            "FAVORITE_ID" to favoriteId.toString(),
+            IMAGE_URL to image,
+            NAME to title,
+            SENDER to senderName,
+            FAVORITE_ID to favoriteId.toString(),
         )
 
         if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
@@ -181,5 +181,9 @@ class MyJogboDetailViewModel @Inject constructor(
 
     companion object {
         private const val DO_NOT_EXISTS_ERROR: Int = 404
+        private const val IMAGE_URL: String = "IMAGE_URL"
+        private const val NAME: String = "NAME"
+        private const val SENDER: String = "SENDER"
+        private const val FAVORITE_ID: String = "FAVORITE_ID"
     }
 }
