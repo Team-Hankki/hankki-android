@@ -147,7 +147,7 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 7.dp)
                         .size(40.dp)
-                        .noRippleClickable(if (editModeState) resetEditModeState else navigateToMy),//navigateUp),
+                        .noRippleClickable(if (editModeState) resetEditModeState else navigateToMy)
                 )
             },
             content = {
