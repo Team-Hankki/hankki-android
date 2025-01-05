@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 data class IsJogboOwnerResponseDto(
     @SerialName("isOwner")
     val isJogboOwner: Boolean
-)
-
-fun IsJogboOwnerResponseDto.toEntity() = IsJogboOwnerEntity(
-    isJogboOwner = this.isJogboOwner
-)
+) {
+    fun toEntity() = IsJogboOwnerEntity(
+        isJogboOwner = this.isJogboOwner
+    )
+}
