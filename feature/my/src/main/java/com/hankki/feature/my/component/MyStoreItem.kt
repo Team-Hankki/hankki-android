@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.item.StoreItem
 import com.hankki.core.designsystem.theme.HankkijogboTheme
+import com.hankki.feature.my.R
 
 @Composable
 fun MyStoreItem(
@@ -41,7 +42,7 @@ fun MyStoreItem(
         if (isIconUsed) {
             Image(
                 imageVector = ImageVector.vectorResource(
-                    id = if (isIconSelected) com.hankki.feature.my.R.drawable.ic_like_heart_filled else com.hankki.feature.my.R.drawable.ic_like_heart_empty
+                    id = if (isIconSelected) com.hankki.core.designsystem.R.drawable.ic_like_heart_filled else com.hankki.feature.my.R.drawable.ic_like_heart_empty
                 ),
                 contentDescription = "좋아요 버튼",
                 modifier = Modifier

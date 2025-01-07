@@ -98,7 +98,7 @@ fun StoreItem(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_heart_filled),
+                    painter = painterResource(id = R.drawable.ic_like_heart_filled),
                     contentDescription = "heart icon",
                     modifier = Modifier.size(16.dp),
                     tint = Color.Unspecified
@@ -145,7 +145,7 @@ fun StoreItemPreview() {
         ) {
             // Icon Button
             Icon(
-                painter = painterResource(id = R.drawable.ic_heart_filled),
+                painter = painterResource(id = R.drawable.ic_like_heart_filled),
                 contentDescription = "plus button",
                 modifier = Modifier.noRippleClickable(onClick = {}),
                 tint = Color.Unspecified
