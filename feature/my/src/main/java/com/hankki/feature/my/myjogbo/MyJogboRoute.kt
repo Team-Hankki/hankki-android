@@ -86,11 +86,12 @@ fun MyJogboRoute(
         updateNoExistsDialogState = myJogboViewModel::updateNoExistsDialog
     )
 
-    BackOnPressed(
-        editMode = state.editModeState,
-        resetJogboState = myJogboViewModel::resetEditModeState,
-        navigateUp = navigateUp,
-    )
+    BackHandler(onBack = {
+        if (state.editModeState)
+            myJogboViewModel.resetEditModeState()
+        else
+            navigateToMy()
+    })
 }
 
 @Composable
@@ -230,20 +231,6 @@ fun MyJogboScreen(
             }
         }
     }
-}
-
-@Composable
-fun BackOnPressed(
-    editMode: Boolean = false,
-    resetJogboState: () -> Unit,
-    navigateUp: () -> Unit,
-) {
-    BackHandler(onBack = {
-        if (editMode)
-            resetJogboState()
-        else
-            navigateUp()
-    })
 }
 
 @Composable

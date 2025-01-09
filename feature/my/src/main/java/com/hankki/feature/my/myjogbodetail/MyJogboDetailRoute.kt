@@ -1,6 +1,7 @@
 package com.hankki.feature.my.myjogbodetail
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -124,8 +125,11 @@ fun MyJogboDetailRoute(
         isJogboOwner = state.isJogboOwner,
         loginDialogState = state.loginDialogState,
         updateLoginDialogState = myJogboDetailViewModel::updateLoginDialog,
-        navigateToLogin = navigateToLogin
+        navigateToLogin = navigateToLogin,
+        navigateToMyJogbo = navigateToMyJogbo
     )
+
+    BackHandler(onBack = { if (isSharedJogbo) navigateToMyJogbo(false) else navigateUp() })
 }
 
 @Composable
@@ -151,7 +155,8 @@ fun MyJogboDetailScreen(
     isJogboOwner: Boolean,
     loginDialogState: Boolean,
     updateLoginDialogState: () -> Unit,
-    navigateToLogin: (Boolean) -> Unit
+    navigateToLogin: (Boolean) -> Unit,
+    navigateToMyJogbo: (Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
@@ -209,12 +214,12 @@ fun MyJogboDetailScreen(
                     modifier = Modifier
                         .padding(start = 7.dp)
                         .size(40.dp)
-                        .noRippleClickable(onClick = navigateUp),
+                        .noRippleClickable(onClick = { if (isSharedJogbo) navigateToMyJogbo(false) else navigateUp() }),
                 )
             },
             content = {
                 Text(
-                    text = if (isSharedJogbo) stringResource(R.string.shared_jogbo) else stringResource(
+                    text = if (isSharedJogbo && !isJogboOwner) stringResource(R.string.shared_jogbo) else stringResource(
                         R.string.my_jogbo
                     ),
                     style = HankkiTheme.typography.sub3,
@@ -393,7 +398,7 @@ fun MyJogboDetailScreenPreview() {
             navigateToNewSharedJogbo = { _, _ -> },
             navigateToMyJogbo = {},
             isSharedJogbo = false,
-            navigateToLogin = {}
+            navigateToLogin = {},
         )
     }
 }
