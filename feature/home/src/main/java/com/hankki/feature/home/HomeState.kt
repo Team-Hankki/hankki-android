@@ -1,7 +1,6 @@
 package com.hankki.feature.home
 
 import com.hankki.core.common.utill.EmptyUiState
-import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
@@ -21,16 +20,27 @@ data class HomeState(
     val categoryChipState: ChipState = ChipState.Unselected(),
     val categoryChipItems: PersistentList<CategoryChipItem> = persistentListOf(),
     val isCategoryChipOpen: Boolean = false,
-    val priceChipState: ChipState = ChipState.Unselected(),
+    val priceChipState: ChipState = defaultPriceChipState,
     val priceChipItems: PersistentList<ChipItem> = persistentListOf(),
     val isPriceChipOpen: Boolean = false,
-    val sortChipState: ChipState = ChipState.Unselected(),
+    val sortChipState: ChipState = defaultSortChipState,
     val sortChipItems: PersistentList<ChipItem> = persistentListOf(),
     val isSortChipOpen: Boolean = false,
     val isMainBottomSheetOpen: Boolean = true,
     val isMyJogboBottomSheetOpen: Boolean = false,
+    val isFilterBottomSheetOpen: Boolean = false,
     val selectedStoreItem: StoreItemModel? = null,
     val markerItems: PersistentList<PinModel> = persistentListOf(),
     val storeItems: EmptyUiState<PersistentList<StoreItemModel>> = EmptyUiState.Loading,
     val jogboItems: PersistentList<JogboResponseModel> = persistentListOf(),
+)
+
+val defaultPriceChipState = ChipState.Fixed(
+    title = "전체",
+    tag = "ALL"
+)
+
+val defaultSortChipState = ChipState.Fixed(
+    title = "최신순",
+    tag = "LATEST"
 )
