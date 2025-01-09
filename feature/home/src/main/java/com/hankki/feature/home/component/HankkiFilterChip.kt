@@ -25,10 +25,10 @@ import com.hankki.core.designsystem.theme.White
 @Composable
 fun HankkiFilterChip(
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     textStyle: TextStyle = HankkiTheme.typography.suitCaption,
-    onClick: () -> Unit = {},
 ) {
     val (textColor, borderColor, containerColor) = if (isSelected) {
         listOf(Red500, Red500, Red100)
@@ -46,9 +46,7 @@ fun HankkiFilterChip(
             )
             .background(containerColor)
             .padding(horizontal = 12.dp, vertical = 6.dp)
-            .noRippleClickable {
-                onClick()
-            }
+            .noRippleClickable(onClick)
     ) {
         Text(
             text = text,
@@ -63,8 +61,8 @@ fun HankkiFilterChip(
 fun HankkiFilterChipPreview() {
     HankkijogboTheme {
         Column {
-            HankkiFilterChip(text = "최신순", isSelected = true)
-            HankkiFilterChip(text = "가격순", isSelected = false)
+            HankkiFilterChip(text = "최신순", onClick = {}, isSelected = true)
+            HankkiFilterChip(text = "가격순", onClick = {}, isSelected = false)
         }
     }
 }

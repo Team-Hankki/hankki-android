@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
@@ -60,18 +59,20 @@ fun HankkiFilterBottomSheet(
             FilterContent(
                 title = "가격대",
                 filters = priceFilter,
-                tag = nowPriceName.value.tag
-            ) {
-                nowPriceName.value = it
-            }
+                tag = nowPriceName.value.tag,
+                onClick = {
+                    nowPriceName.value = it
+                }
+            )
 
             FilterContent(
                 title = "정렬",
                 filters = sortFilter,
-                tag = nowSortedName.value.tag
-            ) {
-                nowSortedName.value = it
-            }
+                tag = nowSortedName.value.tag,
+                onClick = {
+                    nowSortedName.value = it
+                }
+            )
         }
 
         HorizontalDivider(
@@ -99,8 +100,8 @@ private fun FilterContent(
     title: String,
     filters: ImmutableList<ChipItem>,
     tag: String,
-    modifier: Modifier = Modifier,
     onClick: (ChipItem) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -122,10 +123,9 @@ private fun FilterContent(
                 key(it.tag) {
                     HankkiFilterChip(
                         text = it.name,
-                        isSelected = tag == it.tag
-                    ) {
-                        onClick(it)
-                    }
+                        isSelected = tag == it.tag,
+                        onClick = { onClick(it) }
+                    )
                 }
             }
         }
