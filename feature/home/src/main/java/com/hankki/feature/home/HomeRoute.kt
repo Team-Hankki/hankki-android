@@ -31,7 +31,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
@@ -115,8 +114,6 @@ import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -420,7 +417,8 @@ fun HomeScreen(
 
         HankkiCategoryScrollableTabRow(
             categoryChipItems = categoryChipItems,
-            onClickItem = selectHomeChipItem
+            onClickItem = selectHomeChipItem,
+            isDefaultFilter = sortChipState.tag == defaultSortChipState.tag && priceChipState.tag == defaultPriceChipState.tag,
         ) {
             controlFilterBottomSheetState()
         }

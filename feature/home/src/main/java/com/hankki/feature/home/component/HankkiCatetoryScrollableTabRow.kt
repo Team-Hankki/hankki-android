@@ -1,6 +1,5 @@
 package com.hankki.feature.home.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
@@ -51,6 +51,7 @@ import kotlinx.collections.immutable.PersistentList
 fun HankkiCategoryScrollableTabRow(
     categoryChipItems: PersistentList<CategoryChipItem>,
     onClickItem: (HomeChips, String, tag: String) -> Unit,
+    isDefaultFilter: Boolean = true,
     modifier: Modifier = Modifier,
     onClickFilterButton: () -> Unit,
 ) {
@@ -127,6 +128,7 @@ fun HankkiCategoryScrollableTabRow(
                 )
             }
             FilterButton(
+                isDefaultFilter = isDefaultFilter,
                 modifier = Modifier.align(Alignment.CenterEnd),
                 size = tabRowHeight,
             ) {
@@ -161,6 +163,7 @@ private fun WhiteGradientBox(
 @Composable
 private fun FilterButton(
     size: Dp,
+    isDefaultFilter: Boolean = true,
     modifier: Modifier = Modifier,
     onClickFilterButton: () -> Unit,
 ) {
@@ -180,8 +183,11 @@ private fun FilterButton(
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_filter_btn),
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        if (isDefaultFilter) R.drawable.ic_filter_btn
+                        else R.drawable.ic_filter_btn_orange
+                    ),
                     contentDescription = "reposition user location",
                     modifier = modifier
                         .size(size - 20.dp)
@@ -191,7 +197,8 @@ private fun FilterButton(
                             shape = CircleShape,
                             spotColor = Color.Black.copy(alpha = 0.25f),
                             ambientColor = Color.Black.copy(alpha = 0.25f),
-                        )
+                        ),
+                    tint = Color.Unspecified
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))

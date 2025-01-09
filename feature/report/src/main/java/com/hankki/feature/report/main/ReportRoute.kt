@@ -427,12 +427,14 @@ fun StoreCategoryChips(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             categories.forEach { item ->
-                HankkiChipWithIcon(
-                    iconUrl = item.imageUrl,
-                    title = item.name,
-                    isSelected = item.tag == selectedItem,
-                    onClick = { onClick(item.tag) }
-                )
+                if (item.tag != "ALL") {
+                    HankkiChipWithIcon(
+                        iconUrl = item.imageUrl,
+                        title = item.name,
+                        isSelected = item.tag == selectedItem,
+                        onClick = { onClick(item.tag) }
+                    )
+                }
             }
         }
     }

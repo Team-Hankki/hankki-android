@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
-import com.hankki.domain.home.entity.response.CategoriesEntity
-import com.hankki.domain.home.entity.response.CategoryEntity
 import com.hankki.domain.home.repository.HomeRepository
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.ChipItem
@@ -25,7 +23,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
-import timber.log.Timber.Forest.tag
 import javax.inject.Inject
 
 @HiltViewModel
@@ -133,8 +130,8 @@ class HomeViewModel @Inject constructor(
     private fun clearState() {
         _state.value = _state.value.copy(
             categoryChipState = ChipState.Unselected(),
-            priceChipState = ChipState.Unselected(),
-            sortChipState = ChipState.Unselected(),
+            priceChipState = defaultPriceChipState,
+            sortChipState = defaultSortChipState,
             isMainBottomSheetOpen = true,
             selectedStoreItem = null
         )
@@ -337,12 +334,12 @@ class HomeViewModel @Inject constructor(
                 _state.value.categoryChipState
             },
             priceChipState = if (_state.value.priceChipState is ChipState.Selected) {
-                ChipState.Unselected()
+                defaultPriceChipState
             } else {
                 _state.value.priceChipState
             },
             sortChipState = if (_state.value.sortChipState is ChipState.Selected) {
-                ChipState.Unselected()
+                defaultSortChipState
             } else {
                 _state.value.sortChipState
             }
