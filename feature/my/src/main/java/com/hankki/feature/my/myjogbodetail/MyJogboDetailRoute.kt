@@ -305,19 +305,20 @@ fun MyJogboDetailScreen(
                             }
                         }
 
-                        if (!isSharedJogbo) item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 20.dp, bottom = 30.dp),
-                                contentAlignment = Alignment.TopCenter
-                            ) {
-                                MoveToHomeButton(
+                        if ((isSharedJogbo && isJogboOwner) || !isSharedJogbo)
+                            item {
+                                Box(
                                     modifier = Modifier
-                                        .noRippleClickable(navigateToHome),
-                                )
+                                        .fillMaxSize()
+                                        .padding(top = 20.dp, bottom = 30.dp),
+                                    contentAlignment = Alignment.TopCenter
+                                ) {
+                                    MoveToHomeButton(
+                                        modifier = Modifier
+                                            .noRippleClickable(navigateToHome),
+                                    )
+                                }
                             }
-                        }
                     }
 
                     is EmptyUiState.Empty -> {
