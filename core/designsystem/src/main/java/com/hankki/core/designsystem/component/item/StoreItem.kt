@@ -55,15 +55,15 @@ fun StoreItem(
             .wrapContentHeight()
             .clip(RoundedCornerShape(10.dp))
             .background(White)
-            .padding(vertical = 12.dp)
-            .padding(start = 18.dp, end = 15.dp)
             .then(
                 if (onLongClickItem != null) Modifier.combinedClickable(
                     onClick = { onClickItem(storeId) },
                     onLongClick = { onLongClickItem(storeId) }
                 )
                 else Modifier.noRippleClickable { onClickItem(storeId) }
-            ),
+            )
+            .padding(vertical = 12.dp)
+            .padding(start = 18.dp, end = 15.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
