@@ -15,6 +15,7 @@ import com.hankki.feature.home.navigation.navigateHome
 import com.hankki.feature.login.navigation.Login
 import com.hankki.feature.login.navigation.navigateOnboarding
 import com.hankki.feature.main.splash.navigation.Splash
+import com.hankki.feature.my.navigation.MyJogbo
 import com.hankki.feature.my.navigation.MyJogboDetail
 import com.hankki.feature.my.navigation.navigateMy
 import com.hankki.feature.my.navigation.navigateMyJogbo
@@ -75,14 +76,14 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateToLogin(navOptions: NavOptions? = null) {
+    fun navigateToLogin(isLoginDialogNeed: Boolean, navOptions: NavOptions? = null) {
         val options = navOptions ?: navOptions {
             popUpTo(navController.graph.startDestinationId) {
                 inclusive = false
             }
             launchSingleTop = true
         }
-        navController.navigate(Login, options)
+        navController.navigate(Login(isLoginDialogNeed), options)
     }
 
     fun navigateToOnboarding(navOptions: NavOptions) {
@@ -141,8 +142,22 @@ internal class MainNavigator(
         navController.navigateToUniversitySelection(navOptions)
     }
 
-    fun navigateToMyJogbo() {
-        navController.navigateMyJogbo()
+    fun navigateToMy() {
+        navController.navigateMy(navOptions {
+            popUpTo<MyJogbo> {
+                inclusive = true
+            }
+            launchSingleTop = true
+        })
+    }
+
+    fun navigateToMyJogbo(isDeletedDialogNeed: Boolean) {
+        navController.navigateMyJogbo(isDeletedDialogNeed, navOptions {
+            popUpTo<MyJogboDetail> {
+                inclusive = true
+            }
+            launchSingleTop = true
+        })
     }
 
     fun navigateToMyStore(type: String) {
@@ -160,6 +175,10 @@ internal class MainNavigator(
 
     fun navigateToNewJogbo() {
         navController.navigateNewJogbo()
+    }
+
+    fun navigateToNewSharedJogbo(isSharedJogbo: Boolean, favoriteId: Long) {
+        navController.navigateNewJogbo(isSharedJogbo, favoriteId)
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {

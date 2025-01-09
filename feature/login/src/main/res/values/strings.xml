@@ -5,4 +5,6 @@
     <string name="rice_burden">밥값으로\n부담된 적 없으신가요?</string>
     <string name="under_8000">이제 우리학교 주변\n8000원 이하 식당을 찾아봐요</string>
     <string name="report">식당을 제보하고 다함께\n한끼족보를 만들어가요</string>
+    <string name="deleted_jogbo">생성자에 의해 삭제된 족보입니다</string>
+    <string name="check">확인</string>
 </resources>

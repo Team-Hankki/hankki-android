@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.jakewharton.process.phoenix)
     implementation(libs.retrofit.core)
+    implementation(libs.kakao.share)
 }
 
 

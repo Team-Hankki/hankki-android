@@ -1,12 +1,13 @@
 package com.hankki.feature.my.myjogbodetail
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,10 +36,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.common.BuildConfig.KAKAO_SHARE_DEFAULT_IMAGE
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
+import com.hankki.core.designsystem.component.button.HankkiButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
+import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
@@ -61,14 +66,22 @@ fun MyJogboDetailRoute(
     navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
-    myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel(),
+    navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
+    navigateToMyJogbo: (Boolean) -> Unit,
+    navigateToLogin: (Boolean) -> Unit,
+    isSharedJogbo: Boolean = false,
+    myJogboDetailViewModel: MyJogboDetailViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by myJogboDetailViewModel.myJogboDetailState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(true) {
-        myJogboDetailViewModel.getJogboDetail(favoriteId)
-        myJogboDetailViewModel.getUserName()
+    LaunchedEffect(isSharedJogbo) {
+        if (isSharedJogbo)
+            myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
+        else {
+            myJogboDetailViewModel.getSharedJogboDetail(favoriteId)
+            myJogboDetailViewModel.getJogboDetail(favoriteId)
+        }
     }
 
     LaunchedEffect(myJogboDetailViewModel.mySideEffect, lifecycleOwner) {
@@ -77,6 +90,9 @@ fun MyJogboDetailRoute(
                 when (sideEffect) {
                     is MyJogboDetailSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
                     is MyJogboDetailSideEffect.NavigateToHome -> navigateToHome()
+                    is MyJogboDetailSideEffect.NavigateToMyJogbo -> navigateToMyJogbo(true)
+                    is MyJogboDetailSideEffect.ShowLoginDialog -> myJogboDetailViewModel.updateLoginDialog()
+                    is MyJogboDetailSideEffect.NavigateToLogin -> navigateToLogin(true)
                 }
             }
     }
@@ -89,8 +105,8 @@ fun MyJogboDetailRoute(
         deleteDialogState = state.deleteDialogState,
         shareDialogState = state.shareDialogState,
         userNickname = state.userInformation.nickname,
-        updateShareDialogState = { myJogboDetailViewModel.updateShareDialogState(state.shareDialogState) },
-        updateDeleteDialogState = { myJogboDetailViewModel.updateDeleteDialogState(state.deleteDialogState) },
+        updateShareDialogState = myJogboDetailViewModel::updateShareDialogState,
+        updateDeleteDialogState = myJogboDetailViewModel::updateDeleteDialogState,
         deleteSelectedStore = { storeId ->
             myJogboDetailViewModel.deleteSelectedStore(
                 favoriteId,
@@ -100,11 +116,18 @@ fun MyJogboDetailRoute(
         selectedStoreId = state.selectedStoreId,
         updateSelectedStoreId = myJogboDetailViewModel::updateSelectedStoreId,
         navigateToStoreDetail = myJogboDetailViewModel::navigateToStoreDetail,
-        navigateToHome = myJogboDetailViewModel::navigateToHome
+        navigateToHome = myJogboDetailViewModel::navigateToHome,
+        navigateToNewSharedJogbo = navigateToNewSharedJogbo,
+        shareJogbo = myJogboDetailViewModel::shareJogbo,
+        isSharedJogbo = isSharedJogbo,
+        favoriteId = favoriteId,
+        isJogboOwner = state.isJogboOwner,
+        loginDialogState = state.loginDialogState,
+        updateLoginDialogState = myJogboDetailViewModel::updateLoginDialog,
+        navigateToLogin = navigateToLogin
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyJogboDetailScreen(
     navigateUp: () -> Unit,
@@ -121,19 +144,29 @@ fun MyJogboDetailScreen(
     updateSelectedStoreId: (Long) -> Unit,
     navigateToStoreDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
+    navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
+    isSharedJogbo: Boolean,
+    shareJogbo: (Context, String, String, String, Long) -> Unit,
+    favoriteId: Long,
+    isJogboOwner: Boolean,
+    loginDialogState: Boolean,
+    updateLoginDialogState: () -> Unit,
+    navigateToLogin: (Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val height by rememberSaveable {
         mutableDoubleStateOf(configuration.screenHeightDp * 0.09)
     }
     val scrollState = rememberLazyListState()
+    val context = LocalContext.current
 
     if (shareDialogState) {
-        SingleButtonDialog(
-            title = stringResource(R.string.please_wait),
-            description = stringResource(R.string.preparing_share_jogbo),
-            buttonTitle = stringResource(R.string.check),
-            onConfirmation = updateShareDialogState
+        DoubleButtonDialog(
+            title = stringResource(R.string.no_jogbo),
+            negativeButtonTitle = stringResource(R.string.go_back),
+            positiveButtonTitle = stringResource(id = R.string.look_around),
+            onNegativeButtonClicked = updateShareDialogState,
+            onPositiveButtonClicked = navigateToHome
         )
     }
 
@@ -145,6 +178,17 @@ fun MyJogboDetailScreen(
             onNegativeButtonClicked = updateDeleteDialogState,
             onPositiveButtonClicked = {
                 deleteSelectedStore(selectedStoreId)
+            }
+        )
+    }
+
+    if (loginDialogState) {
+        SingleButtonDialog(
+            title = stringResource(R.string.need_login),
+            buttonTitle = stringResource(R.string.login),
+            onConfirmation = {
+                updateLoginDialogState()
+                navigateToLogin(false)
             }
         )
     }
@@ -170,114 +214,168 @@ fun MyJogboDetailScreen(
             },
             content = {
                 Text(
-                    text = stringResource(R.string.my_jogbo),
+                    text = if (isSharedJogbo) stringResource(R.string.shared_jogbo) else stringResource(
+                        R.string.my_jogbo
+                    ),
                     style = HankkiTheme.typography.sub3,
                     color = Gray900
                 )
             }
         )
 
-        LazyColumn(
+        Box(
             modifier = Modifier
+                .fillMaxSize()
                 .background(White)
-                .navigationBarsPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            state = scrollState
         ) {
-            when (state) {
-                is EmptyUiState.Loading -> {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillParentMaxSize()
-                        ) {
-                            HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
-                        }
-                    }
-                }
-
-                is EmptyUiState.Success -> {
-                    item {
-                        JogboFolder(
-                            title = jogboTitle,
-                            chips = jogboChips,
-                            userNickname = userNickname,
-                            shareJogboDialogState = updateShareDialogState
-                        )
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-
-                    items(state.data) { store ->
-                        MyStoreItem(
-                            storeId = store.id,
-                            storeImageUrl = store.imageUrl,
-                            category = store.category,
-                            storeName = store.name,
-                            price = store.lowestPrice,
-                            heartCount = store.heartCount,
-                            isIconUsed = false,
-                            isIconSelected = false,
-                            onClickItem = { navigateToStoreDetail(store.id) },
-                            onLongClickItem = {
-                                updateSelectedStoreId(store.id)
-                                updateDeleteDialogState()
-                            }
-                        )
-                        if (state.data.indexOf(store) != state.data.lastIndex) {
-                            HorizontalDivider(
-                                modifier = Modifier.padding(vertical = 1.dp, horizontal = 22.dp),
-                                thickness = 1.dp,
-                                color = Gray200
-                            )
-                        }
-                    }
-
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 20.dp, bottom = 30.dp),
-                            contentAlignment = Alignment.TopCenter
-                        ) {
-                            MoveToHomeButton(
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                state = scrollState
+            ) {
+                when (state) {
+                    is EmptyUiState.Loading -> {
+                        item {
+                            Box(
                                 modifier = Modifier
-                                    .noRippleClickable(navigateToHome),
-                            )
+                                    .fillParentMaxSize()
+                            ) {
+                                HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                            }
                         }
                     }
-                }
 
-                is EmptyUiState.Empty -> {
-                    item {
-                        JogboFolder(
-                            title = jogboTitle,
-                            chips = jogboChips,
-                            userNickname = userNickname,
-                            shareJogboDialogState = updateShareDialogState
-                        )
+                    is EmptyUiState.Success -> {
+                        item {
+                            JogboFolder(
+                                title = jogboTitle,
+                                chips = jogboChips,
+                                userNickname = userNickname,
+                                shareJogboDialogState = {
+                                    val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
+                                    val imageUrl =
+                                        state.data.firstOrNull { it.imageUrl != null }?.imageUrl
+                                            ?: defaultImageUrl
 
-                        Spacer(modifier = Modifier.height((height).dp))
+                                    shareJogbo(
+                                        context,
+                                        imageUrl,
+                                        jogboTitle,
+                                        userNickname,
+                                        favoriteId
+                                    )
+                                },
+                                isSharedJogbo = isSharedJogbo
+                            )
+                        }
 
-                        EmptyViewWithButton(
-                            text = stringResource(R.string.my_jogbo) +
-                                    stringResource(R.string.add_store_to_jogbo),
-                            content = {
+                        item {
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+
+                        items(state.data) { store ->
+                            MyStoreItem(
+                                storeId = store.id,
+                                storeImageUrl = store.imageUrl,
+                                category = store.category,
+                                storeName = store.name,
+                                price = store.lowestPrice,
+                                heartCount = store.heartCount,
+                                isIconUsed = false,
+                                isIconSelected = false,
+                                onClickItem = { if (!isSharedJogbo) navigateToStoreDetail(store.id) },
+                                onLongClickItem = {
+                                    if (!isSharedJogbo) {
+                                        updateSelectedStoreId(store.id)
+                                        updateDeleteDialogState()
+                                    }
+                                }
+                            )
+                            if (state.data.indexOf(store) != state.data.lastIndex) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(
+                                        vertical = 1.dp,
+                                        horizontal = 22.dp
+                                    ),
+                                    thickness = 1.dp,
+                                    color = Gray200
+                                )
+                            }
+                        }
+
+                        if (!isSharedJogbo) item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 20.dp, bottom = 30.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
                                 MoveToHomeButton(
                                     modifier = Modifier
-                                        .padding(top = 20.dp)
                                         .noRippleClickable(navigateToHome),
                                 )
                             }
+                        }
+                    }
+
+                    is EmptyUiState.Empty -> {
+                        item {
+                            JogboFolder(
+                                title = jogboTitle,
+                                chips = jogboChips,
+                                userNickname = userNickname,
+                                shareJogboDialogState = updateShareDialogState,
+                                isSharedJogbo = isSharedJogbo
+                            )
+
+                            Spacer(modifier = Modifier.height((height).dp))
+
+                            if (!isSharedJogbo)
+                                EmptyViewWithButton(
+                                    text = stringResource(R.string.my_jogbo) +
+                                            stringResource(R.string.add_store_to_jogbo),
+                                    content = {
+                                        MoveToHomeButton(
+                                            modifier = Modifier
+                                                .padding(top = 20.dp)
+                                                .noRippleClickable(navigateToHome),
+                                        )
+                                    }
+                                )
+                        }
+                    }
+
+                    is EmptyUiState.Failure -> {}
+                }
+            }
+
+            if (!isJogboOwner) // 공유된 족보가 내거라면.. 버튼 x
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    BottomBlurLayout(
+                        imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle
+                    )
+
+                    Column {
+                        HankkiButton(
+                            modifier = Modifier
+                                .navigationBarsPadding()
+                                .padding(horizontal = 22.dp)
+                                .fillMaxWidth()
+                                .padding(bottom = 15.dp),
+                            text = stringResource(R.string.add_to_my_jogbo),
+                            onClick = { navigateToNewSharedJogbo(isSharedJogbo, favoriteId) },
+                            enabled = true,
+                            textStyle = HankkiTheme.typography.sub3,
                         )
                     }
                 }
-
-                is EmptyUiState.Failure -> {}
-            }
         }
     }
 }
@@ -290,7 +388,11 @@ fun MyJogboDetailScreenPreview() {
             favoriteId = 1,
             navigateUp = {},
             navigateToDetail = {},
-            navigateToHome = {}
+            navigateToHome = {},
+            navigateToNewSharedJogbo = { _, _ -> },
+            navigateToMyJogbo = {},
+            isSharedJogbo = false,
+            navigateToLogin = {}
         )
     }
 }

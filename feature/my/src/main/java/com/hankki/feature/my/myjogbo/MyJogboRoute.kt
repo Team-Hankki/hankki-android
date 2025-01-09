@@ -33,6 +33,7 @@ import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
+import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
 import com.hankki.core.designsystem.theme.Gray700
@@ -49,19 +50,27 @@ import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun MyJogboRoute(
+    isDeletedDialogNeed: Boolean,
     navigateUp: () -> Unit,
+    navigateToMy: () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
+    resetDeepLinkState: () -> Unit,
     myJogboViewModel: MyJogboViewModel = hiltViewModel(),
 ) {
     val state by myJogboViewModel.myJogboState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
+        resetDeepLinkState()
         myJogboViewModel.getMyJogboList()
+        if (isDeletedDialogNeed) {
+            myJogboViewModel.updateNoExistsDialog()
+        }
     }
 
     MyJogboScreen(
         navigateUp = navigateUp,
+        navigateToMy = navigateToMy,
         navigateToJogboDetail = navigateToJogboDetail,
         navigateToNewJogbo = navigateToNewJogbo,
         state = state.uiState,
@@ -69,10 +78,12 @@ fun MyJogboRoute(
         updateEditModeState = myJogboViewModel::updateEditModeState,
         updateJogboSelectedState = myJogboViewModel::updateJogboSeleted,
         resetEditModeState = myJogboViewModel::resetEditModeState,
-        deleteDialogState = state.dialogState,
+        deleteDialogState = state.deleteDialogState,
         updateDeleteDialogState = myJogboViewModel::updateDeleteDialogState,
         deleteSelectedJogbo = myJogboViewModel::deleteSelectedJogbo,
-        buttonEnabledState = state.buttonEnabled
+        buttonEnabledState = state.buttonEnabled,
+        noExistsDialogState = state.noExistsDialogState,
+        updateNoExistsDialogState = myJogboViewModel::updateNoExistsDialog
     )
 
     BackOnPressed(
@@ -85,6 +96,7 @@ fun MyJogboRoute(
 @Composable
 fun MyJogboScreen(
     navigateUp: () -> Unit,
+    navigateToMy : () -> Unit,
     navigateToJogboDetail: (Long) -> Unit,
     navigateToNewJogbo: () -> Unit,
     state: UiState<PersistentList<MyJogboModel>>,
@@ -93,9 +105,11 @@ fun MyJogboScreen(
     updateJogboSelectedState: (Int, Boolean) -> Unit,
     resetEditModeState: () -> Unit,
     deleteDialogState: Boolean,
-    updateDeleteDialogState: (Boolean) -> Unit,
+    updateDeleteDialogState: () -> Unit,
     deleteSelectedJogbo: () -> Unit,
-    buttonEnabledState: Boolean
+    buttonEnabledState: Boolean,
+    noExistsDialogState: Boolean,
+    updateNoExistsDialogState: () -> Unit
 ) {
     val tracker = LocalTracker.current
 
@@ -104,8 +118,16 @@ fun MyJogboScreen(
             title = stringResource(R.string.ask_delete_jogbo),
             negativeButtonTitle = stringResource(id = R.string.close),
             positiveButtonTitle = stringResource(id = R.string.do_delete),
-            onNegativeButtonClicked = { updateDeleteDialogState(false) },
+            onNegativeButtonClicked = updateDeleteDialogState,
             onPositiveButtonClicked = { if (buttonEnabledState) deleteSelectedJogbo() }
+        )
+    }
+
+    if (noExistsDialogState) {
+        SingleButtonDialog(
+            title = stringResource(R.string.deleted_jogbo),
+            buttonTitle = stringResource(R.string.check),
+            onConfirmation = updateNoExistsDialogState
         )
     }
 
@@ -125,7 +147,7 @@ fun MyJogboScreen(
                     modifier = Modifier
                         .padding(start = 7.dp)
                         .size(40.dp)
-                        .noRippleClickable(if (editModeState) resetEditModeState else navigateUp),
+                        .noRippleClickable(if (editModeState) resetEditModeState else navigateToMy)
                 )
             },
             content = {
@@ -149,7 +171,7 @@ fun MyJogboScreen(
                         .run {
                             if (editModeState && isSelectedJogboExists) {
                                 noRippleClickable {
-                                    updateDeleteDialogState(true)
+                                    updateDeleteDialogState()
                                 }
                             } else if (!editModeState) {
                                 noRippleClickable(updateEditModeState)
@@ -230,6 +252,7 @@ fun MyJogboScreenPreview() {
     HankkijogboTheme {
         MyJogboScreen(
             navigateUp = {},
+            navigateToMy = {},
             navigateToJogboDetail = { _ -> },
             navigateToNewJogbo = {},
             state = UiState.Loading,
@@ -240,7 +263,9 @@ fun MyJogboScreenPreview() {
             updateDeleteDialogState = {},
             deleteSelectedJogbo = {},
             buttonEnabledState = false,
-            editModeState = false
+            editModeState = false,
+            noExistsDialogState = false,
+            updateNoExistsDialogState = {}
         )
     }
 }

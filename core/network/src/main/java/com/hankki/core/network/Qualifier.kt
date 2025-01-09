@@ -4,7 +4,7 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class REISSUE
+annotation class NoToken
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
