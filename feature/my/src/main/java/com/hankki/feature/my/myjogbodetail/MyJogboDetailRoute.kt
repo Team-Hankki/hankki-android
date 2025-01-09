@@ -352,7 +352,7 @@ fun MyJogboDetailScreen(
                 }
             }
 
-            if (!isJogboOwner) // 공유된 족보가 내거라면.. 버튼 x
+            if (!isJogboOwner)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
