@@ -290,7 +290,9 @@ fun MyJogboDetailScreen(
                                 heartCount = store.heartCount,
                                 isIconUsed = false,
                                 isIconSelected = false,
-                                onClickItem = { if (!isSharedJogbo) navigateToStoreDetail(store.id) },
+                                onClickItem = {
+                                    if (!isSharedJogbo || isJogboOwner) navigateToStoreDetail(store.id)
+                                },
                                 onLongClickItem = {
                                     if (!isSharedJogbo) {
                                         updateSelectedStoreId(store.id)
