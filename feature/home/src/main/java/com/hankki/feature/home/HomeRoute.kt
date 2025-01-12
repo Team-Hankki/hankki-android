@@ -78,15 +78,13 @@ import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
 import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray600
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.R.drawable.ic_marker
-import com.hankki.feature.home.R.drawable.ic_university
 import com.hankki.feature.home.component.HankkiCategoryScrollableTabRow
 import com.hankki.feature.home.component.HankkiFilterBottomSheet
 import com.hankki.feature.home.component.HomeStoreItem
@@ -382,34 +380,27 @@ fun HomeScreen(
         HankkiHeadTopBar(
             content = {
                 Column {
-                    Spacer(modifier = Modifier.height(9.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = ic_university),
-                            contentDescription = "university",
-                            modifier = Modifier
-                                .padding(horizontal = 2.dp)
-                                .size(18.dp),
-                            tint = Color.Unspecified
-                        )
+                        Spacer(modifier = Modifier.width(18.dp))
                         Text(
                             text = universityName,
                             style = HankkiTheme.typography.body5,
                             color = Gray900
                         )
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = com.hankki.feature.home.R.drawable.ic_arrow_down_16),
+                            imageVector = ImageVector.vectorResource(id = com.hankki.feature.home.R.drawable.ic_arrow_down_16_black),
                             contentDescription = "button",
                             modifier = Modifier
                                 .padding(horizontal = 2.dp)
                                 .size(16.dp),
-                            tint = Gray400
+                            tint = Color.Unspecified
                         )
                     }
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             },
             modifier = Modifier.background(White)
@@ -479,8 +470,8 @@ fun HomeScreen(
                     sheetBackgroundColor = Color.Transparent,
                     backgroundColor = Color.Transparent,
                     sheetShape = RoundedCornerShape(
-                        topStart = 30.dp,
-                        topEnd = 30.dp
+                        topStart = 18.dp,
+                        topEnd = 18.dp
                     ),
                     sheetGesturesEnabled = true,
                     sheetContent = {
@@ -532,14 +523,9 @@ fun HomeScreen(
                                         modifier = Modifier.align(Alignment.CenterHorizontally)
                                     ) {
                                         Text(
-                                            text = "${storeItems.size}개",
-                                            style = HankkiTheme.typography.body5,
-                                            color = Gray900,
-                                        )
-                                        Text(
-                                            text = "의 족보",
-                                            style = HankkiTheme.typography.body6,
-                                            color = Gray600,
+                                            text = "${storeItems.size}개의 족보",
+                                            style = HankkiTheme.typography.body8,
+                                            color = Gray800,
                                         )
                                     }
 
