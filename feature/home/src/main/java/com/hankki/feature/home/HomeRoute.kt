@@ -78,7 +78,6 @@ import com.hankki.core.designsystem.component.topappbar.HankkiHeadTopBar
 import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
 import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray200
-import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -393,12 +392,12 @@ fun HomeScreen(
                             color = Gray900
                         )
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = com.hankki.feature.home.R.drawable.ic_arrow_down_16),
+                            imageVector = ImageVector.vectorResource(id = com.hankki.feature.home.R.drawable.ic_arrow_down_16_black),
                             contentDescription = "button",
                             modifier = Modifier
                                 .padding(horizontal = 2.dp)
                                 .size(16.dp),
-                            tint = Gray400
+                            tint = Color.Unspecified
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -525,7 +524,7 @@ fun HomeScreen(
                                     ) {
                                         Text(
                                             text = "${storeItems.size}개의 족보",
-                                            style = HankkiTheme.typography.body5,
+                                            style = HankkiTheme.typography.body8,
                                             color = Gray800,
                                         )
                                     }
