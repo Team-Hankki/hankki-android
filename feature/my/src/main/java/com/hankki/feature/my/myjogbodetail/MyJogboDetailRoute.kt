@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +46,6 @@ import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -198,183 +196,183 @@ fun MyJogboDetailScreen(
         )
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Red500)
+            .background(White)
     ) {
-        HankkiTopBar(
-            modifier = Modifier
-                .background(Red500)
-                .statusBarsPadding(),
-            leadingIcon = {
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.icon_back),
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .padding(start = 7.dp)
-                        .size(40.dp)
-                        .noRippleClickable(onClick = { if (isSharedJogbo) navigateToMyJogbo(false) else navigateUp() }),
-                )
-            },
-            content = {
-                Text(
-                    text = if (isSharedJogbo && !isJogboOwner) stringResource(R.string.shared_jogbo) else stringResource(
-                        R.string.my_jogbo
-                    ),
-                    style = HankkiTheme.typography.sub3,
-                    color = Gray900
-                )
-            }
-        )
-
-        Box(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(White)
+                .navigationBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = scrollState
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                state = scrollState
-            ) {
-                when (state) {
-                    is EmptyUiState.Loading -> {
+            when (state) {
+                is EmptyUiState.Loading -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                        ) {
+                            HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                        }
+                    }
+                }
+
+                is EmptyUiState.Success -> {
+                    item {
+                        HankkiTopBar(
+                            modifier = Modifier
+                                .background(Red500)
+                                .statusBarsPadding(),
+                            leadingIcon = {
+                                Image(
+                                    imageVector = ImageVector.vectorResource(R.drawable.icon_back),
+                                    contentDescription = "Back",
+                                    modifier = Modifier
+                                        .padding(start = 7.dp)
+                                        .size(40.dp)
+                                        .noRippleClickable(onClick = {
+                                            if (isSharedJogbo) navigateToMyJogbo(
+                                                false
+                                            ) else navigateUp()
+                                        }),
+                                )
+                            },
+                            content = {
+                                Text(
+                                    text = if (isSharedJogbo && !isJogboOwner) stringResource(R.string.shared_jogbo) else stringResource(
+                                        R.string.my_jogbo
+                                    ),
+                                    style = HankkiTheme.typography.sub3,
+                                    color = Gray900
+                                )
+                            }
+                        )
+                    }
+
+                    item {
+                        JogboFolder(
+                            title = jogboTitle,
+                            chips = jogboChips,
+                            userNickname = userNickname,
+                            shareJogboDialogState = {
+                                val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
+                                val imageUrl =
+                                    state.data.firstOrNull { it.imageUrl != null }?.imageUrl
+                                        ?: defaultImageUrl
+
+                                shareJogbo(
+                                    context,
+                                    imageUrl,
+                                    jogboTitle,
+                                    userNickname,
+                                    favoriteId
+                                )
+                            },
+                            isSharedJogbo = isSharedJogbo
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
+
+                    items(state.data) { store ->
+                        MyStoreItem(
+                            storeId = store.id,
+                            storeImageUrl = store.imageUrl,
+                            category = store.category,
+                            storeName = store.name,
+                            price = store.lowestPrice,
+                            heartCount = store.heartCount,
+                            isIconUsed = false,
+                            isIconSelected = false,
+                            onClickItem = {
+                                if (!isSharedJogbo || isJogboOwner) navigateToStoreDetail(store.id)
+                            },
+                            onLongClickItem = {
+                                if (!isSharedJogbo) {
+                                    updateSelectedStoreId(store.id)
+                                    updateDeleteDialogState()
+                                }
+                            }
+                        )
+                    }
+
+                    if ((isSharedJogbo && isJogboOwner) || !isSharedJogbo)
                         item {
                             Box(
                                 modifier = Modifier
-                                    .fillParentMaxSize()
+                                    .fillMaxSize()
+                                    .padding(top = 20.dp, bottom = 30.dp),
+                                contentAlignment = Alignment.TopCenter
                             ) {
-                                HankkiLoadingScreen(modifier = Modifier.align(Alignment.Center))
+                                MoveToHomeButton(
+                                    modifier = Modifier
+                                        .noRippleClickable(navigateToHome),
+                                )
                             }
                         }
-                    }
+                }
 
-                    is EmptyUiState.Success -> {
-                        item {
-                            JogboFolder(
-                                title = jogboTitle,
-                                chips = jogboChips,
-                                userNickname = userNickname,
-                                shareJogboDialogState = {
-                                    val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
-                                    val imageUrl =
-                                        state.data.firstOrNull { it.imageUrl != null }?.imageUrl
-                                            ?: defaultImageUrl
+                is EmptyUiState.Empty -> {
+                    item {
+                        JogboFolder(
+                            title = jogboTitle,
+                            chips = jogboChips,
+                            userNickname = userNickname,
+                            shareJogboDialogState = updateShareDialogState,
+                            isSharedJogbo = isSharedJogbo
+                        )
 
-                                    shareJogbo(
-                                        context,
-                                        imageUrl,
-                                        jogboTitle,
-                                        userNickname,
-                                        favoriteId
-                                    )
-                                },
-                                isSharedJogbo = isSharedJogbo
-                            )
-                        }
+                        Spacer(modifier = Modifier.height((height).dp))
 
-                        item {
-                            Spacer(modifier = Modifier.height(4.dp))
-                        }
-
-                        items(state.data) { store ->
-                            MyStoreItem(
-                                storeId = store.id,
-                                storeImageUrl = store.imageUrl,
-                                category = store.category,
-                                storeName = store.name,
-                                price = store.lowestPrice,
-                                heartCount = store.heartCount,
-                                isIconUsed = false,
-                                isIconSelected = false,
-                                onClickItem = {
-                                    if (!isSharedJogbo || isJogboOwner) navigateToStoreDetail(store.id)
-                                },
-                                onLongClickItem = {
-                                    if (!isSharedJogbo) {
-                                        updateSelectedStoreId(store.id)
-                                        updateDeleteDialogState()
-                                    }
-                                }
-                            )
-                        }
-
-                        if ((isSharedJogbo && isJogboOwner) || !isSharedJogbo)
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(top = 20.dp, bottom = 30.dp),
-                                    contentAlignment = Alignment.TopCenter
-                                ) {
+                        if (!isSharedJogbo)
+                            EmptyViewWithButton(
+                                text = stringResource(R.string.my_jogbo) +
+                                        stringResource(R.string.add_store_to_jogbo),
+                                content = {
                                     MoveToHomeButton(
                                         modifier = Modifier
+                                            .padding(top = 20.dp)
                                             .noRippleClickable(navigateToHome),
                                     )
                                 }
-                            }
-                    }
-
-                    is EmptyUiState.Empty -> {
-                        item {
-                            JogboFolder(
-                                title = jogboTitle,
-                                chips = jogboChips,
-                                userNickname = userNickname,
-                                shareJogboDialogState = updateShareDialogState,
-                                isSharedJogbo = isSharedJogbo
                             )
-
-                            Spacer(modifier = Modifier.height((height).dp))
-
-                            if (!isSharedJogbo)
-                                EmptyViewWithButton(
-                                    text = stringResource(R.string.my_jogbo) +
-                                            stringResource(R.string.add_store_to_jogbo),
-                                    content = {
-                                        MoveToHomeButton(
-                                            modifier = Modifier
-                                                .padding(top = 20.dp)
-                                                .noRippleClickable(navigateToHome),
-                                        )
-                                    }
-                                )
-                        }
                     }
+                }
 
-                    is EmptyUiState.Failure -> {}
+                is EmptyUiState.Failure -> {}
+            }
+        }
+
+        if (!isJogboOwner)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                BottomBlurLayout(
+                    imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle
+                )
+
+                Column {
+                    HankkiButton(
+                        modifier = Modifier
+                            .navigationBarsPadding()
+                            .padding(horizontal = 22.dp)
+                            .fillMaxWidth()
+                            .padding(bottom = 15.dp),
+                        text = stringResource(R.string.add_to_my_jogbo),
+                        onClick = { navigateToNewSharedJogbo(isSharedJogbo, favoriteId) },
+                        enabled = true,
+                        textStyle = HankkiTheme.typography.sub3,
+                    )
                 }
             }
-
-            if (!isJogboOwner)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    BottomBlurLayout(
-                        imageBlur = com.hankki.core.designsystem.R.drawable.img_white_gradient_bottom_middle
-                    )
-
-                    Column {
-                        HankkiButton(
-                            modifier = Modifier
-                                .navigationBarsPadding()
-                                .padding(horizontal = 22.dp)
-                                .fillMaxWidth()
-                                .padding(bottom = 15.dp),
-                            text = stringResource(R.string.add_to_my_jogbo),
-                            onClick = { navigateToNewSharedJogbo(isSharedJogbo, favoriteId) },
-                            enabled = true,
-                            textStyle = HankkiTheme.typography.sub3,
-                        )
-                    }
-                }
-        }
     }
 }
 
