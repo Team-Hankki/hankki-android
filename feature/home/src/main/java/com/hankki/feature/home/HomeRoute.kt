@@ -32,6 +32,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
@@ -80,6 +81,7 @@ import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
 import com.hankki.core.designsystem.theme.Gray600
+import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.White
@@ -382,20 +384,12 @@ fun HomeScreen(
         HankkiHeadTopBar(
             content = {
                 Column {
-                    Spacer(modifier = Modifier.height(9.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.noRippleClickable(navigateToUniversitySelection),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = ic_university),
-                            contentDescription = "university",
-                            modifier = Modifier
-                                .padding(horizontal = 2.dp)
-                                .size(18.dp),
-                            tint = Color.Unspecified
-                        )
+                        Spacer(modifier = Modifier.width(18.dp))
                         Text(
                             text = universityName,
                             style = HankkiTheme.typography.body5,
@@ -410,6 +404,7 @@ fun HomeScreen(
                             tint = Gray400
                         )
                     }
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             },
             modifier = Modifier.background(White)
@@ -479,8 +474,8 @@ fun HomeScreen(
                     sheetBackgroundColor = Color.Transparent,
                     backgroundColor = Color.Transparent,
                     sheetShape = RoundedCornerShape(
-                        topStart = 30.dp,
-                        topEnd = 30.dp
+                        topStart = 18.dp,
+                        topEnd = 18.dp
                     ),
                     sheetGesturesEnabled = true,
                     sheetContent = {
@@ -532,14 +527,9 @@ fun HomeScreen(
                                         modifier = Modifier.align(Alignment.CenterHorizontally)
                                     ) {
                                         Text(
-                                            text = "${storeItems.size}개",
+                                            text = "${storeItems.size}개의 족보",
                                             style = HankkiTheme.typography.body5,
-                                            color = Gray900,
-                                        )
-                                        Text(
-                                            text = "의 족보",
-                                            style = HankkiTheme.typography.body6,
-                                            color = Gray600,
+                                            color = Gray800,
                                         )
                                     }
 

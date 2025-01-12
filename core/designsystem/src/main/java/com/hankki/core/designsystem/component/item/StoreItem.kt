@@ -30,6 +30,7 @@ import com.hankki.core.common.extension.formatPrice
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.theme.Gray400
+import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray700
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -83,7 +84,7 @@ fun StoreItem(
             Text(
                 text = category,
                 style = HankkiTheme.typography.caption4,
-                color = Gray700
+                color = Gray500
             )
             Spacer(modifier = Modifier.height(1.dp))
             Row(
@@ -106,7 +107,7 @@ fun StoreItem(
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
                     text = heartCount.toString(),
-                    style = HankkiTheme.typography.suitCaption,
+                    style = HankkiTheme.typography.caption1,
                     color = Gray700
                 )
             }
