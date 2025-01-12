@@ -32,7 +32,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
@@ -80,7 +79,6 @@ import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
 import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray400
-import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray800
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -88,7 +86,6 @@ import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.MapConstants.CAN_SEE_TITLE_ZOOM
 import com.hankki.feature.home.MapConstants.DEFAULT_ZOOM
 import com.hankki.feature.home.R.drawable.ic_marker
-import com.hankki.feature.home.R.drawable.ic_university
 import com.hankki.feature.home.component.HankkiCategoryScrollableTabRow
 import com.hankki.feature.home.component.HankkiFilterBottomSheet
 import com.hankki.feature.home.component.HomeStoreItem
