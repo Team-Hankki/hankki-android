@@ -300,16 +300,6 @@ fun MyJogboDetailScreen(
                                     }
                                 }
                             )
-                            if (state.data.indexOf(store) != state.data.lastIndex) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(
-                                        vertical = 1.dp,
-                                        horizontal = 22.dp
-                                    ),
-                                    thickness = 1.dp,
-                                    color = Gray200
-                                )
-                            }
                         }
 
                         if ((isSharedJogbo && isJogboOwner) || !isSharedJogbo)
