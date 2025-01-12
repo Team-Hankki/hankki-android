@@ -486,6 +486,7 @@ private fun RowScope.MainBottomBarItem(
     Column(
         modifier = Modifier
             .fillMaxHeight()
+            .padding(horizontal = 10.dp)
             .selectable(
                 selected = selected,
                 indication = null,
