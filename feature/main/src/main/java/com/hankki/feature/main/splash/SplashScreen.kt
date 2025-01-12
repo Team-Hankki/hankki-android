@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,27 +68,15 @@ fun SplashScreen(
             .background(White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.weight(205f))
+        Spacer(modifier = Modifier.weight(291f))
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.img_subtitle),
-                contentDescription = "subtitle"
-            )
-            Spacer(modifier = Modifier.height(14.dp))
+        Image(
+            imageVector = ImageVector.vectorResource(id = R.drawable.img_logo),
+            modifier = Modifier.fillMaxWidth(0.5f),
+            contentDescription = null
+        )
 
-            Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.img_title),
-                contentDescription = "title"
-            )
-            Spacer(modifier = Modifier.height(42.dp))
-
-            Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.img_logo),
-                contentDescription = "logo"
-            )
-        }
-        Spacer(modifier = Modifier.weight(253f))
+        Spacer(modifier = Modifier.weight(365f))
     }
 }
 
