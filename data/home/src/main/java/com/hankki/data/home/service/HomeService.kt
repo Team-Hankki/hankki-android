@@ -20,7 +20,7 @@ interface HomeService {
     @GET("api/v1/users/me/university")
     suspend fun getMyUniversity(): BaseResponse<UniversityResponseDto>
 
-    @GET("api/v1/stores/categories")
+    @GET("api/v2/stores/categories")
     suspend fun getCategories(): BaseResponse<CategoriesResponse>
 
     @GET("api/v1/stores/price-categories")

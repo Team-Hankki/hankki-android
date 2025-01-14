@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -427,7 +428,7 @@ fun StoreCategoryChips(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             categories.forEach { item ->
-                if (item.tag != "ALL") {
+                key(item.tag) {
                     HankkiChipWithIcon(
                         iconUrl = item.imageUrl,
                         title = item.name,
