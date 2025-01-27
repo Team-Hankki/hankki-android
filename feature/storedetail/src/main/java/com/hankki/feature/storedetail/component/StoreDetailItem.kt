@@ -9,6 +9,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.extension.formatPrice
+import com.hankki.core.designsystem.theme.Gray850
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 
@@ -28,7 +29,7 @@ fun StoreDetailItem(name: String, price: String) {
         Text(
             text = "${price.formatPrice()}원",
             style = HankkiTheme.typography.body5,
-            color = Gray900,
+            color = Gray850,
             textAlign = TextAlign.End
         )
     }
