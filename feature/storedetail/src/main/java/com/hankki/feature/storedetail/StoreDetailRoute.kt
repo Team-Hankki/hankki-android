@@ -344,7 +344,7 @@ fun StoreDetailScreen(
                 onClick = onReportClicked,
                 tailingIcon = {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                        imageVector = ImageVector.vectorResource(id = com.hankki.feature.storedetail.R.drawable.ic_arrow_under),
                         contentDescription = null,
                         tint = Gray350
                     )
