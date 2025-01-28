@@ -153,6 +153,12 @@ fun HomeRoute(
         backPressedTime = System.currentTimeMillis()
     }
 
+    // 대학 선택 후 home 재진입시 변경된 대학 설정 반영을 위해 존재
+    // 화면 전환시 매개변수 넘기는 방법으로 개선 가능
+    LaunchedEffect(Unit) {
+        viewModel.getUniversityInformation()
+    }
+
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { sideEffect ->
             when (sideEffect) {
