@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -48,7 +49,6 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.addFocusCleaner
-import com.hankki.core.common.extension.advancedImePadding
 import com.hankki.core.common.extension.animateScrollAroundItem
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.R
@@ -237,7 +237,7 @@ fun ReportScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .advancedImePadding()
+                    .imePadding()
                     .verticalScroll(scrollState),
             ) {
                 Spacer(modifier = Modifier.height(18.dp))
