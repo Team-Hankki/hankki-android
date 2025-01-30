@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import kotlinx.coroutines.launch
@@ -130,6 +131,7 @@ fun Modifier.ignoreNextModifiers(): Modifier {
 
 fun Modifier.animateScrollAroundItem(
     scrollState: ScrollState,
+    verticalWeight: Int = 0
 ): Modifier = composed {
     var scrollToPosition by remember {
         mutableFloatStateOf(0f)
@@ -141,7 +143,7 @@ fun Modifier.animateScrollAroundItem(
             val itemTop = coordinates.positionInParent().y
             val itemHeight = coordinates.size.height
 
-            scrollToPosition = itemTop + itemHeight
+            scrollToPosition = itemTop + itemHeight + verticalWeight
         }
         .onFocusEvent {
             if (it.isFocused) {
