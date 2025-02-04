@@ -56,7 +56,12 @@ fun NavGraphBuilder.myNavGraph(
     resetDeepLinkState: () -> Unit
 ) {
     composable<My> {
-        MyRoute(paddingValues, navigateToMyJogbo, navigateToMyStore)
+        MyRoute(
+            paddingValues = paddingValues,
+            navigateUp = navigateToHome,
+            navigateToJogbo = navigateToMyJogbo,
+            navigateToStore = navigateToMyStore
+        )
     }
     composable<MyJogbo> { backStackEntry ->
         val isDeletedDialogNeed = backStackEntry.toRoute<MyJogbo>()

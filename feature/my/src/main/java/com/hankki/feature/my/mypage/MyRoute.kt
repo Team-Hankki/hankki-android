@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -68,6 +69,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix
 @Composable
 fun MyRoute(
     paddingValues: PaddingValues,
+    navigateUp: () -> Unit,
     navigateToJogbo: (Boolean) -> Unit,
     navigateToStore: (String) -> Unit,
     myViewModel: MyViewModel = hiltViewModel(),
@@ -106,6 +108,8 @@ fun MyRoute(
             }
         }
     }
+
+    BackHandler(onBack = navigateUp)
 
     MyScreen(
         paddingValues = paddingValues,
