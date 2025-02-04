@@ -319,6 +319,37 @@ fun MyJogboDetailScreen(
 
                 is EmptyUiState.Empty -> {
                     item {
+                        HankkiTopBar(
+                            modifier = Modifier
+                                .background(Red500)
+                                .statusBarsPadding(),
+                            leadingIcon = {
+                                Image(
+                                    imageVector = ImageVector.vectorResource(R.drawable.icon_back),
+                                    contentDescription = "Back",
+                                    modifier = Modifier
+                                        .padding(start = 7.dp)
+                                        .size(40.dp)
+                                        .noRippleClickable(onClick = {
+                                            if (isSharedJogbo) navigateToMyJogbo(
+                                                false
+                                            ) else navigateUp()
+                                        }),
+                                )
+                            },
+                            content = {
+                                Text(
+                                    text = if (isSharedJogbo && !isJogboOwner) stringResource(R.string.shared_jogbo) else stringResource(
+                                        R.string.my_jogbo
+                                    ),
+                                    style = HankkiTheme.typography.sub3,
+                                    color = Gray900
+                                )
+                            }
+                        )
+                    }
+
+                    item {
                         JogboFolder(
                             title = jogboTitle,
                             chips = jogboChips,
@@ -329,7 +360,7 @@ fun MyJogboDetailScreen(
 
                         Spacer(modifier = Modifier.height((height).dp))
 
-                        if (!isSharedJogbo)
+                        if (isJogboOwner)
                             EmptyViewWithButton(
                                 text = stringResource(R.string.my_jogbo) +
                                         stringResource(R.string.add_store_to_jogbo),
