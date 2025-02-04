@@ -62,7 +62,7 @@ fun HankkiHeadTopBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 42.dp),
+            .defaultMinSize(minHeight = 41.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         content()

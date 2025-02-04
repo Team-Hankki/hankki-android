@@ -38,8 +38,8 @@ class HomeViewModel @Inject constructor(
         get() = _sideEffect.asSharedFlow()
 
     init {
-        getUniversityInformation()
-
+        // home의 화면 구조 변화에 따라 카테고리 및 필터들은 한번 불러오고 재사용 할 필요 없다 판단하여 init에 존재.
+        // ChipState는 필요없는 코드이지만, 구버전에서 급하게 신버전 업데이트 하며 반영하지 못함.
         viewModelScope.launch {
             homeRepository.getCategories().onSuccess { items ->
                 _state.update {
@@ -83,7 +83,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getUniversityInformation() {
+    fun getUniversityInformation() {
         viewModelScope.launch {
             homeRepository.getMyUniversity()
                 .onSuccess { university ->

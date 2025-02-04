@@ -1,5 +1,6 @@
 package com.hankki.feature.home.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +34,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.vectorResource
@@ -93,34 +96,36 @@ fun HankkiCategoryScrollableTabRow(
                 },
             ) {
                 categoryChipItems.forEachIndexed { index, item ->
-                    Tab(
-                        selected = selectedIndex == index,
-                        onClick = {
-                            selectedIndex = index
-                            onClickItem(
-                                HomeChips.CATEGORY,
-                                item.name,
-                                item.tag
+                    key(index) {
+                        Tab(
+                            selected = selectedIndex == index,
+                            onClick = {
+                                selectedIndex = index
+                                onClickItem(
+                                    HomeChips.CATEGORY,
+                                    item.name,
+                                    item.tag
+                                )
+                            },
+                        ) {
+                            AsyncImage(
+                                model = item.imageUrl,
+                                contentDescription = "filter",
+                                modifier = Modifier
+                                    .padding(horizontal = 14.dp)
+                                    .size(30.dp)
                             )
-                        },
-                    ) {
-                        AsyncImage(
-                            model = item.imageUrl,
-                            contentDescription = "filter",
-                            modifier = Modifier
-                                .padding(horizontal = 14.dp)
-                                .size(40.dp)
-                        )
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
 
-                        Text(
-                            text = item.name,
-                            style = if (selectedIndex == index) HankkiTheme.typography.caption3 else HankkiTheme.typography.caption1,
-                            color = Gray900,
-                        )
+                            Text(
+                                text = item.name,
+                                style = if (selectedIndex == index) HankkiTheme.typography.caption3 else HankkiTheme.typography.caption1,
+                                color = Gray900,
+                            )
 
-                        Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
                     }
                 }
                 WhiteGradientBox(
@@ -185,12 +190,12 @@ private fun FilterButton(
 
                 Icon(
                     imageVector = ImageVector.vectorResource(
-                        if (isDefaultFilter) R.drawable.ic_filter_btn
-                        else R.drawable.ic_filter_btn_orange
+                        if (isDefaultFilter) R.drawable.ic_filter_default
+                        else R.drawable.ic_filter_orange
                     ),
-                    contentDescription = "reposition user location",
+                    contentDescription = "필터 버튼",
                     modifier = modifier
-                        .size(size - 20.dp)
+                        .size(size - 26.dp) // 위아래 Spacer의 합
                         .noRippleClickable(onClickFilterButton)
                         .shadow(
                             elevation = 6.dp,
@@ -201,7 +206,7 @@ private fun FilterButton(
                     tint = Color.Unspecified
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(18.dp))
             }
 
             Spacer(modifier = Modifier.padding(end = 12.dp))

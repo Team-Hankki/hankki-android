@@ -31,11 +31,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -236,6 +241,7 @@ fun ReportScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .imePadding()
                     .verticalScroll(scrollState),
             ) {
                 Spacer(modifier = Modifier.height(18.dp))
@@ -257,7 +263,6 @@ fun ReportScreen(
                     modifier = Modifier
                         .padding(horizontal = 22.dp)
                         .fillMaxWidth()
-                        .imePadding()
                 ) {
                     StoreCategoryChips(
                         title = stringResource(id = com.hankki.feature.report.R.string.show_store_categories),
@@ -301,6 +306,7 @@ fun ReportScreen(
                             Spacer(modifier = Modifier.height(24.dp))
                         }
 
+                        var addMenuButtonSize by remember { mutableIntStateOf(0) }
                         menuList.forEachIndexed { index, menu ->
                             MenuWithPriceInputComponent(
                                 name = menu.name,
@@ -314,7 +320,10 @@ fun ReportScreen(
                                     changePrice(index, price)
                                 },
                                 deleteMenu = { deleteMenu(index) },
-                                modifier = Modifier.animateScrollAroundItem(scrollState)
+                                modifier = Modifier.animateScrollAroundItem(
+                                    scrollState = scrollState,
+                                    verticalWeight = addMenuButtonSize
+                                )
                             )
                             if (index != menuList.lastIndex) {
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -322,18 +331,23 @@ fun ReportScreen(
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
-                        AddMenuButton(onClick = {
-                            addMenu()
-                            coroutineScope.launch {
-                                delay(100)
+                        AddMenuButton(
+                            onClick = {
+                                addMenu()
+                                coroutineScope.launch {
+                                    delay(100)
 
-                                if (isVisibleIme) {
-                                    focusManager.moveFocus(FocusDirection.Next)
-                                } else {
-                                    scrollState.animateScrollTo(scrollState.maxValue)
+                                    if (isVisibleIme) {
+                                        focusManager.moveFocus(FocusDirection.Next)
+                                    } else {
+                                        scrollState.animateScrollTo(scrollState.maxValue)
+                                    }
                                 }
+                            },
+                            modifier = Modifier.onGloballyPositioned {
+                                addMenuButtonSize = it.size.height
                             }
-                        })
+                        )
 
                         Spacer(modifier = Modifier.height(35.dp))
                         BottomBlurLayout()
@@ -427,7 +441,7 @@ fun StoreCategoryChips(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             categories.forEach { item ->
-                if (item.tag != "ALL") {
+                key(item.tag) {
                     HankkiChipWithIcon(
                         iconUrl = item.imageUrl,
                         title = item.name,
@@ -496,9 +510,12 @@ fun MenuWithPriceInputComponent(
 }
 
 @Composable
-fun AddMenuButton(onClick: () -> Unit) {
+fun AddMenuButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier.noRippleClickable(onClick = onClick),
+        modifier = modifier.noRippleClickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

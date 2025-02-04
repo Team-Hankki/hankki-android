@@ -112,7 +112,7 @@ private fun FilterContent(
                 .fillMaxWidth()
                 .padding(top = 14.dp, bottom = 4.dp),
             color = Gray850,
-            style = HankkiTheme.typography.body4
+            style = HankkiTheme.typography.body5
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -123,6 +123,7 @@ private fun FilterContent(
                 key(it.tag) {
                     HankkiFilterChip(
                         text = it.name,
+                        textStyle = HankkiTheme.typography.caption1,
                         isSelected = tag == it.tag,
                         onClick = { onClick(it) }
                     )

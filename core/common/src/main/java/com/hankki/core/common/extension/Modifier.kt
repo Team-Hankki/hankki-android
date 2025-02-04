@@ -130,15 +130,19 @@ fun Modifier.ignoreNextModifiers(): Modifier {
 
 fun Modifier.animateScrollAroundItem(
     scrollState: ScrollState,
-    yPosition: Float = 50f,
+    verticalWeight: Int = 0
 ): Modifier = composed {
     var scrollToPosition by remember {
         mutableFloatStateOf(0f)
     }
     val coroutineScope = rememberCoroutineScope()
+
     this
         .onGloballyPositioned { coordinates ->
-            scrollToPosition = coordinates.positionInParent().y + yPosition
+            val itemTop = coordinates.positionInParent().y
+            val itemHeight = coordinates.size.height
+
+            scrollToPosition = itemTop + itemHeight + verticalWeight
         }
         .onFocusEvent {
             if (it.isFocused) {
