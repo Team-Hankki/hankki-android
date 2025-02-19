@@ -95,7 +95,6 @@ fun NavGraphBuilder.myNavGraph(
         MyJogboDetailRoute(
             favoriteId = jogbo.favoriteId,
             navigateToDetail = navigateToStoreDetail,
-            navigateUp = navigateUp,
             navigateToHome = navigateToHome,
             navigateToNewSharedJogbo = navigateToNewSharedJogbo,
             navigateToMyJogbo = navigateToMyJogbo,
