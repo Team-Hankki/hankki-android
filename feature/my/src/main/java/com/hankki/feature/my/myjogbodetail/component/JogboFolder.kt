@@ -37,9 +37,9 @@ import kotlinx.collections.immutable.persistentListOf
 fun JogboFolder(
     title: String,
     chips: PersistentList<String>,
-    userNickname: String,
+    userName: String,
     shareJogboDialogState: () -> Unit,
-    isSharedJogbo: Boolean
+    isJogboOwner:Boolean
 ) {
     Box(
         modifier = Modifier
@@ -105,13 +105,13 @@ fun JogboFolder(
                         modifier = Modifier.size(26.dp)
                     )
                     Text(
-                        text = userNickname,
+                        text = userName,
                         style = HankkiTheme.typography.body6,
                         color = Gray600,
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
-                if (!isSharedJogbo) JogboShareButton(showShareDialog = shareJogboDialogState)
+                if (isJogboOwner) JogboShareButton(showShareDialog = shareJogboDialogState)
             }
         }
     }
@@ -124,9 +124,9 @@ fun JogboFolderPreview() {
         JogboFolder(
             title = "족보 이름",
             chips = persistentListOf("태그1", "태그2"),
-            userNickname = "사용자 이름",
+            userName = "사용자 이름",
             shareJogboDialogState = {},
-            isSharedJogbo = false
+            isJogboOwner = false
         )
     }
 }
