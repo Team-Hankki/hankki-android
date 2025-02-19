@@ -69,7 +69,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix
 @Composable
 fun MyRoute(
     paddingValues: PaddingValues,
-    navigateUp: () -> Unit,
+    navigateToHome: () -> Unit,
     navigateToJogbo: (Boolean) -> Unit,
     navigateToStore: (String) -> Unit,
     myViewModel: MyViewModel = hiltViewModel(),
@@ -109,7 +109,7 @@ fun MyRoute(
         }
     }
 
-    BackHandler(onBack = navigateUp)
+    BackHandler(onBack = navigateToHome)
 
     MyScreen(
         paddingValues = paddingValues,

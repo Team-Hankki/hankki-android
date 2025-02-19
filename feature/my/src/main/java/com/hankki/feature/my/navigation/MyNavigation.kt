@@ -58,7 +58,7 @@ fun NavGraphBuilder.myNavGraph(
     composable<My> {
         MyRoute(
             paddingValues = paddingValues,
-            navigateUp = navigateToHome,
+            navigateToHome = navigateToHome,
             navigateToJogbo = navigateToMyJogbo,
             navigateToStore = navigateToMyStore
         )
