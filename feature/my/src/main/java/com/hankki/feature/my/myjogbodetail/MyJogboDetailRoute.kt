@@ -2,7 +2,6 @@ package com.hankki.feature.my.myjogbodetail
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,12 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,11 +21,9 @@ import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,16 +39,13 @@ import com.hankki.core.designsystem.component.dialog.SingleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
 import com.hankki.core.designsystem.component.layout.EmptyViewWithButton
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
-import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
-import com.hankki.core.designsystem.theme.Red500
 import com.hankki.core.designsystem.theme.White
 import com.hankki.domain.my.entity.response.Store
 import com.hankki.feature.my.R
 import com.hankki.feature.my.component.MyStoreItem
-import com.hankki.feature.my.myjogbodetail.component.JogboFolder
+import com.hankki.feature.my.myjogbodetail.component.JogboHeader
 import com.hankki.feature.my.myjogbodetail.component.MoveToHomeButton
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -62,7 +53,6 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun MyJogboDetailRoute(
     favoriteId: Long,
-    navigateUp: () -> Unit,
     navigateToDetail: (Long) -> Unit,
     navigateToHome: () -> Unit,
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
@@ -97,13 +87,12 @@ fun MyJogboDetailRoute(
     }
 
     MyJogboDetailScreen(
-        navigateUp = navigateUp,
         jogboTitle = state.myStoreItems.title,
         jogboChips = state.myStoreItems.chips.toPersistentList(),
         state = state.uiState,
         deleteDialogState = state.deleteDialogState,
         shareDialogState = state.shareDialogState,
-        userNickname = state.userInformation.nickname,
+        userName = state.userInformation.nickname,
         updateShareDialogState = myJogboDetailViewModel::updateShareDialogState,
         updateDeleteDialogState = myJogboDetailViewModel::updateDeleteDialogState,
         deleteSelectedStore = { storeId ->
@@ -127,18 +116,17 @@ fun MyJogboDetailRoute(
         navigateToMyJogbo = navigateToMyJogbo
     )
 
-    BackHandler(onBack = { if (isSharedJogbo) navigateToMyJogbo(false) else navigateUp() })
+    BackHandler(onBack = { navigateToMyJogbo(false) })
 }
 
 @Composable
 fun MyJogboDetailScreen(
-    navigateUp: () -> Unit,
     jogboTitle: String,
     jogboChips: PersistentList<String>,
     state: EmptyUiState<PersistentList<Store>>,
     deleteDialogState: Boolean,
     shareDialogState: Boolean,
-    userNickname: String,
+    userName: String,
     updateShareDialogState: () -> Unit,
     updateDeleteDialogState: () -> Unit,
     deleteSelectedStore: (Long) -> Unit,
@@ -222,41 +210,13 @@ fun MyJogboDetailScreen(
 
                 is EmptyUiState.Success -> {
                     item {
-                        HankkiTopBar(
-                            modifier = Modifier
-                                .background(Red500)
-                                .statusBarsPadding(),
-                            leadingIcon = {
-                                Image(
-                                    imageVector = ImageVector.vectorResource(R.drawable.icon_back),
-                                    contentDescription = "Back",
-                                    modifier = Modifier
-                                        .padding(start = 7.dp)
-                                        .size(40.dp)
-                                        .noRippleClickable(onClick = {
-                                            if (isSharedJogbo) navigateToMyJogbo(
-                                                false
-                                            ) else navigateUp()
-                                        }),
-                                )
-                            },
-                            content = {
-                                Text(
-                                    text = if (isSharedJogbo && !isJogboOwner) stringResource(R.string.shared_jogbo) else stringResource(
-                                        R.string.my_jogbo
-                                    ),
-                                    style = HankkiTheme.typography.sub3,
-                                    color = Gray900
-                                )
-                            }
-                        )
-                    }
-
-                    item {
-                        JogboFolder(
-                            title = jogboTitle,
-                            chips = jogboChips,
-                            userNickname = userNickname,
+                        JogboHeader(
+                            isSharedJogbo = isSharedJogbo,
+                            isJogboOwner = isJogboOwner,
+                            jogboTitle = jogboTitle,
+                            jogboChips = jogboChips,
+                            userName = userName,
+                            navigateToMyJogbo = navigateToMyJogbo,
                             shareJogboDialogState = {
                                 val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
                                 val imageUrl =
@@ -267,11 +227,10 @@ fun MyJogboDetailScreen(
                                     context,
                                     imageUrl,
                                     jogboTitle,
-                                    userNickname,
+                                    userName,
                                     favoriteId
                                 )
-                            },
-                            isSharedJogbo = isSharedJogbo
+                            }
                         )
                     }
 
@@ -319,47 +278,20 @@ fun MyJogboDetailScreen(
 
                 is EmptyUiState.Empty -> {
                     item {
-                        HankkiTopBar(
-                            modifier = Modifier
-                                .background(Red500)
-                                .statusBarsPadding(),
-                            leadingIcon = {
-                                Image(
-                                    imageVector = ImageVector.vectorResource(R.drawable.icon_back),
-                                    contentDescription = "Back",
-                                    modifier = Modifier
-                                        .padding(start = 7.dp)
-                                        .size(40.dp)
-                                        .noRippleClickable(onClick = {
-                                            if (isSharedJogbo) navigateToMyJogbo(
-                                                false
-                                            ) else navigateUp()
-                                        }),
-                                )
-                            },
-                            content = {
-                                Text(
-                                    text = if (isSharedJogbo && !isJogboOwner) stringResource(R.string.shared_jogbo) else stringResource(
-                                        R.string.my_jogbo
-                                    ),
-                                    style = HankkiTheme.typography.sub3,
-                                    color = Gray900
-                                )
-                            }
-                        )
-                    }
-
-                    item {
-                        JogboFolder(
-                            title = jogboTitle,
-                            chips = jogboChips,
-                            userNickname = userNickname,
-                            shareJogboDialogState = updateShareDialogState,
-                            isSharedJogbo = isSharedJogbo
+                        JogboHeader(
+                            isSharedJogbo = isSharedJogbo,
+                            isJogboOwner = isJogboOwner,
+                            jogboTitle = jogboTitle,
+                            jogboChips = jogboChips,
+                            userName = userName,
+                            navigateToMyJogbo = navigateToMyJogbo,
+                            shareJogboDialogState = updateShareDialogState
                         )
 
                         Spacer(modifier = Modifier.height((height).dp))
+                    }
 
+                    item {
                         if (isJogboOwner)
                             EmptyViewWithButton(
                                 text = stringResource(R.string.my_jogbo) +
@@ -413,7 +345,6 @@ fun MyJogboDetailScreenPreview() {
     HankkijogboTheme {
         MyJogboDetailRoute(
             favoriteId = 1,
-            navigateUp = {},
             navigateToDetail = {},
             navigateToHome = {},
             navigateToNewSharedJogbo = { _, _ -> },
