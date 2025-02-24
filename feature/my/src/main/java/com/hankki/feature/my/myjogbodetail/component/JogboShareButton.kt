@@ -24,10 +24,11 @@ import com.hankki.core.designsystem.theme.White
 
 @Composable
 fun JogboShareButton(
+    modifier: Modifier = Modifier,
     showShareDialog: () -> Unit
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(88.dp))
             .background(Gray800)
             .padding(top = 7.dp, bottom = 9.dp, start = 9.dp, end = 16.dp)

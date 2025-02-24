@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -37,12 +38,13 @@ import kotlinx.collections.immutable.persistentListOf
 fun JogboFolder(
     title: String,
     chips: PersistentList<String>,
-    userNickname: String,
+    userName: String,
     shareJogboDialogState: () -> Unit,
-    isSharedJogbo: Boolean
+    isJogboOwner: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Red500)
             .padding(horizontal = 22.dp)
@@ -105,13 +107,20 @@ fun JogboFolder(
                         modifier = Modifier.size(26.dp)
                     )
                     Text(
-                        text = userNickname,
+                        text = userName,
                         style = HankkiTheme.typography.body6,
                         color = Gray600,
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
-                if (!isSharedJogbo) JogboShareButton(showShareDialog = shareJogboDialogState)
+
+                JogboShareButton(
+                    modifier = Modifier.alpha(if (isJogboOwner) 1f else 0f),
+                    showShareDialog = {
+                        if (isJogboOwner) shareJogboDialogState() else {
+                        }
+                    }
+                )
             }
         }
     }
@@ -121,12 +130,22 @@ fun JogboFolder(
 @Preview
 fun JogboFolderPreview() {
     HankkijogboTheme {
-        JogboFolder(
-            title = "족보 이름",
-            chips = persistentListOf("태그1", "태그2"),
-            userNickname = "사용자 이름",
-            shareJogboDialogState = {},
-            isSharedJogbo = false
-        )
+        Column {
+            JogboFolder(
+                title = "족보 이름",
+                chips = persistentListOf("태그1", "태그2"),
+                userName = "사용자 이름",
+                shareJogboDialogState = {},
+                isJogboOwner = false
+            )
+
+            JogboFolder(
+                title = "족보 이름",
+                chips = persistentListOf("태그1", "태그2"),
+                userName = "사용자 이름",
+                shareJogboDialogState = {},
+                isJogboOwner = true
+            )
+        }
     }
 }

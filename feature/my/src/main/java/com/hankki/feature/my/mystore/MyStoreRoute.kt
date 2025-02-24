@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +31,6 @@ import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.layout.EmptyView
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
 import com.hankki.core.designsystem.theme.HankkijogboTheme
@@ -156,17 +154,6 @@ fun MyStoreScreen(
                                     updateStoreSelected(store.id, store.isLiked == true)
                                 },
                             )
-
-                            if (index != state.data.lastIndex) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(
-                                        vertical = 1.dp,
-                                        horizontal = 22.dp
-                                    ),
-                                    thickness = 1.dp,
-                                    color = Gray200
-                                )
-                            }
                         }
                     }
                 }
