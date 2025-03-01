@@ -1,6 +1,5 @@
 package com.hankki.feature.home.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,21 +33,24 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
+import com.hankki.core.designsystem.component.item.UrlImage
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
+import com.hankki.core.designsystem.theme.HankkijogboTheme
 import com.hankki.core.designsystem.theme.White
 import com.hankki.feature.home.R
 import com.hankki.feature.home.model.CategoryChipItem
 import com.hankki.feature.home.model.HomeChips
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun HankkiCategoryScrollableTabRow(
@@ -211,5 +213,68 @@ private fun FilterButton(
 
             Spacer(modifier = Modifier.padding(end = 12.dp))
         }
+    }
+}
+
+@Preview
+@Composable
+fun HankkiCategoryScrollableTabRowPreview() {
+    HankkijogboTheme {
+        HankkiCategoryScrollableTabRow(
+            categoryChipItems = listOf(
+                CategoryChipItem(
+                    name = "한식",
+                    imageUrl = "",
+                    tag = "korean"
+                ),
+                CategoryChipItem(
+                    name = "중식",
+                    imageUrl = "",
+                    tag = "chinese"
+                ),
+                CategoryChipItem(
+                    name = "일식",
+                    imageUrl = "",
+                    tag = "japanese"
+                ),
+                CategoryChipItem(
+                    name = "양식",
+                    imageUrl = "",
+                    tag = "western"
+                ),
+                CategoryChipItem(
+                    name = "분식",
+                    imageUrl = "",
+                    tag = "snack"
+                ),
+                CategoryChipItem(
+                    name = "카페",
+                    imageUrl = "",
+                    tag = "cafe"
+                ),
+                CategoryChipItem(
+                    name = "편의점",
+                    imageUrl = "",
+                    tag = "convenience"
+                ),
+                CategoryChipItem(
+                    name = "패스트푸드",
+                    imageUrl = "",
+                    tag = "fastfood"
+                ),
+                CategoryChipItem(
+                    name = "디저트",
+                    imageUrl = "",
+                    tag = "dessert"
+                ),
+                CategoryChipItem(
+                    name = "음료",
+                    imageUrl = "",
+                    tag = "drink"
+                ),
+            ).toPersistentList(),
+            onClickItem = { _, _, _ -> },
+            onClickFilterButton = { },
+        )
     }
 }
