@@ -39,7 +39,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.item.UrlImage
 import com.hankki.core.designsystem.theme.Gray900
@@ -110,8 +109,8 @@ fun HankkiCategoryScrollableTabRow(
                                 )
                             },
                         ) {
-                            AsyncImage(
-                                model = item.imageUrl,
+                            UrlImage(
+                                url = item.imageUrl,
                                 contentDescription = "filter",
                                 modifier = Modifier
                                     .padding(horizontal = 14.dp)
