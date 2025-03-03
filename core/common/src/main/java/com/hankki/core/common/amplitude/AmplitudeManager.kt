@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
-import com.amplitude.android.events.Identify
 import com.hankki.core.common.BuildConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -28,6 +27,9 @@ class AmplitudeTracker @Inject constructor(
         if (BuildConfig.DEBUG) {
             Timber.d("Amplitude: ${name}_${type.prefix} properties: $properties")
         }
-        amplitude.track(eventType = "${name}_${type.prefix}", eventProperties = properties)
+        amplitude.track(
+            eventType = if (type == EventType.NONE) name else "${name}_${type.prefix}",
+            eventProperties = properties
+        )
     }
 }
