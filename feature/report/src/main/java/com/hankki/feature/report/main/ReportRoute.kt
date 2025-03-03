@@ -194,6 +194,7 @@ fun ReportScreen(
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val isVisibleIme = WindowInsets.isImeVisible
+    val tracker = LocalTracker.current
 
     if (isUniversityError) {
         SingleButtonDialog(
@@ -292,7 +293,13 @@ fun ReportScreen(
                         if (selectedImageUri == null) {
                             Spacer(modifier = Modifier.height(24.dp))
                             AddPhotoButton(
-                                onClick = selectImageUri,
+                                onClick = {
+                                    selectImageUri()
+                                    tracker.track(
+                                        type = EventType.CLICK,
+                                        name = "Report_Food_Picture"
+                                    )
+                                },
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(modifier = Modifier.height(24.dp))
