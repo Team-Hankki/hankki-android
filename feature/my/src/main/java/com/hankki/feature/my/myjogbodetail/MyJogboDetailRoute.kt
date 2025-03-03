@@ -155,6 +155,16 @@ fun MyJogboDetailScreen(
     val scrollState = rememberLazyListState()
     val context = LocalContext.current
 
+    if (isSharedJogbo && !isJogboOwner) {
+        tracker.track(
+            type = EventType.NONE,
+            name = "Shared_Jokbo_Page",
+            properties = mapOf(
+                "족보" to jogboTitle
+            )
+        )
+    }
+
     if (shareDialogState) {
         DoubleButtonDialog(
             title = stringResource(R.string.no_jogbo),
