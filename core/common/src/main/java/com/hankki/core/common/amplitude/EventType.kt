@@ -4,5 +4,6 @@ enum class EventType(val prefix: String) {
     ADD("Add"),
     CLICK("Click"),
     CREATE("Create"),
-    COMPLETED("Completed")
+    COMPLETED("Completed"),
+    NONE("")
 }
