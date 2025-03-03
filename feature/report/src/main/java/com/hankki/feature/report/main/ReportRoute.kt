@@ -429,6 +429,8 @@ fun StoreCategoryChips(
     selectedItem: String?,
     onClick: (String) -> Unit = {},
 ) {
+    val tracker = LocalTracker.current
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
@@ -446,7 +448,16 @@ fun StoreCategoryChips(
                         iconUrl = item.imageUrl,
                         title = item.name,
                         isSelected = item.tag == selectedItem,
-                        onClick = { onClick(item.tag) }
+                        onClick = {
+                            onClick(item.tag)
+                            tracker.track(
+                                type = EventType.CLICK,
+                                name = "Report_Food_Categories",
+                                properties = mapOf(
+                                    "food" to item.name
+                                )
+                            )
+                        }
                     )
                 }
             }
