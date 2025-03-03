@@ -229,7 +229,13 @@ fun ReportScreen(
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable(navigateUp)
+                        .noRippleClickable {
+                            navigateUp()
+                            tracker.track(
+                                type = EventType.CLICK,
+                                name = "Report_Back"
+                            )
+                        }
                 )
             }
         )
