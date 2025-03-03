@@ -352,7 +352,16 @@ fun MyJogboDetailScreen(
                             .fillMaxWidth()
                             .padding(bottom = 15.dp),
                         text = stringResource(R.string.add_to_my_jogbo),
-                        onClick = { navigateToNewSharedJogbo(isSharedJogbo, favoriteId) },
+                        onClick = {
+                            navigateToNewSharedJogbo(isSharedJogbo, favoriteId)
+                            tracker.track(
+                                type = EventType.ADD,
+                                name = "Shared_Jokbo_MyJokbo",
+                                properties = mapOf(
+                                    "족보" to jogboTitle
+                                )
+                            )
+                        },
                         enabled = true,
                         textStyle = HankkiTheme.typography.sub3,
                     )
