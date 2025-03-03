@@ -567,7 +567,7 @@ fun HomeScreen(
                                                         type = EventType.CLICK,
                                                         name = "Home_StoreCard",
                                                         properties = mapOf(
-                                                            "식당 이름" to item.name
+                                                            "식당" to item.name
                                                         )
                                                     )
                                                 }
