@@ -459,6 +459,13 @@ fun HomeScreen(
                             captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
                             onClick = {
                                 clickMarkerItem(marker.id)
+                                tracker.track(
+                                    type = EventType.CLICK,
+                                    name = "Home_Map_Pin",
+                                    properties = mapOf(
+                                        "식당" to marker.name
+                                    )
+                                )
                                 true
                             }
                         )
