@@ -1,5 +1,6 @@
 package com.hankki.feature.storedetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -247,6 +248,15 @@ fun StoreDetailScreen(
 ) {
     val localContextResource = LocalContext.current.resources
     val tracker = LocalTracker.current
+
+    BackHandler {
+        onNavigateUp()
+
+        tracker.track(
+            type = EventType.CLICK,
+            name = "RestInfo_Back"
+        )
+    }
 
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(

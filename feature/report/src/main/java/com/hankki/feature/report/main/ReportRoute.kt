@@ -1,6 +1,7 @@
 package com.hankki.feature.report.main
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -190,11 +191,22 @@ fun ReportScreen(
     controlErrorDialog: () -> Unit = {},
     submitReport: () -> Unit,
 ) {
+    val tracker = LocalTracker.current
+    val focusManager = LocalFocusManager.current
+
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    val focusManager = LocalFocusManager.current
+
     val isVisibleIme = WindowInsets.isImeVisible
-    val tracker = LocalTracker.current
+
+    BackHandler {
+        navigateUp()
+
+        tracker.track(
+            type = EventType.CLICK,
+            name = "Report_Back"
+        )
+    }
 
     if (isUniversityError) {
         SingleButtonDialog(
@@ -231,6 +243,7 @@ fun ReportScreen(
                         .size(44.dp)
                         .noRippleClickable {
                             navigateUp()
+
                             tracker.track(
                                 type = EventType.CLICK,
                                 name = "Report_Back"
