@@ -43,13 +43,12 @@ import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.R
 import com.hankki.core.designsystem.component.bottomsheet.HankkiStoreJogboBottomSheet
 import com.hankki.core.designsystem.component.bottomsheet.JogboResponseModel
-import com.hankki.feature.storedetail.component.StoreDetailMenuButton
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.dialog.ImageDoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.HankkiLoadingScreen
 import com.hankki.core.designsystem.component.topappbar.HankkiTopBar
-import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.event.LocalButtonSnackBarTrigger
+import com.hankki.core.designsystem.event.LocalSnackBarTrigger
 import com.hankki.core.designsystem.theme.Gray100
 import com.hankki.core.designsystem.theme.Gray350
 import com.hankki.core.designsystem.theme.Gray400
@@ -62,6 +61,7 @@ import com.hankki.domain.storedetail.entity.MenuItem
 import com.hankki.feature.storedetail.component.StoreDetailDifferentButton
 import com.hankki.feature.storedetail.component.StoreDetailHeadBox
 import com.hankki.feature.storedetail.component.StoreDetailMenuBox
+import com.hankki.feature.storedetail.component.StoreDetailMenuButton
 import com.hankki.feature.storedetail.editbottomsheet.EditMenuBottomSheet
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -311,7 +311,13 @@ fun StoreDetailScreen(
                             contentDescription = "뒤로가기",
                             modifier = Modifier
                                 .padding(start = 6.dp, top = 2.dp)
-                                .noRippleClickable(onClick = onNavigateUp),
+                                .noRippleClickable(onClick = {
+                                    onNavigateUp()
+                                    tracker.track(
+                                        type = EventType.CLICK,
+                                        name = "RestInfo_Back"
+                                    )
+                                }),
                             tint = Gray50
                         )
                     }
