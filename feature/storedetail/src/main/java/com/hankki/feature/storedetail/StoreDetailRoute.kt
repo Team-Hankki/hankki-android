@@ -246,6 +246,7 @@ fun StoreDetailScreen(
     onEditMenuClick: () -> Unit
 ) {
     val localContextResource = LocalContext.current.resources
+    val tracker = LocalTracker.current
 
     if (isOpenBottomSheet) {
         HankkiStoreJogboBottomSheet(
@@ -409,7 +410,13 @@ fun StoreDetailScreen(
 
             StoreDetailMenuBox(
                 menuItems = menuItems,
-                onMenuEditClick = openEditMenuBottomSheet
+                onMenuEditClick = {
+                    openEditMenuBottomSheet()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_MenuEdit"
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
