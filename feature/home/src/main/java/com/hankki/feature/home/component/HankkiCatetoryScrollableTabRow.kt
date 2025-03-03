@@ -41,6 +41,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -58,6 +60,7 @@ fun HankkiCategoryScrollableTabRow(
     modifier: Modifier = Modifier,
     onClickFilterButton: () -> Unit,
 ) {
+    val tracker = LocalTracker.current
     val currentDensity = LocalDensity.current
 
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -105,6 +108,13 @@ fun HankkiCategoryScrollableTabRow(
                                     HomeChips.CATEGORY,
                                     item.name,
                                     item.tag
+                                )
+                                tracker.track(
+                                    type = EventType.CLICK,
+                                    name = "Home_Food_Categories",
+                                    properties = mapOf(
+                                        "food" to item.name
+                                    )
                                 )
                             },
                         ) {
