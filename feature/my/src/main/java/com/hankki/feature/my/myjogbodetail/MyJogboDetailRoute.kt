@@ -138,7 +138,7 @@ fun MyJogboDetailScreen(
     navigateToHome: () -> Unit,
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     isSharedJogbo: Boolean,
-    shareJogbo: (Context, String, String, String, Long) -> Unit,
+    shareJogbo: (Context, String, String, String, Long, () -> Unit) -> Unit,
     favoriteId: Long,
     isJogboOwner: Boolean,
     loginDialogState: Boolean,
@@ -242,7 +242,16 @@ fun MyJogboDetailScreen(
                                     imageUrl,
                                     jogboTitle,
                                     userName,
-                                    favoriteId
+                                    favoriteId,
+                                    {
+                                        tracker.track(
+                                            type = EventType.COMPLETED,
+                                            name = "Mypage_MyJokbo_Share",
+                                            properties = mapOf(
+                                                "족보" to jogboTitle
+                                            )
+                                        )
+                                    }
                                 )
 
                                 tracker.track(
