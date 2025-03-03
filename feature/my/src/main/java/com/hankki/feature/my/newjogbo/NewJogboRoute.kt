@@ -32,6 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiButton
@@ -115,6 +117,7 @@ fun NewJogboScreen(
 ) {
     val isVisibleIme = WindowInsets.isImeVisible
     val focusManager = LocalFocusManager.current
+    val tracker = LocalTracker.current
 
     if (errorDialogState) {
         SingleButtonDialog(
@@ -210,7 +213,16 @@ fun NewJogboScreen(
                     .fillMaxWidth()
                     .imePadding(),
                 text = if (isSharedJogbo) stringResource(R.string.add) else stringResource(R.string.make_jogbo),
-                onClick = { createSharedJogbo(favoriteId) },
+                onClick = {
+                    createSharedJogbo(favoriteId)
+                    tracker.track(
+                        type = EventType.COMPLETED,
+                        name = "Shared_Jokbo_MyJokbo_Add",
+                        properties = mapOf(
+                            "족보" to title
+                        )
+                    )
+                },
                 enabled = buttonEnabledState,
                 textStyle = HankkiTheme.typography.sub3,
             )
@@ -222,7 +234,16 @@ fun NewJogboScreen(
                     .fillMaxWidth()
                     .padding(bottom = 15.dp),
                 text = if (isSharedJogbo) stringResource(R.string.add) else stringResource(R.string.make_jogbo),
-                onClick = { createNewJogbo() },
+                onClick = {
+                    createNewJogbo()
+                    tracker.track(
+                        type = EventType.COMPLETED,
+                        name = "Shared_Jokbo_MyJokbo_Add",
+                        properties = mapOf(
+                            "족보" to title
+                        )
+                    )
+                },
                 enabled = buttonEnabledState,
                 textStyle = HankkiTheme.typography.sub3,
             )
