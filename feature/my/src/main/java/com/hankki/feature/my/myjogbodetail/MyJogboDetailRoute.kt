@@ -31,6 +31,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.BuildConfig.KAKAO_SHARE_DEFAULT_IMAGE
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.button.HankkiButton
@@ -144,7 +146,9 @@ fun MyJogboDetailScreen(
     navigateToLogin: (Boolean) -> Unit,
     navigateToMyJogbo: (Boolean) -> Unit
 ) {
+    val tracker = LocalTracker.current
     val configuration = LocalConfiguration.current
+
     val height by rememberSaveable {
         mutableDoubleStateOf(configuration.screenHeightDp * 0.09)
     }
@@ -217,7 +221,7 @@ fun MyJogboDetailScreen(
                             jogboChips = jogboChips,
                             userName = userName,
                             navigateToMyJogbo = navigateToMyJogbo,
-                            shareJogboDialogState = {
+                            onClickShareButton = {
                                 val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
                                 val imageUrl =
                                     state.data.firstOrNull { it.imageUrl != null }?.imageUrl
@@ -229,6 +233,14 @@ fun MyJogboDetailScreen(
                                     jogboTitle,
                                     userName,
                                     favoriteId
+                                )
+
+                                tracker.track(
+                                    type = EventType.NONE,
+                                    name = "Mypage_MyJokbo_Share",
+                                    properties = mapOf(
+                                        "족보" to jogboTitle
+                                    )
                                 )
                             }
                         )
@@ -285,7 +297,7 @@ fun MyJogboDetailScreen(
                             jogboChips = jogboChips,
                             userName = userName,
                             navigateToMyJogbo = navigateToMyJogbo,
-                            shareJogboDialogState = updateShareDialogState
+                            onClickShareButton = updateShareDialogState
                         )
 
                         Spacer(modifier = Modifier.height((height).dp))
