@@ -53,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.animateScrollAroundItem
 import com.hankki.core.common.extension.noRippleClickable
@@ -480,7 +481,7 @@ fun StoreCategoryChips(
                                 type = EventType.CLICK,
                                 name = "Report_Food_Categories",
                                 properties = mapOf(
-                                    "food" to item.name
+                                    PropertyKey.FOOD to item.name
                                 )
                             )
                         }

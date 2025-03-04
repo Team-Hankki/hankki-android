@@ -64,6 +64,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
@@ -463,7 +464,7 @@ fun HomeScreen(
                                     type = EventType.CLICK,
                                     name = "Home_Map_Pin",
                                     properties = mapOf(
-                                        "식당" to marker.name
+                                        PropertyKey.STORE to marker.name
                                     )
                                 )
                                 true
@@ -567,7 +568,7 @@ fun HomeScreen(
                                                         type = EventType.CLICK,
                                                         name = "Home_StoreCard",
                                                         properties = mapOf(
-                                                            "식당" to item.name
+                                                            PropertyKey.STORE to item.name
                                                         )
                                                     )
                                                 }

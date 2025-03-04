@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -113,7 +114,7 @@ fun HankkiCategoryScrollableTabRow(
                                     type = EventType.CLICK,
                                     name = "Home_Food_Categories",
                                     properties = mapOf(
-                                        "food" to item.name
+                                        PropertyKey.FOOD to item.name
                                     )
                                 )
                             },

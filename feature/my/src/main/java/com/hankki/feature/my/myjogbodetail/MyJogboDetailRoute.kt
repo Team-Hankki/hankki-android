@@ -33,6 +33,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.BuildConfig.KAKAO_SHARE_DEFAULT_IMAGE
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.button.HankkiButton
@@ -160,7 +161,7 @@ fun MyJogboDetailScreen(
             type = EventType.NONE,
             name = "Shared_Jokbo_Page",
             properties = mapOf(
-                "족보" to jogboTitle
+                PropertyKey.JOGBO to jogboTitle
             )
         )
     }
@@ -248,7 +249,7 @@ fun MyJogboDetailScreen(
                                             type = EventType.COMPLETED,
                                             name = "Mypage_MyJokbo_Share",
                                             properties = mapOf(
-                                                "족보" to jogboTitle
+                                                PropertyKey.JOGBO to jogboTitle
                                             )
                                         )
                                     }
@@ -258,7 +259,7 @@ fun MyJogboDetailScreen(
                                     type = EventType.NONE,
                                     name = "Mypage_MyJokbo_Share",
                                     properties = mapOf(
-                                        "족보" to jogboTitle
+                                        PropertyKey.JOGBO to jogboTitle
                                     )
                                 )
                             }
@@ -367,7 +368,7 @@ fun MyJogboDetailScreen(
                                 type = EventType.ADD,
                                 name = "Shared_Jokbo_MyJokbo",
                                 properties = mapOf(
-                                    "족보" to jogboTitle
+                                    PropertyKey.JOGBO to jogboTitle
                                 )
                             )
                         },

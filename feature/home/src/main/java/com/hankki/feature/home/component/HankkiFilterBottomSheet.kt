@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray800
@@ -94,8 +95,8 @@ fun HankkiFilterBottomSheet(
                         type = EventType.COMPLETED,
                         name = "Home_Detail_Filter",
                         properties = mapOf(
-                            "정렬" to nowSortedName.value.name,
-                            "가격대" to nowPriceName.value.name
+                            PropertyKey.ARRAY to nowSortedName.value.name,
+                            PropertyKey.PRICE to nowPriceName.value.name
                         )
                     )
                 },
