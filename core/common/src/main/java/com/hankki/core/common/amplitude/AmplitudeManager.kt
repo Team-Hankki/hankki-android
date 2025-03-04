@@ -23,13 +23,14 @@ class AmplitudeTracker @Inject constructor(
         ),
     )
 
-    fun track(type: EventType, name: String, properties: Map<String, Any?> = emptyMap()) {
+    fun track(type: EventType, name: String, properties: Map<PropertyKey, Any?> = emptyMap()) {
+        val eventType = if (type == EventType.NONE) name else "${name}_${type.prefix}"
+        val properties = properties.mapKeys { it.key.key }
+
         if (BuildConfig.DEBUG) {
-            Timber.d("Amplitude: ${name}_${type.prefix} properties: $properties")
+            Timber.d("Amplitude: $eventType properties: $properties")
         }
-        amplitude.track(
-            eventType = if (type == EventType.NONE) name else "${name}_${type.prefix}",
-            eventProperties = properties
-        )
+
+        amplitude.track(eventType = eventType, eventProperties = properties)
     }
 }
