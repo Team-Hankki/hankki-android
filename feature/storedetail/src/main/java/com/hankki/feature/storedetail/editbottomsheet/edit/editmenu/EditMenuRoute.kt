@@ -114,6 +114,10 @@ fun EditMenuRoute(
                 onPositiveButtonClicked = {
                     viewModel.deleteMenuItem(storeId)
                     viewModel.closeDialog()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_DeleteCompleted"
+                    )
                 }
             )
         }

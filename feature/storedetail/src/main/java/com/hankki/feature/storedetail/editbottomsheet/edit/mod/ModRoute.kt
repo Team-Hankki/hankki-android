@@ -117,6 +117,10 @@ fun ModRoute(
                 onPositiveButtonClicked = {
                     viewModel.deleteMenu()
                     viewModel.closeDialog()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_DeleteCompleted"
+                    )
                 }
             )
         }
