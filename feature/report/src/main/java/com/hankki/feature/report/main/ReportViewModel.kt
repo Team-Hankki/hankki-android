@@ -3,6 +3,7 @@ package com.hankki.feature.report.main
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hankki.domain.report.entity.request.ReportStoreRequestEntity
 import com.hankki.domain.report.repository.ReportRepository
 import com.hankki.feature.report.model.LocationModel
@@ -213,6 +214,12 @@ class ReportViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 isShowErrorDialog = !state.value.isShowErrorDialog
             )
+        }
+    }
+
+    fun navigateUpTrackSideEffect(){
+        viewModelScope.launch {
+            _sideEffect.emit(ReportSideEffect.NavigateUpTrack)
         }
     }
 }

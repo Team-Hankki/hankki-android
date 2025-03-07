@@ -10,4 +10,6 @@ sealed class ReportSideEffect {
     data object UniversityError : ReportSideEffect()
 
     data object ReportError : ReportSideEffect()
+
+    data object NavigateUpTrack: ReportSideEffect()
 }

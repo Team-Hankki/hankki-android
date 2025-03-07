@@ -134,6 +134,14 @@ fun ReportRoute(
                     )
                 }
 
+                is ReportSideEffect.NavigateUpTrack -> {
+                    navigateUp()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "Report_Back"
+                    )
+                }
+
                 ReportSideEffect.UniversityError -> navigateUp()
                 ReportSideEffect.ReportError -> snackBar("오류가 발생했어요. 다시 시도해주세요")
             }
@@ -146,7 +154,7 @@ fun ReportRoute(
         buttonEnabled = state.buttonEnabled,
         isShowErrorDialog = state.isShowErrorDialog,
         controlErrorDialog = viewModel::controlErrorDialog,
-        navigateUp = navigateUp,
+        navigateUp = viewModel::navigateUpTrackSideEffect,
         categoryList = state.categoryList,
         selectedImageUri = state.selectedImageUri,
         isUniversityError = state.isUniversityError,
@@ -163,7 +171,7 @@ fun ReportRoute(
         addMenu = viewModel::addMenu,
         deleteMenu = viewModel::deleteMenu,
         navigateSearchStore = navigateSearchStore,
-        submitReport = viewModel::submitReport
+        submitReport = viewModel::submitReport,
     )
 }
 
@@ -200,14 +208,7 @@ fun ReportScreen(
 
     val isVisibleIme = WindowInsets.isImeVisible
 
-    BackHandler {
-        navigateUp()
-
-        tracker.track(
-            type = EventType.CLICK,
-            name = "Report_Back"
-        )
-    }
+    BackHandler(onBack = navigateUp)
 
     if (isUniversityError) {
         SingleButtonDialog(
@@ -242,14 +243,7 @@ fun ReportScreen(
                     modifier = Modifier
                         .padding(start = 9.dp)
                         .size(44.dp)
-                        .noRippleClickable {
-                            navigateUp()
-
-                            tracker.track(
-                                type = EventType.CLICK,
-                                name = "Report_Back"
-                            )
-                        }
+                        .noRippleClickable(navigateUp)
                 )
             }
         )
