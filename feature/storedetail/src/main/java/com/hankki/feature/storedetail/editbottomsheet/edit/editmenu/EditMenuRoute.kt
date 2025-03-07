@@ -26,6 +26,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.dialog.DoubleButtonDialog
 import com.hankki.core.designsystem.component.layout.BottomBlurLayout
@@ -53,6 +55,8 @@ fun EditMenuRoute(
     onNavigateToDeleteSuccessLast: (Long) -> Unit,
 ) {
     val snackBar = LocalSnackBarTrigger.current
+    val tracker = LocalTracker.current
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
@@ -91,6 +95,10 @@ fun EditMenuRoute(
                 onPositiveButtonClicked = {
                     viewModel.deleteMenuItem(storeId)
                     viewModel.closeDialog()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_DeleteCompleted"
+                    )
                 }
             )
         }
@@ -106,6 +114,10 @@ fun EditMenuRoute(
                 onPositiveButtonClicked = {
                     viewModel.deleteMenuItem(storeId)
                     viewModel.closeDialog()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_DeleteCompleted"
+                    )
                 }
             )
         }

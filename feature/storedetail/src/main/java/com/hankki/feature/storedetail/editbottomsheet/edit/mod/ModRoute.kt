@@ -29,6 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.component.button.HankkiExpandedButton
 import com.hankki.core.designsystem.component.button.HankkiMediumButton
@@ -60,6 +62,7 @@ fun ModRoute(
     onNavigateToDeleteSuccess: (Long) -> Unit,
 ) {
     val snackBar = LocalSnackBarTrigger.current
+    val tracker = LocalTracker.current
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sideEffectFlow = viewModel.sideEffect
@@ -114,6 +117,10 @@ fun ModRoute(
                 onPositiveButtonClicked = {
                     viewModel.deleteMenu()
                     viewModel.closeDialog()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_DeleteCompleted"
+                    )
                 }
             )
         }
@@ -131,6 +138,10 @@ fun ModRoute(
                         viewModel.submitMenu()
                     }
                     viewModel.closeDialog()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "RestInfo_MenuEditCompleted"
+                    )
                 }
             )
         }

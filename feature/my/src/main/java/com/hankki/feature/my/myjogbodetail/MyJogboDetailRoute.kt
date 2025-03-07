@@ -31,6 +31,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.BuildConfig.KAKAO_SHARE_DEFAULT_IMAGE
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
 import com.hankki.core.designsystem.component.button.HankkiButton
@@ -136,7 +139,7 @@ fun MyJogboDetailScreen(
     navigateToHome: () -> Unit,
     navigateToNewSharedJogbo: (Boolean, Long) -> Unit,
     isSharedJogbo: Boolean,
-    shareJogbo: (Context, String, String, String, Long) -> Unit,
+    shareJogbo: (Context, String, String, String, Long, () -> Unit) -> Unit,
     favoriteId: Long,
     isJogboOwner: Boolean,
     loginDialogState: Boolean,
@@ -144,12 +147,24 @@ fun MyJogboDetailScreen(
     navigateToLogin: (Boolean) -> Unit,
     navigateToMyJogbo: (Boolean) -> Unit
 ) {
+    val tracker = LocalTracker.current
     val configuration = LocalConfiguration.current
+
     val height by rememberSaveable {
         mutableDoubleStateOf(configuration.screenHeightDp * 0.09)
     }
     val scrollState = rememberLazyListState()
     val context = LocalContext.current
+
+    if (isSharedJogbo && !isJogboOwner) {
+        tracker.track(
+            type = EventType.NONE,
+            name = "Shared_Jokbo_Page",
+            properties = mapOf(
+                PropertyKey.JOGBO to jogboTitle
+            )
+        )
+    }
 
     if (shareDialogState) {
         DoubleButtonDialog(
@@ -217,7 +232,7 @@ fun MyJogboDetailScreen(
                             jogboChips = jogboChips,
                             userName = userName,
                             navigateToMyJogbo = navigateToMyJogbo,
-                            shareJogboDialogState = {
+                            onClickShareButton = {
                                 val defaultImageUrl = KAKAO_SHARE_DEFAULT_IMAGE
                                 val imageUrl =
                                     state.data.firstOrNull { it.imageUrl != null }?.imageUrl
@@ -228,7 +243,24 @@ fun MyJogboDetailScreen(
                                     imageUrl,
                                     jogboTitle,
                                     userName,
-                                    favoriteId
+                                    favoriteId,
+                                    {
+                                        tracker.track(
+                                            type = EventType.COMPLETED,
+                                            name = "Mypage_MyJokbo_Share",
+                                            properties = mapOf(
+                                                PropertyKey.JOGBO to jogboTitle
+                                            )
+                                        )
+                                    }
+                                )
+
+                                tracker.track(
+                                    type = EventType.NONE,
+                                    name = "Mypage_MyJokbo_Share",
+                                    properties = mapOf(
+                                        PropertyKey.JOGBO to jogboTitle
+                                    )
                                 )
                             }
                         )
@@ -285,7 +317,7 @@ fun MyJogboDetailScreen(
                             jogboChips = jogboChips,
                             userName = userName,
                             navigateToMyJogbo = navigateToMyJogbo,
-                            shareJogboDialogState = updateShareDialogState
+                            onClickShareButton = updateShareDialogState
                         )
 
                         Spacer(modifier = Modifier.height((height).dp))
@@ -330,7 +362,16 @@ fun MyJogboDetailScreen(
                             .fillMaxWidth()
                             .padding(bottom = 15.dp),
                         text = stringResource(R.string.add_to_my_jogbo),
-                        onClick = { navigateToNewSharedJogbo(isSharedJogbo, favoriteId) },
+                        onClick = {
+                            navigateToNewSharedJogbo(isSharedJogbo, favoriteId)
+                            tracker.track(
+                                type = EventType.ADD,
+                                name = "Shared_Jokbo_MyJokbo",
+                                properties = mapOf(
+                                    PropertyKey.JOGBO to jogboTitle
+                                )
+                            )
+                        },
                         enabled = true,
                         textStyle = HankkiTheme.typography.sub3,
                     )

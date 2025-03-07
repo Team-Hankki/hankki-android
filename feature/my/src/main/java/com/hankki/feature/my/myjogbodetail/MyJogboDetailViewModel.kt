@@ -133,7 +133,8 @@ class MyJogboDetailViewModel @Inject constructor(
         image: String,
         title: String,
         senderName: String,
-        favoriteId: Long
+        favoriteId: Long,
+        trackResult: () -> Unit
     ) {
         val templateId = 115383L
         val templateArgs = mapOf(
@@ -149,6 +150,7 @@ class MyJogboDetailViewModel @Inject constructor(
                     Timber.e(error)
                 } else if (result != null) {
                     context.startActivity(result.intent)
+                    trackResult()
                 }
             }
         } else {

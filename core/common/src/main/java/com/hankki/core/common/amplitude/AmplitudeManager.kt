@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
-import com.amplitude.android.events.Identify
 import com.hankki.core.common.BuildConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -24,10 +23,14 @@ class AmplitudeTracker @Inject constructor(
         ),
     )
 
-    fun track(type: EventType, name: String, properties: Map<String, Any?> = emptyMap()) {
+    fun track(type: EventType, name: String, properties: Map<PropertyKey, Any?> = emptyMap()) {
+        val eventType = if (type == EventType.NONE) name else "${name}_${type.prefix}"
+        val properties = properties.mapKeys { it.key.key }
+
         if (BuildConfig.DEBUG) {
-            Timber.d("Amplitude: ${name}_${type.prefix} properties: $properties")
+            Timber.d("Amplitude: $eventType properties: $properties")
         }
-        amplitude.track(eventType = "${name}_${type.prefix}", eventProperties = properties)
+
+        amplitude.track(eventType = eventType, eventProperties = properties)
     }
 }

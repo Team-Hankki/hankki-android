@@ -20,6 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.designsystem.theme.Gray200
 import com.hankki.core.designsystem.theme.Gray800
@@ -41,6 +44,8 @@ fun HankkiFilterBottomSheet(
     onDismissRequest: () -> Unit = {},
     onSubmit: (ChipItem, ChipItem) -> Unit = { _, _ -> },
 ) {
+    val tracker = LocalTracker.current
+
     val nowPriceName = remember { mutableStateOf(selectedPriceItem) }
     val nowSortedName = remember { mutableStateOf(selectedSortItem) }
 
@@ -86,6 +91,14 @@ fun HankkiFilterBottomSheet(
                 .padding(top = 14.dp, bottom = 4.dp)
                 .noRippleClickable {
                     onSubmit(nowPriceName.value, nowSortedName.value)
+                    tracker.track(
+                        type = EventType.COMPLETED,
+                        name = "Home_Detail_Filter",
+                        properties = mapOf(
+                            PropertyKey.ARRAY to nowSortedName.value.name,
+                            PropertyKey.PRICE to nowPriceName.value.name
+                        )
+                    )
                 },
             color = Gray800,
             textAlign = TextAlign.Center,

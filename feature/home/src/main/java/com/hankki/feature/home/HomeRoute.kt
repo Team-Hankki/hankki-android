@@ -64,6 +64,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.LocationServices
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.ignoreNextModifiers
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
@@ -459,6 +460,13 @@ fun HomeScreen(
                             captionText = if (cameraPositionState.position.zoom > CAN_SEE_TITLE_ZOOM) marker.name else "",
                             onClick = {
                                 clickMarkerItem(marker.id)
+                                tracker.track(
+                                    type = EventType.CLICK,
+                                    name = "Home_Map_Pin",
+                                    properties = mapOf(
+                                        PropertyKey.STORE to marker.name
+                                    )
+                                )
                                 true
                             }
                         )
@@ -556,6 +564,13 @@ fun HomeScreen(
                                                 heartCount = item.heartCount,
                                                 onClickItem = { id ->
                                                     navigateStoreDetail(id)
+                                                    tracker.track(
+                                                        type = EventType.CLICK,
+                                                        name = "Home_StoreCard",
+                                                        properties = mapOf(
+                                                            PropertyKey.STORE to item.name
+                                                        )
+                                                    )
                                                 }
                                             ) {
                                                 selectStoreItem(item)

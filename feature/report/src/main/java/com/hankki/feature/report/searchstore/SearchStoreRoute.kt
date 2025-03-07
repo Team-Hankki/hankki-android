@@ -30,6 +30,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.hankki.core.common.amplitude.EventType
+import com.hankki.core.common.amplitude.LocalTracker
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.EmptyUiState
@@ -116,6 +118,7 @@ fun SearchStoreScreen(
     reportButtonClicked: () -> Unit = {},
     onDismissDialog: () -> Unit = {},
 ) {
+    val tracker = LocalTracker.current
     val focusManager = LocalFocusManager.current
 
     if (isOpenDialog) {
@@ -246,6 +249,10 @@ fun SearchStoreScreen(
                     ),
                     onClick = {
                         reportButtonClicked()
+                        tracker.track(
+                            type = EventType.CLICK,
+                            name = "Report_RestaurantComplete"
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
