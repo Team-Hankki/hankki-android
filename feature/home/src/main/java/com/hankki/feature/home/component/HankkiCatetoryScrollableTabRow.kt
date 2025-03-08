@@ -101,7 +101,7 @@ fun HankkiCategoryScrollableTabRow(
                 },
             ) {
                 categoryChipItems.forEachIndexed { index, item ->
-                    key(index) {
+                    key(item.tag) {
                         Tab(
                             selected = selectedIndex == index,
                             onClick = {
