@@ -193,6 +193,7 @@ private fun StoreDetailReportScreen(
 
                 HankkiButton(
                     text = "제보하기",
+                    textStyle = HankkiTheme.typography.sub2,
                     onClick = onReportClicked,
                     modifier = Modifier
                         .fillMaxWidth()
