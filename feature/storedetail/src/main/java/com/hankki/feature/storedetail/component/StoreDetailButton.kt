@@ -135,27 +135,16 @@ fun StoreDetailModDeleteButton(
             .clip(RoundedCornerShape(8.dp))
             .background(color = Gray100)
             .noRippleClickable(onClick = onClick)
-            .padding(horizontal = 77.5.dp, vertical = 13.5.dp)
+            .padding(vertical = 13.5.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(
-                modifier = Modifier,
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                leadingIcon()
-            }
-
-            Spacer(modifier = Modifier.padding(start = 4.dp))
-            Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                content()
-            }
+            leadingIcon()
+            Spacer(modifier = Modifier.width(4.dp))
+            content()
         }
     }
 }

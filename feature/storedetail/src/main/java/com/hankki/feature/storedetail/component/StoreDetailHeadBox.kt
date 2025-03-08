@@ -41,6 +41,7 @@ fun StoreDetailHeadBox(
     ) {
         Row(
             modifier = Modifier
+                .padding(top = 18.dp)
                 .padding(horizontal = 22.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

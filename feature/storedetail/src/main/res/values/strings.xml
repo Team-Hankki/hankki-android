@@ -6,5 +6,5 @@
     <string name="no_longer_8000">더이상 8,000원 이하인 메뉴가 없어요</string>
     <string name="inappropriate_report">부적절한 제보에요</string>
     <string name="store_detail_caution_title">유의사항</string>
-    <string name="store_detail_caution_content">· 개인의 느낌은 실제 정보와 다를 수 있습니다\n· 8000원 이하인 메뉴만 노출됩니다\n· 사용자가 직접 제보한 정보 기준으로 제공되었으며 변동될 수 있습니다\n· 악성 무단 삭제 및 수정 시 서비스 이용이 중단 될 수 있습니다</string>
+    <string name="store_detail_caution_content">· 제보된 내용은 실제 정보와 다를 수 있습니다\n· 8000원 이하인 메뉴만 노출됩니다\n· 사용자가 직접 제보한 정보 기준으로 제공되었으며 변동될 수 있습니다\n· 악성 무단 삭제 및 수정 시 서비스 이용이 중단 될 수 있습니다</string>
 </resources>

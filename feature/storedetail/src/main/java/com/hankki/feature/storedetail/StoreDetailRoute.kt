@@ -205,7 +205,7 @@ fun StoreDetailRoute(
                 name = storeState.nickname,
                 title = "변동사항을 알려주셔서 감사합니다 :)\n오늘도 저렴하고 든든한 식사하세요!",
                 negativeButtonTitle = "",
-                positiveButtonTitle = "돌아가기",
+                positiveButtonTitle = "확인",
                 onNegativeButtonClicked = { },
                 onPositiveButtonClicked = {
                     viewModel.closeDialog()
@@ -361,7 +361,7 @@ fun StoreDetailScreen(
                 onClick = onReportClicked,
                 tailingIcon = {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                        imageVector = ImageVector.vectorResource(id = com.hankki.feature.storedetail.R.drawable.ic_arrow_down),
                         contentDescription = null,
                         tint = Gray350
                     )

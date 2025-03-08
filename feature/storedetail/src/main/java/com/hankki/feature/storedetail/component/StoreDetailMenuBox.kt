@@ -14,12 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.hankki.core.designsystem.R
-import com.hankki.core.designsystem.theme.Gray500
 import com.hankki.core.designsystem.theme.Gray600
 import com.hankki.core.designsystem.theme.Gray900
 import com.hankki.core.designsystem.theme.HankkiTheme
@@ -33,7 +33,7 @@ fun StoreDetailMenuBox(
     menuItems: PersistentList<MenuItem>,
     onMenuEditClick: () -> Unit
 ) {
-    Spacer(modifier = Modifier.padding(top = 20.dp))
+    Spacer(modifier = Modifier.padding(top = 10.dp))
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,7 +81,7 @@ fun StoreDetailMenuBox(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = com.hankki.feature.storedetail.R.drawable.ic_bottom_edit),
                     contentDescription = "추가 아이콘",
-                    tint = Gray500
+                    tint = Color.Unspecified
                 )
             },
             content = {
