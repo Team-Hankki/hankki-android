@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.noRippleClickable
 import com.hankki.core.common.utill.UiState
 import com.hankki.core.designsystem.component.button.HankkiButton
@@ -67,7 +68,7 @@ fun UniversitySelectionRoute(
                             type = EventType.CLICK,
                             name = "UniversityChoice_AnyUniv",
                             properties = mapOf(
-                                "university" to sideEffect.universityName
+                                PropertyKey.UNIVERSITY to sideEffect.universityName
                             )
                         )
                     }

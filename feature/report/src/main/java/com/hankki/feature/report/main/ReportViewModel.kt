@@ -215,4 +215,10 @@ class ReportViewModel @Inject constructor(
             )
         }
     }
+
+    fun navigateUpTrackSideEffect(){
+        viewModelScope.launch {
+            _sideEffect.emit(ReportSideEffect.NavigateUpTrack)
+        }
+    }
 }

@@ -31,7 +31,7 @@ fun JogboHeader(
     jogboChips: PersistentList<String>,
     userName: String,
     navigateToMyJogbo: (Boolean) -> Unit,
-    shareJogboDialogState: () -> Unit
+    onClickShareButton: () -> Unit
 ) {
     HankkiTopBar(
         modifier = Modifier
@@ -61,7 +61,7 @@ fun JogboHeader(
         title = jogboTitle,
         chips = jogboChips,
         userName = userName,
-        shareJogboDialogState = shareJogboDialogState,
+        onClickShareButton = onClickShareButton,
         isJogboOwner = isJogboOwner
     )
 }
@@ -77,7 +77,7 @@ fun JogboHeaderPreview() {
             jogboChips = persistentListOf(),
             userName = "nickname",
             navigateToMyJogbo = {},
-            shareJogboDialogState = {}
+            onClickShareButton = {}
         )
     }
 }

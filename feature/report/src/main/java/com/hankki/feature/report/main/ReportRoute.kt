@@ -1,6 +1,7 @@
 package com.hankki.feature.report.main
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.hankki.core.common.amplitude.EventType
 import com.hankki.core.common.amplitude.LocalTracker
+import com.hankki.core.common.amplitude.PropertyKey
 import com.hankki.core.common.extension.addFocusCleaner
 import com.hankki.core.common.extension.animateScrollAroundItem
 import com.hankki.core.common.extension.noRippleClickable
@@ -132,6 +134,14 @@ fun ReportRoute(
                     )
                 }
 
+                is ReportSideEffect.NavigateUpTrack -> {
+                    navigateUp()
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "Report_Back"
+                    )
+                }
+
                 ReportSideEffect.UniversityError -> navigateUp()
                 ReportSideEffect.ReportError -> snackBar("오류가 발생했어요. 다시 시도해주세요")
             }
@@ -144,7 +154,7 @@ fun ReportRoute(
         buttonEnabled = state.buttonEnabled,
         isShowErrorDialog = state.isShowErrorDialog,
         controlErrorDialog = viewModel::controlErrorDialog,
-        navigateUp = navigateUp,
+        navigateUp = viewModel::navigateUpTrackSideEffect,
         categoryList = state.categoryList,
         selectedImageUri = state.selectedImageUri,
         isUniversityError = state.isUniversityError,
@@ -161,7 +171,7 @@ fun ReportRoute(
         addMenu = viewModel::addMenu,
         deleteMenu = viewModel::deleteMenu,
         navigateSearchStore = navigateSearchStore,
-        submitReport = viewModel::submitReport
+        submitReport = viewModel::submitReport,
     )
 }
 
@@ -190,10 +200,15 @@ fun ReportScreen(
     controlErrorDialog: () -> Unit = {},
     submitReport: () -> Unit,
 ) {
+    val tracker = LocalTracker.current
+    val focusManager = LocalFocusManager.current
+
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    val focusManager = LocalFocusManager.current
+
     val isVisibleIme = WindowInsets.isImeVisible
+
+    BackHandler(onBack = navigateUp)
 
     if (isUniversityError) {
         SingleButtonDialog(
@@ -292,7 +307,13 @@ fun ReportScreen(
                         if (selectedImageUri == null) {
                             Spacer(modifier = Modifier.height(24.dp))
                             AddPhotoButton(
-                                onClick = selectImageUri,
+                                onClick = {
+                                    selectImageUri()
+                                    tracker.track(
+                                        type = EventType.CLICK,
+                                        name = "Report_Food_Picture"
+                                    )
+                                },
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(modifier = Modifier.height(24.dp))
@@ -429,6 +450,8 @@ fun StoreCategoryChips(
     selectedItem: String?,
     onClick: (String) -> Unit = {},
 ) {
+    val tracker = LocalTracker.current
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
@@ -446,7 +469,16 @@ fun StoreCategoryChips(
                         iconUrl = item.imageUrl,
                         title = item.name,
                         isSelected = item.tag == selectedItem,
-                        onClick = { onClick(item.tag) }
+                        onClick = {
+                            onClick(item.tag)
+                            tracker.track(
+                                type = EventType.CLICK,
+                                name = "Report_Food_Categories",
+                                properties = mapOf(
+                                    PropertyKey.FOOD to item.name
+                                )
+                            )
+                        }
                     )
                 }
             }
