@@ -13,6 +13,10 @@ import com.hankki.feature.home.model.StoreItemModel
 import com.hankki.feature.home.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -274,9 +278,11 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setChipItem(priceItem: String, priceTag: String, sortItem: String, sortTag: String) {
-        runBlocking {
-            selectPriceChipItem(priceItem, priceTag)
-            selectSortChipItem(sortItem, sortTag)
+        CoroutineScope(Dispatchers.IO).launch {
+            async {
+                selectPriceChipItem(priceItem, priceTag)
+                selectSortChipItem(sortItem, sortTag)
+            }.await()
 
             fetchData()
         }
@@ -294,8 +300,6 @@ class HomeViewModel @Inject constructor(
         _state.value = _state.value.copy(
             priceChipState = ChipState.Fixed(item, tag)
         )
-
-        fetchData()
     }
 
     private fun selectSortChipItem(item: String, tag: String) {
