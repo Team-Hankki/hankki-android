@@ -310,7 +310,7 @@ fun HomeScreen(
         key2 = storeItemState,
         LocalLifecycleOwner.current
     ) {
-        if (bottomSheetState.isCollapsed) {
+        if (bottomSheetState.isCollapsed || storeItemState is EmptyUiState.Success) {
             listState.animateScrollToItem(0)
         }
     }
@@ -552,8 +552,7 @@ fun HomeScreen(
                                         state = listState
                                     ) {
                                         items(
-                                            items = storeItems,
-                                            key = { item -> item.id }
+                                            items = storeItems
                                         ) { item ->
                                             HomeStoreItem(
                                                 storeId = item.id,
