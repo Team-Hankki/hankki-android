@@ -3,8 +3,8 @@ accompanistSystemuicontroller = "0.17.0"
 compileSdk = "34"
 minSdk = "28"
 targetSdk = "35"
-versionName = "1.1.2"
-versionCode = "10102"
+versionName = "1.2.0"
+versionCode = "10200"
 
 ## Android gradle plugin
 androidGradlePlugin = "8.3.2"
