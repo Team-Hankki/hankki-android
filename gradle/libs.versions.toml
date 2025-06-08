@@ -1,6 +1,6 @@
 [versions]
 accompanistSystemuicontroller = "0.17.0"
-compileSdk = "34"
+compileSdk = "35"
 minSdk = "28"
 targetSdk = "35"
 versionName = "1.2.1"
@@ -46,7 +46,7 @@ kotlinxImmutable = "0.3.7"
 coil = "2.6.0"
 
 ## Naver Map
-naverMapCompose = "1.7.2"
+naverMapCompose = "1.8.2"
 naverMapLocation = "21.0.2"
 playServicesLocation = "21.0.1"
 
